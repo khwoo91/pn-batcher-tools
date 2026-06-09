@@ -320,7 +320,7 @@ export class SvgToPngConverter extends LitElement {
 
   protected override render() {
     return html`
-      <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col min-h-screen">
+      <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col min-h-screen pb-32">
         <!-- Header -->
         <app-header 
           .hasFiles="${this.svgFiles.length > 0}" 
@@ -361,7 +361,6 @@ export class SvgToPngConverter extends LitElement {
               @change-subfolder="${(e: CustomEvent<string>) => this.outputSubFolderName = e.detail.replace(/[^a-zA-Z0-9_\-]/g, '')}"
               @change-suffix="${(e: CustomEvent<{ scale: number; suffix: string }>) => this.handleChangeSuffix(e.detail.scale, e.detail.suffix)}"
               @toggle-delete="${() => this.deleteOriginal = !this.deleteOriginal}"
-              @start-conversion="${this.startConversion}"
             ></settings-panel>
           </div>
 
@@ -390,6 +389,43 @@ export class SvgToPngConverter extends LitElement {
             ></log-console>
           </div>
 
+        </div>
+      </div>
+
+      <!-- Sticky Bottom Action Bar -->
+      <div class="fixed bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-md border-t border-slate-800 py-5 px-6 z-40 shadow-2xl">
+        <div class="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-4 text-xs md:text-sm text-slate-400 font-medium font-sans">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full ${this.svgFiles.length > 0 ? 'bg-indigo-500 animate-pulse' : 'bg-slate-700'}"></span>
+              <span>대기 파일: <strong class="text-white">${this.svgFiles.length}개</strong></span>
+            </div>
+            <span class="text-slate-700 hidden md:inline">|</span>
+            <span>내보내기 포맷: <strong class="text-indigo-400 uppercase font-bold">${this.exportFormat}</strong></span>
+            <span class="text-slate-700 hidden md:inline">|</span>
+            <span>적용 배율: <strong class="text-white font-mono">${this.selectedScale}x</strong></span>
+            ${this.scaleOptions.find(o => o.scale === this.selectedScale)?.suffix ? html`
+              <span class="text-slate-700 hidden md:inline">|</span>
+              <span>접미사: <strong class="text-emerald-400 font-mono">${this.scaleOptions.find(o => o.scale === this.selectedScale)?.suffix}</strong></span>
+            ` : ''}
+          </div>
+          
+          <button 
+            @click="${this.startConversion}" 
+            ?disabled="${this.isConverting || this.svgFiles.length === 0}"
+            class="w-full md:w-auto px-10 py-3.5 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-indigo-500/20 active:scale-[0.98] text-white font-bold rounded-xl transition-all flex items-center justify-center gap-3 cursor-pointer shadow-md font-sans text-sm font-bold shrink-0"
+          >
+            ${this.isConverting ? html`
+              <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>배치 변환 진행 중 (${this.conversionProgress}%)</span>
+            ` : html`
+              <i class="fa-solid fa-play"></i>
+              <span>배치 ${this.exportFormat.toUpperCase()} 변환 시작</span>
+            `}
+          </button>
         </div>
       </div>
 
