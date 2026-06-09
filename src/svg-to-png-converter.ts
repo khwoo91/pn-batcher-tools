@@ -399,7 +399,7 @@ export class SvgToPngConverter extends LitElement {
       </div>
 
       <!-- Sticky Bottom Action Bar -->
-      <div class="fixed bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-md border-t border-slate-800 py-5 px-6 z-40 shadow-2xl">
+      <div class="fixed bottom-0 left-0 right-0 bg-slate-900/50 backdrop-blur-xl border-t border-white/5 py-5 px-6 z-40 shadow-[0_-8px_32px_rgba(0,0,0,0.5)]">
         <div class="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-4">
           <div class="flex flex-wrap items-center gap-4 text-xs md:text-sm text-slate-400 font-medium font-sans">
             <div class="flex items-center gap-2">
