@@ -319,6 +319,12 @@ export class SvgToPngConverter extends LitElement {
   }
 
   protected override render() {
+    const selectedOption = this.scaleOptions.find(o => o.scale === this.selectedScale);
+    const suffixTemplate = selectedOption?.suffix ? html`
+      <span class="text-slate-700 hidden md:inline">|</span>
+      <span>접미사: <strong class="text-emerald-400 font-mono">${selectedOption.suffix}</strong></span>
+    ` : '';
+
     return html`
       <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col min-h-screen pb-32">
         <!-- Header -->
@@ -365,7 +371,7 @@ export class SvgToPngConverter extends LitElement {
           </div>
 
           <!-- Right Real-Time Display & Logger Panel (cols-7) -->
-          <div class="lg:col-span-7 space-y-6">
+          <div class="lg:col-span-7 space-y-6 flex flex-col">
             <!-- Progress Indicator (Visible only during execution) -->
             ${this.isConverting || this.conversionProgress > 0 ? html`
               <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
@@ -401,19 +407,16 @@ export class SvgToPngConverter extends LitElement {
               <span>대기 파일: <strong class="text-white">${this.svgFiles.length}개</strong></span>
             </div>
             <span class="text-slate-700 hidden md:inline">|</span>
-            <span>내보내기 포맷: <strong class="text-indigo-400 uppercase font-bold">${this.exportFormat}</strong></span>
+            <span>내보내기 포맷: <strong class="text-indigo-400 uppercase">${this.exportFormat}</strong></span>
             <span class="text-slate-700 hidden md:inline">|</span>
             <span>적용 배율: <strong class="text-white font-mono">${this.selectedScale}x</strong></span>
-            ${this.scaleOptions.find(o => o.scale === this.selectedScale)?.suffix ? html`
-              <span class="text-slate-700 hidden md:inline">|</span>
-              <span>접미사: <strong class="text-emerald-400 font-mono">${this.scaleOptions.find(o => o.scale === this.selectedScale)?.suffix}</strong></span>
-            ` : ''}
+            ${suffixTemplate}
           </div>
           
           <button 
             @click="${this.startConversion}" 
             ?disabled="${this.isConverting || this.svgFiles.length === 0}"
-            class="w-full md:w-auto px-10 py-3.5 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-indigo-500/20 active:scale-[0.98] text-white font-bold rounded-xl transition-all flex items-center justify-center gap-3 cursor-pointer shadow-md font-sans text-sm font-bold shrink-0"
+            class="w-full md:w-auto px-10 py-3.5 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-indigo-500/20 active:scale-[0.98] text-white font-bold rounded-xl transition-all flex items-center justify-center gap-3 cursor-pointer shadow-md font-sans text-sm shrink-0"
           >
             ${this.isConverting ? html`
               <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
