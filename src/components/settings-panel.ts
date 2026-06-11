@@ -329,7 +329,7 @@ export class SettingsPanel extends LitElement {
                             >
                               <div class="flex items-center gap-2 text-indigo-300">
                                 <i class="fa-regular fa-folder-open text-sm"></i>
-                                <span class="font-semibold truncate max-w-[200px]" title="${this.outputDirHandle.name}"
+                                <span class="font-semibold truncate max-w-50" title="${this.outputDirHandle.name}"
                                   >${this.outputDirHandle.name}</span
                                 >
                               </div>

@@ -611,7 +611,7 @@ export class SvgToBatchExporter extends LitElement {
           ? html`
               <div class="absolute top-0 left-0 right-0 h-1 bg-slate-950/40 overflow-hidden">
                 <div
-                  class="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-500 transition-all duration-300 shadow-[0_0_8px_rgba(99,102,241,0.6)]"
+                  class="h-full bg-linear-to-r from-indigo-500 via-purple-500 to-emerald-500 transition-all duration-300 shadow-[0_0_8px_rgba(99,102,241,0.6)]"
                   style="width: ${this.conversionProgress}%"
                 ></div>
               </div>
