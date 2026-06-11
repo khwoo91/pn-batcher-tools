@@ -1,4 +1,4 @@
-# Batcher 🖼️
+# Batcher
 
 Vite, Lit, TypeScript, 그리고 Tailwind CSS를 기반으로 제작된 대용량 SVG 이미지 로컬 배치(Batch) 변환기입니다. 
 브라우저의 최신 File System Access API를 활용하여 로컬 폴더의 SVG 파일들을 원하는 배율과 포맷(PNG/JPG)으로 직접 변환하여 내보내거나, 미지원 브라우저의 경우 가상 ZIP 압축을 통해 일괄 다운로드해 드립니다.
