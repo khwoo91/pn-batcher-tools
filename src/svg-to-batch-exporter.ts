@@ -502,7 +502,16 @@ export class SvgToBatchExporter extends LitElement {
     this.conversionProgress = 0;
     this.currentConversionIndex = 0;
     this.conversionLogs = [];
-    this.addLog("데이터를 리셋하였습니다.", "info");
+  }
+
+  protected override updated(changedProperties: Map<PropertyKey, unknown>) {
+    super.updated(changedProperties);
+    if (changedProperties.has("conversionProgress") || changedProperties.has("isConverting")) {
+      const progressBar = this.renderRoot.querySelector(".progress-bar-inner") as HTMLElement;
+      if (progressBar) {
+        progressBar.style.width = `${this.conversionProgress}%`;
+      }
+    }
   }
 
   protected override render() {
@@ -611,8 +620,7 @@ export class SvgToBatchExporter extends LitElement {
           ? html`
               <div class="absolute top-0 left-0 right-0 h-1 bg-slate-950/40 overflow-hidden">
                 <div
-                  class="h-full bg-linear-to-r from-indigo-500 via-purple-500 to-emerald-500 transition-all duration-300 shadow-[0_0_8px_rgba(99,102,241,0.6)]"
-                  style=${"width: " + this.conversionProgress + "%"}
+                  class="progress-bar-inner h-full bg-linear-to-r from-indigo-500 via-purple-500 to-emerald-500 transition-all duration-300 shadow-[0_0_8px_rgba(99,102,241,0.6)]"
                 ></div>
               </div>
             `
