@@ -90,9 +90,7 @@ export class SvgToBatchExporter extends LitElement {
     }
 
     try {
-      this.dirHandle = await window.showDirectoryPicker({
-        mode: "readwrite",
-      });
+      this.dirHandle = await window.showDirectoryPicker();
 
       this.svgFiles = [];
       this.conversionLogs = [];
@@ -133,9 +131,7 @@ export class SvgToBatchExporter extends LitElement {
     }
 
     try {
-      this.outputDirHandle = await window.showDirectoryPicker({
-        mode: "readwrite",
-      });
+      this.outputDirHandle = await window.showDirectoryPicker();
       this.addLog(`출력 폴더가 지정되었습니다: ${this.outputDirHandle.name}`, "info");
     } catch (err: any) {
       if (err.name !== "AbortError") {
@@ -267,9 +263,16 @@ export class SvgToBatchExporter extends LitElement {
     if (isLocalDirMode && this.dirHandle) {
       try {
         const opts = { mode: "readwrite" as const };
-        if ((await this.dirHandle.queryPermission(opts)) !== "granted") {
-          await this.dirHandle.requestPermission(opts);
+        
+        // 원본 파일을 지워야 하거나 별도의 출력 폴더를 지정하지 않은 경우에만 원본 폴더 쓰기 권한이 필요합니다.
+        const needsInputWritePermission = this.deleteOriginal || !hasOutputDir;
+        
+        if (needsInputWritePermission) {
+          if ((await this.dirHandle.queryPermission(opts)) !== "granted") {
+            await this.dirHandle.requestPermission(opts);
+          }
         }
+        
         if (hasOutputDir && this.outputDirHandle) {
           if ((await this.outputDirHandle.queryPermission(opts)) !== "granted") {
             await this.outputDirHandle.requestPermission(opts);
@@ -278,7 +281,7 @@ export class SvgToBatchExporter extends LitElement {
             `로컬 출력 폴더가 준비되었습니다: ${this.outputDirHandle.name}`,
             "success",
           );
-        } else {
+        } else if (!hasOutputDir) {
           this.addLog(
             `출력 폴더가 지정되지 않아 원본 SVG 파일 경로에 직접 변환 파일을 생성합니다.`,
             "info",
@@ -692,7 +695,7 @@ export class SvgToBatchExporter extends LitElement {
           <button
             @click="${this.startConversion}"
             ?disabled="${this.isConverting || this.svgFiles.filter(f => f.selected).length === 0}"
-            class="w-full md:w-auto pl-14 pr-16 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-indigo-500/20 active:scale-[0.98] text-white font-semibold rounded-md transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0"
+            class="w-full md:w-auto pl-14 pr-16 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-indigo-500/20 active:scale-[0.98] text-white font-bold rounded-md transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0"
           >
             ${this.isConverting
               ? html`
@@ -719,7 +722,7 @@ export class SvgToBatchExporter extends LitElement {
                 `
               : html`
                   <i class="fa-solid fa-play"></i>
-                  <span class="text-xl">변환 시작</span>
+                  <span>변환 시작</span>
                 `}
           </button>
         </div>
