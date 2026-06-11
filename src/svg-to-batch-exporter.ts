@@ -32,9 +32,9 @@ export class SvgToBatchExporter extends LitElement {
   @state() private modalType: "info" | "success" | "error" = "info";
 
   @state() private scaleOptions: ScaleOption[] = [
-    { scale: 1, label: "1.0x (기본 배율)", suffix: "" },
-    { scale: 1.5, label: "1.5x (중간 배율)", suffix: "@1.5x" },
-    { scale: 2, label: "2.0x (고해상도)", suffix: "@2x" },
+    { scale: 1, label: "1.0x (기본)", suffix: "" },
+    { scale: 1.5, label: "1.5x", suffix: "@1.5x" },
+    { scale: 2, label: "2.0x", suffix: "@2x" },
   ];
 
   protected override createRenderRoot() {
