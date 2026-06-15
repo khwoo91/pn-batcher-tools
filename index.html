@@ -40,8 +40,287 @@
 </head>
 
 <body class="h-full">
+  <!-- Dynamic Ambient Glow Background Spots -->
+  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] animate-glow-indigo">
+    </div>
+    <div
+      class="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[130px] animate-glow-purple">
+    </div>
+    <div
+      class="absolute -bottom-40 -right-40 w-[450px] h-[450px] bg-emerald-500/5 rounded-full blur-[120px] animate-glow-emerald">
+    </div>
+  </div>
+
   <!-- Lit Component Container -->
-  <svg-to-batch-exporter class="block min-h-screen"></svg-to-batch-exporter>
+  <svg-to-batch-exporter class="block min-h-screen relative z-20"></svg-to-batch-exporter>
+
+  <!-- SEO & FAQ Section for Google AdSense and Users (KO) -->
+  <section id="faq-ko" class="max-w-7xl mx-auto px-6 py-16 border-t border-white/5 relative z-10 pb-20">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl font-extrabold text-white mb-12 text-center tracking-tight">자주 묻는 질문 (FAQ)</h2>
+
+      <div class="space-y-4">
+        <details class="glass-card-interactive rounded-2xl group">
+          <summary
+            class="text-lg font-bold text-indigo-400 p-6 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-circle-question"></i> svg-Batcher는 어떤 도구인가요?
+            </span>
+            <i
+              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+          </summary>
+          <div class="faq-content overflow-hidden">
+            <div class="px-6 pb-6 text-slate-300 text-sm leading-relaxed border-t border-white/5 pt-4">
+              svg-Batcher는 대용량 SVG 벡터 이미지 파일을 브라우저 상에서 원하는 배율과 포맷(PNG, JPG)으로 빠르게 일괄 변환(Batch Export)해 주는 스마트 로컬 유틸리티
+              도구입니다.
+            </div>
+          </div>
+        </details>
+
+        <details class="glass-card-interactive rounded-2xl group">
+          <summary
+            class="text-lg font-bold text-indigo-400 p-6 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-shield-halved"></i> 내가 입력한 SVG 파일이 외부 서버로 유출되거나 전송되나요?
+            </span>
+            <i
+              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+          </summary>
+          <div class="faq-content overflow-hidden">
+            <div class="px-6 pb-6 text-slate-300 text-sm leading-relaxed border-t border-white/5 pt-4">
+              <strong>아니요, 절대 전송되지 않습니다!</strong> 본 사이트는 최신 브라우저의 File System Access API 및 가상 ZIP 라이브러리를 이용하여 모든 파일 읽기,
+              이미지 래스터라이징, 다운로드 빌드 프로세스를 <strong>100% 사용자의 웹 브라우저(Client-Side) 안에서 로컬로 처리</strong>합니다. 어떠한 네트워크 전송도 수행하지
+              않으므로 기밀이나 상업적 디자인 리소스 유출 걱정 없이 안심하고 사용하실 수 있습니다.
+            </div>
+          </div>
+        </details>
+
+        <details class="glass-card-interactive rounded-2xl group">
+          <summary
+            class="text-lg font-bold text-indigo-400 p-6 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-laptop-code"></i> 브라우저 호환성 및 출력 디렉토리(폴더) 기능은 어떻게 동작하나요?
+            </span>
+            <i
+              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+          </summary>
+          <div class="faq-content overflow-hidden">
+            <div class="px-6 pb-6 text-slate-300 text-sm leading-relaxed border-t border-white/5 pt-4">
+              Google Chrome, Microsoft Edge 등 최신 WICG File System Access API를 지원하는 브라우저에서는 사용자의 원본 로컬 디렉토리 구조 그대로 이미지를
+              내보내거나 기존 파일을 정리하는 모드를 지원합니다. Safari, Firefox 등 해당 API를 미지원하는 브라우저의 경우에는 브라우저 안전 환경 안에서 폴더 구조를 유지한 채 ZIP 압축
+              패키지로 자동 빌드되어 일괄 다운로드하도록 처리됩니다.
+            </div>
+          </div>
+        </details>
+
+        <details class="glass-card-interactive rounded-2xl group">
+          <summary
+            class="text-lg font-bold text-indigo-400 p-6 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-scale-balanced"></i> 변환된 이미지 결과물을 상업적으로 마음대로 사용해도 되나요?
+            </span>
+            <i
+              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+          </summary>
+          <div class="faq-content overflow-hidden">
+            <div class="px-6 pb-6 text-slate-300 text-sm leading-relaxed border-t border-white/5 pt-4">
+              <strong>네, 물론입니다.</strong> 본 도구 자체와 내부 변환 모듈은 MIT, BSD-3-Clause, SIL OFL 1.1 등 제약이 없는 완전 자유 오픈소스 라이선스 패키지로
+              빌드되었습니다. 따라서 변환 결과물에 어떠한 라이선스 제약도 부과하지 않으며 개인 포트폴리오는 물론, 유료 판매용 디자인 패키지나 상업용 앱 빌드 리소스 등 모든 비즈니스 환경에서 자유롭게
+              활용
+              및 배포하실 수 있습니다.
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEO & FAQ Section for Google AdSense and Users (EN) -->
+  <section id="faq-en" class="hidden max-w-7xl mx-auto px-6 py-16 border-t border-white/5 relative z-10 pb-20">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl font-extrabold text-white mb-12 text-center tracking-tight">Frequently Asked Questions (FAQ)
+      </h2>
+
+      <div class="space-y-4">
+        <details class="glass-card-interactive rounded-2xl group">
+          <summary
+            class="text-lg font-bold text-indigo-400 p-6 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-circle-question"></i> What kind of tool is svg-Batcher?
+            </span>
+            <i
+              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+          </summary>
+          <div class="faq-content overflow-hidden">
+            <div class="px-6 pb-6 text-slate-300 text-sm leading-relaxed border-t border-white/5 pt-4">
+              svg-Batcher is a smart local utility tool that quickly batch converts (Batch Export) large volumes of SVG
+              vector
+              image files into desired scales and formats (PNG, JPG) directly in the browser.
+            </div>
+          </div>
+        </details>
+
+        <details class="glass-card-interactive rounded-2xl group">
+          <summary
+            class="text-lg font-bold text-indigo-400 p-6 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-shield-halved"></i> Are my uploaded SVG files sent to any external server?
+            </span>
+            <i
+              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+          </summary>
+          <div class="faq-content overflow-hidden">
+            <div class="px-6 pb-6 text-slate-300 text-sm leading-relaxed border-t border-white/5 pt-4">
+              <strong>No, never!</strong> This site utilizes the latest browser File System Access API and virtual ZIP
+              library to process all file reading, image rasterization, and download building <strong>100% locally
+                inside your web browser (Client-Side)</strong>. No network transfer is performed, so you can safely use
+              it without worrying about leaks of confidential or commercial design resources.
+            </div>
+          </div>
+        </details>
+
+        <details class="glass-card-interactive rounded-2xl group">
+          <summary
+            class="text-lg font-bold text-indigo-400 p-6 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-laptop-code"></i> How do browser compatibility and output directory features work?
+            </span>
+            <i
+              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+          </summary>
+          <div class="faq-content overflow-hidden">
+            <div class="px-6 pb-6 text-slate-300 text-sm leading-relaxed border-t border-white/5 pt-4">
+              Modern browsers like Google Chrome and Microsoft Edge that support the WICG File System Access API can
+              export images directly into your original local directories, maintaining directory structure and
+              optionally cleaning up original files. For browsers that do not support this API (such as Safari or
+              Firefox), files are automatically zipped in a virtual archive and offered as a single ZIP download,
+              keeping the folder structure intact.
+            </div>
+          </div>
+        </details>
+
+        <details class="glass-card-interactive rounded-2xl group">
+          <summary
+            class="text-lg font-bold text-indigo-400 p-6 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-scale-balanced"></i> Can I use the converted images for commercial purposes?
+            </span>
+            <i
+              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+          </summary>
+          <div class="faq-content overflow-hidden">
+            <div class="px-6 pb-6 text-slate-300 text-sm leading-relaxed border-t border-white/5 pt-4">
+              <strong>Yes, absolutely!</strong> This tool and its internal conversion modules are built on fully
+              open-source packages (MIT, BSD-3-Clause, SIL OFL 1.1) that have no commercial restrictions. We impose no
+              licensing terms on your outputs. You are free to use and distribute them in any environment, including
+              personal portfolios, commercial design kits, or paid application assets.
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Global Footer (KO) -->
+  <footer id="footer-ko"
+    class="bg-slate-950 border-t border-white/5 py-8 text-center text-xs text-slate-500 pb-36 relative z-10">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div>
+        <p>&copy; 2026 Batcher. All rights reserved.</p>
+        <p class="text-slate-600 mt-1">All image conversion processes occur completely locally on the client-side
+          browser.</p>
+      </div>
+      <div class="flex items-center gap-4 text-slate-400 font-medium">
+        <a href="/privacy.html" class="hover:text-indigo-400 transition-colors">개인정보처리방침</a>
+        <span class="text-slate-800">|</span>
+        <a href="/terms.html" class="hover:text-indigo-400 transition-colors">이용약관</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Global Footer (EN) -->
+  <footer id="footer-en"
+    class="hidden bg-slate-950 border-t border-white/5 py-8 text-center text-xs text-slate-500 pb-36 relative z-10">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div>
+        <p>&copy; 2026 Batcher. All rights reserved.</p>
+        <p class="text-slate-600 mt-1">All image conversion processes occur completely locally on the client-side
+          browser.</p>
+      </div>
+      <div class="flex items-center gap-4 text-slate-400 font-medium">
+        <a href="/privacy.html" class="hover:text-indigo-400 transition-colors">Privacy Policy</a>
+        <span class="text-slate-800">|</span>
+        <a href="/terms.html" class="hover:text-indigo-400 transition-colors">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('#faq-ko details, #faq-en details').forEach((details) => {
+        const summary = details.querySelector('summary');
+        const content = details.querySelector('.faq-content');
+        let isTransitioning = false;
+
+        summary.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (isTransitioning) return;
+
+          if (details.open) {
+            // Shrink / Close
+            isTransitioning = true;
+            const startHeight = content.scrollHeight;
+            content.style.height = `${startHeight}px`;
+
+            // force reflow
+            content.offsetHeight;
+
+            content.style.transition = 'height 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease-out';
+            content.style.height = '0px';
+            content.style.opacity = '0';
+
+            const onEnd = (event) => {
+              if (event.propertyName === 'height') {
+                content.removeEventListener('transitionend', onEnd);
+                details.removeAttribute('open');
+                content.style.height = '';
+                content.style.opacity = '';
+                content.style.transition = '';
+                isTransitioning = false;
+              }
+            };
+            content.addEventListener('transitionend', onEnd);
+          } else {
+            // Expand / Open
+            isTransitioning = true;
+            details.setAttribute('open', '');
+            const endHeight = content.scrollHeight;
+
+            content.style.height = '0px';
+            content.style.opacity = '0';
+
+            // force reflow
+            content.offsetHeight;
+
+            content.style.transition = 'height 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease-out';
+            content.style.height = `${endHeight}px`;
+            content.style.opacity = '1';
+
+            const onEnd = (event) => {
+              if (event.propertyName === 'height') {
+                content.removeEventListener('transitionend', onEnd);
+                content.style.height = '';
+                content.style.opacity = '';
+                content.style.transition = '';
+                isTransitioning = false;
+              }
+            };
+            content.addEventListener('transitionend', onEnd);
+          }
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>

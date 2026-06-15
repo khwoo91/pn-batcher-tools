@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>개인정보처리방침 - Batcher (SVG Batch Exporter)</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #020617;
+      color: #cbd5e1;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      line-height: 1.7;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'Outfit', sans-serif;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .container {
+      max-w-width: 800px;
+      max-width: 50rem;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 6rem;
+    }
+
+    .header {
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 2rem;
+      margin-bottom: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #818cf8;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .back-btn:hover {
+      color: #a5b4fc;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      margin: 0.5rem 0;
+      background: linear-gradient(to right, #ffffff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .meta {
+      font-size: 0.875rem;
+      color: #64748b;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1.25rem;
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      border-left: 3px solid #6366f1;
+      padding-left: 0.75rem;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #e2e8f0;
+    }
+
+    p,
+    li {
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    ul,
+    ol {
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    .highlight-box {
+      background: rgba(99, 102, 241, 0.08);
+      border: 1px solid rgba(99, 102, 241, 0.15);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .highlight-box p {
+      margin: 0;
+      color: #a5b4fc;
+      font-weight: 500;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      font-size: 0.85rem;
+      color: #475569;
+      border-top: 1px solid #1e293b;
+      padding-top: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <a href="/" class="back-btn">
+        <i class="fa-solid fa-arrow-left"></i> Batcher 도구로 돌아가기
+      </a>
+      <h1>개인정보처리방침</h1>
+      <div class="meta">시행일자: 2026년 6월 15일</div>
+    </div>
+
+    <div class="card">
+      <p>본 방침은 'Batcher' (이하 '서비스')의 이용자가 제공하는 개인정보의 처리 방식 및 조치에 대한 안내입니다. 본 서비스는 이용자의 개인정보 및 프라이버시 권리를 매우 소중하게 생각하며 관련
+        법령을 준수하기 위해 노력하고 있습니다.</p>
+
+      <div class="highlight-box">
+        <p><i class="fa-solid fa-shield-halved"></i> <strong>중요 확인 사항:</strong> Batcher는 완전한 웹 브라우저 로컬(Client-side) 실행
+          도구입니다. 귀하가 변환하기 위해 선택한 어떠한 SVG 이미지 파일도 외부 서버로 업로드되지 않으며, 모든 변환 프로세스는 귀하의 PC/브라우저 내에서만 안전하게 직접 수행됩니다.</p>
+      </div>
+
+      <h2>1. 개인정보의 수집 항목 및 수집 방법</h2>
+      <p>본 서비스는 웹 서버로 어떠한 사용자 식별 데이터나 작업용 이미지 파일을 전송하거나 수집하지 않습니다. 다만, 서비스 운영 및 고도화, 타겟형 광고 송출을 위해 다음과 같은 자동 수집 및 타사 서비스
+        분석 도구가 활용됩니다.</p>
+      <ul>
+        <li><strong>자동 수집 항목</strong>: 접속 IP 주소, 브라우저 종류 및 운영체제 정보, 쿠키(Cookie), 서비스 방문 및 이용 기록</li>
+        <li><strong>수집 방법</strong>: 웹 브라우저 자동 생성을 통한 수집 및 타사 광고 파트너사 모듈의 쿠키 연동</li>
+      </ul>
+
+      <h2>2. 개인정보의 이용 목적</h2>
+      <p>수집된 범용 및 자동 데이터는 다음 목적으로만 활용됩니다.</p>
+      <ul>
+        <li><strong>광고 제공 및 수익화</strong>: 구글 애드센스(Google AdSense) 플랫폼을 활용한 맞춤형/비맞춤형 광고 게재</li>
+        <li><strong>접속 분석 및 통계</strong>: 웹사이트 방문자 트래픽 모니터링 및 성능 모니터링</li>
+      </ul>
+
+      <h2>3. 제3자 제공 및 광고용 쿠키 수집 (구글 애드센스)</h2>
+      <p>본 서비스는 타사 광고 제공업체인 <strong>Google</strong>을 통해 광고를 게재합니다.</p>
+      <ul>
+        <li>Google은 쿠키를 사용하여 사용자가 본 사이트 또는 다른 사이트를 방문한 내역을 기반으로 사용자에게 맞춤 광고를 제공합니다.</li>
+        <li>Google의 DART 쿠키 사용을 원치 않는 경우, Google 광고 및 콘텐츠 네트워크 개인정보처리방침에 방문하여 관련 쿠키 수집 설정을 해제(Opt-out)하실 수 있습니다.</li>
+        <li>사용자는 각 브라우저의 옵션을 변경함으로써 타사 광고 파트너의 쿠키 수집 및 맞춤형 광고 게재 목적의 식별 정보를 거부할 수 있습니다.</li>
+      </ul>
+
+      <h2>4. 쿠키(Cookie)의 설치·운영 및 그 거부에 관한 사항</h2>
+      <p>귀하는 쿠키 설치에 대한 선택권을 가지고 있습니다. 브라우저 설정을 변경하여 모든 쿠키를 허용하거나, 쿠키가 저장될 때마다 확인을 거치거나, 모든 쿠키의 저장을 거부할 수 있습니다.</p>
+      <h3>쿠키 설정 거부 방법 (예: Chrome의 경우)</h3>
+      <ol>
+        <li>웹 브라우저 오른쪽 상단의 설정(세로 점 3개) 메뉴로 이동합니다.</li>
+        <li>'개인정보 및 보안' -> '서드파티 쿠키' 설정을 선택합니다.</li>
+        <li>원하는 수준의 쿠키 차단 설정을 지정합니다.</li>
+      </ol>
+      <p class="meta">* 단, 쿠키 설치를 전면 거부할 경우 일부 맞춤형 광고 노출이 제한되거나 웹 편의 서비스 이용에 지장이 생길 수 있습니다.</p>
+
+      <h2>5. 개인정보의 안전성 확보 조치</h2>
+      <p>본 서비스는 파일 변환을 서버가 아닌 클라이언트 단에서 완전 처리하게 설계함으로써, 개인 제작 이미지의 해킹 또는 서버 유출 위험을 원천 차단하고 있습니다. 이를 통해 사용자가 업로드하고 생성한
+        이미지 데이터에 대해 가장 높은 수준의 프라이버시 보호를 수행하고 있습니다.</p>
+
+      <h2>6. 개인정보 보호 책임자 및 문의처</h2>
+      <p>이용자는 서비스를 이용하며 발생하는 모든 개인정보 보호 관련 민원을 아래의 담당부서 또는 연락처로 문의하실 수 있습니다. 신속하고 성실하게 답변해 드리겠습니다.</p>
+      <ul>
+        <li><strong>개인정보담당 연락 이메일</strong>: <a href="mailto:[EMAIL_ADDRESS]"
+            style="color: #818cf8; text-decoration: none;">[EMAIL_ADDRESS]</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      &copy; 2026 Batcher. All rights reserved.
+    </footer>
+  </div>
+</body>
+
+</html>

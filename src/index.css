@@ -12,6 +12,7 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
+  background: #020617;
 }
 
 h1,
@@ -23,21 +24,142 @@ h6 {
   font-family: 'Outfit', sans-serif;
 }
 
-/* Custom scrollbar for modern feel */
+/* Custom premium text selection */
+::selection {
+  background: rgba(99, 102, 241, 0.35);
+  color: #ffffff;
+}
+
+/* Custom modern scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: rgba(15, 23, 42, 0.3);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: rgba(99, 102, 241, 0.4);
 }
+
+/* Hide default details summary marker in Safari */
+summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Glassmorphism helpers */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.glass-card-interactive {
+  background: rgba(15, 23, 42, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card-interactive:hover {
+  transform: translateY(-2px);
+  background: rgba(15, 23, 42, 0.45);
+  border-color: rgba(99, 102, 241, 0.2);
+  box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.1);
+}
+
+.glass-card-interactive:focus-within {
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.15);
+}
+
+/* Glow spot pulsing animations */
+@keyframes pulse-glow-indigo {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.1;
+  }
+  50% {
+    transform: translate(25px, -15px) scale(1.1);
+    opacity: 0.15;
+  }
+}
+
+@keyframes pulse-glow-purple {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.05;
+  }
+  50% {
+    transform: translate(-20px, 30px) scale(1.05);
+    opacity: 0.08;
+  }
+}
+
+@keyframes pulse-glow-emerald {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.08;
+  }
+  50% {
+    transform: translate(15px, 20px) scale(1.1);
+    opacity: 0.12;
+  }
+}
+
+.animate-glow-indigo {
+  animation: pulse-glow-indigo 18s ease-in-out infinite;
+}
+
+.animate-glow-purple {
+  animation: pulse-glow-purple 22s ease-in-out infinite alternate;
+}
+
+.animate-glow-emerald {
+  animation: pulse-glow-emerald 20s ease-in-out infinite alternate;
+}
+
+/* Elegant logo rotate animations */
+@keyframes logo-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-logo-float {
+  animation: logo-float 4s ease-in-out infinite;
+}
+
+/* Custom Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
