@@ -136,7 +136,7 @@ export class AppHeader extends LitElement {
 
         <div class="flex items-center gap-3 self-end md:self-center">
           <!-- Language Selector dropdown -->
-          <div class="relative inline-block text-left w-[130px] custom-dropdown-container">
+          <div class="relative inline-block text-left w-32.5 custom-dropdown-container">
             <button
               @click="${() => (this.dropdownOpen = !this.dropdownOpen)}"
               class="flex items-center justify-start w-full pl-9 pr-8 py-2.5 bg-slate-950/60 backdrop-blur-xl border border-white/5 hover:border-indigo-500/30 hover:bg-slate-900/60 text-slate-200 rounded-xl text-sm cursor-pointer focus:outline-none transition-all font-sans font-medium shadow-sm hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] focus:border-indigo-500 select-none relative"
