@@ -1,4 +1,4 @@
-export interface SvgFile {
+export interface BatchFile {
   name: string;
   file: File;
   relativePath: string;
@@ -18,3 +18,4 @@ export interface ConversionLog {
   text: string;
   type: "info" | "success" | "error" | "warning";
 }
+

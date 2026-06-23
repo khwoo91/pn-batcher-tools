@@ -1,5 +1,5 @@
 /// <reference types="wicg-file-system-access" />
-import type { SvgFile } from "../types";
+import type { BatchFile } from "../types";
 
 /**
  * Creates or retrieves a nested FileSystemDirectoryHandle based on a relative file path.
@@ -22,16 +22,18 @@ export async function getNestedDirHandle(
 }
 
 /**
- * Scans a directory recursively to gather all SVG files, bypassing the output directory if matched.
+ * Scans a directory recursively to gather files matching a specific extension, bypassing the output directory if matched.
  */
 export async function scanDirectory(
   dirHandle: FileSystemDirectoryHandle,
   path = "",
-  fileAccumulator: SvgFile[] = [],
+  fileAccumulator: BatchFile[] = [],
+  extension = ".svg",
   outputDirHandle: FileSystemDirectoryHandle | null = null,
 ): Promise<void> {
+  const extLower = extension.toLowerCase();
   for await (const entry of dirHandle.values()) {
-    if (entry.kind === "file" && entry.name.toLowerCase().endsWith(".svg")) {
+    if (entry.kind === "file" && entry.name.toLowerCase().endsWith(extLower)) {
       const file = await (entry as FileSystemFileHandle).getFile();
       fileAccumulator.push({
         name: entry.name,
@@ -54,9 +56,11 @@ export async function scanDirectory(
           entry as FileSystemDirectoryHandle,
           path ? `${path}/${entry.name}` : entry.name,
           fileAccumulator,
+          extension,
           outputDirHandle,
         );
       }
     }
   }
 }
+

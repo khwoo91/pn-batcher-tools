@@ -1,21 +1,31 @@
 export const ko = {
+  tabs: {
+    svg: "SVG 이미지 변환",
+    audio: "WAV 오디오 변환 (MP3)",
+  },
   main: {
     compatAlert: "이 브라우저는 폴더 직접 선택 API를 지원하지 않습니다. 파일 탐색기 기반 업로드를 사용합니다.",
     noSvgInFolder: "선택한 폴더 안에 SVG 파일이 존재하지 않습니다.",
-    folderScanDone: (count: number) => `폴더 스캔 완료: 총 ${count}개의 SVG 파일을 감지했습니다.`,
+    noWavInFolder: "선택한 폴더 안에 WAV 파일이 존재하지 않습니다.",
+    folderScanDone: (count: number) => `폴더 스캔 완료: 총 ${count}개의 파일을 감지했습니다.`,
     folderPermissionFail: (msg: string) => `폴더 접근 권한을 획득하지 못했습니다: ${msg}`,
     outputFolderSet: (name: string) => `출력 폴더가 지정되었습니다: ${name}`,
     noFallbackSvg: "업로드된 폴더/파일 중 SVG 파일을 찾을 수 없습니다.",
-    fallbackUploadDone: (count: number) => `수동 파일 업로드 완료: 총 ${count}개의 SVG 파일을 준비했습니다.`,
+    noFallbackWav: "업로드된 폴더/파일 중 WAV 파일을 찾을 수 없습니다.",
+    fallbackUploadDone: (count: number) => `수동 파일 업로드 완료: 총 ${count}개의 파일을 준비했습니다.`,
     noSvgToConvert: "변환할 SVG 파일이 존재하지 않습니다. 먼저 폴더를 선택하거나 업로드 해주세요.",
+    noWavToConvert: "변환할 WAV 파일이 존재하지 않습니다. 먼저 폴더를 선택하거나 업로드 해주세요.",
     noSelectedSvg: "선택된 SVG 파일이 없습니다. 변환할 파일을 한 개 이상 선택해 주세요.",
+    noSelectedWav: "선택된 WAV 파일이 없습니다. 변환할 파일을 한 개 이상 선택해 주세요.",
     invalidScale: "해당 배율 옵션이 올바르지 않습니다.",
     startConversion: (format: string, scale: number) => `변환 프로세스를 시작합니다... [포맷: ${format.toUpperCase()}, 배율: ${scale}x]`,
+    startAudioConversion: (bitrate: number) => `오디오 변환 프로세스를 시작합니다... [출력: MP3, 음질: ${bitrate}kbps]`,
     localOutputDirReady: (name: string) => `로컬 출력 폴더가 준비되었습니다: ${name}`,
-    directWriteNotice: "출력 폴더가 지정되지 않아 원본 SVG 파일 경로에 직접 변환 파일을 생성합니다.",
+    directWriteNotice: "출력 폴더가 지정되지 않아 원본 파일 경로에 직접 변환 파일을 생성합니다.",
     permissionFailFallback: "로컬 폴더 권한 획득 실패. 브라우저 제한으로 인해 ZIP 보관함으로 변환 후 다운로드로 대체 진행합니다.",
     zipArchiveStart: "ZIP 가상 아카이브 빌드를 개시합니다.",
     convertSuccess: (relPath: string, outName: string, w: number, h: number) => `성공: ${relPath} → ${outName} (${w}x${h} px)`,
+    convertAudioSuccess: (relPath: string, outName: string) => `성공: ${relPath} → ${outName}`,
     originalDeleted: (relPath: string) => `원본 제거 완료: ${relPath}`,
     originalDeleteFail: (relPath: string, msg: string) => `원본 제거 실패: ${relPath} (${msg})`,
     convertFail: (relPath: string, msg: string) => `실패: ${relPath} - ${msg}`,
@@ -35,10 +45,21 @@ export const ko = {
       }
       return `전체 변환 완료!\n\n${dest}`;
     },
+    alertAudioSuccessText: (isLocal: boolean, hasOutput: boolean, outName: string) => {
+      let dest = "";
+      if (isLocal) {
+        dest = hasOutput
+          ? `지정한 출력 폴더 '${outName}' 경로에 직접 개별 MP3 파일들이 저장되었습니다.`
+          : `선택한 로컬 폴더 내의 각 WAV 파일 위치에 직접 변환 MP3 파일들이 개별 저장되었습니다.`;
+      } else {
+        dest = `브라우저 제약(Safari/Firefox 등)으로 인해 변환된 파일들이 가상 폴더 구조를 포함한 ZIP 다운로드로 제공되었습니다.`;
+      }
+      return `전체 변환 완료!\n\n${dest}`;
+    },
     alertSuccessTitle: "전체 변환 완료!",
     alertFail: "변환 작업을 마쳤으나 완료된 리소스가 없습니다. 로그 콘솔을 체크해주세요.",
     queueRemoved: (name: string) => `대기열에서 제거됨: ${name}`,
-    compatBannerText: (name: string) => `현재 사용 중인 브라우저는 로컬 디렉토리에 직접 새 이미지 파일을 저장하거나 원본 파일을 제어하는 최신 API를 완벽히 지원하지 않습니다. 대신, 변환이 끝난 파일들을 묶어 ${name}.zip 압축파일 형태로 일괄 안전하게 다운로드해 드립니다.`,
+    compatBannerText: (name: string) => `현재 사용 중인 브라우저는 로컬 디렉토리에 직접 새 오디오 파일을 저장하거나 원본 파일을 제어하는 최신 API를 완벽히 지원하지 않습니다. 대신, 변환이 끝난 파일들을 묶어 ${name}.zip 압축파일 형태로 일괄 안전하게 다운로드해 드립니다.`,
     compatBannerTitle: "브라우저 호환성 안내:",
     converting: "변환 진행 중...",
     completed: "변환 완료!",
@@ -47,6 +68,7 @@ export const ko = {
     waitingFiles: "대기 파일:",
     exportFormat: "내보내기 포맷:",
     applyScale: "적용 배율:",
+    applyBitrate: "적용 음질:",
     suffix: "접미사:",
     btnConvert: "변환 시작",
     btnConverting: "변환 중...",
@@ -71,17 +93,39 @@ export const ko = {
     resetDir: "해제",
     selectOutputDir: "출력 디렉토리(폴더) 지정",
     noOutputDirCompat: "브라우저 보안 제약으로 인해 개별 폴더 지정을 지원하지 않습니다. 모든 변환 완료 시 한꺼번에 ZIP 압축파일로 받아보실 수 있습니다.",
-    outputDirDesc: "출력 폴더가 미지정된 경우 원본 SVG 파일 위치와 동일한 경로에 결과물이 개별 생성됩니다.",
+    outputDirDesc: "출력 폴더가 미지정된 경우 원본 파일 위치와 동일한 경로에 결과물이 개별 생성됩니다.",
     deleteOriginalLabel: "변환 후 원본 SVG 파일 자동 제거",
     deleteOriginalDesc: "변환 프로세스가 완전히 정상 종료되면 해당 로컬 원본 파일(.svg)을 대상 폴더에서 삭제합니다.",
+    deleteOriginalAlert: "로컬 디렉토리가 브라우저 상에 정상 연동되어 있어야 원본 제어가 가능합니다.",
+  },
+  audioSettings: {
+    linkFolder: "대상 오디오 폴더 연동하기",
+    localFolderSelect: "로컬 디렉토리(폴더) 지정",
+    folderAutoFetch: "폴더 내의 모든 WAV 오디오 파일을 자동으로 가져옵니다.",
+    filesLoaded: (count: number) => `${count}개 오디오 파일 로드됨`,
+    noFolderSelected: "지정된 로컬 디렉토리가 없습니다.",
+    fallbackUpload: "작업 폴더 선택 업로드",
+    fallbackUploadDesc: "폴더 내부를 업로드 형식으로 가져옵니다.",
+    filesDetected: (count: number) => `${count}개 오디오 파일 감지됨`,
+    waitingImport: "오디오 폴더 임포트 대기 중",
+    rulesHeader: "MP3 변환 품질 설정",
+    bitrateLabel: "MP3 출력 비트레이트 (음질)",
+    bitrateDesc: "비트레이트가 높을수록 음질이 좋으나 파일 크기가 커집니다.",
+    outputDirLabel: "내보낼 대상 폴더 (출력 경로)",
+    resetDir: "해제",
+    selectOutputDir: "출력 디렉토리(폴더) 지정",
+    noOutputDirCompat: "브라우저 보안 제약으로 인해 개별 폴더 지정을 지원하지 않습니다. 모든 변환 완료 시 한꺼번에 ZIP 압축파일로 받아보실 수 있습니다.",
+    outputDirDesc: "출력 폴더가 미지정된 경우 원본 WAV 파일 위치와 동일한 경로에 결과물이 개별 생성됩니다.",
+    deleteOriginalLabel: "변환 후 원본 WAV 파일 자동 제거",
+    deleteOriginalDesc: "변환 프로세스가 완전히 정상 종료되면 해당 로컬 원본 파일(.wav)을 대상 폴더에서 삭제합니다.",
     deleteOriginalAlert: "로컬 디렉토리가 브라우저 상에 정상 연동되어 있어야 원본 제어가 가능합니다.",
   },
   queue: {
     selectAll: "전체 선택 / 해제",
     fileList: (count: number) => `파일 리스트 (${count}개)`,
-    emptyQueue: "대기열이 비어 있습니다. 대상 로컬 SVG 폴더를 연동해 주세요.",
+    emptyQueue: "대기열이 비어 있습니다. 대상 로컬 폴더를 연동해 주세요.",
     statusPending: "대기 중",
-    statusProcessing: "렌더링 중",
+    statusProcessing: "변환 중",
     statusSuccess: "완료됨",
     statusError: "에러",
     deleteTooltip: "대기열에서 삭제 (Del 키)",

@@ -1,11 +1,11 @@
 /// <reference types="wicg-file-system-access" />
 import JSZip from "jszip";
-import type { SvgFile } from "../types";
+import type { BatchFile } from "../types";
 import { getSvgDimensions, convertSvgToImage } from "../utils/svg-utils";
 import { getNestedDirHandle } from "../utils/fs-utils";
 
 export interface BatchConvertOptions {
-  selectedFiles: SvgFile[];
+  selectedFiles: BatchFile[];
   exportFormat: "png" | "jpg";
   selectedScale: number;
   scaleSuffix: string;

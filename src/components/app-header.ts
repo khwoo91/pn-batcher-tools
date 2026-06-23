@@ -43,8 +43,8 @@ export class AppHeader extends LitElement {
 
   protected override render() {
     const desc = this.lang === "ko"
-      ? "단일 배율 변환, 포맷 확장(JPG), 원본 정리 기능을 포함한 통합 배치 변환기"
-      : "Integrated batch exporter with multi-scale, format extension (JPG), and original cleanup";
+      ? "SVG 이미지 배율 변환 및 WAV 오디오 MP3 대량 변환 도구"
+      : "Bulk SVG image scale converter and WAV audio MP3 converter";
 
     return html`
       <header class="flex flex-col md:flex-row items-center justify-between border-b border-white/5 pb-6 mb-8 gap-4">
