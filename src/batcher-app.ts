@@ -39,6 +39,7 @@ export class BatcherApp extends LitElement {
   @state() private audioBitrate = 192; // 128, 192, 256, 320
   @state() private audioDeleteOriginal = false;
   @state() private audioOutputDirHandle: FileSystemDirectoryHandle | null = null;
+  @state() private audioInputExts: string[] = [".wav", ".mp3"];
 
   // Shared UI states
   @state() private isConverting = false;
@@ -155,7 +156,7 @@ export class BatcherApp extends LitElement {
       } else {
         this.audioDirHandle = handle;
         this.audioFiles = [];
-        await scanDirectory(this.audioDirHandle, "", files, ".wav", this.audioOutputDirHandle);
+        await scanDirectory(this.audioDirHandle, "", files, this.audioInputExts, this.audioOutputDirHandle);
         this.audioFiles = files;
 
         if (this.audioFiles.length === 0) {
@@ -201,12 +202,13 @@ export class BatcherApp extends LitElement {
   private appendFiles(files: FileList | File[], isDropped = false) {
     this.conversionProgress = 0;
     const isSvg = this.activeTab === "svg";
-    const ext = isSvg ? ".svg" : ".wav";
+    const exts = isSvg ? [".svg"] : this.audioInputExts;
     const newBatchFiles: BatchFile[] = [];
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      if (file.name.toLowerCase().endsWith(ext)) {
+      const hasMatchedExt = exts.some(ext => file.name.toLowerCase().endsWith(ext));
+      if (hasMatchedExt) {
         newBatchFiles.push({
           name: file.name,
           file: file,
@@ -259,6 +261,31 @@ export class BatcherApp extends LitElement {
     const files = e.detail;
     if (!files || files.length === 0) return;
     this.appendFiles(files, true);
+  }
+
+  private handleChangeInputExts(e: CustomEvent<string[]>) {
+    this.audioInputExts = e.detail;
+    if (this.audioDirHandle) {
+      this.reScanAudioDirectory();
+    }
+  }
+
+  private async reScanAudioDirectory() {
+    if (!this.audioDirHandle) return;
+    try {
+      const files: BatchFile[] = [];
+      await scanDirectory(
+        this.audioDirHandle,
+        "",
+        files,
+        this.audioInputExts,
+        this.audioOutputDirHandle
+      );
+      this.audioFiles = files;
+      this.addLog(t[this.currentLang].folderScanDone(this.audioFiles.length));
+    } catch (err: any) {
+      console.error("Failed to re-scan audio directory", err);
+    }
   }
 
   private loadSampleFile() {
@@ -677,6 +704,7 @@ export class BatcherApp extends LitElement {
                     .deleteOriginal="${this.audioDeleteOriginal}"
                     .isConverting="${this.isConverting}"
                     .conversionProgress="${this.conversionProgress}"
+                    .inputExts="${this.audioInputExts}"
                     @select-folder="${this.selectFolder}"
                     @select-output-folder="${this.selectOutputFolder}"
                     @reset-output-folder="${() => (this.audioOutputDirHandle = null)}"
@@ -684,6 +712,7 @@ export class BatcherApp extends LitElement {
                     @load-sample="${this.loadSampleFile}"
                     @change-bitrate="${(e: CustomEvent<number>) => (this.audioBitrate = e.detail)}"
                     @toggle-delete="${() => (this.audioDeleteOriginal = !this.audioDeleteOriginal)}"
+                    @change-input-exts="${this.handleChangeInputExts}"
                   ></audio-settings-panel>
                 `}
           </div>

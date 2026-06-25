@@ -1,24 +1,24 @@
 export const en = {
   tabs: {
     svg: "SVG Image Export",
-    audio: "WAV Audio Convert (MP3)",
+    audio: "Audio Convert (MP3)",
   },
   main: {
     compatAlert: "This browser does not support the File System Access API. Fallback file upload is used.",
     noSvgInFolder: "No SVG files found in the selected folder.",
-    noWavInFolder: "No WAV files found in the selected folder.",
+    noWavInFolder: "No audio files (WAV, MP3) found in the selected folder.",
     folderScanDone: (count: number) => `Folder scan complete: Detected ${count} files.`,
     folderPermissionFail: (msg: string) => `Failed to acquire folder permission: ${msg}`,
     outputFolderSet: (name: string) => `Output folder specified: ${name}`,
     noFallbackSvg: "No SVG files found in the uploaded folders or files.",
-    noFallbackWav: "No WAV files found in the uploaded folders or files.",
+    noFallbackWav: "No audio files (WAV, MP3) found in the uploaded folders or files.",
     fallbackUploadDone: (count: number) => `Manual upload complete: Prepared ${count} files.`,
     sampleFileAdded: (type: string) => `A sample ${type} file has been added to the queue. Click the convert button to test!`,
     filesDropped: (count: number) => `Successfully added ${count} files via Drag & Drop.`,
     noSvgToConvert: "No SVG files to convert. Please select a folder or upload files first.",
-    noWavToConvert: "No WAV files to convert. Please select a folder or upload files first.",
+    noWavToConvert: "No audio files to convert. Please select a folder or upload files first.",
     noSelectedSvg: "No SVG files selected. Please select at least one file to convert.",
-    noSelectedWav: "No WAV files selected. Please select at least one file to convert.",
+    noSelectedWav: "No audio files selected. Please select at least one file to convert.",
     invalidScale: "The selected scale option is invalid.",
     startConversion: (format: string, scale: number) => `Starting conversion process... [Format: ${format.toUpperCase()}, Scale: ${scale}x]`,
     startAudioConversion: (bitrate: number) => `Starting audio conversion... [Output: MP3, Quality: ${bitrate}kbps]`,
@@ -30,6 +30,7 @@ export const en = {
     convertAudioSuccess: (relPath: string, outName: string) => `Success: ${relPath} → ${outName}`,
     originalDeleted: (relPath: string) => `Original file deleted: ${relPath}`,
     originalDeleteFail: (relPath: string, msg: string) => `Failed to delete original file: ${relPath} (${msg})`,
+    deleteOriginalSkipSameName: (relPath: string) => `Original file kept because output and input filenames are identical: ${relPath}`,
     convertFail: (relPath: string, msg: string) => `Failed: ${relPath} - ${msg}`,
     parseError: (relPath: string, msg: string) => `Structure parsing error: ${relPath} - ${msg}`,
     zipCompressing: "Compressing ZIP archive...",
@@ -52,7 +53,7 @@ export const en = {
       if (isLocal) {
         dest = hasOutput
           ? `Individual MP3 files were saved directly into the specified output folder '${outName}'.`
-          : `Individual converted MP3 files were saved directly in the same directories as the original WAV files.`;
+          : `Individual converted MP3 files were saved directly in the same directories as the original audio files.`;
       } else {
         dest = `Due to browser restrictions (Safari/Firefox, etc.), converted audio files were provided as a ZIP download maintaining virtual folder structure.`;
       }
@@ -107,7 +108,9 @@ export const en = {
   audioSettings: {
     linkFolder: "Link Target Audio Folder",
     localFolderSelect: "Specify Local Directory",
-    folderAutoFetch: "Automatically scan and load all WAV files in the directory.",
+    folderAutoFetch: "Automatically scan and load all audio files (WAV, MP3) in the directory.",
+    inputExtsLabel: "Target Extensions",
+    noExtSelectedAlert: "At least one extension must be selected.",
     filesLoaded: (count: number) => `${count} audio files loaded`,
     noFolderSelected: "No local directory selected.",
     fallbackUpload: "Select & Upload Workspace Folder",
@@ -115,7 +118,7 @@ export const en = {
     selectFiles: "Select Files",
     orText: "or",
     trySample: "Try with Sample File (3s)",
-    trySampleDesc: "Don't have a WAV? Test instantly with a sample file.",
+    trySampleDesc: "Don't have an audio file? Test instantly with a sample file.",
     filesDetected: (count: number) => `${count} audio files detected`,
     waitingImport: "Waiting for folder import...",
     rulesHeader: "MP3 Conversion Settings",
@@ -125,9 +128,9 @@ export const en = {
     resetDir: "Clear",
     selectOutputDir: "Specify Output Folder",
     noOutputDirCompat: "Due to browser security restrictions, individual output folder selection is not supported. You will receive all converted files in a single ZIP file upon completion.",
-    outputDirDesc: "If the output folder is not specified, files will be saved in the same directory as their original WAVs.",
-    deleteOriginalLabel: "Auto-delete original WAV after conversion",
-    deleteOriginalDesc: "Removes original WAV (.wav) files from the target directory after conversion completes successfully.",
+    outputDirDesc: "If the output folder is not specified, files will be saved in the same directory as their original audio files.",
+    deleteOriginalLabel: "Auto-delete original audio file after conversion",
+    deleteOriginalDesc: "Removes original audio (.wav, .mp3) files from the target directory after conversion completes successfully.",
     deleteOriginalAlert: "Original files can only be controlled when a local directory is successfully linked to the browser.",
   },
   queue: {
@@ -139,7 +142,7 @@ export const en = {
     statusSuccess: "Success",
     statusError: "Error",
     deleteTooltip: "Remove from queue (Del key)",
-    dragOverActive: (isSvg: boolean) => isSvg ? "Drop SVG files here to add to queue" : "Drop WAV files here to add to queue",
+    dragOverActive: (isSvg: boolean) => isSvg ? "Drop SVG files here to add to queue" : "Drop audio files here to add to queue",
     trySampleEmpty: "Test with Sample File",
   }
 };

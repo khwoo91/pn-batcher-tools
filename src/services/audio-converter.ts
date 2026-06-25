@@ -213,12 +213,16 @@ export async function batchConvertAudio(
 
       // 4. Optional original file cleanup
       if (deleteOriginal && dirHandle) {
-        try {
-          const targetDirHandle = await getNestedDirHandle(dirHandle, audioItem.relativePath);
-          await targetDirHandle.removeEntry(audioItem.name);
-          onLog(t.originalDeleted(audioItem.relativePath), "info");
-        } catch (delErr: any) {
-          onLog(t.originalDeleteFail(audioItem.relativePath, delErr.message), "warning");
+        if (audioItem.name === outputFileName) {
+          onLog(t.deleteOriginalSkipSameName(audioItem.relativePath), "warning");
+        } else {
+          try {
+            const targetDirHandle = await getNestedDirHandle(dirHandle, audioItem.relativePath);
+            await targetDirHandle.removeEntry(audioItem.name);
+            onLog(t.originalDeleted(audioItem.relativePath), "info");
+          } catch (delErr: any) {
+            onLog(t.originalDeleteFail(audioItem.relativePath, delErr.message), "warning");
+          }
         }
       }
 

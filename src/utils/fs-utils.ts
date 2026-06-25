@@ -28,12 +28,16 @@ export async function scanDirectory(
   dirHandle: FileSystemDirectoryHandle,
   path = "",
   fileAccumulator: BatchFile[] = [],
-  extension = ".svg",
+  extension: string | string[] = ".svg",
   outputDirHandle: FileSystemDirectoryHandle | null = null,
 ): Promise<void> {
-  const extLower = extension.toLowerCase();
+  const extensions = Array.isArray(extension)
+    ? extension.map((ext) => ext.toLowerCase())
+    : [extension.toLowerCase()];
+
   for await (const entry of dirHandle.values()) {
-    if (entry.kind === "file" && entry.name.toLowerCase().endsWith(extLower)) {
+    const isMatched = entry.kind === "file" && extensions.some((ext) => entry.name.toLowerCase().endsWith(ext));
+    if (isMatched) {
       const file = await (entry as FileSystemFileHandle).getFile();
       fileAccumulator.push({
         name: entry.name,
