@@ -152,8 +152,8 @@ export class AudioSettingsPanel extends LitElement {
                       : "bg-slate-950/40 text-slate-500 border-white/5 hover:border-white/10 hover:text-slate-300"}"
                   >
                     ${isSelected
-                      ? html`<i class="fa-solid fa-square-check text-indigo-400 text-sm relative top-[2px]"></i>`
-                      : html`<i class="fa-regular fa-square text-slate-600 text-sm relative top-[2px]"></i>`}
+                      ? html`<i class="fa-solid fa-square-check text-indigo-400 text-sm relative top-0.5"></i>`
+                      : html`<i class="fa-regular fa-square text-slate-600 text-sm relative top-0.5"></i>`}
                     <span>${ext.toUpperCase().replace(".", "")}</span>
                   </button>
                 `;
