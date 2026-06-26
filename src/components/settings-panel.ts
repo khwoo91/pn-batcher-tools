@@ -303,41 +303,38 @@ export class SettingsPanel extends LitElement {
                 ${this.scaleOptions.map((item) => {
                   const itemLabel = item.scale === 1 ? (this.lang === "ko" ? "1.0x (기본)" : "1.0x (Default)") : item.label;
                   return html`
-                      <div class="flex items-center gap-2">
-                        <button
-                          @click="${() => this.handleChangeScale(item.scale)}"
-                          ?disabled="${this.isConverting}"
-                          class="flex-1 p-3.5 rounded-xl border transition-all flex items-center justify-between font-sans cursor-pointer ${
-                            this.selectedScale === item.scale
-                              ? "bg-brand-bg border-brand-primary text-brand-text font-semibold hover:border-brand-primary/60 shadow-[0_0_15px_rgba(99,102,241,0.05)]"
-                              : "bg-slate-950 border-slate-800 text-slate-400 hover:border-brand-primary/40 hover:text-slate-200"
-                          }"
+                    <div class="flex items-center gap-2">
+                      <button
+                        @click="${() => this.handleChangeScale(item.scale)}"
+                        ?disabled="${this.isConverting}"
+                        class="flex-1 p-3.5 rounded-xl border transition-all flex items-center justify-between font-sans cursor-pointer ${this
+                          .selectedScale === item.scale
+                          ? "bg-brand-bg border-brand-primary text-brand-text font-semibold hover:border-brand-primary/60 shadow-[0_0_15px_rgba(99,102,241,0.05)]"
+                          : "bg-slate-950 border-slate-800 text-slate-400 hover:border-brand-primary/40 hover:text-slate-200"}"
+                      >
+                        <span class="text-xs font-bold">${itemLabel}</span>
+                        <div
+                          class="w-4.5 h-4.5 rounded-full border-2 flex items-center justify-center ${this.selectedScale === item.scale
+                            ? "border-brand-primary bg-brand-bg shadow-[0_0_8px_rgba(99,102,241,0.4)]"
+                            : "border-slate-500 bg-slate-950"}"
                         >
-                          <span class="text-xs font-bold">${itemLabel}</span>
-                          <div
-                            class="w-4.5 h-4.5 rounded-full border-2 flex items-center justify-center ${
-                              this.selectedScale === item.scale
-                                ? "border-brand-primary bg-brand-bg shadow-[0_0_8px_rgba(99,102,241,0.4)]"
-                                : "border-slate-500 bg-slate-950"
-                            }"
-                          >
-                            ${this.selectedScale === item.scale ? html`<div class="w-2 h-2 rounded-full bg-brand-primary"></div>` : ""}
-                          </div>
-                        </button
-
-                        <div class="w-28 shrink-0 flex flex-col gap-1">
-                           <input
-                            type="text"
-                            .value="${item.suffix}"
-                            @input="${(e: Event) => this.handleSuffixInput(item.scale, e)}"
-                            ?disabled="${this.isConverting}"
-                            placeholder="${activeT.placeholderSuffix}"
-                            class="w-full px-3.5 py-4 bg-slate-950 border border-slate-800 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/20 rounded-xl text-slate-100 text-xs focus:outline-none transition-all font-mono shadow-inner"
-                            title="${activeT.suffixTooltip}"
-                          />
+                          ${this.selectedScale === item.scale ? html`<div class="w-2 h-2 rounded-full bg-brand-primary"></div>` : ""}
                         </div>
+                      </button>
+
+                      <div class="w-28 shrink-0 flex flex-col gap-1">
+                        <input
+                          type="text"
+                          .value="${item.suffix}"
+                          @input="${(e: Event) => this.handleSuffixInput(item.scale, e)}"
+                          ?disabled="${this.isConverting}"
+                          placeholder="${activeT.placeholderSuffix}"
+                          class="w-full px-3.5 py-4 bg-slate-950 border border-slate-800 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/20 rounded-xl text-slate-100 text-xs focus:outline-none transition-all font-mono shadow-inner"
+                          title="${activeT.suffixTooltip}"
+                        />
                       </div>
-                    `;
+                    </div>
+                  `;
                 })}
               </div>
             </div>
