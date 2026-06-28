@@ -2,7 +2,7 @@ export const ko = {
   tabs: {
     svg: "SVG 이미지 변환",
     audio: "오디오 변환 (MP3)",
-    rename: "파일 일괄 변경",
+    rename: "파일명 일괄 변경",
   },
   main: {
     compatAlert: "이 브라우저는 폴더 직접 선택 API를 지원하지 않습니다. 파일 탐색기 기반 업로드를 사용합니다.",

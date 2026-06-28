@@ -1247,11 +1247,11 @@ export class BatcherApp extends LitElement {
       </div>
 
       <!-- Floating Bottom Glass Action Bar -->
-      <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl bg-white/80 dark:bg-slate-950/60 backdrop-blur-xl border border-black/10 dark:border-white/10 py-4.5 px-6 z-40 rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:shadow-[0_15px_50px_rgba(0,0,0,0.6)] transition-all duration-300 hover:border-black/15 dark:hover:border-white/15">
+      <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl bg-[rgba(255,255,255,0.75)] dark:bg-[rgba(15,23,42,0.65)] backdrop-blur-[13px] backdrop-saturate-[183%] border border-[rgba(255,255,255,0.35)] dark:border-white/10 py-4.5 px-6 z-40 rounded-3xl shadow-[0px_8px_32px_rgba(31,38,135,0.25)] dark:shadow-[0px_15px_50px_rgba(0,0,0,0.6)] transition-all duration-300 hover:border-[rgba(255,255,255,0.5)] dark:hover:border-white/15">
         <!-- Progress bar along the top inner edge -->
         ${this.isConverting || this.conversionProgress > 0
           ? html`
-              <div class="absolute top-0 left-6 right-6 h-1 bg-slate-950/40 rounded-full overflow-hidden">
+              <div class="absolute top-0 left-6 right-6 h-1 bg-slate-950/20 dark:bg-white/10 rounded-full overflow-hidden">
                 <div class="progress-bar-inner h-full bg-linear-to-r from-indigo-500 via-purple-500 to-emerald-500 transition-all duration-300 shadow-[0_0_8px_rgba(99,102,241,0.6)]"></div>
               </div>
             `
@@ -1269,36 +1269,36 @@ export class BatcherApp extends LitElement {
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-indigo-500"></span>
                           </span>
-                          <span class="text-white font-bold tracking-wide">${isRename ? (this.currentLang === "ko" ? "변경 진행 중..." : "Renaming...") : activeT.converting}</span>
+                          <span class="text-slate-100 font-bold tracking-wide">${isRename ? (this.currentLang === "ko" ? "변경 진행 중..." : "Renaming...") : activeT.converting}</span>
                         `
                       : html`
                           <span class="inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
-                          <span class="text-emerald-400 font-bold tracking-wide">${isRename ? (this.currentLang === "ko" ? "변경 완료!" : "Rename complete!") : activeT.completed}</span>
+                          <span class="text-emerald-600 font-bold tracking-wide">${isRename ? (this.currentLang === "ko" ? "변경 완료!" : "Rename complete!") : activeT.completed}</span>
                         `}
                   </div>
-                  <span class="text-slate-700">|</span>
+                  <span class="text-black/10 dark:text-white/10">|</span>
                   <span>
                     ${activeT.progress}
-                    <strong class="text-indigo-400 font-mono text-xs">${this.conversionProgress}%</strong>
+                    <strong class="text-indigo-600 dark:text-indigo-400 font-mono text-xs">${this.conversionProgress}%</strong>
                   </span>
-                  <span class="text-slate-700 hidden sm:inline">|</span>
+                  <span class="text-black/10 dark:text-white/10 hidden sm:inline">|</span>
                   <span class="hidden sm:inline">
                     ${activeT.doneCount}
-                    <strong class="text-emerald-400 font-mono">${this.currentConversionIndex}</strong> /
+                    <strong class="text-emerald-600 dark:text-emerald-400 font-mono">${this.currentConversionIndex}</strong> /
                     ${currentFiles.filter((f) => f.selected).length}
                   </span>
                 </div>
               `
             : html`
-                <div class="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-400 font-bold font-sans">
+                <div class="flex flex-wrap items-center gap-4 text-xs text-slate-300 font-bold font-sans">
                   <div class="flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full ${selectedFilesCount > 0 ? "bg-indigo-400 animate-ping" : "bg-slate-300 dark:bg-slate-700"}"></span>
                     <span>
                       ${activeT.waitingFiles}
-                      <strong class="text-slate-900 dark:text-white font-extrabold">
+                      <strong class="text-slate-100 font-extrabold">
                         ${selectedFilesCount}${this.currentLang === "ko" ? "개" : ""}
                       </strong>
-                      <span class="text-slate-400 dark:text-slate-500 font-normal">
+                      <span class="text-slate-500 dark:text-slate-500 font-normal">
                         / ${currentFiles.length}${this.currentLang === "ko" ? "개" : ""}
                       </span>
                     </span>
@@ -1306,28 +1306,28 @@ export class BatcherApp extends LitElement {
 
                   ${isSvg
                     ? html`
-                        <span class="text-slate-300 dark:text-slate-700 hidden md:inline">|</span>
+                        <span class="text-black/10 dark:text-white/10 hidden md:inline">|</span>
                         <span>
                           ${activeT.exportFormat}
                           <strong class="text-indigo-600 dark:text-indigo-400 uppercase font-extrabold">${this.exportFormat}</strong>
                         </span>
-                        <span class="text-slate-300 dark:text-slate-700 hidden md:inline">|</span>
+                        <span class="text-black/10 dark:text-white/10 hidden md:inline">|</span>
                         <span>
                           ${activeT.applyScale}
-                          <strong class="text-slate-900 dark:text-white font-mono font-extrabold">${this.selectedScale}x</strong>
+                          <strong class="text-slate-100 font-mono font-extrabold">${this.selectedScale}x</strong>
                         </span>
                         ${suffixTemplate}
                       `
                     : isAudio
                     ? html`
-                        <span class="text-slate-300 dark:text-slate-700 hidden md:inline">|</span>
+                        <span class="text-black/10 dark:text-white/10 hidden md:inline">|</span>
                         <span>
                           ${activeT.applyBitrate}
                           <strong class="text-purple-600 dark:text-purple-400 uppercase font-extrabold">${this.audioBitrate} kbps</strong>
                         </span>
                       `
                     : html`
-                        <span class="text-slate-300 dark:text-slate-700 hidden md:inline">|</span>
+                        <span class="text-black/10 dark:text-white/10 hidden md:inline">|</span>
                         <span>
                           ${this.currentLang === "ko" ? "모드" : "Mode"}:
                           <strong class="text-pink-600 dark:text-pink-400 uppercase font-extrabold">${this.currentLang === "ko" ? "파일 일괄 변경" : "Batch Rename"}</strong>
@@ -1342,7 +1342,7 @@ export class BatcherApp extends LitElement {
                   <button
                     @click="${this.resetAll}"
                     ?disabled="${this.isConverting}"
-                    class="flex-1 md:flex-initial w-full md:w-auto px-6 py-3 border border-black/10 dark:border-white/5 hover:border-indigo-500/30 dark:hover:border-indigo-500/20 bg-black/5 dark:bg-slate-950/60 hover:bg-black/10 dark:hover:bg-slate-900 disabled:opacity-30 disabled:cursor-not-allowed text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-xl text-xs transition-all flex items-center justify-center gap-2 font-sans cursor-pointer active:scale-95"
+                    class="flex-1 md:flex-initial w-full md:w-auto px-6 py-3 border border-black/15 dark:border-white/10 bg-black/[0.04] dark:bg-white/[0.04] hover:bg-black/[0.08] dark:hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 hover:text-slate-100 rounded-xl text-xs transition-all flex items-center justify-center gap-2 font-sans cursor-pointer active:scale-95"
                   >
                     <i class="fa-solid fa-rotate-left text-xs"></i>
                     <span>${this.currentLang === "ko" ? "초기화" : "Reset"}</span>
@@ -1357,7 +1357,7 @@ export class BatcherApp extends LitElement {
                 ? "from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500"
                 : isAudio
                 ? "from-purple-600 via-fuchsia-600 to-pink-600 hover:from-purple-500 hover:via-fuchsia-500 hover:to-pink-500"
-                : "from-pink-600 via-rose-600 to-red-600 hover:from-pink-500 hover:via-rose-500 hover:to-red-500"} disabled:from-slate-200 disabled:via-slate-200 disabled:to-slate-200 dark:disabled:from-slate-900 dark:disabled:via-slate-900 dark:disabled:to-slate-900 disabled:text-slate-400 dark:disabled:text-slate-500 disabled:border-black/5 dark:disabled:border-white/5 disabled:cursor-not-allowed disabled:shadow-none hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] active:scale-[0.97] text-white font-bold text-sm tracking-wide rounded-xl border border-white/20 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shrink-0"
+                : "from-pink-600 via-rose-600 to-red-600 hover:from-pink-500 hover:via-rose-500 hover:to-red-500"} disabled:bg-none disabled:bg-black/5 dark:disabled:bg-white/5 disabled:text-black/30 dark:disabled:text-white/30 disabled:border-black/5 dark:disabled:border-white/5 disabled:cursor-not-allowed disabled:shadow-none hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] active:scale-[0.97] text-white font-bold text-sm tracking-wide rounded-xl border border-white/20 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shrink-0"
             >
               ${this.isConverting
                 ? html`

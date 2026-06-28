@@ -386,43 +386,51 @@ export class RenamerSettingsPanel extends LitElement {
 
           <div class="space-y-4 max-h-[500px] overflow-y-auto pr-1">
             <!-- 1. 문자열 바꾸기 -->
-            <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl space-y-3">
-              <h3 class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                <i class="fa-solid fa-arrows-rotate text-purple-primary"></i>
-                ${activeT.replaceHeader}
-              </h3>
-              <div class="grid grid-cols-2 gap-2">
-                <input
-                  type="text"
-                  id="replace-find"
-                  placeholder="${activeT.replaceFind}"
-                  class="bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
+            <details class="group p-4 bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+              <summary class="text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200">
+                <div class="flex items-center gap-1.5">
+                  <i class="fa-solid fa-arrows-rotate text-purple-primary"></i>
+                  <span>${activeT.replaceHeader}</span>
+                </div>
+                <i class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"></i>
+              </summary>
+              <div class="space-y-3 pt-4">
+                <div class="grid grid-cols-2 gap-2">
+                  <input
+                    type="text"
+                    id="replace-find"
+                    placeholder="${activeT.replaceFind}"
+                    class="bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
+                    ?disabled="${this.isConverting || this.filesCount === 0}"
+                  />
+                  <input
+                    type="text"
+                    id="replace-replace"
+                    placeholder="${activeT.replaceReplace}"
+                    class="bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
+                    ?disabled="${this.isConverting || this.filesCount === 0}"
+                  />
+                </div>
+                <button
+                  @click="${this.applyReplace}"
                   ?disabled="${this.isConverting || this.filesCount === 0}"
-                />
-                <input
-                  type="text"
-                  id="replace-replace"
-                  placeholder="${activeT.replaceReplace}"
-                  class="bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
-                  ?disabled="${this.isConverting || this.filesCount === 0}"
-                />
+                  class="w-full py-2 bg-purple-primary hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans"
+                >
+                  ${activeT.btnApply}
+                </button>
               </div>
-              <button
-                @click="${this.applyReplace}"
-                ?disabled="${this.isConverting || this.filesCount === 0}"
-                class="w-full py-2 bg-purple-primary hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans"
-              >
-                ${activeT.btnApply}
-              </button>
-            </div>
+            </details>
 
             <!-- 2. 앞이름 / 뒷이름 붙이기 -->
-            <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl space-y-3">
-              <h3 class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                <i class="fa-solid fa-indent text-purple-primary"></i>
-                ${activeT.prefixHeader}
-              </h3>
-              <div class="space-y-2">
+            <details class="group p-4 bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+              <summary class="text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200">
+                <div class="flex items-center gap-1.5">
+                  <i class="fa-solid fa-indent text-purple-primary"></i>
+                  <span>${activeT.prefixHeader}</span>
+                </div>
+                <i class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"></i>
+              </summary>
+              <div class="space-y-2 pt-4">
                 <div class="flex gap-2">
                   <input
                     type="text"
@@ -456,54 +464,62 @@ export class RenamerSettingsPanel extends LitElement {
                   </button>
                 </div>
               </div>
-            </div>
+            </details>
 
             <!-- 3. 특정 위치 지우기 -->
-            <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl space-y-3">
-              <h3 class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                <i class="fa-solid fa-scissors text-purple-primary"></i>
-                ${activeT.removeHeader}
-              </h3>
-              <div class="grid grid-cols-2 gap-2">
-                <div class="space-y-1">
-                  <label class="text-[10px] text-slate-500 font-bold block">${activeT.removeStart}</label>
-                  <input
-                    type="number"
-                    id="remove-start"
-                    min="1"
-                    placeholder="예: 3"
-                    class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
-                    ?disabled="${this.isConverting || this.filesCount === 0}"
-                  />
+            <details class="group p-4 bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+              <summary class="text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200">
+                <div class="flex items-center gap-1.5">
+                  <i class="fa-solid fa-scissors text-purple-primary"></i>
+                  <span>${activeT.removeHeader}</span>
                 </div>
-                <div class="space-y-1">
-                  <label class="text-[10px] text-slate-500 font-bold block">${activeT.removeLen}</label>
-                  <input
-                    type="number"
-                    id="remove-len"
-                    min="1"
-                    placeholder="예: 2"
-                    class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
-                    ?disabled="${this.isConverting || this.filesCount === 0}"
-                  />
+                <i class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"></i>
+              </summary>
+              <div class="space-y-3 pt-4">
+                <div class="grid grid-cols-2 gap-2">
+                  <div class="space-y-1">
+                    <label class="text-[10px] text-slate-500 font-bold block">${activeT.removeStart}</label>
+                    <input
+                      type="number"
+                      id="remove-start"
+                      min="1"
+                      placeholder="예: 3"
+                      class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
+                      ?disabled="${this.isConverting || this.filesCount === 0}"
+                    />
+                  </div>
+                  <div class="space-y-1">
+                    <label class="text-[10px] text-slate-500 font-bold block">${activeT.removeLen}</label>
+                    <input
+                      type="number"
+                      id="remove-len"
+                      min="1"
+                      placeholder="예: 2"
+                      class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
+                      ?disabled="${this.isConverting || this.filesCount === 0}"
+                    />
+                  </div>
                 </div>
+                <button
+                  @click="${this.applyRemove}"
+                  ?disabled="${this.isConverting || this.filesCount === 0}"
+                  class="w-full py-2 bg-purple-primary hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans"
+                >
+                  ${activeT.btnApply}
+                </button>
               </div>
-              <button
-                @click="${this.applyRemove}"
-                ?disabled="${this.isConverting || this.filesCount === 0}"
-                class="w-full py-2 bg-purple-primary hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans"
-              >
-                ${activeT.btnApply}
-              </button>
-            </div>
+            </details>
 
             <!-- 4. 일괄 정리 및 지우기 -->
-            <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl space-y-3">
-              <h3 class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                <i class="fa-solid fa-broom text-purple-primary"></i>
-                ${activeT.cleanHeader}
-              </h3>
-              <div class="grid grid-cols-2 gap-2">
+            <details class="group p-4 bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+              <summary class="text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200">
+                <div class="flex items-center gap-1.5">
+                  <i class="fa-solid fa-broom text-purple-primary"></i>
+                  <span>${activeT.cleanHeader}</span>
+                </div>
+                <i class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"></i>
+              </summary>
+              <div class="grid grid-cols-2 gap-2 pt-4">
                 <button
                   @click="${this.applyKeepNumbers}"
                   ?disabled="${this.isConverting || this.filesCount === 0}"
@@ -518,105 +534,107 @@ export class RenamerSettingsPanel extends LitElement {
                 >
                   ${activeT.btnRemoveBrackets}
                 </button>
-                <!-- <button
-                  @click="${this.applyClearFilename}"
-                  ?disabled="${this.isConverting || this.filesCount === 0}"
-                  class="col-span-2 py-2.5 px-2 bg-slate-950 border border-slate-800 hover:border-rose-500/30 text-rose-600 hover:text-rose-500 dark:text-rose-400 dark:hover:text-rose-300 rounded-xl text-xs font-bold transition-all cursor-pointer font-sans active:scale-95 text-center flex items-center justify-center gap-1.5"
-                >
-                  <i class="fa-regular fa-trash-can text-[10px]"></i>
-                  <span>${activeT.btnDeleteAllName}</span>
-                </button> -->
               </div>
-            </div>
+            </details>
 
             <!-- 5. 일련번호 붙이기 -->
-            <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl space-y-3">
-              <h3 class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                <i class="fa-solid fa-list-ol text-purple-primary"></i>
-                ${activeT.numberingHeader}
-              </h3>
-              <div class="grid grid-cols-3 gap-2">
-                <div class="space-y-1">
-                  <label class="text-[10px] text-slate-500 font-bold block">${activeT.numberingStart}</label>
-                  <input
-                    type="number"
-                    id="num-start"
-                    min="0"
-                    value="1"
-                    class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none transition-all font-sans"
-                    ?disabled="${this.isConverting || this.filesCount === 0}"
-                  />
+            <details class="group p-4 bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+              <summary class="text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200">
+                <div class="flex items-center gap-1.5">
+                  <i class="fa-solid fa-list-ol text-purple-primary"></i>
+                  <span>${activeT.numberingHeader}</span>
                 </div>
-                <div class="space-y-1">
-                  <label class="text-[10px] text-slate-500 font-bold block">${activeT.numberingDigits}</label>
-                  <input
-                    type="number"
-                    id="num-digits"
-                    min="1"
-                    value="2"
-                    class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none transition-all font-sans"
-                    ?disabled="${this.isConverting || this.filesCount === 0}"
-                  />
+                <i class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"></i>
+              </summary>
+              <div class="space-y-3 pt-4">
+                <div class="grid grid-cols-3 gap-2">
+                  <div class="space-y-1">
+                    <label class="text-[10px] text-slate-500 font-bold block">${activeT.numberingStart}</label>
+                    <input
+                      type="number"
+                      id="num-start"
+                      min="0"
+                      value="1"
+                      class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none transition-all font-sans"
+                      ?disabled="${this.isConverting || this.filesCount === 0}"
+                    />
+                  </div>
+                  <div class="space-y-1">
+                    <label class="text-[10px] text-slate-500 font-bold block">${activeT.numberingDigits}</label>
+                    <input
+                      type="number"
+                      id="num-digits"
+                      min="1"
+                      value="2"
+                      class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none transition-all font-sans"
+                      ?disabled="${this.isConverting || this.filesCount === 0}"
+                    />
+                  </div>
+                  <div class="space-y-1">
+                    <label class="text-[10px] text-slate-500 font-bold block">${activeT.numberingPosition}</label>
+                    <select
+                      id="num-position"
+                      class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-2 py-2 text-[11px] text-slate-100 focus:outline-none transition-all font-sans cursor-pointer h-[34px]"
+                      ?disabled="${this.isConverting || this.filesCount === 0}"
+                    >
+                      <option value="suffix" selected>${activeT.posSuffix}</option>
+                      <option value="prefix">${activeT.posPrefix}</option>
+                    </select>
+                  </div>
                 </div>
-                <div class="space-y-1">
-                  <label class="text-[10px] text-slate-500 font-bold block">${activeT.numberingPosition}</label>
-                  <select
-                    id="num-position"
-                    class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-2 py-2 text-[11px] text-slate-100 focus:outline-none transition-all font-sans cursor-pointer h-[34px]"
-                    ?disabled="${this.isConverting || this.filesCount === 0}"
-                  >
-                    <option value="suffix" selected>${activeT.posSuffix}</option>
-                    <option value="prefix">${activeT.posPrefix}</option>
-                  </select>
-                </div>
+                <button
+                  @click="${this.applyNumbering}"
+                  ?disabled="${this.isConverting || this.filesCount === 0}"
+                  class="w-full py-2 bg-purple-primary hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans"
+                >
+                  ${activeT.btnApply}
+                </button>
               </div>
-              <button
-                @click="${this.applyNumbering}"
-                ?disabled="${this.isConverting || this.filesCount === 0}"
-                class="w-full py-2 bg-purple-primary hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans"
-              >
-                ${activeT.btnApply}
-              </button>
-            </div>
+            </details>
 
             <!-- 6. 확장자 변경 및 추가 -->
-            <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl space-y-3">
-              <h3 class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                <i class="fa-solid fa-file-signature text-purple-primary"></i>
-                ${activeT.extHeader}
-              </h3>
-              <div class="grid grid-cols-2 gap-2">
-                <div class="space-y-1">
-                  <label class="text-[10px] text-slate-500 font-bold block">${activeT.extMode}</label>
-                  <select
-                    @change="${(e: Event) => (this.extMode = (e.target as HTMLSelectElement).value as any)}"
-                    class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-2 py-2 text-[11px] text-slate-100 focus:outline-none transition-all font-sans cursor-pointer h-[34px]"
-                    ?disabled="${this.isConverting || this.filesCount === 0}"
-                  >
-                    <option value="keep" selected>${activeT.extModeKeep}</option>
-                    <option value="remove">${activeT.extModeRemove}</option>
-                    <option value="change">${activeT.extModeChange}</option>
-                  </select>
+            <details class="group p-4 bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
+              <summary class="text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200">
+                <div class="flex items-center gap-1.5">
+                  <i class="fa-solid fa-file-signature text-purple-primary"></i>
+                  <span>${activeT.extHeader}</span>
                 </div>
-                <div class="space-y-1">
-                  <label class="text-[10px] text-slate-500 font-bold block">${activeT.extNew}</label>
-                  <input
-                    type="text"
-                    id="ext-new"
-                    placeholder=".txt"
-                    class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
-                    ?disabled="${this.isConverting || this.filesCount === 0 || this.extMode !== "change"}"
-                  />
+                <i class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"></i>
+              </summary>
+              <div class="space-y-3 pt-4">
+                <div class="grid grid-cols-2 gap-2">
+                  <div class="space-y-1">
+                    <label class="text-[10px] text-slate-500 font-bold block">${activeT.extMode}</label>
+                    <select
+                      @change="${(e: Event) => (this.extMode = (e.target as HTMLSelectElement).value as any)}"
+                      class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-2 py-2 text-[11px] text-slate-100 focus:outline-none transition-all font-sans cursor-pointer h-[34px]"
+                      ?disabled="${this.isConverting || this.filesCount === 0}"
+                    >
+                      <option value="keep" selected>${activeT.extModeKeep}</option>
+                      <option value="remove">${activeT.extModeRemove}</option>
+                      <option value="change">${activeT.extModeChange}</option>
+                    </select>
+                  </div>
+                  <div class="space-y-1">
+                    <label class="text-[10px] text-slate-500 font-bold block">${activeT.extNew}</label>
+                    <input
+                      type="text"
+                      id="ext-new"
+                      placeholder=".txt"
+                      class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
+                      ?disabled="${this.isConverting || this.filesCount === 0 || this.extMode !== "change"}"
+                    />
+                  </div>
                 </div>
+                <button
+                  @click="${this.applyExtension}"
+                  ?disabled="${this.isConverting || this.filesCount === 0 || this.extMode === "keep"}"
+                  class="w-full py-2 bg-purple-primary hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans"
+                >
+                  ${activeT.btnApply}
+                </button>
               </div>
-              <button
-                @click="${this.applyExtension}"
-                ?disabled="${this.isConverting || this.filesCount === 0 || this.extMode === "keep"}"
-                class="w-full py-2 bg-purple-primary hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans"
-              >
-                ${activeT.btnApply}
-              </button>
-            </div>
+            </details>
           </div>
         </div>
 
