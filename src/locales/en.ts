@@ -5,7 +5,8 @@ export const en = {
     rename: "Batch File Rename",
   },
   main: {
-    compatAlert: "This browser does not support the File System Access API. Fallback file upload is used.",
+    compatAlert:
+      "This browser does not support the File System Access API. Fallback file upload is used.",
     noSvgInFolder: "No SVG files found in the selected folder.",
     noWavInFolder: "No audio files (WAV, MP3) found in the selected folder.",
     folderScanDone: (count: number) => `Folder scan complete: Detected ${count} files.`,
@@ -14,30 +15,39 @@ export const en = {
     noFallbackSvg: "No SVG files found in the uploaded folders or files.",
     noFallbackWav: "No audio files (WAV, MP3) found in the uploaded folders or files.",
     fallbackUploadDone: (count: number) => `Manual upload complete: Prepared ${count} files.`,
-    sampleFileAdded: (type: string) => `A sample ${type} file has been added to the queue. Click the convert button to test!`,
+    sampleFileAdded: (type: string) =>
+      `A sample ${type} file has been added to the queue. Click the convert button to test!`,
     filesDropped: (count: number) => `Successfully added ${count} files via Drag & Drop.`,
     noSvgToConvert: "No SVG files to convert. Please select a folder or upload files first.",
     noWavToConvert: "No audio files to convert. Please select a folder or upload files first.",
     noSelectedSvg: "No SVG files selected. Please select at least one file to convert.",
     noSelectedWav: "No audio files selected. Please select at least one file to convert.",
     invalidScale: "The selected scale option is invalid.",
-    startConversion: (format: string, scale: number) => `Starting conversion process... [Format: ${format.toUpperCase()}, Scale: ${scale}x]`,
-    startAudioConversion: (bitrate: number) => `Starting audio conversion... [Output: MP3, Quality: ${bitrate}kbps]`,
+    startConversion: (format: string, scale: number) =>
+      `Starting conversion process... [Format: ${format.toUpperCase()}, Scale: ${scale}x]`,
+    startAudioConversion: (bitrate: number) =>
+      `Starting audio conversion... [Output: MP3, Quality: ${bitrate}kbps]`,
     localOutputDirReady: (name: string) => `Local output folder is ready: ${name}`,
-    directWriteNotice: "No output folder specified. Saving converted files directly in the original paths.",
-    permissionFailFallback: "Failed to acquire local folder permission. Falling back to ZIP archive download due to browser restrictions.",
+    directWriteNotice:
+      "No output folder specified. Saving converted files directly in the original paths.",
+    permissionFailFallback:
+      "Failed to acquire local folder permission. Falling back to ZIP archive download due to browser restrictions.",
     zipArchiveStart: "Starting virtual ZIP archive build.",
-    convertSuccess: (relPath: string, outName: string, w: number, h: number) => `Success: ${relPath} → ${outName} (${w}x${h} px)`,
+    convertSuccess: (relPath: string, outName: string, w: number, h: number) =>
+      `Success: ${relPath} → ${outName} (${w}x${h} px)`,
     convertAudioSuccess: (relPath: string, outName: string) => `Success: ${relPath} → ${outName}`,
     originalDeleted: (relPath: string) => `Original file deleted: ${relPath}`,
-    originalDeleteFail: (relPath: string, msg: string) => `Failed to delete original file: ${relPath} (${msg})`,
-    deleteOriginalSkipSameName: (relPath: string) => `Original file kept because output and input filenames are identical: ${relPath}`,
+    originalDeleteFail: (relPath: string, msg: string) =>
+      `Failed to delete original file: ${relPath} (${msg})`,
+    deleteOriginalSkipSameName: (relPath: string) =>
+      `Original file kept because output and input filenames are identical: ${relPath}`,
     convertFail: (relPath: string, msg: string) => `Failed: ${relPath} - ${msg}`,
     parseError: (relPath: string, msg: string) => `Structure parsing error: ${relPath} - ${msg}`,
     zipCompressing: "Compressing ZIP archive...",
     zipDownloadDone: (name: string) => `ZIP archive download complete: ${name}.zip`,
     zipDownloadFail: (msg: string) => `Failed to build ZIP download archive: ${msg}`,
-    conversionEnded: (success: number, fail: number) => `Conversion finished. (Success: ${success}, Failed: ${fail})`,
+    conversionEnded: (success: number, fail: number) =>
+      `Conversion finished. (Success: ${success}, Failed: ${fail})`,
     alertSuccessText: (isLocal: boolean, hasOutput: boolean, outName: string) => {
       let dest = "";
       if (isLocal) {
@@ -61,9 +71,11 @@ export const en = {
       return `Conversion completed successfully!\n\n${dest}`;
     },
     alertSuccessTitle: "Conversion Completed!",
-    alertFail: "Conversion completed, but no resources were converted. Please check the log console.",
+    alertFail:
+      "Conversion completed, but no resources were converted. Please check the log console.",
     queueRemoved: (name: string) => `Removed from queue: ${name}`,
-    compatBannerText: (name: string) => `Your current browser does not fully support the latest APIs to write files directly to local directories or manage original files. Instead, converted files will be compiled and downloaded securely in a single ZIP package named ${name}.zip.`,
+    compatBannerText: (name: string) =>
+      `Your current browser does not fully support the latest APIs to write files directly to local directories or manage original files. Instead, converted files will be compiled and downloaded securely in a single ZIP package named ${name}.zip.`,
     compatBannerTitle: "Browser Compatibility Notice:",
     converting: "Converting...",
     completed: "Conversion complete!",
@@ -85,13 +97,16 @@ export const en = {
     deleteSuccess: (relPath: string) => `Deleted from local disk: ${relPath}`,
     deleteFail: (relPath: string, msg: string) => `Failed to delete: ${relPath} (${msg})`,
     alertRenameSuccessText: (isLocal: boolean) => {
-      return isLocal 
+      return isLocal
         ? "All file names have been physically renamed in the local folder successfully."
         : "Due to browser security restrictions (Safari/Firefox, etc.), renamed files were downloaded as a ZIP archive containing the virtual directory layout.";
     },
-    alertDeleteConfirm: (count: number) => `Are you sure you want to permanently delete the ${count} selected files from the local device (your computer)?\nThis action cannot be undone, and original files will be deleted directly.`,
-    alertDeleteSuccess: (success: number, fail: number) => `File deletion complete.\n(Success: ${success}, Failed: ${fail})`,
-    compatRenameBannerText: "Your current browser does not support the latest APIs to directly rename or delete files in local directories. Instead, you can download a compiled ZIP package containing all the renamed files.",
+    alertDeleteConfirm: (count: number) =>
+      `Are you sure you want to permanently delete the ${count} selected files from the local device (your computer)?\nThis action cannot be undone, and original files will be deleted directly.`,
+    alertDeleteSuccess: (success: number, fail: number) =>
+      `File deletion complete.\n(Success: ${success}, Failed: ${fail})`,
+    compatRenameBannerText:
+      "Your current browser does not support the latest APIs to directly rename or delete files in local directories. Instead, you can download a compiled ZIP package containing all the renamed files.",
   },
   settings: {
     linkFolder: "Link Target SVG Folder",
@@ -115,11 +130,15 @@ export const en = {
     outputDirLabel: "Export Target Folder (Output Path)",
     resetDir: "Clear",
     selectOutputDir: "Specify Output Folder",
-    noOutputDirCompat: "Due to browser security restrictions, individual output folder selection is not supported. You will receive all converted images in a single ZIP file upon completion.",
-    outputDirDesc: "If the output folder is not specified, files will be saved in the same directory as their original SVGs.",
+    noOutputDirCompat:
+      "Due to browser security restrictions, individual output folder selection is not supported. You will receive all converted images in a single ZIP file upon completion.",
+    outputDirDesc:
+      "If the output folder is not specified, files will be saved in the same directory as their original SVGs.",
     deleteOriginalLabel: "Auto-delete original SVG after conversion",
-    deleteOriginalDesc: "Removes original SVG (.svg) files from the target directory after conversion completes successfully.",
-    deleteOriginalAlert: "Original files can only be controlled when a local directory is successfully linked to the browser.",
+    deleteOriginalDesc:
+      "Removes original SVG (.svg) files from the target directory after conversion completes successfully.",
+    deleteOriginalAlert:
+      "Original files can only be controlled when a local directory is successfully linked to the browser.",
   },
   audioSettings: {
     linkFolder: "Link Target Audio Folder",
@@ -143,11 +162,15 @@ export const en = {
     outputDirLabel: "Export Target Folder (Output Path)",
     resetDir: "Clear",
     selectOutputDir: "Specify Output Folder",
-    noOutputDirCompat: "Due to browser security restrictions, individual output folder selection is not supported. You will receive all converted files in a single ZIP file upon completion.",
-    outputDirDesc: "If the output folder is not specified, files will be saved in the same directory as their original audio files.",
+    noOutputDirCompat:
+      "Due to browser security restrictions, individual output folder selection is not supported. You will receive all converted files in a single ZIP file upon completion.",
+    outputDirDesc:
+      "If the output folder is not specified, files will be saved in the same directory as their original audio files.",
     deleteOriginalLabel: "Auto-delete original audio file after conversion",
-    deleteOriginalDesc: "Removes original audio (.wav, .mp3) files from the target directory after conversion completes successfully.",
-    deleteOriginalAlert: "Original files can only be controlled when a local directory is successfully linked to the browser.",
+    deleteOriginalDesc:
+      "Removes original audio (.wav, .mp3) files from the target directory after conversion completes successfully.",
+    deleteOriginalAlert:
+      "Original files can only be controlled when a local directory is successfully linked to the browser.",
   },
   renameSettings: {
     linkFolder: "Link Target Workspace Folder",
@@ -203,7 +226,8 @@ export const en = {
 
     deleteHeader: "Dangerous Operation (Permanently delete files)",
     btnDeleteSelected: "Permanently delete selected files",
-    deleteWarning: "This operation is irreversible. Files will be deleted directly from your computer's local disk."
+    deleteWarning:
+      "This operation is irreversible. Files will be deleted directly from your computer's local disk.",
   },
   queue: {
     selectAll: "Select / Deselect All",
@@ -214,9 +238,8 @@ export const en = {
     statusSuccess: "Success",
     statusError: "Error",
     deleteTooltip: "Remove from queue (Del key)",
-    dragOverActive: (isSvg: boolean) => isSvg ? "Drop SVG files here to add to queue" : "Drop audio files here to add to queue",
+    dragOverActive: (isSvg: boolean) =>
+      isSvg ? "Drop SVG files here to add to queue" : "Drop audio files here to add to queue",
     trySampleEmpty: "Test with Sample File",
-  }
+  },
 };
-
-

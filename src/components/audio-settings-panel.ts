@@ -116,7 +116,9 @@ export class AudioSettingsPanel extends LitElement {
       <div class="space-y-6">
         <!-- Step 1: Directory Picker Card -->
         <div class="glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden">
-          <div class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-indigo-500 to-purple-600"></div>
+          <div
+            class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-indigo-500 to-purple-600"
+          ></div>
           <h2 class="text-md font-bold mb-5 text-slate-100 flex items-center gap-2.5 font-sans">
             <span
               class="bg-linear-to-r from-indigo-500 to-purple-600 text-white w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold shadow-[0_0_10px_rgba(99,102,241,0.3)]"
@@ -139,7 +141,9 @@ export class AudioSettingsPanel extends LitElement {
 
           <!-- Extension Filter Options -->
           <div class="mb-5 flex flex-col gap-2.5">
-            <span class="text-xs font-bold text-slate-400 font-sans tracking-wide"> ${activeT.inputExtsLabel} </span>
+            <span class="text-xs font-bold text-slate-400 font-sans tracking-wide">
+              ${activeT.inputExtsLabel}
+            </span>
             <div class="flex gap-2">
               ${[".wav", ".mp3"].map((ext) => {
                 const isSelected = this.inputExts.includes(ext);
@@ -152,8 +156,12 @@ export class AudioSettingsPanel extends LitElement {
                       : "bg-slate-950 text-slate-500 border-slate-800 hover:border-brand-primary/40 hover:text-slate-200"}"
                   >
                     ${isSelected
-                      ? html`<i class="fa-solid fa-square-check text-indigo-400 text-sm relative top-0.5"></i>`
-                      : html`<i class="fa-regular fa-square text-slate-600 text-sm relative top-0.5"></i>`}
+                      ? html`<i
+                          class="fa-solid fa-square-check text-indigo-400 text-sm relative top-0.5"
+                        ></i>`
+                      : html`<i
+                          class="fa-regular fa-square text-slate-600 text-sm relative top-0.5"
+                        ></i>`}
                     <span>${ext.toUpperCase().replace(".", "")}</span>
                   </button>
                 `;
@@ -171,8 +179,12 @@ export class AudioSettingsPanel extends LitElement {
                       ?disabled="${this.isConverting}"
                       class="w-full py-4 px-4 bg-slate-950 hover:bg-brand-bg disabled:opacity-50 text-slate-100 rounded-2xl border border-dashed border-slate-800 hover:border-brand-primary hover:shadow-[0_0_20px_rgba(99,102,241,0.05)] transition-all flex flex-col items-center justify-center gap-2.5 cursor-pointer group font-sans active:scale-[0.98] text-center"
                     >
-                      <i class="fa-regular fa-folder-open text-2xl text-indigo-400 group-hover:scale-110 transition-transform duration-300"></i>
-                      <span class="text-xs font-semibold text-slate-100"> ${activeT.localFolderSelect} </span>
+                      <i
+                        class="fa-regular fa-folder-open text-2xl text-indigo-400 group-hover:scale-110 transition-transform duration-300"
+                      ></i>
+                      <span class="text-xs font-semibold text-slate-100">
+                        ${activeT.localFolderSelect}
+                      </span>
                     </button>
 
                     <button
@@ -180,8 +192,12 @@ export class AudioSettingsPanel extends LitElement {
                       ?disabled="${this.isConverting}"
                       class="w-full py-4 px-4 bg-slate-950 hover:bg-brand-bg disabled:opacity-50 text-slate-100 rounded-2xl border border-dashed border-slate-800 hover:border-brand-primary hover:shadow-[0_0_20px_rgba(99,102,241,0.05)] transition-all flex flex-col items-center justify-center gap-2.5 cursor-pointer group font-sans active:scale-[0.98] text-center"
                     >
-                      <i class="fa-regular fa-file-image text-2xl text-emerald-400 group-hover:scale-110 transition-transform duration-300"></i>
-                      <span class="text-xs font-semibold text-slate-100"> ${activeT.selectFiles} </span>
+                      <i
+                        class="fa-regular fa-file-image text-2xl text-emerald-400 group-hover:scale-110 transition-transform duration-300"
+                      ></i>
+                      <span class="text-xs font-semibold text-slate-100">
+                        ${activeT.selectFiles}
+                      </span>
                     </button>
                   </div>
 
@@ -192,9 +208,16 @@ export class AudioSettingsPanel extends LitElement {
                         >
                           <div class="flex items-center gap-2 text-indigo-300 font-medium">
                             <i class="fa-regular fa-folder-open text-sm"></i>
-                            <span class="font-bold truncate max-w-50" title="${this.dirHandle.name}"> ${this.dirHandle.name} </span>
+                            <span
+                              class="font-bold truncate max-w-50"
+                              title="${this.dirHandle.name}"
+                            >
+                              ${this.dirHandle.name}
+                            </span>
                           </div>
-                          <span class="text-slate-400 font-mono"> ${activeT.filesLoaded(this.filesCount)} </span>
+                          <span class="text-slate-400 font-mono">
+                            ${activeT.filesLoaded(this.filesCount)}
+                          </span>
                         </div>
                       `
                     : this.filesCount > 0
@@ -204,14 +227,20 @@ export class AudioSettingsPanel extends LitElement {
                           >
                             <div class="flex items-center gap-2 text-indigo-300 font-medium">
                               <i class="fa-regular fa-file text-sm"></i>
-                              <span class="font-bold truncate max-w-50"> ${this.lang === "ko" ? "선택된 개별 파일들" : "Selected Files"} </span>
+                              <span class="font-bold truncate max-w-50">
+                                ${this.lang === "ko" ? "선택된 개별 파일들" : "Selected Files"}
+                              </span>
                             </div>
-                            <span class="text-slate-400 font-mono"> ${activeT.filesLoaded(this.filesCount)} </span>
+                            <span class="text-slate-400 font-mono">
+                              ${activeT.filesLoaded(this.filesCount)}
+                            </span>
                           </div>
                         `
                       : html`
                           <div class="text-center py-2">
-                            <span class="text-xs text-slate-500 font-medium"> ${activeT.noFolderSelected} </span>
+                            <span class="text-xs text-slate-500 font-medium">
+                              ${activeT.noFolderSelected}
+                            </span>
                           </div>
                         `}
                 </div>
@@ -233,8 +262,12 @@ export class AudioSettingsPanel extends LitElement {
                         ?disabled="${this.isConverting}"
                         accept="${this.inputExts.join(",")}"
                       />
-                      <i class="fa-solid fa-cloud-arrow-up text-2xl text-amber-400 group-hover:scale-110 transition-transform duration-300"></i>
-                      <span class="text-xs font-semibold text-slate-100"> ${activeT.fallbackUpload} </span>
+                      <i
+                        class="fa-solid fa-cloud-arrow-up text-2xl text-amber-400 group-hover:scale-110 transition-transform duration-300"
+                      ></i>
+                      <span class="text-xs font-semibold text-slate-100">
+                        ${activeT.fallbackUpload}
+                      </span>
                     </label>
 
                     <button
@@ -242,26 +275,38 @@ export class AudioSettingsPanel extends LitElement {
                       ?disabled="${this.isConverting}"
                       class="py-4 px-4 bg-slate-950 hover:bg-amber-bg disabled:opacity-50 text-slate-100 hover:text-amber-text rounded-2xl border border-dashed border-slate-800 hover:border-amber-border hover:shadow-[0_0_20px_rgba(217,119,6,0.05)] transition-all flex flex-col items-center justify-center gap-2.5 cursor-pointer group font-sans active:scale-[0.98] text-center"
                     >
-                      <i class="fa-regular fa-file text-2xl text-purple-primary group-hover:scale-110 transition-transform duration-300"></i>
-                      <span class="text-xs font-semibold text-slate-100"> ${activeT.selectFiles} </span>
+                      <i
+                        class="fa-regular fa-file text-2xl text-purple-primary group-hover:scale-110 transition-transform duration-300"
+                      ></i>
+                      <span class="text-xs font-semibold text-slate-100">
+                        ${activeT.selectFiles}
+                      </span>
                     </button>
                   </div>
 
                   ${this.filesCount > 0
                     ? html`
-                        <div class="p-3 bg-amber-bg border border-amber-border rounded-xl text-xs flex items-center justify-between shadow-inner">
+                        <div
+                          class="p-3 bg-amber-bg border border-amber-border rounded-xl text-xs flex items-center justify-between shadow-inner"
+                        >
                           <div class="flex items-center gap-2 text-amber-text font-medium">
                             <i class="fa-solid fa-folder-tree text-sm"></i>
                             <span class="font-bold truncate max-w-50">
-                              ${this.lang === "ko" ? "수동 로드된 임포트 셋" : "Manually Imported Set"}
+                              ${this.lang === "ko"
+                                ? "수동 로드된 임포트 셋"
+                                : "Manually Imported Set"}
                             </span>
                           </div>
-                          <span class="text-slate-400 font-mono"> ${activeT.filesDetected(this.filesCount)} </span>
+                          <span class="text-slate-400 font-mono">
+                            ${activeT.filesDetected(this.filesCount)}
+                          </span>
                         </div>
                       `
                     : html`
                         <div class="text-center py-2">
-                          <span class="text-xs text-slate-500 font-medium"> ${activeT.waitingImport} </span>
+                          <span class="text-xs text-slate-500 font-medium">
+                            ${activeT.waitingImport}
+                          </span>
                         </div>
                       `}
                 </div>
@@ -277,13 +322,17 @@ export class AudioSettingsPanel extends LitElement {
               <i class="fa-solid fa-wand-magic-sparkles text-xs animate-pulse"></i>
               <span>${activeT.trySample}</span>
             </button>
-            <p class="text-xs text-slate-500 mt-1.5 text-center font-medium leading-relaxed">${activeT.trySampleDesc}</p>
+            <p class="text-xs text-slate-500 mt-1.5 text-center font-medium leading-relaxed">
+              ${activeT.trySampleDesc}
+            </p>
           </div>
         </div>
 
         <!-- Step 2: Settings Card -->
         <div class="glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden">
-          <div class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-indigo-500 to-purple-600"></div>
+          <div
+            class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-indigo-500 to-purple-600"
+          ></div>
           <h2 class="text-md font-bold mb-5 text-slate-100 flex items-center gap-2.5 font-sans">
             <span
               class="bg-linear-to-r from-indigo-500 to-purple-600 text-white w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold shadow-[0_0_10px_rgba(99,102,241,0.3)]"
@@ -296,15 +345,19 @@ export class AudioSettingsPanel extends LitElement {
           <div class="space-y-4">
             <!-- Bitrate selection (MP3 Quality) -->
             <div>
-              <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2.5"> ${activeT.bitrateLabel} </label>
+              <label
+                class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2.5"
+              >
+                ${activeT.bitrateLabel}
+              </label>
               <div class="grid grid-cols-2 gap-3">
                 ${bitrates.map(
                   (rate) => html`
                     <button
                       @click="${() => this.handleChangeBitrate(rate)}"
                       ?disabled="${this.isConverting}"
-                      class="py-2.5 rounded-xl border text-xs font-bold transition-all font-sans cursor-pointer active:scale-95 ${this.bitrate ===
-                      rate
+                      class="py-2.5 rounded-xl border text-xs font-bold transition-all font-sans cursor-pointer active:scale-95 ${this
+                        .bitrate === rate
                         ? "bg-brand-bg border-brand-primary text-brand-text shadow-[0_0_15px_rgba(99,102,241,0.15)]"
                         : "bg-slate-950 border-slate-800 text-slate-400 hover:border-brand-primary/40 hover:text-slate-200"}"
                     >
@@ -322,14 +375,20 @@ export class AudioSettingsPanel extends LitElement {
                   `,
                 )}
               </div>
-              <p class="text-xs text-slate-500 mt-2 font-medium tracking-wide leading-relaxed">${activeT.bitrateDesc}</p>
+              <p class="text-xs text-slate-500 mt-2 font-medium tracking-wide leading-relaxed">
+                ${activeT.bitrateDesc}
+              </p>
             </div>
 
             <div class="border-t border-slate-800 my-4"></div>
 
             <!-- Output Folder settings -->
             <div>
-              <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2.5"> ${activeT.outputDirLabel} </label>
+              <label
+                class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2.5"
+              >
+                ${activeT.outputDirLabel}
+              </label>
 
               ${this.apiSupported
                 ? html`
@@ -341,7 +400,12 @@ export class AudioSettingsPanel extends LitElement {
                             >
                               <div class="flex items-center gap-2 text-brand-text font-medium">
                                 <i class="fa-regular fa-folder-open text-sm"></i>
-                                <span class="font-bold truncate max-w-50" title="${this.outputDirHandle.name}"> ${this.outputDirHandle.name} </span>
+                                <span
+                                  class="font-bold truncate max-w-50"
+                                  title="${this.outputDirHandle.name}"
+                                >
+                                  ${this.outputDirHandle.name}
+                                </span>
                               </div>
                               <button
                                 @click="${this.handleResetOutputFolder}"
@@ -365,12 +429,16 @@ export class AudioSettingsPanel extends LitElement {
                     </div>
                   `
                 : html`
-                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-500 font-sans leading-relaxed shadow-inner">
+                    <div
+                      class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-500 font-sans leading-relaxed shadow-inner"
+                    >
                       <i class="fa-solid fa-circle-info text-amber-500/80 mr-1"></i>
                       ${activeT.noOutputDirCompat}
                     </div>
                   `}
-              <p class="text-xs text-slate-500 mt-2 font-medium tracking-wide leading-relaxed">${activeT.outputDirDesc}</p>
+              <p class="text-xs text-slate-500 mt-2 font-medium tracking-wide leading-relaxed">
+                ${activeT.outputDirDesc}
+              </p>
             </div>
 
             <div class="border-t border-slate-800 my-4"></div>
@@ -386,14 +454,20 @@ export class AudioSettingsPanel extends LitElement {
                   class="w-5 h-5 rounded-lg text-indigo-600 bg-slate-950 border-slate-800 focus:ring-indigo-500 focus:ring-offset-slate-950 cursor-pointer mt-0.5"
                 />
                 <div class="text-sm">
-                  <span class="font-bold text-slate-100 block"> ${activeT.deleteOriginalLabel} </span>
-                  <span class="text-slate-500 block mt-1 font-sans leading-relaxed"> ${activeT.deleteOriginalDesc} </span>
+                  <span class="font-bold text-slate-100 block">
+                    ${activeT.deleteOriginalLabel}
+                  </span>
+                  <span class="text-slate-500 block mt-1 font-sans leading-relaxed">
+                    ${activeT.deleteOriginalDesc}
+                  </span>
                 </div>
               </label>
 
               ${this.deleteOriginal && (!this.apiSupported || !this.dirHandle)
                 ? html`
-                    <div class="mt-2 text-xs text-rose-400 font-bold flex items-center gap-1.5 font-sans">
+                    <div
+                      class="mt-2 text-xs text-rose-400 font-bold flex items-center gap-1.5 font-sans"
+                    >
                       <i class="fa-solid fa-circle-exclamation"></i>
                       <span>${activeT.deleteOriginalAlert}</span>
                     </div>

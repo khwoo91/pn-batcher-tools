@@ -13,7 +13,9 @@ export class AppHeader extends LitElement {
 
   private handleDocumentClick = (e: MouseEvent) => {
     const path = e.composedPath();
-    const isClickInside = path.some((el) => el instanceof HTMLElement && el.classList.contains("custom-dropdown-container"));
+    const isClickInside = path.some(
+      (el) => el instanceof HTMLElement && el.classList.contains("custom-dropdown-container"),
+    );
     if (!isClickInside) {
       this.dropdownOpen = false;
     }
@@ -72,7 +74,9 @@ export class AppHeader extends LitElement {
     const desc = this.lang === "ko" ? "쉽고 빠른 파일 변환 툴" : "Easy and Fast File Converter";
 
     return html`
-      <header class="flex flex-col md:flex-row items-center justify-between border-b border-slate-800 pb-6 mb-8 gap-4">
+      <header
+        class="flex flex-col md:flex-row items-center justify-between border-b border-slate-800 pb-6 mb-8 gap-4"
+      >
         <div class="flex items-center gap-3">
           <div class="flex items-center justify-center w-14 h-14 animate-logo-float">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="w-full h-full">
@@ -138,7 +142,11 @@ export class AppHeader extends LitElement {
                   stroke-opacity="0.25"
                   filter="url(#header-glow)"
                 />
-                <path d="M3 14 L7.5 8.5 L11 12.5 L13 10 L15.5 14 Z" fill="#ffffff" fill-opacity="0.95" />
+                <path
+                  d="M3 14 L7.5 8.5 L11 12.5 L13 10 L15.5 14 Z"
+                  fill="#ffffff"
+                  fill-opacity="0.95"
+                />
                 <circle cx="12.5" cy="5.5" r="2" fill="#34d399" />
               </g>
 
@@ -154,7 +162,11 @@ export class AppHeader extends LitElement {
             </svg>
           </div>
           <div>
-            <h1 class="text-xl font-extrabold tracking-tight text-slate-100 flex items-center gap-2 font-sans">배처 툴(Batcher Tools)</h1>
+            <h1
+              class="text-xl font-extrabold tracking-tight text-slate-100 flex items-center gap-2 font-sans"
+            >
+              배처 툴(Batcher Tools)
+            </h1>
             <p class="text-xs text-slate-400 font-medium tracking-wide">${desc}</p>
           </div>
         </div>
@@ -177,12 +189,21 @@ export class AppHeader extends LitElement {
               @click="${() => (this.dropdownOpen = !this.dropdownOpen)}"
               class="flex items-center justify-start w-full pl-9 pr-8 py-2.5 bg-slate-950 border border-slate-800 hover:border-brand-primary/30 hover:bg-slate-900 text-slate-200 rounded-xl text-xs cursor-pointer focus:outline-none transition-all font-sans font-medium shadow-sm hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] focus:border-brand-primary select-none relative"
             >
-              <div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+              <div
+                class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400"
+              >
                 <i class="fa-solid fa-globe text-xs"></i>
               </div>
               <span>${this.lang === "ko" ? "한국어" : "English"}</span>
-              <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500 text-xs">
-                <i class="fa-solid fa-chevron-down transition-transform duration-200 ${this.dropdownOpen ? "rotate-180" : ""}"></i>
+              <div
+                class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500 text-xs"
+              >
+                <i
+                  class="fa-solid fa-chevron-down transition-transform duration-200 ${this
+                    .dropdownOpen
+                    ? "rotate-180"
+                    : ""}"
+                ></i>
               </div>
             </button>
 
@@ -201,7 +222,9 @@ export class AppHeader extends LitElement {
                     >
                       <span>한국어</span>
                       <div class="w-3.5 flex items-center justify-center shrink-0">
-                        ${this.lang === "ko" ? html`<i class="fa-solid fa-check text-brand-primary text-xs"></i>` : ""}
+                        ${this.lang === "ko"
+                          ? html`<i class="fa-solid fa-check text-brand-primary text-xs"></i>`
+                          : ""}
                       </div>
                     </button>
                     <button
@@ -213,7 +236,9 @@ export class AppHeader extends LitElement {
                     >
                       <span>English</span>
                       <div class="w-3.5 flex items-center justify-center shrink-0">
-                        ${this.lang === "en" ? html`<i class="fa-solid fa-check text-brand-primary text-xs"></i>` : ""}
+                        ${this.lang === "en"
+                          ? html`<i class="fa-solid fa-check text-brand-primary text-xs"></i>`
+                          : ""}
                       </div>
                     </button>
                   </div>

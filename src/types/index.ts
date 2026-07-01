@@ -20,4 +20,3 @@ export interface ConversionLog {
   text: string;
   type: "info" | "success" | "error" | "warning";
 }
-

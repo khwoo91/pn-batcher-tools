@@ -13,7 +13,7 @@ export interface RenameBatchOptions {
   onFileStatusChange: (
     relativePath: string,
     status: "pending" | "processing" | "success" | "error",
-    errorMsg?: string
+    errorMsg?: string,
   ) => void;
   onLog: (text: string, type: "info" | "success" | "error" | "warning") => void;
 }
@@ -22,7 +22,7 @@ export interface RenameBatchOptions {
  * Executes batch renaming of files.
  */
 export async function batchRenameFiles(
-  options: RenameBatchOptions
+  options: RenameBatchOptions,
 ): Promise<{ successCount: number; failCount: number; isLocalDirMode: boolean }> {
   const {
     selectedFiles,
@@ -77,7 +77,7 @@ export async function batchRenameFiles(
         } else {
           const parentDirHandle = await getNestedDirHandle(dirHandle, fileItem.relativePath);
           const fileHandle = await parentDirHandle.getFileHandle(originalName);
-          
+
           // Check for .move() API support
           if (typeof (fileHandle as any).move === "function") {
             await (fileHandle as any).move(newName);
@@ -91,7 +91,7 @@ export async function batchRenameFiles(
             await parentDirHandle.removeEntry(originalName);
           }
         }
-        
+
         successCount++;
         onLog(t.renameSuccess(fileItem.relativePath, newName), "success");
         onFileStatusChange(fileItem.relativePath, "success");
@@ -150,7 +150,7 @@ export interface DeleteBatchOptions {
   onFileStatusChange: (
     relativePath: string,
     status: "pending" | "processing" | "success" | "error",
-    errorMsg?: string
+    errorMsg?: string,
   ) => void;
   onLog: (text: string, type: "info" | "success" | "error" | "warning") => void;
 }
@@ -159,16 +159,9 @@ export interface DeleteBatchOptions {
  * Executes batch deletion of files.
  */
 export async function batchDeleteFiles(
-  options: DeleteBatchOptions
+  options: DeleteBatchOptions,
 ): Promise<{ successCount: number; failCount: number }> {
-  const {
-    selectedFiles,
-    dirHandle,
-    t,
-    onProgress,
-    onFileStatusChange,
-    onLog,
-  } = options;
+  const { selectedFiles, dirHandle, t, onProgress, onFileStatusChange, onLog } = options;
 
   let successCount = 0;
   let failCount = 0;
@@ -193,7 +186,7 @@ export async function batchDeleteFiles(
     try {
       const parentDirHandle = await getNestedDirHandle(dirHandle, fileItem.relativePath);
       await parentDirHandle.removeEntry(fileItem.name);
-      
+
       successCount++;
       onLog(t.deleteSuccess(fileItem.relativePath), "success");
       onFileStatusChange(fileItem.relativePath, "success");
@@ -208,6 +201,9 @@ export async function batchDeleteFiles(
     onProgress(Math.round((currentStep / totalSteps) * 100), currentStep);
   }
 
-  onLog(`파일 삭제 작업 완료. (성공: ${successCount}건, 실패: ${failCount}건)`, successCount > 0 ? "success" : "error");
+  onLog(
+    `파일 삭제 작업 완료. (성공: ${successCount}건, 실패: ${failCount}건)`,
+    successCount > 0 ? "success" : "error",
+  );
   return { successCount, failCount };
 }

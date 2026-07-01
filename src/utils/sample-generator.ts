@@ -69,7 +69,5 @@ export function generateSampleRenameFiles(): File[] {
     "[draft] logo_final.png",
     "temp_cache.tmp",
   ];
-  return fileNames.map(
-    (name) => new File(["dummy content"], name, { type: "text/plain" })
-  );
+  return fileNames.map((name) => new File(["dummy content"], name, { type: "text/plain" }));
 }

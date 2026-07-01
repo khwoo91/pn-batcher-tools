@@ -38,7 +38,12 @@ export class FileQueue extends LitElement {
 
     // Only turn off if actually leaving the component area
     const rect = this.getBoundingClientRect();
-    if (e.clientX < rect.left || e.clientX >= rect.right || e.clientY < rect.top || e.clientY >= rect.bottom) {
+    if (
+      e.clientX < rect.left ||
+      e.clientX >= rect.right ||
+      e.clientY < rect.top ||
+      e.clientY >= rect.bottom
+    ) {
       this.isDragging = false;
     }
   }
@@ -219,7 +224,8 @@ export class FileQueue extends LitElement {
   protected override render() {
     const activeT = t[this.lang];
     const allSelected = this.files.length > 0 && this.files.every((f) => f.selected);
-    const someSelected = this.files.length > 0 && this.files.some((f) => f.selected) && !allSelected;
+    const someSelected =
+      this.files.length > 0 && this.files.some((f) => f.selected) && !allSelected;
 
     return html`
       <div
@@ -236,7 +242,9 @@ export class FileQueue extends LitElement {
                 class="absolute inset-0 bg-indigo-950/85 backdrop-blur-md border-2 border-dashed border-indigo-500 rounded-3xl flex flex-col items-center justify-center text-indigo-300 z-30 transition-all duration-300"
               >
                 <i class="fa-solid fa-cloud-arrow-up text-4xl mb-3 animate-bounce"></i>
-                <span class="text-sm font-bold text-center px-4">${activeT.dragOverActive(this.activeTab === "svg")}</span>
+                <span class="text-sm font-bold text-center px-4"
+                  >${activeT.dragOverActive(this.activeTab === "svg")}</span
+                >
               </div>
             `
           : ""}
@@ -256,7 +264,9 @@ export class FileQueue extends LitElement {
             </div>
             <div class="flex items-center gap-2">
               <i class="fa-solid fa-list-ul text-brand-primary text-sm"></i>
-              <span class="text-sm font-bold text-slate-100 font-sans tracking-wide">${activeT.fileList(this.files.length)}</span>
+              <span class="text-sm font-bold text-slate-100 font-sans tracking-wide"
+                >${activeT.fileList(this.files.length)}</span
+              >
             </div>
           </div>
           ${this.files.some((f) => f.selected)
@@ -276,9 +286,13 @@ export class FileQueue extends LitElement {
         <div class="flex-1 overflow-y-auto pr-1">
           ${this.files.length === 0
             ? html`
-                <div class="h-full flex flex-col items-center justify-center text-slate-500 space-y-3 py-10 text-center px-4">
+                <div
+                  class="h-full flex flex-col items-center justify-center text-slate-500 space-y-3 py-10 text-center px-4"
+                >
                   <i class="fa-solid fa-folder-open text-4xl text-slate-700"></i>
-                  <p class="text-xs font-semibold tracking-wide leading-relaxed">${activeT.emptyQueue}</p>
+                  <p class="text-xs font-semibold tracking-wide leading-relaxed">
+                    ${activeT.emptyQueue}
+                  </p>
                   <button
                     @click="${this.handleLoadSample}"
                     ?disabled="${this.isConverting}"
@@ -302,13 +316,19 @@ export class FileQueue extends LitElement {
                       <thead>
                         <tr class="border-b border-slate-800 pb-2">
                           <th class="py-2 pl-2 w-8"></th>
-                          <th class="py-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                          <th
+                            class="py-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider"
+                          >
                             ${this.lang === "ko" ? "현재 파일명" : "Current Name"}
                           </th>
-                          <th class="py-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                          <th
+                            class="py-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider"
+                          >
                             ${this.lang === "ko" ? "변경할 파일명" : "New Name"}
                           </th>
-                          <th class="py-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider text-right pr-2">
+                          <th
+                            class="py-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider text-right pr-2"
+                          >
                             ${this.lang === "ko" ? "상태" : "Status"}
                           </th>
                         </tr>
@@ -318,7 +338,9 @@ export class FileQueue extends LitElement {
                           const newName = file.newName || file.name;
                           const isChanged = newName !== file.name;
                           return html`
-                            <tr class="hover:bg-slate-900/40 border-b border-slate-800 transition-all group/row">
+                            <tr
+                              class="hover:bg-slate-900/40 border-b border-slate-800 transition-all group/row"
+                            >
                               <td class="py-3 pl-2">
                                 <input
                                   type="checkbox"
@@ -328,7 +350,10 @@ export class FileQueue extends LitElement {
                                   class="w-4.5 h-4.5 rounded text-indigo-600 bg-slate-950 border-slate-800 focus:ring-indigo-500 focus:ring-offset-slate-950 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                                 />
                               </td>
-                              <td class="py-3 pr-4 text-slate-400 max-w-37.5 truncate font-medium font-sans" title="${file.relativePath}">
+                              <td
+                                class="py-3 pr-4 text-slate-400 max-w-37.5 truncate font-medium font-sans"
+                                title="${file.relativePath}"
+                              >
                                 ${file.name}
                               </td>
                               <td class="py-3 pr-4 max-w-50 truncate font-sans">
@@ -338,17 +363,21 @@ export class FileQueue extends LitElement {
                                         type="text"
                                         .value="${newName}"
                                         class="rename-input bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs text-slate-100 focus:outline-none focus:ring-1 focus:ring-brand-primary w-full"
-                                        @blur="${(e: Event) => this.handleFinishEdit(file.relativePath, e)}"
+                                        @blur="${(e: Event) =>
+                                          this.handleFinishEdit(file.relativePath, e)}"
                                         @keydown="${this.handleInputKeyDown}"
                                       />
                                     `
                                   : html`
                                       <span
-                                        @dblclick="${(e: Event) => this.handleStartEdit(file.relativePath, e)}"
+                                        @dblclick="${(e: Event) =>
+                                          this.handleStartEdit(file.relativePath, e)}"
                                         class="cursor-pointer ${isChanged
                                           ? "text-success-text font-bold"
                                           : "text-slate-100"} select-none flex items-center gap-1.5"
-                                        title="${this.lang === "ko" ? "더블클릭하여 직접 변경" : "Double click to edit"}"
+                                        title="${this.lang === "ko"
+                                          ? "더블클릭하여 직접 변경"
+                                          : "Double click to edit"}"
                                       >
                                         ${newName}
                                         <i
@@ -376,7 +405,8 @@ export class FileQueue extends LitElement {
                                       ? html` <span
                                           class="px-2 py-0.5 bg-success-bg text-success-text border border-success-border rounded-full text-[10px] font-bold tracking-wide inline-flex items-center gap-0.5"
                                         >
-                                          <i class="fa-solid fa-check text-[9px]"></i> ${activeT.statusSuccess}
+                                          <i class="fa-solid fa-check text-[9px]"></i>
+                                          ${activeT.statusSuccess}
                                         </span>`
                                       : ""}
                                     ${file.status === "error"
@@ -384,7 +414,8 @@ export class FileQueue extends LitElement {
                                           class="px-2 py-0.5 bg-warning-bg text-warning-text border border-warning-border rounded-full text-[10px] font-bold tracking-wide inline-flex items-center gap-0.5"
                                           title="${file.errorMsg || ""}"
                                         >
-                                          <i class="fa-solid fa-exclamation text-[9px]"></i> ${activeT.statusError}
+                                          <i class="fa-solid fa-exclamation text-[9px]"></i>
+                                          ${activeT.statusError}
                                         </span>`
                                       : ""}
                                   </div>
@@ -409,7 +440,9 @@ export class FileQueue extends LitElement {
                   <!-- List View (SVG / Audio) -->
                   <div class="space-y-2">
                     ${this.files.map((file) => {
-                      const isAudio = file.name.toLowerCase().endsWith(".wav") || file.name.toLowerCase().endsWith(".mp3");
+                      const isAudio =
+                        file.name.toLowerCase().endsWith(".wav") ||
+                        file.name.toLowerCase().endsWith(".mp3");
                       const iconClass = isAudio
                         ? `fa-solid fa-music ${file.selected ? "text-purple-primary" : "text-slate-500"}`
                         : `fa-regular fa-file-image ${file.selected ? "text-brand-primary" : "text-slate-500"}`;
@@ -436,12 +469,16 @@ export class FileQueue extends LitElement {
                             <i class="${iconClass} text-lg shrink-0 transition-colors"></i>
                             <div class="min-w-0 flex-1">
                               <p
-                                class="font-bold ${file.selected ? "text-slate-100" : "text-slate-500 line-through decoration-slate-700"} truncate"
+                                class="font-bold ${file.selected
+                                  ? "text-slate-100"
+                                  : "text-slate-500 line-through decoration-slate-700"} truncate"
                                 title="${file.relativePath}"
                               >
                                 ${file.name}
                               </p>
-                              <p class="text-xs text-slate-500 font-mono mt-0.5">${this.formatSize(file.file.size)}</p>
+                              <p class="text-xs text-slate-500 font-mono mt-0.5">
+                                ${this.formatSize(file.file.size)}
+                              </p>
                             </div>
                           </div>
 
@@ -466,7 +503,8 @@ export class FileQueue extends LitElement {
                                 ? html` <span
                                     class="px-2.5 py-0.5 bg-success-bg text-success-text border border-success-border rounded-full text-[11px] font-bold tracking-wide flex items-center gap-1 font-sans shadow-[0_0_10px_rgba(16,185,129,0.1)]"
                                   >
-                                    <i class="fa-solid fa-check text-[11px]"></i> ${activeT.statusSuccess}
+                                    <i class="fa-solid fa-check text-[11px]"></i>
+                                    ${activeT.statusSuccess}
                                   </span>`
                                 : ""}
                               ${file.status === "error"
@@ -474,7 +512,8 @@ export class FileQueue extends LitElement {
                                     class="px-2.5 py-0.5 bg-warning-bg text-warning-text border border-warning-border rounded-full text-[11px] font-bold tracking-wide flex items-center gap-1 shadow-[0_0_10px_rgba(244,63,94,0.1)]"
                                     title="${file.errorMsg || ""}"
                                   >
-                                    <i class="fa-solid fa-exclamation text-[11px]"></i> ${activeT.statusError}
+                                    <i class="fa-solid fa-exclamation text-[11px]"></i>
+                                    ${activeT.statusError}
                                   </span>`
                                 : ""}
                             </div>

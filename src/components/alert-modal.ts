@@ -12,9 +12,7 @@ export class AlertModal extends LitElement {
   }
 
   private handleClose() {
-    this.dispatchEvent(
-      new CustomEvent("close", { bubbles: true, composed: true }),
-    );
+    this.dispatchEvent(new CustomEvent("close", { bubbles: true, composed: true }));
   }
 
   protected override render() {
@@ -40,9 +38,7 @@ export class AlertModal extends LitElement {
                   ? html`<i class="fa-solid fa-circle-check text-2xl"></i>`
                   : ""}
                 ${this.type === "error"
-                  ? html`<i
-                      class="fa-solid fa-circle-exclamation text-2xl"
-                    ></i>`
+                  ? html`<i class="fa-solid fa-circle-exclamation text-2xl"></i>`
                   : ""}
                 ${this.type === "info"
                   ? html`<i class="fa-solid fa-circle-info text-2xl"></i>`

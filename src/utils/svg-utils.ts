@@ -95,9 +95,7 @@ export async function convertSvgToImage(
             if (imgBlob) {
               resolve(imgBlob);
             } else {
-              reject(
-                new Error(`Canvas ${format.toUpperCase()} Blob 변환 실패`),
-              );
+              reject(new Error(`Canvas ${format.toUpperCase()} Blob 변환 실패`));
             }
           },
           mimeType,
@@ -112,9 +110,7 @@ export async function convertSvgToImage(
     img.onerror = () => {
       URL.revokeObjectURL(url);
       reject(
-        new Error(
-          "SVG 이미지 로드 실패 (정의되지 않은 태그나 유효하지 않은 XML 구문 가능성)",
-        ),
+        new Error("SVG 이미지 로드 실패 (정의되지 않은 태그나 유효하지 않은 XML 구문 가능성)"),
       );
     };
 

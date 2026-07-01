@@ -58,7 +58,7 @@ export function applyNumbering(
   name: string,
   num: number,
   digits: number,
-  position: "prefix" | "suffix"
+  position: "prefix" | "suffix",
 ): string {
   const lastDot = name.lastIndexOf(".");
   const base = lastDot !== -1 ? name.substring(0, lastDot) : name;
@@ -75,7 +75,7 @@ export function applyNumbering(
 export function applyExtension(
   name: string,
   mode: "keep" | "remove" | "change",
-  newExt: string
+  newExt: string,
 ): string {
   const lastDot = name.lastIndexOf(".");
   const base = lastDot !== -1 ? name.substring(0, lastDot) : name;

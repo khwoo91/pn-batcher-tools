@@ -170,7 +170,11 @@ export class RenamerSettingsPanel extends LitElement {
     const newExt = newExtInput ? newExtInput.value.trim() : "";
 
     if (this.extMode === "change" && !newExt) {
-      alert(this.lang === "ko" ? "변경할 새 확장자를 입력해 주세요." : "Please enter the new extension.");
+      alert(
+        this.lang === "ko"
+          ? "변경할 새 확장자를 입력해 주세요."
+          : "Please enter the new extension.",
+      );
       return;
     }
 
@@ -203,7 +207,9 @@ export class RenamerSettingsPanel extends LitElement {
       <div class="space-y-6">
         <!-- Step 1: Directory Picker Card -->
         <div class="glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden">
-          <div class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-indigo-500 to-purple-600"></div>
+          <div
+            class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-indigo-500 to-purple-600"
+          ></div>
           <h2 class="text-md font-bold mb-5 text-slate-100 flex items-center gap-2.5 font-sans">
             <span
               class="bg-linear-to-r from-indigo-500 to-purple-600 text-white w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold shadow-[0_0_10px_rgba(99,102,241,0.3)]"
@@ -225,7 +231,9 @@ export class RenamerSettingsPanel extends LitElement {
 
           <!-- Extension Filter Options -->
           <div class="mb-5 flex flex-col gap-2.5">
-            <span class="text-xs font-bold text-slate-400 font-sans tracking-wide"> ${activeT.inputExtsLabel} </span>
+            <span class="text-xs font-bold text-slate-400 font-sans tracking-wide">
+              ${activeT.inputExtsLabel}
+            </span>
             <input
               type="text"
               .value="${this.extFilter}"
@@ -246,8 +254,12 @@ export class RenamerSettingsPanel extends LitElement {
                       ?disabled="${this.isConverting}"
                       class="w-full py-4 px-4 bg-slate-950 hover:bg-brand-bg disabled:opacity-50 text-slate-100 rounded-2xl border border-dashed border-slate-800 hover:border-brand-primary hover:shadow-[0_0_20px_rgba(99,102,241,0.05)] transition-all flex flex-col items-center justify-center gap-2.5 cursor-pointer group font-sans active:scale-[0.98] text-center"
                     >
-                      <i class="fa-regular fa-folder-open text-2xl text-brand-primary group-hover:scale-110 transition-transform duration-300"></i>
-                      <span class="text-xs font-semibold text-slate-100"> ${activeT.localFolderSelect} </span>
+                      <i
+                        class="fa-regular fa-folder-open text-2xl text-brand-primary group-hover:scale-110 transition-transform duration-300"
+                      ></i>
+                      <span class="text-xs font-semibold text-slate-100">
+                        ${activeT.localFolderSelect}
+                      </span>
                     </button>
 
                     <button
@@ -255,29 +267,48 @@ export class RenamerSettingsPanel extends LitElement {
                       ?disabled="${this.isConverting}"
                       class="w-full py-4 px-4 bg-slate-950 hover:bg-brand-bg disabled:opacity-50 text-slate-100 rounded-2xl border border-dashed border-slate-800 hover:border-brand-primary hover:shadow-[0_0_20px_rgba(99,102,241,0.05)] transition-all flex flex-col items-center justify-center gap-2.5 cursor-pointer group font-sans active:scale-[0.98] text-center"
                     >
-                      <i class="fa-regular fa-file text-2xl text-purple-primary group-hover:scale-110 transition-transform duration-300"></i>
-                      <span class="text-xs font-semibold text-slate-100"> ${activeT.selectFiles} </span>
+                      <i
+                        class="fa-regular fa-file text-2xl text-purple-primary group-hover:scale-110 transition-transform duration-300"
+                      ></i>
+                      <span class="text-xs font-semibold text-slate-100">
+                        ${activeT.selectFiles}
+                      </span>
                     </button>
                   </div>
 
                   ${this.dirHandle
                     ? html`
-                        <div class="p-3 bg-brand-bg border border-brand-border rounded-xl text-xs flex items-center justify-between shadow-inner">
+                        <div
+                          class="p-3 bg-brand-bg border border-brand-border rounded-xl text-xs flex items-center justify-between shadow-inner"
+                        >
                           <div class="flex items-center gap-2 text-brand-text font-medium">
                             <i class="fa-regular fa-folder-open text-sm"></i>
-                            <span class="font-bold truncate max-w-50" title="${this.dirHandle.name}"> ${this.dirHandle.name} </span>
+                            <span
+                              class="font-bold truncate max-w-50"
+                              title="${this.dirHandle.name}"
+                            >
+                              ${this.dirHandle.name}
+                            </span>
                           </div>
-                          <span class="text-slate-400 font-mono"> ${activeT.filesLoaded(this.filesCount)} </span>
+                          <span class="text-slate-400 font-mono">
+                            ${activeT.filesLoaded(this.filesCount)}
+                          </span>
                         </div>
                       `
                     : this.filesCount > 0
                       ? html`
-                          <div class="p-3 bg-brand-bg border border-brand-border rounded-xl text-xs flex items-center justify-between shadow-inner">
+                          <div
+                            class="p-3 bg-brand-bg border border-brand-border rounded-xl text-xs flex items-center justify-between shadow-inner"
+                          >
                             <div class="flex items-center gap-2 text-brand-text font-medium">
                               <i class="fa-regular fa-file text-sm"></i>
-                              <span class="font-bold"> ${this.lang === "ko" ? "개별 업로드됨" : "Uploaded files"} </span>
+                              <span class="font-bold">
+                                ${this.lang === "ko" ? "개별 업로드됨" : "Uploaded files"}
+                              </span>
                             </div>
-                            <span class="text-slate-400 font-mono"> ${activeT.filesLoaded(this.filesCount)} </span>
+                            <span class="text-slate-400 font-mono">
+                              ${activeT.filesLoaded(this.filesCount)}
+                            </span>
                           </div>
                         `
                       : html`
@@ -295,12 +326,19 @@ export class RenamerSettingsPanel extends LitElement {
                 <div class="space-y-4">
                   <div class="grid grid-cols-2 gap-3">
                     <button
-                      @click="${() => this.renderRoot.querySelector("#folder-upload-input")?.dispatchEvent(new MouseEvent("click"))}"
+                      @click="${() =>
+                        this.renderRoot
+                          .querySelector("#folder-upload-input")
+                          ?.dispatchEvent(new MouseEvent("click"))}"
                       ?disabled="${this.isConverting}"
                       class="w-full py-4 px-4 bg-slate-950 hover:bg-brand-bg disabled:opacity-50 text-slate-100 rounded-2xl border border-dashed border-slate-800 hover:border-brand-primary hover:shadow-[0_0_20px_rgba(99,102,241,0.05)] transition-all flex flex-col items-center justify-center gap-2.5 cursor-pointer group font-sans active:scale-[0.98] text-center"
                     >
-                      <i class="fa-regular fa-folder-open text-2xl text-indigo-400 group-hover:scale-110 transition-transform duration-300"></i>
-                      <span class="text-xs font-semibold text-slate-100"> ${activeT.fallbackUpload} </span>
+                      <i
+                        class="fa-regular fa-folder-open text-2xl text-indigo-400 group-hover:scale-110 transition-transform duration-300"
+                      ></i>
+                      <span class="text-xs font-semibold text-slate-100">
+                        ${activeT.fallbackUpload}
+                      </span>
                     </button>
                     <input
                       type="file"
@@ -318,19 +356,29 @@ export class RenamerSettingsPanel extends LitElement {
                       ?disabled="${this.isConverting}"
                       class="w-full py-4 px-4 bg-slate-950 hover:bg-brand-bg disabled:opacity-50 text-slate-100 rounded-2xl border border-dashed border-slate-800 hover:border-brand-primary hover:shadow-[0_0_20px_rgba(99,102,241,0.05)] transition-all flex flex-col items-center justify-center gap-2.5 cursor-pointer group font-sans active:scale-[0.98] text-center"
                     >
-                      <i class="fa-regular fa-file text-2xl text-purple-400 group-hover:scale-110 transition-transform duration-300"></i>
-                      <span class="text-xs font-semibold text-slate-100"> ${activeT.selectFiles} </span>
+                      <i
+                        class="fa-regular fa-file text-2xl text-purple-400 group-hover:scale-110 transition-transform duration-300"
+                      ></i>
+                      <span class="text-xs font-semibold text-slate-100">
+                        ${activeT.selectFiles}
+                      </span>
                     </button>
                   </div>
 
                   ${this.filesCount > 0
                     ? html`
-                        <div class="p-3 bg-brand-bg border border-brand-border rounded-xl text-xs flex items-center justify-between shadow-inner">
+                        <div
+                          class="p-3 bg-brand-bg border border-brand-border rounded-xl text-xs flex items-center justify-between shadow-inner"
+                        >
                           <div class="flex items-center gap-2 text-brand-text font-medium">
                             <i class="fa-regular fa-folder-open text-sm"></i>
-                            <span class="font-bold truncate max-w-55"> ${activeT.fallbackUpload} </span>
+                            <span class="font-bold truncate max-w-55">
+                              ${activeT.fallbackUpload}
+                            </span>
                           </div>
-                          <span class="text-slate-400 font-mono"> ${activeT.filesLoaded(this.filesCount)} </span>
+                          <span class="text-slate-400 font-mono">
+                            ${activeT.filesLoaded(this.filesCount)}
+                          </span>
                         </div>
                       `
                     : html`
@@ -364,8 +412,12 @@ export class RenamerSettingsPanel extends LitElement {
 
         <!-- Step 2: Configure Rename Rules Card -->
         <div class="glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden">
-          <div class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-purple-500 to-pink-600"></div>
-          <h2 class="text-md font-bold mb-5 text-slate-100 flex items-center gap-2.5 font-sans justify-between">
+          <div
+            class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-purple-500 to-pink-600"
+          ></div>
+          <h2
+            class="text-md font-bold mb-5 text-slate-100 flex items-center gap-2.5 font-sans justify-between"
+          >
             <div class="flex items-center gap-2.5">
               <span
                 class="bg-linear-to-r from-purple-500 to-pink-600 text-white w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold shadow-[0_0_10px_rgba(168,85,247,0.3)]"
@@ -384,17 +436,23 @@ export class RenamerSettingsPanel extends LitElement {
             </button>
           </h2>
 
-          <div class="space-y-4 max-h-125 overflow-y-auto pr-1">
+          <div class="space-y-4">
             <!-- 1. 문자열 바꾸기 -->
-            <details class="group p-4 bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
-              <summary class="text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200">
+            <details
+              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
+            >
+              <summary
+                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
+              >
                 <div class="flex items-center gap-1.5">
                   <i class="fa-solid fa-arrows-rotate text-purple-primary"></i>
                   <span>${activeT.replaceHeader}</span>
                 </div>
-                <i class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"></i>
+                <i
+                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
+                ></i>
               </summary>
-              <div class="space-y-3 pt-4">
+              <div class="space-y-3 px-4 pb-4 pt-0">
                 <div class="grid grid-cols-2 gap-2">
                   <input
                     type="text"
@@ -422,15 +480,21 @@ export class RenamerSettingsPanel extends LitElement {
             </details>
 
             <!-- 2. 앞이름 / 뒷이름 붙이기 -->
-            <details class="group p-4 bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
-              <summary class="text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200">
+            <details
+              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
+            >
+              <summary
+                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
+              >
                 <div class="flex items-center gap-1.5">
                   <i class="fa-solid fa-indent text-purple-primary"></i>
                   <span>${activeT.prefixHeader}</span>
                 </div>
-                <i class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"></i>
+                <i
+                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
+                ></i>
               </summary>
-              <div class="space-y-2 pt-4">
+              <div class="space-y-2 px-4 pb-4 pt-0">
                 <div class="flex gap-2">
                   <input
                     type="text"
@@ -467,18 +531,26 @@ export class RenamerSettingsPanel extends LitElement {
             </details>
 
             <!-- 3. 특정 위치 지우기 -->
-            <details class="group p-4 bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
-              <summary class="text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200">
+            <details
+              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
+            >
+              <summary
+                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
+              >
                 <div class="flex items-center gap-1.5">
                   <i class="fa-solid fa-scissors text-purple-primary"></i>
                   <span>${activeT.removeHeader}</span>
                 </div>
-                <i class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"></i>
+                <i
+                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
+                ></i>
               </summary>
-              <div class="space-y-3 pt-4">
+              <div class="space-y-3 px-4 pb-4 pt-0">
                 <div class="grid grid-cols-2 gap-2">
                   <div class="space-y-1">
-                    <label class="text-[10px] text-slate-500 font-bold block">${activeT.removeStart}</label>
+                    <label class="text-[10px] text-slate-500 font-bold block"
+                      >${activeT.removeStart}</label
+                    >
                     <input
                       type="number"
                       id="remove-start"
@@ -489,7 +561,9 @@ export class RenamerSettingsPanel extends LitElement {
                     />
                   </div>
                   <div class="space-y-1">
-                    <label class="text-[10px] text-slate-500 font-bold block">${activeT.removeLen}</label>
+                    <label class="text-[10px] text-slate-500 font-bold block"
+                      >${activeT.removeLen}</label
+                    >
                     <input
                       type="number"
                       id="remove-len"
@@ -511,15 +585,21 @@ export class RenamerSettingsPanel extends LitElement {
             </details>
 
             <!-- 4. 일괄 정리 및 지우기 -->
-            <details class="group p-4 bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
-              <summary class="text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200">
+            <details
+              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
+            >
+              <summary
+                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
+              >
                 <div class="flex items-center gap-1.5">
                   <i class="fa-solid fa-broom text-purple-primary"></i>
                   <span>${activeT.cleanHeader}</span>
                 </div>
-                <i class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"></i>
+                <i
+                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
+                ></i>
               </summary>
-              <div class="grid grid-cols-2 gap-2 pt-4">
+              <div class="grid grid-cols-2 gap-2 px-4 pb-4 pt-0">
                 <button
                   @click="${this.applyKeepNumbers}"
                   ?disabled="${this.isConverting || this.filesCount === 0}"
@@ -538,18 +618,26 @@ export class RenamerSettingsPanel extends LitElement {
             </details>
 
             <!-- 5. 일련번호 붙이기 -->
-            <details class="group p-4 bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
-              <summary class="text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200">
+            <details
+              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
+            >
+              <summary
+                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
+              >
                 <div class="flex items-center gap-1.5">
                   <i class="fa-solid fa-list-ol text-purple-primary"></i>
                   <span>${activeT.numberingHeader}</span>
                 </div>
-                <i class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"></i>
+                <i
+                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
+                ></i>
               </summary>
-              <div class="space-y-3 pt-4">
+              <div class="space-y-3 px-4 pb-4 pt-0">
                 <div class="grid grid-cols-3 gap-2">
                   <div class="space-y-1">
-                    <label class="text-[10px] text-slate-500 font-bold block">${activeT.numberingStart}</label>
+                    <label class="text-[10px] text-slate-500 font-bold block"
+                      >${activeT.numberingStart}</label
+                    >
                     <input
                       type="number"
                       id="num-start"
@@ -560,7 +648,9 @@ export class RenamerSettingsPanel extends LitElement {
                     />
                   </div>
                   <div class="space-y-1">
-                    <label class="text-[10px] text-slate-500 font-bold block">${activeT.numberingDigits}</label>
+                    <label class="text-[10px] text-slate-500 font-bold block"
+                      >${activeT.numberingDigits}</label
+                    >
                     <input
                       type="number"
                       id="num-digits"
@@ -571,7 +661,9 @@ export class RenamerSettingsPanel extends LitElement {
                     />
                   </div>
                   <div class="space-y-1">
-                    <label class="text-[10px] text-slate-500 font-bold block">${activeT.numberingPosition}</label>
+                    <label class="text-[10px] text-slate-500 font-bold block"
+                      >${activeT.numberingPosition}</label
+                    >
                     <select
                       id="num-position"
                       class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-2 py-2 text-[11px] text-slate-100 focus:outline-none transition-all font-sans cursor-pointer h-8.5"
@@ -593,20 +685,29 @@ export class RenamerSettingsPanel extends LitElement {
             </details>
 
             <!-- 6. 확장자 변경 및 추가 -->
-            <details class="group p-4 bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden">
-              <summary class="text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200">
+            <details
+              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
+            >
+              <summary
+                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
+              >
                 <div class="flex items-center gap-1.5">
                   <i class="fa-solid fa-file-signature text-purple-primary"></i>
                   <span>${activeT.extHeader}</span>
                 </div>
-                <i class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"></i>
+                <i
+                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
+                ></i>
               </summary>
-              <div class="space-y-3 pt-4">
+              <div class="space-y-3 px-4 pb-4 pt-0">
                 <div class="grid grid-cols-2 gap-2">
                   <div class="space-y-1">
-                    <label class="text-[10px] text-slate-500 font-bold block">${activeT.extMode}</label>
+                    <label class="text-[10px] text-slate-500 font-bold block"
+                      >${activeT.extMode}</label
+                    >
                     <select
-                      @change="${(e: Event) => (this.extMode = (e.target as HTMLSelectElement).value as any)}"
+                      @change="${(e: Event) =>
+                        (this.extMode = (e.target as HTMLSelectElement).value as any)}"
                       class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-2 py-2 text-[11px] text-slate-100 focus:outline-none transition-all font-sans cursor-pointer h-8.5"
                       ?disabled="${this.isConverting || this.filesCount === 0}"
                     >
@@ -616,19 +717,25 @@ export class RenamerSettingsPanel extends LitElement {
                     </select>
                   </div>
                   <div class="space-y-1">
-                    <label class="text-[10px] text-slate-500 font-bold block">${activeT.extNew}</label>
+                    <label class="text-[10px] text-slate-500 font-bold block"
+                      >${activeT.extNew}</label
+                    >
                     <input
                       type="text"
                       id="ext-new"
                       placeholder=".txt"
                       class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
-                      ?disabled="${this.isConverting || this.filesCount === 0 || this.extMode !== "change"}"
+                      ?disabled="${this.isConverting ||
+                      this.filesCount === 0 ||
+                      this.extMode !== "change"}"
                     />
                   </div>
                 </div>
                 <button
                   @click="${this.applyExtension}"
-                  ?disabled="${this.isConverting || this.filesCount === 0 || this.extMode === "keep"}"
+                  ?disabled="${this.isConverting ||
+                  this.filesCount === 0 ||
+                  this.extMode === "keep"}"
                   class="w-full py-2 bg-purple-primary hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans"
                 >
                   ${activeT.btnApply}
@@ -640,7 +747,9 @@ export class RenamerSettingsPanel extends LitElement {
 
         <!-- Step 3: Rename History & Dangerous Actions Card -->
         <div class="glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden">
-          <div class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-pink-500 to-rose-600"></div>
+          <div
+            class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-pink-500 to-rose-600"
+          ></div>
           <h2 class="text-md font-bold mb-5 text-slate-100 flex items-center gap-2.5 font-sans">
             <span
               class="bg-linear-to-r from-pink-500 to-rose-600 text-white w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold shadow-[0_0_10px_rgba(244,63,94,0.3)]"
@@ -679,7 +788,9 @@ export class RenamerSettingsPanel extends LitElement {
                       <i class="fa-solid fa-circle-exclamation text-rose-500"></i>
                       ${activeT.deleteHeader}
                     </h3>
-                    <p class="text-[11px] text-slate-500 leading-normal font-sans">${activeT.deleteWarning}</p>
+                    <p class="text-[11px] text-slate-500 leading-normal font-sans">
+                      ${activeT.deleteWarning}
+                    </p>
                     <button
                       @click="${this.handleDeleteSelected}"
                       ?disabled="${this.isConverting || this.filesCount === 0}"

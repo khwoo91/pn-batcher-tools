@@ -18,7 +18,7 @@ export interface AudioBatchConvertOptions {
   onFileStatusChange: (
     relativePath: string,
     status: "pending" | "processing" | "success" | "error",
-    errorMsg?: string
+    errorMsg?: string,
   ) => void;
   onLog: (text: string, type: "info" | "success" | "error" | "warning") => void;
 }
@@ -39,7 +39,7 @@ function float32ToInt16(float32Array: Float32Array): Int16Array {
  * Executes batch conversion of WAV audio files to MP3.
  */
 export async function batchConvertAudio(
-  options: AudioBatchConvertOptions
+  options: AudioBatchConvertOptions,
 ): Promise<{ successCount: number; failCount: number; isLocalDirMode: boolean }> {
   const {
     selectedFiles,
@@ -111,29 +111,36 @@ export async function batchConvertAudio(
       // Read file and decode
       onLog(`Decoding: ${audioItem.relativePath}`, "info");
       const arrayBuffer = await audioItem.file.arrayBuffer();
-      
+
       let audioBuffer: AudioBuffer;
       try {
         audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
       } catch (decodeErr: any) {
-        throw new Error(`Audio decoding failed. The WAV file might be corrupted or in an unsupported format. (${decodeErr.message})`);
+        throw new Error(
+          `Audio decoding failed. The WAV file might be corrupted or in an unsupported format. (${decodeErr.message})`,
+        );
       }
 
       const channels = audioBuffer.numberOfChannels;
       const sampleRate = audioBuffer.sampleRate;
 
       if (channels < 1 || channels > 2) {
-        throw new Error(`Unsupported channel count: ${channels}. Only Mono (1ch) and Stereo (2ch) are supported.`);
+        throw new Error(
+          `Unsupported channel count: ${channels}. Only Mono (1ch) and Stereo (2ch) are supported.`,
+        );
       }
 
-      onLog(`Encoding to MP3: ${audioItem.name} (${channels} ch, ${sampleRate} Hz, ${bitrate} kbps)`, "info");
+      onLog(
+        `Encoding to MP3: ${audioItem.name} (${channels} ch, ${sampleRate} Hz, ${bitrate} kbps)`,
+        "info",
+      );
 
       // Set up Mp3Encoder
       const EncoderClass = (lamejs as any).Mp3Encoder || (lamejs as any).default?.Mp3Encoder;
       if (!EncoderClass) {
         throw new Error("LameJS Mp3Encoder constructor not found.");
       }
-      
+
       const mp3Encoder = new EncoderClass(channels, sampleRate, bitrate);
       const mp3Data: Int8Array[] = [];
 
@@ -170,7 +177,8 @@ export async function batchConvertAudio(
       const mp3Blob = new Blob(mp3Data as any[], { type: "audio/mp3" });
 
       const lastDotIndex = audioItem.name.lastIndexOf(".");
-      const baseName = lastDotIndex !== -1 ? audioItem.name.substring(0, lastDotIndex) : audioItem.name;
+      const baseName =
+        lastDotIndex !== -1 ? audioItem.name.substring(0, lastDotIndex) : audioItem.name;
       const outputFileName = `${baseName}.mp3`;
 
       // 3. Write output

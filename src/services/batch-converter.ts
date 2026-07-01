@@ -17,7 +17,11 @@ export interface BatchConvertOptions {
   t: any;
 
   onProgress: (progress: number, currentIndex: number) => void;
-  onFileStatusChange: (relativePath: string, status: "pending" | "processing" | "success" | "error", errorMsg?: string) => void;
+  onFileStatusChange: (
+    relativePath: string,
+    status: "pending" | "processing" | "success" | "error",
+    errorMsg?: string,
+  ) => void;
   onLog: (text: string, type: "info" | "success" | "error" | "warning") => void;
 }
 
@@ -90,13 +94,7 @@ export async function batchConvertSvg(
       const outputFileName = `${baseName}${scaleSuffix}.${exportFormat}`;
 
       try {
-        const imageBlob = await convertSvgToImage(
-          text,
-          width,
-          height,
-          selectedScale,
-          exportFormat,
-        );
+        const imageBlob = await convertSvgToImage(text, width, height, selectedScale, exportFormat);
 
         if (isLocalDirMode && dirHandle) {
           // Write directly to file system
