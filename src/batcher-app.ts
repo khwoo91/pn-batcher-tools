@@ -21,11 +21,7 @@ import {
   applyClearFilename,
 } from "./utils/rename-rules";
 
-import {
-  generateSampleSvgFile,
-  generateSampleWavFile,
-  generateSampleRenameFiles,
-} from "./utils/sample-generator";
+import { generateSampleSvgFile, generateSampleWavFile, generateSampleRenameFiles } from "./utils/sample-generator";
 
 import "./components/app-header";
 import "./components/settings-panel";
@@ -43,7 +39,11 @@ const t = {
 @customElement("batcher-app")
 export class BatcherApp extends LitElement {
   @state() private activeTab: "svg" | "audio" | "rename" = "svg";
-  @state() private currentLang: "ko" | "en" = "ko";
+  @state() private currentLang: "ko" | "en" = (() => {
+    const saved = localStorage.getItem("batcher-lang");
+    if (saved === "ko" || saved === "en") return saved;
+    return navigator.language.toLowerCase().startsWith("ko") ? "ko" : "en";
+  })();
 
   // SVG specific states
   @state() private svgDirHandle: FileSystemDirectoryHandle | null = null;
@@ -105,19 +105,13 @@ export class BatcherApp extends LitElement {
     }
   }
 
-  private showAlert(
-    message: string,
-    type: "info" | "success" | "error" = "info"
-  ) {
+  private showAlert(message: string, type: "info" | "success" | "error" = "info") {
     this.modalMessage = message;
     this.modalType = type;
     this.showModal = true;
   }
 
-  private addLog(
-    text: string,
-    type: "info" | "success" | "error" | "warning" = "info"
-  ) {
+  private addLog(text: string, type: "info" | "success" | "error" | "warning" = "info") {
     const timestamp = new Date().toLocaleTimeString();
     this.conversionLogs = [{ timestamp, text, type }, ...this.conversionLogs];
   }
@@ -130,9 +124,7 @@ export class BatcherApp extends LitElement {
   }
 
   private handleChangeSuffix(scale: number, suffix: string) {
-    this.scaleOptions = this.scaleOptions.map((opt) =>
-      opt.scale === scale ? { ...opt, suffix } : opt
-    );
+    this.scaleOptions = this.scaleOptions.map((opt) => (opt.scale === scale ? { ...opt, suffix } : opt));
   }
 
   private updateStaticElements(lang: "ko" | "en") {
@@ -166,8 +158,48 @@ export class BatcherApp extends LitElement {
     const savedLang = localStorage.getItem("batcher-lang");
     if (savedLang === "en" || savedLang === "ko") {
       this.currentLang = savedLang as "ko" | "en";
+    } else {
+      const browserLang = navigator.language.toLowerCase();
+      this.currentLang = browserLang.startsWith("ko") ? "ko" : "en";
+      localStorage.setItem("batcher-lang", this.currentLang);
     }
     this.updateStaticElements(this.currentLang);
+
+    // SVG export format restore
+    const savedFormat = localStorage.getItem("batcher-svg-exportFormat");
+    if (savedFormat === "png" || savedFormat === "jpg") {
+      this.exportFormat = savedFormat;
+    }
+    // SVG selected scale restore
+    const savedScale = localStorage.getItem("batcher-svg-selectedScale");
+    if (savedScale) {
+      this.selectedScale = Number(savedScale);
+    }
+    // SVG scale options (suffixes) restore
+    const savedScaleOptions = localStorage.getItem("batcher-svg-scaleOptions");
+    if (savedScaleOptions) {
+      try {
+        this.scaleOptions = JSON.parse(savedScaleOptions);
+      } catch (e) {
+        console.error("Failed to parse saved scale options", e);
+      }
+    }
+    // SVG delete original restore
+    const savedSvgDelete = localStorage.getItem("batcher-svg-deleteOriginal");
+    if (savedSvgDelete) {
+      this.svgDeleteOriginal = savedSvgDelete === "true";
+    }
+
+    // Audio bitrate restore
+    const savedBitrate = localStorage.getItem("batcher-audio-bitrate");
+    if (savedBitrate) {
+      this.audioBitrate = Number(savedBitrate);
+    }
+    // Audio delete original restore
+    const savedAudioDelete = localStorage.getItem("batcher-audio-deleteOriginal");
+    if (savedAudioDelete) {
+      this.audioDeleteOriginal = savedAudioDelete === "true";
+    }
   }
 
   private getRenameExtensions(): string[] {
@@ -291,8 +323,7 @@ export class BatcherApp extends LitElement {
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      const hasMatchedExt =
-        exts.includes("*") || exts.some((ext) => file.name.toLowerCase().endsWith(ext));
+      const hasMatchedExt = exts.includes("*") || exts.some((ext) => file.name.toLowerCase().endsWith(ext));
       if (hasMatchedExt) {
         newBatchFiles.push({
           name: file.name,
@@ -312,12 +343,7 @@ export class BatcherApp extends LitElement {
       } else if (isAudio) {
         this.showAlert(t[this.currentLang].noFallbackWav, "error");
       } else {
-        this.showAlert(
-          this.currentLang === "ko"
-            ? "선택한 확장자의 파일을 찾을 수 없습니다."
-            : "No files matched the selected extensions.",
-          "error"
-        );
+        this.showAlert(this.currentLang === "ko" ? "선택한 확장자의 파일을 찾을 수 없습니다." : "No files matched the selected extensions.", "error");
       }
       return;
     }
@@ -328,10 +354,7 @@ export class BatcherApp extends LitElement {
     this.activeFiles = [...this.activeFiles, ...filteredNew];
     const count = filteredNew.length;
     if (count > 0) {
-      this.addLog(
-        isDropped ? activeT.filesDropped(count) : activeT.fallbackUploadDone(count),
-        "success"
-      );
+      this.addLog(isDropped ? activeT.filesDropped(count) : activeT.fallbackUploadDone(count), "success");
     }
   }
 
@@ -360,13 +383,7 @@ export class BatcherApp extends LitElement {
     if (!this.audioDirHandle) return;
     try {
       const files: BatchFile[] = [];
-      await scanDirectory(
-        this.audioDirHandle,
-        "",
-        files,
-        this.audioInputExts,
-        this.audioOutputDirHandle
-      );
+      await scanDirectory(this.audioDirHandle, "", files, this.audioInputExts, this.audioOutputDirHandle);
       this.audioFiles = files;
       this.addLog(t[this.currentLang].folderScanDone(this.audioFiles.length));
     } catch (err: any) {
@@ -405,10 +422,7 @@ export class BatcherApp extends LitElement {
         selected: true,
       };
 
-      this.svgFiles = [
-        sampleBatchFile,
-        ...this.svgFiles.filter((f) => f.relativePath !== file.name),
-      ];
+      this.svgFiles = [sampleBatchFile, ...this.svgFiles.filter((f) => f.relativePath !== file.name)];
       this.addLog(activeT.sampleFileAdded("SVG"), "success");
       this.showAlert(activeT.sampleFileAdded("SVG"), "success");
     } else if (this.activeTab === "audio") {
@@ -421,10 +435,7 @@ export class BatcherApp extends LitElement {
         selected: true,
       };
 
-      this.audioFiles = [
-        sampleBatchFile,
-        ...this.audioFiles.filter((f) => f.relativePath !== file.name),
-      ];
+      this.audioFiles = [sampleBatchFile, ...this.audioFiles.filter((f) => f.relativePath !== file.name)];
       this.addLog(activeT.sampleFileAdded("WAV"), "success");
       this.showAlert(activeT.sampleFileAdded("WAV"), "success");
     } else {
@@ -439,10 +450,7 @@ export class BatcherApp extends LitElement {
         newName: file.name,
       }));
 
-      this.renameFiles = [
-        ...newFiles,
-        ...this.renameFiles.filter((f) => !newFiles.some((nf) => nf.name === f.name)),
-      ];
+      this.renameFiles = [...newFiles, ...this.renameFiles.filter((f) => !newFiles.some((nf) => nf.name === f.name))];
       this.addLog(activeT.sampleFileAdded("TXT/IMG"), "success");
       this.showAlert(activeT.sampleFileAdded("TXT/IMG"), "success");
     }
@@ -465,12 +473,7 @@ export class BatcherApp extends LitElement {
       }
       return file;
     });
-    this.addLog(
-      this.currentLang === "ko"
-        ? "마지막 변경 사항을 실행 취소했습니다."
-        : "Undid the last rename rule.",
-      "info"
-    );
+    this.addLog(this.currentLang === "ko" ? "마지막 변경 사항을 실행 취소했습니다." : "Undid the last rename rule.", "info");
     this.requestUpdate();
   }
 
@@ -480,12 +483,7 @@ export class BatcherApp extends LitElement {
       ...file,
       newName: file.originalName || file.name,
     }));
-    this.addLog(
-      this.currentLang === "ko"
-        ? "모든 파일명을 원래 이름으로 복원했습니다."
-        : "Restored all filenames to original.",
-      "info"
-    );
+    this.addLog(this.currentLang === "ko" ? "모든 파일명을 원래 이름으로 복원했습니다." : "Restored all filenames to original.", "info");
     this.requestUpdate();
   }
 
@@ -497,12 +495,7 @@ export class BatcherApp extends LitElement {
       if (!file.selected) return file;
       return { ...file, newName: applyReplace(file.newName || file.name, find, replace) };
     });
-    this.addLog(
-      this.currentLang === "ko"
-        ? `문자열 치환 적용: "${find}" → "${replace}"`
-        : `Applied text replace: "${find}" → "${replace}"`,
-      "info"
-    );
+    this.addLog(this.currentLang === "ko" ? `문자열 치환 적용: "${find}" → "${replace}"` : `Applied text replace: "${find}" → "${replace}"`, "info");
     this.requestUpdate();
   }
 
@@ -514,10 +507,7 @@ export class BatcherApp extends LitElement {
       if (!file.selected) return file;
       return { ...file, newName: applyPrefix(file.newName || file.name, text) };
     });
-    this.addLog(
-      this.currentLang === "ko" ? `앞이름 추가 적용: "${text}"` : `Applied prefix: "${text}"`,
-      "info"
-    );
+    this.addLog(this.currentLang === "ko" ? `앞이름 추가 적용: "${text}"` : `Applied prefix: "${text}"`, "info");
     this.requestUpdate();
   }
 
@@ -529,10 +519,7 @@ export class BatcherApp extends LitElement {
       if (!file.selected) return file;
       return { ...file, newName: applySuffix(file.newName || file.name, text) };
     });
-    this.addLog(
-      this.currentLang === "ko" ? `뒷이름 추가 적용: "${text}"` : `Applied suffix: "${text}"`,
-      "info"
-    );
+    this.addLog(this.currentLang === "ko" ? `뒷이름 추가 적용: "${text}"` : `Applied suffix: "${text}"`, "info");
     this.requestUpdate();
   }
 
@@ -544,10 +531,8 @@ export class BatcherApp extends LitElement {
       return { ...file, newName: applyRemove(file.newName || file.name, start, len) };
     });
     this.addLog(
-      this.currentLang === "ko"
-        ? `위치 기준 지우기 적용 (시작: ${start}, 길이: ${len})`
-        : `Applied remove at index (start: ${start}, len: ${len})`,
-      "info"
+      this.currentLang === "ko" ? `위치 기준 지우기 적용 (시작: ${start}, 길이: ${len})` : `Applied remove at index (start: ${start}, len: ${len})`,
+      "info",
     );
     this.requestUpdate();
   }
@@ -558,10 +543,7 @@ export class BatcherApp extends LitElement {
       if (!file.selected) return file;
       return { ...file, newName: applyKeepNumbers(file.newName || file.name) };
     });
-    this.addLog(
-      this.currentLang === "ko" ? "숫자만 남기기 적용" : "Applied keep only numbers",
-      "info"
-    );
+    this.addLog(this.currentLang === "ko" ? "숫자만 남기기 적용" : "Applied keep only numbers", "info");
     this.requestUpdate();
   }
 
@@ -571,18 +553,11 @@ export class BatcherApp extends LitElement {
       if (!file.selected) return file;
       return { ...file, newName: applyRemoveBrackets(file.newName || file.name) };
     });
-    this.addLog(
-      this.currentLang === "ko"
-        ? "괄호 안 내용 지우기 적용"
-        : "Applied remove text inside brackets",
-      "info"
-    );
+    this.addLog(this.currentLang === "ko" ? "괄호 안 내용 지우기 적용" : "Applied remove text inside brackets", "info");
     this.requestUpdate();
   }
 
-  private handleApplyNumbering(
-    e: CustomEvent<{ start: number; digits: number; position: "prefix" | "suffix" }>
-  ) {
+  private handleApplyNumbering(e: CustomEvent<{ start: number; digits: number; position: "prefix" | "suffix" }>) {
     const { start, digits, position } = e.detail;
     this.saveRenameHistory();
     let currentNumber = start;
@@ -593,17 +568,13 @@ export class BatcherApp extends LitElement {
       return { ...file, newName };
     });
     this.addLog(
-      this.currentLang === "ko"
-        ? `일련번호 추가 적용 (시작: ${start}, 자릿수: ${digits})`
-        : `Applied numbering (start: ${start}, digits: ${digits})`,
-      "info"
+      this.currentLang === "ko" ? `일련번호 추가 적용 (시작: ${start}, 자릿수: ${digits})` : `Applied numbering (start: ${start}, digits: ${digits})`,
+      "info",
     );
     this.requestUpdate();
   }
 
-  private handleApplyExtension(
-    e: CustomEvent<{ mode: "keep" | "remove" | "change"; newExt: string }>
-  ) {
+  private handleApplyExtension(e: CustomEvent<{ mode: "keep" | "remove" | "change"; newExt: string }>) {
     const { mode, newExt } = e.detail;
     this.saveRenameHistory();
     this.renameFiles = this.renameFiles.map((file) => {
@@ -614,7 +585,7 @@ export class BatcherApp extends LitElement {
       this.currentLang === "ko"
         ? `확장자 변경 적용 (모드: ${mode}${newExt ? `, 새 확장자: ${newExt}` : ""})`
         : `Applied extension operation (mode: ${mode}${newExt ? `, ext: ${newExt}` : ""})`,
-      "info"
+      "info",
     );
     this.requestUpdate();
   }
@@ -625,10 +596,7 @@ export class BatcherApp extends LitElement {
       if (!file.selected) return file;
       return { ...file, newName: applyClearFilename(file.newName || file.name) };
     });
-    this.addLog(
-      this.currentLang === "ko" ? "파일명 전체 삭제 적용" : "Applied clear entire filename",
-      "info"
-    );
+    this.addLog(this.currentLang === "ko" ? "파일명 전체 삭제 적용" : "Applied clear entire filename", "info");
     this.requestUpdate();
   }
 
@@ -684,9 +652,7 @@ export class BatcherApp extends LitElement {
           this.currentConversionIndex = currentIndex;
         },
         onFileStatusChange: (relativePath, status, errorMsg) => {
-          this.renameFiles = this.renameFiles.map((file) =>
-            file.relativePath === relativePath ? { ...file, status, errorMsg } : file
-          );
+          this.renameFiles = this.renameFiles.map((file) => (file.relativePath === relativePath ? { ...file, status, errorMsg } : file));
         },
         onLog: (text, type) => {
           this.addLog(text, type);
@@ -751,9 +717,7 @@ export class BatcherApp extends LitElement {
           this.currentConversionIndex = currentIndex;
         },
         onFileStatusChange: (relativePath, status, errorMsg) => {
-          this.renameFiles = this.renameFiles.map((file) =>
-            file.relativePath === relativePath ? { ...file, status, errorMsg } : file
-          );
+          this.renameFiles = this.renameFiles.map((file) => (file.relativePath === relativePath ? { ...file, status, errorMsg } : file));
         },
         onLog: (text, type) => {
           this.addLog(text, type);
@@ -762,15 +726,10 @@ export class BatcherApp extends LitElement {
 
       this.isConverting = false;
 
-      const deletedPaths = new Set(
-        selectedFiles.filter((f) => f.status === "success").map((f) => f.relativePath)
-      );
+      const deletedPaths = new Set(selectedFiles.filter((f) => f.status === "success").map((f) => f.relativePath));
       this.renameFiles = this.renameFiles.filter((file) => !deletedPaths.has(file.relativePath));
 
-      this.showAlert(
-        activeT.alertDeleteSuccess(result.successCount, result.failCount),
-        result.successCount > 0 ? "success" : "error"
-      );
+      this.showAlert(activeT.alertDeleteSuccess(result.successCount, result.failCount), result.successCount > 0 ? "success" : "error");
     } catch (err: any) {
       console.error(err);
       this.isConverting = false;
@@ -799,10 +758,7 @@ export class BatcherApp extends LitElement {
     this.isConverting = true;
     this.conversionProgress = 0;
     this.currentConversionIndex = 0;
-    this.addLog(
-      t[this.currentLang].startConversion(this.exportFormat, scaleObj.scale),
-      "info"
-    );
+    this.addLog(t[this.currentLang].startConversion(this.exportFormat, scaleObj.scale), "info");
 
     const activeT = t[this.currentLang];
 
@@ -823,9 +779,7 @@ export class BatcherApp extends LitElement {
           this.currentConversionIndex = currentIndex;
         },
         onFileStatusChange: (relativePath, status, errorMsg) => {
-          this.svgFiles = this.svgFiles.map((file) =>
-            file.relativePath === relativePath ? { ...file, status, errorMsg } : file
-          );
+          this.svgFiles = this.svgFiles.map((file) => (file.relativePath === relativePath ? { ...file, status, errorMsg } : file));
         },
         onLog: (text, type) => {
           this.addLog(text, type);
@@ -838,12 +792,8 @@ export class BatcherApp extends LitElement {
 
       if (result.successCount > 0) {
         this.showAlert(
-          activeT.alertSuccessText(
-            isLocalDirMode,
-            hasOutputDir,
-            this.svgOutputDirHandle ? this.svgOutputDirHandle.name : ""
-          ),
-          "success"
+          activeT.alertSuccessText(isLocalDirMode, hasOutputDir, this.svgOutputDirHandle ? this.svgOutputDirHandle.name : ""),
+          "success",
         );
       } else {
         this.showAlert(activeT.alertFail, "error");
@@ -889,9 +839,7 @@ export class BatcherApp extends LitElement {
           this.currentConversionIndex = currentIndex;
         },
         onFileStatusChange: (relativePath, status, errorMsg) => {
-          this.audioFiles = this.audioFiles.map((file) =>
-            file.relativePath === relativePath ? { ...file, status, errorMsg } : file
-          );
+          this.audioFiles = this.audioFiles.map((file) => (file.relativePath === relativePath ? { ...file, status, errorMsg } : file));
         },
         onLog: (text, type) => {
           this.addLog(text, type);
@@ -904,12 +852,8 @@ export class BatcherApp extends LitElement {
 
       if (result.successCount > 0) {
         this.showAlert(
-          activeT.alertAudioSuccessText(
-            isLocalDirMode,
-            hasOutputDir,
-            this.audioOutputDirHandle ? this.audioOutputDirHandle.name : ""
-          ),
-          "success"
+          activeT.alertAudioSuccessText(isLocalDirMode, hasOutputDir, this.audioOutputDirHandle ? this.audioOutputDirHandle.name : ""),
+          "success",
         );
       } else {
         this.showAlert(activeT.alertFail, "error");
@@ -923,9 +867,7 @@ export class BatcherApp extends LitElement {
 
   private handleToggleFileSelected(e: CustomEvent<BatchFile>) {
     const targetFile = e.detail;
-    this.activeFiles = this.activeFiles.map((file) =>
-      file.relativePath === targetFile.relativePath ? { ...file, selected: !file.selected } : file
-    );
+    this.activeFiles = this.activeFiles.map((file) => (file.relativePath === targetFile.relativePath ? { ...file, selected: !file.selected } : file));
   }
 
   private handleToggleAllFiles(e: CustomEvent<boolean>) {
@@ -938,9 +880,7 @@ export class BatcherApp extends LitElement {
 
   private handleDeleteFile(e: CustomEvent<BatchFile>) {
     const fileToDelete = e.detail;
-    this.activeFiles = this.activeFiles.filter(
-      (file) => file.relativePath !== fileToDelete.relativePath
-    );
+    this.activeFiles = this.activeFiles.filter((file) => file.relativePath !== fileToDelete.relativePath);
     this.addLog(t[this.currentLang].queueRemoved(fileToDelete.name), "info");
   }
 
@@ -954,7 +894,7 @@ export class BatcherApp extends LitElement {
       this.currentLang === "ko"
         ? `선택한 ${filesToDelete.length}개의 파일을 대기열에서 삭제했습니다.`
         : `Removed ${filesToDelete.length} selected files from the queue.`,
-      "info"
+      "info",
     );
   }
 
@@ -985,6 +925,24 @@ export class BatcherApp extends LitElement {
         progressBar.style.width = `${this.conversionProgress}%`;
       }
     }
+    if (changedProperties.has("exportFormat")) {
+      localStorage.setItem("batcher-svg-exportFormat", this.exportFormat);
+    }
+    if (changedProperties.has("selectedScale")) {
+      localStorage.setItem("batcher-svg-selectedScale", String(this.selectedScale));
+    }
+    if (changedProperties.has("svgDeleteOriginal")) {
+      localStorage.setItem("batcher-svg-deleteOriginal", String(this.svgDeleteOriginal));
+    }
+    if (changedProperties.has("scaleOptions")) {
+      localStorage.setItem("batcher-svg-scaleOptions", JSON.stringify(this.scaleOptions));
+    }
+    if (changedProperties.has("audioBitrate")) {
+      localStorage.setItem("batcher-audio-bitrate", String(this.audioBitrate));
+    }
+    if (changedProperties.has("audioDeleteOriginal")) {
+      localStorage.setItem("batcher-audio-deleteOriginal", String(this.audioDeleteOriginal));
+    }
   }
 
   protected override render() {
@@ -1012,10 +970,7 @@ export class BatcherApp extends LitElement {
     return html`
       <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col min-h-screen pb-32">
         <!-- Header -->
-        <app-header
-          .lang="${this.currentLang}"
-          @change-lang="${(e: CustomEvent<"ko" | "en">) => this.handleLangChange(e.detail)}"
-        ></app-header>
+        <app-header .lang="${this.currentLang}" @change-lang="${(e: CustomEvent<"ko" | "en">) => this.handleLangChange(e.detail)}"></app-header>
 
         <!-- Tabs Navigation -->
         <div
@@ -1056,9 +1011,7 @@ export class BatcherApp extends LitElement {
         <!-- Browser Compatibility Alert Banner -->
         ${!this.apiSupported
           ? html`
-              <div
-                class="mb-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl text-amber-300 text-sm flex items-start gap-3"
-              >
+              <div class="mb-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl text-amber-300 text-sm flex items-start gap-3">
                 <i class="fa-solid fa-triangle-exclamation text-lg mt-0.5 shrink-0 font-sans"></i>
                 <div class="font-sans">
                   <span class="font-bold">${activeT.compatBannerTitle}</span>
@@ -1071,7 +1024,7 @@ export class BatcherApp extends LitElement {
                             : "converted_images"
                           : this.audioOutputDirHandle
                             ? this.audioOutputDirHandle.name
-                            : "converted_audio"
+                            : "converted_audio",
                       )}
                 </div>
               </div>
@@ -1101,8 +1054,7 @@ export class BatcherApp extends LitElement {
                     @reset-output-folder="${() => (this.svgOutputDirHandle = null)}"
                     @upload-files="${(e: CustomEvent) => this.handleFallbackUpload(e.detail)}"
                     @load-sample="${this.loadSampleFile}"
-                    @change-format="${(e: CustomEvent<"png" | "jpg">) =>
-                      (this.exportFormat = e.detail)}"
+                    @change-format="${(e: CustomEvent<"png" | "jpg">) => (this.exportFormat = e.detail)}"
                     @change-scale="${(e: CustomEvent<number>) => (this.selectedScale = e.detail)}"
                     @change-suffix="${(e: CustomEvent<{ scale: number; suffix: string }>) =>
                       this.handleChangeSuffix(e.detail.scale, e.detail.suffix)}"
@@ -1169,6 +1121,17 @@ export class BatcherApp extends LitElement {
 
           <!-- Right Real-Time Display & Logger Panel (cols-7) -->
           <div class="lg:col-span-7 space-y-6 flex flex-col">
+            <!-- AdSense Top Banner Slot -->
+            <div
+              class="p-3 bg-slate-900/40 border border-slate-800/40 rounded-2xl flex flex-col items-center justify-center min-h-[90px] relative overflow-hidden group"
+            >
+              <div class="absolute inset-0 bg-linear-to-r from-indigo-500/5 via-purple-500/5 to-pink-500/5 opacity-50"></div>
+              <div class="text-[10px] text-slate-500 font-semibold mb-1 uppercase tracking-wider select-none relative z-10">Advertisement</div>
+              <div class="w-full flex items-center justify-center relative z-10 text-xs text-slate-400 font-sans italic text-center">
+                ${this.currentLang === "ko" ? "여기에 구글 애드센스 광고가 노출됩니다." : "Google AdSense Responsive Ad Placement"}
+              </div>
+            </div>
+
             <!-- File List Queue -->
             <file-queue
               .lang="${this.currentLang}"
@@ -1183,6 +1146,17 @@ export class BatcherApp extends LitElement {
               @change-file-new-name="${this.handleChangeFileNewName}"
               @delete-selected-from-queue="${this.handleDeleteSelectedFromQueue}"
             ></file-queue>
+
+            <!-- AdSense Middle Slot -->
+            <div
+              class="p-3 bg-slate-900/40 border border-slate-800/40 rounded-2xl flex flex-col items-center justify-center min-h-[90px] relative overflow-hidden group"
+            >
+              <div class="absolute inset-0 bg-linear-to-r from-emerald-500/5 via-indigo-500/5 to-purple-500/5 opacity-50"></div>
+              <div class="text-[10px] text-slate-500 font-semibold mb-1 uppercase tracking-wider select-none relative z-10">Advertisement</div>
+              <div class="w-full flex items-center justify-center relative z-10 text-xs text-slate-400 font-sans italic text-center">
+                ${this.currentLang === "ko" ? "여기에 구글 애드센스 광고가 노출됩니다." : "Google AdSense Responsive Ad Placement"}
+              </div>
+            </div>
 
             <!-- Logs Console -->
             <log-console
@@ -1201,9 +1175,7 @@ export class BatcherApp extends LitElement {
         <!-- Progress bar along the top inner edge -->
         ${this.isConverting || this.conversionProgress > 0
           ? html`
-              <div
-                class="absolute top-0 left-6 right-6 h-1 bg-slate-950/20 dark:bg-white/10 rounded-full overflow-hidden"
-              >
+              <div class="absolute top-0 left-6 right-6 h-1 bg-slate-950/20 dark:bg-white/10 rounded-full overflow-hidden">
                 <div
                   class="progress-bar-inner h-full bg-linear-to-r from-indigo-500 via-purple-500 to-emerald-500 transition-all duration-300 shadow-[0_0_8px_rgba(99,102,241,0.6)]"
                 ></div>
@@ -1215,52 +1187,34 @@ export class BatcherApp extends LitElement {
           <!-- Left side: dynamic info vs progress info -->
           ${this.isConverting || this.conversionProgress > 0
             ? html`
-                <div
-                  class="flex flex-wrap items-center gap-3 text-xs text-slate-300 font-sans font-bold"
-                >
+                <div class="flex flex-wrap items-center gap-3 text-xs text-slate-300 font-sans font-bold">
                   <div class="flex items-center gap-2">
                     ${this.isConverting
                       ? html`
                           <span class="relative flex h-2.5 w-2.5">
-                            <span
-                              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"
-                            ></span>
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-indigo-500"></span>
                           </span>
                           <span class="text-slate-100 font-bold tracking-wide"
-                            >${isRename
-                              ? this.currentLang === "ko"
-                                ? "변경 진행 중..."
-                                : "Renaming..."
-                              : activeT.converting}</span
+                            >${isRename ? (this.currentLang === "ko" ? "변경 진행 중..." : "Renaming...") : activeT.converting}</span
                           >
                         `
                       : html`
-                          <span
-                            class="inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"
-                          ></span>
+                          <span class="inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
                           <span class="text-emerald-600 font-bold tracking-wide"
-                            >${isRename
-                              ? this.currentLang === "ko"
-                                ? "변경 완료!"
-                                : "Rename complete!"
-                              : activeT.completed}</span
+                            >${isRename ? (this.currentLang === "ko" ? "변경 완료!" : "Rename complete!") : activeT.completed}</span
                           >
                         `}
                   </div>
                   <span class="text-black/10 dark:text-white/10">|</span>
                   <span>
                     ${activeT.progress}
-                    <strong class="text-indigo-600 dark:text-indigo-400 font-mono text-xs"
-                      >${this.conversionProgress}%</strong
-                    >
+                    <strong class="text-indigo-600 dark:text-indigo-400 font-mono text-xs">${this.conversionProgress}%</strong>
                   </span>
                   <span class="text-black/10 dark:text-white/10 hidden sm:inline">|</span>
                   <span class="hidden sm:inline">
                     ${activeT.doneCount}
-                    <strong class="text-emerald-600 dark:text-emerald-400 font-mono"
-                      >${this.currentConversionIndex}</strong
-                    >
+                    <strong class="text-emerald-600 dark:text-emerald-400 font-mono">${this.currentConversionIndex}</strong>
                     / ${currentFiles.filter((f) => f.selected).length}
                   </span>
                 </div>
@@ -1269,15 +1223,11 @@ export class BatcherApp extends LitElement {
                 <div class="flex flex-wrap items-center gap-4 text-xs text-slate-300 font-bold font-sans">
                   <div class="flex items-center gap-2">
                     <span
-                      class="w-2 h-2 rounded-full ${selectedFilesCount > 0
-                        ? "bg-indigo-400 animate-ping"
-                        : "bg-slate-300 dark:bg-slate-700"}"
+                      class="w-2 h-2 rounded-full ${selectedFilesCount > 0 ? "bg-indigo-400 animate-ping" : "bg-slate-300 dark:bg-slate-700"}"
                     ></span>
                     <span>
                       ${activeT.waitingFiles}
-                      <strong class="text-slate-100 font-extrabold">
-                        ${selectedFilesCount}${this.currentLang === "ko" ? "개" : ""}
-                      </strong>
+                      <strong class="text-slate-100 font-extrabold"> ${selectedFilesCount}${this.currentLang === "ko" ? "개" : ""} </strong>
                       <span class="text-slate-500 dark:text-slate-500 font-normal">
                         / ${currentFiles.length}${this.currentLang === "ko" ? "개" : ""}
                       </span>
@@ -1289,16 +1239,12 @@ export class BatcherApp extends LitElement {
                         <span class="text-black/10 dark:text-white/10 hidden md:inline">|</span>
                         <span>
                           ${activeT.exportFormat}
-                          <strong class="text-indigo-600 dark:text-indigo-400 uppercase font-extrabold"
-                            >${this.exportFormat}</strong
-                          >
+                          <strong class="text-indigo-600 dark:text-indigo-400 uppercase font-extrabold">${this.exportFormat}</strong>
                         </span>
                         <span class="text-black/10 dark:text-white/10 hidden md:inline">|</span>
                         <span>
                           ${activeT.applyScale}
-                          <strong class="text-slate-100 font-mono font-extrabold"
-                            >${this.selectedScale}x</strong
-                          >
+                          <strong class="text-slate-100 font-mono font-extrabold">${this.selectedScale}x</strong>
                         </span>
                         ${suffixTemplate}
                       `
@@ -1307,9 +1253,7 @@ export class BatcherApp extends LitElement {
                           <span class="text-black/10 dark:text-white/10 hidden md:inline">|</span>
                           <span>
                             ${activeT.applyBitrate}
-                            <strong class="text-purple-600 dark:text-purple-400 uppercase font-extrabold"
-                              >${this.audioBitrate} kbps</strong
-                            >
+                            <strong class="text-purple-600 dark:text-purple-400 uppercase font-extrabold">${this.audioBitrate} kbps</strong>
                           </span>
                         `
                       : html`
@@ -1317,9 +1261,7 @@ export class BatcherApp extends LitElement {
                           <span>
                             ${this.currentLang === "ko" ? "모드" : "Mode"}:
                             <strong class="text-pink-600 dark:text-pink-400 uppercase font-extrabold"
-                              >${this.currentLang === "ko"
-                                ? "파일 일괄 변경"
-                                : "Batch Rename"}</strong
+                              >${this.currentLang === "ko" ? "파일 일괄 변경" : "Batch Rename"}</strong
                             >
                           </span>
                         `}
