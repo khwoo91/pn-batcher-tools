@@ -343,137 +343,173 @@ export class AudioSettingsPanel extends LitElement {
           </h2>
 
           <div class="space-y-4">
-            <!-- Bitrate selection (MP3 Quality) -->
-            <div>
-              <label
-                class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2.5"
+            <!-- 1. MP3 변환 품질 설정 -->
+            <details
+              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
+            >
+              <summary
+                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
               >
-                ${activeT.bitrateLabel}
-              </label>
-              <div class="grid grid-cols-2 gap-3">
-                ${bitrates.map(
-                  (rate) => html`
-                    <button
-                      @click="${() => this.handleChangeBitrate(rate)}"
-                      ?disabled="${this.isConverting}"
-                      class="py-2.5 rounded-xl border text-xs font-bold transition-all font-sans cursor-pointer active:scale-95 ${this
-                        .bitrate === rate
-                        ? "bg-brand-bg border-brand-primary text-brand-text shadow-[0_0_15px_rgba(99,102,241,0.15)]"
-                        : "bg-slate-950 border-slate-800 text-slate-400 hover:border-brand-primary/40 hover:text-slate-200"}"
-                    >
-                      ${rate} kbps
-                      ${rate === 192
-                        ? this.lang === "ko"
-                          ? "(권장)"
-                          : "(Recommended)"
-                        : rate === 320
-                          ? this.lang === "ko"
-                            ? "(고음질)"
-                            : "(High)"
-                          : ""}
-                    </button>
-                  `,
-                )}
-              </div>
-              <p class="text-xs text-slate-500 mt-2 font-medium tracking-wide leading-relaxed">
-                ${activeT.bitrateDesc}
-              </p>
-            </div>
-
-            <div class="border-t border-slate-800 my-4"></div>
-
-            <!-- Output Folder settings -->
-            <div>
-              <label
-                class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2.5"
-              >
-                ${activeT.outputDirLabel}
-              </label>
-
-              ${this.apiSupported
-                ? html`
-                    <div class="space-y-3">
-                      ${this.outputDirHandle
-                        ? html`
-                            <div
-                              class="p-3 bg-brand-bg border border-brand-border rounded-xl text-xs flex items-center justify-between shadow-inner"
-                            >
-                              <div class="flex items-center gap-2 text-brand-text font-medium">
-                                <i class="fa-regular fa-folder-open text-sm"></i>
-                                <span
-                                  class="font-bold truncate max-w-50"
-                                  title="${this.outputDirHandle.name}"
-                                >
-                                  ${this.outputDirHandle.name}
-                                </span>
-                              </div>
-                              <button
-                                @click="${this.handleResetOutputFolder}"
-                                ?disabled="${this.isConverting}"
-                                class="text-slate-400 hover:text-rose-400 font-sans transition-colors cursor-pointer text-xs flex items-center gap-1 font-bold disabled:opacity-50"
-                              >
-                                <i class="fa-solid fa-xmark"></i> ${activeT.resetDir}
-                              </button>
-                            </div>
-                          `
-                        : html`
-                            <button
-                              @click="${this.handleSelectOutputFolder}"
-                              ?disabled="${this.isConverting}"
-                              class="w-full py-3.5 px-4 bg-slate-950 hover:bg-slate-900 text-slate-300 rounded-xl border border-dashed border-slate-800 hover:border-brand-primary/30 transition-all flex items-center justify-center gap-2 cursor-pointer font-sans text-xs active:scale-[0.98]"
-                            >
-                              <i class="fa-regular fa-folder-open text-base text-brand-primary"></i>
-                              <span class="font-semibold">${activeT.selectOutputDir}</span>
-                            </button>
-                          `}
-                    </div>
-                  `
-                : html`
-                    <div
-                      class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-500 font-sans leading-relaxed shadow-inner"
-                    >
-                      <i class="fa-solid fa-circle-info text-amber-500/80 mr-1"></i>
-                      ${activeT.noOutputDirCompat}
-                    </div>
-                  `}
-              <p class="text-xs text-slate-500 mt-2 font-medium tracking-wide leading-relaxed">
-                ${activeT.outputDirDesc}
-              </p>
-            </div>
-
-            <div class="border-t border-slate-800 my-4"></div>
-
-            <!-- Option: Delete Original WAV -->
-            <div class="bg-slate-950 p-4.5 rounded-2xl border border-slate-800 shadow-inner">
-              <label class="flex items-start gap-3 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  ?checked="${this.deleteOriginal}"
-                  ?disabled="${this.isConverting}"
-                  @change="${this.handleToggleDelete}"
-                  class="w-5 h-5 rounded-lg text-indigo-600 bg-slate-950 border-slate-800 focus:ring-indigo-500 focus:ring-offset-slate-950 cursor-pointer mt-0.5"
-                />
-                <div class="text-sm">
-                  <span class="font-bold text-slate-100 block">
-                    ${activeT.deleteOriginalLabel}
-                  </span>
-                  <span class="text-slate-500 block mt-1 font-sans leading-relaxed">
-                    ${activeT.deleteOriginalDesc}
-                  </span>
+                <div class="flex items-center gap-1.5">
+                  <i class="fa-solid fa-sliders text-indigo-400"></i>
+                  <span>${activeT.bitrateLabel}</span>
                 </div>
-              </label>
+                <i
+                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
+                ></i>
+              </summary>
+              <div class="p-4 pt-0 border-t border-slate-800/50 space-y-4">
+                <div class="mt-4">
+                  <div class="grid grid-cols-2 gap-3">
+                    ${bitrates.map(
+                      (rate) => html`
+                        <button
+                          @click="${() => this.handleChangeBitrate(rate)}"
+                          ?disabled="${this.isConverting}"
+                          class="py-2.5 rounded-xl border text-xs font-bold transition-all font-sans cursor-pointer active:scale-95 ${this
+                            .bitrate === rate
+                            ? "bg-brand-bg border-brand-primary text-brand-text shadow-[0_0_15px_rgba(99,102,241,0.15)]"
+                            : "bg-slate-950 border-slate-800 text-slate-400 hover:border-brand-primary/40 hover:text-slate-200"}"
+                        >
+                          ${rate} kbps
+                          ${rate === 192
+                            ? this.lang === "ko"
+                              ? "(권장)"
+                              : "(Recommended)"
+                            : rate === 320
+                              ? this.lang === "ko"
+                                ? "(고음질)"
+                                : "(High)"
+                              : ""}
+                        </button>
+                      `,
+                    )}
+                  </div>
+                  <p class="text-xs text-slate-500 mt-2 font-medium tracking-wide leading-relaxed">
+                    ${activeT.bitrateDesc}
+                  </p>
+                </div>
+              </div>
+            </details>
 
-              ${this.deleteOriginal && (!this.apiSupported || !this.dirHandle)
-                ? html`
-                    <div
-                      class="mt-2 text-xs text-rose-400 font-bold flex items-center gap-1.5 font-sans"
-                    >
-                      <i class="fa-solid fa-circle-exclamation"></i>
-                      <span>${activeT.deleteOriginalAlert}</span>
+            <!-- 2. 저장 위치 지정 -->
+            <details
+              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
+            >
+              <summary
+                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
+              >
+                <div class="flex items-center gap-1.5">
+                  <i class="fa-regular fa-folder-open text-brand-primary"></i>
+                  <span>${this.lang === "ko" ? "내보낼 대상 폴더 (출력 경로)" : "Export Target Folder"}</span>
+                </div>
+                <i
+                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
+                ></i>
+              </summary>
+              <div class="p-4 pt-0 border-t border-slate-800/50 space-y-4">
+                <div class="mt-4">
+                  ${this.apiSupported
+                    ? html`
+                        <div class="space-y-3">
+                          ${this.outputDirHandle
+                            ? html`
+                                <div
+                                  class="p-3 bg-brand-bg border border-brand-border rounded-xl text-xs flex items-center justify-between shadow-inner"
+                                >
+                                  <div class="flex items-center gap-2 text-brand-text font-medium">
+                                    <i class="fa-regular fa-folder-open text-sm"></i>
+                                    <span
+                                      class="font-bold truncate max-w-50"
+                                      title="${this.outputDirHandle.name}"
+                                    >
+                                      ${this.outputDirHandle.name}
+                                    </span>
+                                  </div>
+                                  <button
+                                    @click="${this.handleResetOutputFolder}"
+                                    ?disabled="${this.isConverting}"
+                                    class="text-slate-400 hover:text-rose-400 font-sans transition-colors cursor-pointer text-xs flex items-center gap-1 font-bold disabled:opacity-50"
+                                  >
+                                    <i class="fa-solid fa-xmark"></i> ${activeT.resetDir}
+                                  </button>
+                                </div>
+                              `
+                            : html`
+                                <button
+                                  @click="${this.handleSelectOutputFolder}"
+                                  ?disabled="${this.isConverting}"
+                                  class="w-full py-3.5 px-4 bg-slate-950 hover:bg-slate-900 text-slate-300 rounded-xl border border-dashed border-slate-800 hover:border-brand-primary/30 transition-all flex items-center justify-center gap-2 cursor-pointer font-sans text-xs active:scale-[0.98]"
+                                >
+                                  <i class="fa-regular fa-folder-open text-base text-brand-primary"></i>
+                                  <span class="font-semibold">${activeT.selectOutputDir}</span>
+                                </button>
+                              `}
+                        </div>
+                      `
+                    : html`
+                        <div
+                          class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-500 font-sans leading-relaxed shadow-inner"
+                        >
+                          <i class="fa-solid fa-circle-info text-amber-500/80 mr-1"></i>
+                          ${activeT.noOutputDirCompat}
+                        </div>
+                      `}
+                  <p class="text-xs text-slate-500 mt-2 font-medium tracking-wide leading-relaxed">
+                    ${activeT.outputDirDesc}
+                  </p>
+                </div>
+              </div>
+            </details>
+
+            <!-- 3. 원본 파일 관리 옵션 -->
+            <details
+              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
+            >
+              <summary
+                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
+              >
+                <div class="flex items-center gap-1.5">
+                  <i class="fa-regular fa-trash-can text-indigo-400"></i>
+                  <span>${this.lang === "ko" ? "원본 파일 정리 옵션" : "Original File Cleanup"}</span>
+                </div>
+                <i
+                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
+                ></i>
+              </summary>
+              <div class="p-4 pt-0 border-t border-slate-800/50 space-y-4">
+                <div class="mt-4 bg-slate-950 p-4.5 rounded-2xl border border-slate-800 shadow-inner">
+                  <label class="flex items-start gap-3 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      ?checked="${this.deleteOriginal}"
+                      ?disabled="${this.isConverting}"
+                      @change="${this.handleToggleDelete}"
+                      class="w-5 h-5 rounded-lg text-indigo-600 bg-slate-950 border-slate-800 focus:ring-indigo-500 focus:ring-offset-slate-950 cursor-pointer mt-0.5"
+                    />
+                    <div class="text-sm">
+                      <span class="font-bold text-slate-100 block">
+                        ${activeT.deleteOriginalLabel}
+                      </span>
+                      <span class="text-slate-500 block mt-1 font-sans leading-relaxed">
+                        ${activeT.deleteOriginalDesc}
+                      </span>
                     </div>
-                  `
-                : ""}
-            </div>
+                  </label>
+
+                  ${this.deleteOriginal && (!this.apiSupported || !this.dirHandle)
+                    ? html`
+                        <div
+                          class="mt-2 text-xs text-rose-400 font-bold flex items-center gap-1.5 font-sans"
+                        >
+                          <i class="fa-solid fa-circle-exclamation"></i>
+                          <span>${activeT.deleteOriginalAlert}</span>
+                        </div>
+                      `
+                    : ""}
+                </div>
+              </div>
+            </details>
           </div>
         </div>
       </div>
