@@ -24,7 +24,7 @@ export class LogConsole extends LitElement {
         : "Execution history and status will be displayed here.";
 
     return html`
-      <div class="glass-panel rounded-3xl p-6 shadow-xl flex flex-col h-70">
+      <div class="glass-panel rounded-3xl p-6 shadow-xl flex flex-col min-h-50 max-h-70">
         <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
           <div class="flex items-center gap-3">
             <i class="fa-solid fa-terminal text-brand-primary text-xs"></i>
@@ -48,7 +48,7 @@ export class LogConsole extends LitElement {
           ${this.conversionLogs.length === 0
             ? html`
                 <div
-                  class="h-full flex items-center justify-center text-slate-600 font-sans tracking-wide"
+                  class="h-30 flex items-center justify-center text-slate-600 font-sans tracking-wide"
                 >
                   ${emptyText}
                 </div>

@@ -269,7 +269,7 @@ export class FileQueue extends LitElement {
 
     return html`
       <div
-        class="glass-panel rounded-3xl p-6 shadow-xl flex flex-col h-100 relative overflow-hidden"
+        class="glass-panel rounded-3xl p-6 shadow-xl flex flex-col min-h-50 max-h-100 relative overflow-hidden"
         @dragover="${this.handleDragOver}"
         @dragenter="${this.handleDragEnter}"
         @dragleave="${this.handleDragLeave}"
@@ -327,16 +327,16 @@ export class FileQueue extends LitElement {
           ${this.files.length === 0
             ? html`
                 <div
-                  class="h-full flex flex-col items-center justify-center text-slate-500 space-y-3 py-10 text-center px-4"
+                  class="h-full flex flex-col items-center justify-center text-slate-500 space-y-3 text-center"
                 >
-                  <i class="fa-solid fa-folder-open text-4xl text-slate-700"></i>
-                  <p class="text-xs font-semibold tracking-wide leading-relaxed">
+                  <i class="fa-solid fa-folder-open text-4xl text-slate-700 mb-0 mt-1"></i>
+                  <p class="text-xs font-semibold tracking-wide leading-relaxed mb-3">
                     ${activeT.emptyQueue}
                   </p>
                   <button
                     @click="${this.handleLoadSample}"
                     ?disabled="${this.isConverting}"
-                    class="px-4.5 py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-md active:scale-95 cursor-pointer mt-2 flex items-center justify-center gap-1.5 hover:opacity-95
+                    class="px-4.5 py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-md active:scale-95 cursor-pointer flex items-center justify-center gap-1.5 hover:opacity-95
                       ${this.activeTab === "rename"
                       ? "bg-pink-600 hover:bg-pink-700"
                       : this.activeTab === "audio"
