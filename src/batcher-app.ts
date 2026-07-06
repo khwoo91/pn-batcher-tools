@@ -387,6 +387,33 @@ export class BatcherApp extends LitElement {
     this.appendFiles(files, true);
   }
 
+  private async handleDropFolder(handle: FileSystemDirectoryHandle) {
+    if (!this.apiSupported) {
+      this.showAlert(t[this.currentLang].compatAlert, "info");
+      return;
+    }
+
+    try {
+      const config = this.getTabConfig();
+      config.setDirHandle(handle);
+
+      const files: BatchFile[] = [];
+      this.conversionProgress = 0;
+
+      await scanDirectory(handle, "", files, config.exts, config.outputDirHandle);
+      config.setFiles(files);
+
+      if (files.length === 0) {
+        this.showAlert(config.noFilesMessage, "error");
+      } else {
+        this.addLog(t[this.currentLang].folderScanDone(files.length));
+      }
+    } catch (err: any) {
+      console.error(err);
+      this.showAlert(t[this.currentLang].folderPermissionFail(err.message), "error");
+    }
+  }
+
   private handleChangeInputExts(e: CustomEvent<string[]>) {
     this.audioInputExts = e.detail;
     if (this.audioDirHandle) {
@@ -1153,6 +1180,8 @@ export class BatcherApp extends LitElement {
                     @select-output-folder="${this.selectOutputFolder}"
                     @reset-output-folder="${() => (this.svgOutputDirHandle = null)}"
                     @upload-files="${(e: CustomEvent) => this.handleFallbackUpload(e.detail)}"
+                    @drop-files="${this.handleDropFiles}"
+                    @drop-folder="${(e: CustomEvent<FileSystemDirectoryHandle>) => this.handleDropFolder(e.detail)}"
                     @load-sample="${this.loadSampleFile}"
                     @change-format="${(e: CustomEvent<"png" | "jpg">) =>
                       (this.exportFormat = e.detail)}"
@@ -1179,6 +1208,8 @@ export class BatcherApp extends LitElement {
                       @select-output-folder="${this.selectOutputFolder}"
                       @reset-output-folder="${() => (this.audioOutputDirHandle = null)}"
                       @upload-files="${(e: CustomEvent) => this.handleFallbackUpload(e.detail)}"
+                      @drop-files="${this.handleDropFiles}"
+                      @drop-folder="${(e: CustomEvent<FileSystemDirectoryHandle>) => this.handleDropFolder(e.detail)}"
                       @load-sample="${this.loadSampleFile}"
                       @change-bitrate="${(e: CustomEvent<number>) =>
                         (this.audioBitrate = e.detail)}"
@@ -1198,11 +1229,13 @@ export class BatcherApp extends LitElement {
                       .conversionProgress="${this.conversionProgress}"
                       @select-folder="${this.selectFolder}"
                       @upload-files="${(e: CustomEvent) => this.handleFallbackUpload(e.detail)}"
+                      @drop-files="${this.handleDropFiles}"
+                      @drop-folder="${(e: CustomEvent<FileSystemDirectoryHandle>) => this.handleDropFolder(e.detail)}"
                       @load-sample="${this.loadSampleFile}"
                       @change-ext-filter="${(e: CustomEvent<string>) => {
                         this.renameExtFilter = e.detail;
                         if (this.renameDirHandle) {
-                          this.reScanRenameDirectory();
+                           this.reScanRenameDirectory();
                         }
                       }}"
                       @apply-replace="${this.handleApplyReplace}"
@@ -1221,7 +1254,7 @@ export class BatcherApp extends LitElement {
                     ></renamer-settings-panel>
                   `}
           </div>
-
+ 
           <!-- Right Real-Time Display & Logger Panel (cols-7) -->
           <div class="lg:col-span-7 space-y-6 flex flex-col">
             <!-- AdSense Top Banner Slot -->
@@ -1244,7 +1277,7 @@ export class BatcherApp extends LitElement {
                   : "Google AdSense Responsive Ad Placement"}
               </div>
             </div>
-
+ 
             <!-- File List Queue -->
             <file-queue
               .lang="${this.currentLang}"
@@ -1255,6 +1288,7 @@ export class BatcherApp extends LitElement {
               @toggle-all-files="${this.handleToggleAllFiles}"
               @delete-file="${this.handleDeleteFile}"
               @drop-files="${this.handleDropFiles}"
+              @drop-folder="${(e: CustomEvent<FileSystemDirectoryHandle>) => this.handleDropFolder(e.detail)}"
               @load-sample="${this.loadSampleFile}"
               @change-file-new-name="${this.handleChangeFileNewName}"
               @delete-selected-from-queue="${this.handleDeleteSelectedFromQueue}"

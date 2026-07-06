@@ -48,20 +48,60 @@ export class FileQueue extends LitElement {
     }
   }
 
-  private handleDrop(e: DragEvent) {
+  private async handleDrop(e: DragEvent) {
     e.preventDefault();
     if (this.isConverting) return;
     this.isDragging = false;
 
-    const files = e.dataTransfer?.files;
-    if (files && files.length > 0) {
-      this.dispatchEvent(
-        new CustomEvent("drop-files", {
-          detail: files,
-          bubbles: true,
-          composed: true,
-        }),
-      );
+    if (e.dataTransfer) {
+      const files = e.dataTransfer.files;
+      const items = e.dataTransfer.items;
+      let directoryItem: DataTransferItem | null = null;
+
+      if (items && items.length > 0) {
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          if (item.kind === "file") {
+            if (typeof item.webkitGetAsEntry === "function") {
+              const entry = item.webkitGetAsEntry();
+              if (entry && entry.isDirectory) {
+                directoryItem = item;
+                break;
+              }
+            }
+          }
+        }
+      }
+
+      if (directoryItem) {
+        if (typeof directoryItem.getAsFileSystemHandle === "function") {
+          try {
+            const handle = await directoryItem.getAsFileSystemHandle();
+            if (handle && handle.kind === "directory") {
+              this.dispatchEvent(
+                new CustomEvent("drop-folder", {
+                  detail: handle,
+                  bubbles: true,
+                  composed: true,
+                }),
+              );
+              return;
+            }
+          } catch (err) {
+            console.error("Error getting dropped directory handle:", err);
+          }
+        }
+      }
+
+      if (files && files.length > 0) {
+        this.dispatchEvent(
+          new CustomEvent("drop-files", {
+            detail: files,
+            bubbles: true,
+            composed: true,
+          }),
+        );
+      }
     }
   }
 

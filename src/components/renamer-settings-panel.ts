@@ -18,9 +18,96 @@ export class RenamerSettingsPanel extends LitElement {
   @property({ type: String }) extFilter = "";
 
   @state() private extMode: "keep" | "remove" | "change" = "keep";
+  @state() private isDraggingFolder = false;
 
   protected override createRenderRoot() {
     return this;
+  }
+
+  private handleDragOver(e: DragEvent) {
+    e.preventDefault();
+    if (this.isConverting) return;
+    if (e.dataTransfer) {
+      e.dataTransfer.dropEffect = "copy";
+    }
+  }
+
+  private handleDragEnter(e: DragEvent) {
+    e.preventDefault();
+    if (this.isConverting) return;
+    this.isDraggingFolder = true;
+  }
+
+  private handleDragLeave(e: DragEvent) {
+    e.preventDefault();
+    if (this.isConverting) return;
+
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    if (
+      e.clientX < rect.left ||
+      e.clientX >= rect.right ||
+      e.clientY < rect.top ||
+      e.clientY >= rect.bottom
+    ) {
+      this.isDraggingFolder = false;
+    }
+  }
+
+  private async handleDrop(e: DragEvent) {
+    e.preventDefault();
+    if (this.isConverting) return;
+    this.isDraggingFolder = false;
+
+    if (e.dataTransfer) {
+      const files = e.dataTransfer.files;
+      const items = e.dataTransfer.items;
+      let directoryItem: DataTransferItem | null = null;
+
+      if (items && items.length > 0) {
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          if (item.kind === "file") {
+            if (typeof item.webkitGetAsEntry === "function") {
+              const entry = item.webkitGetAsEntry();
+              if (entry && entry.isDirectory) {
+                directoryItem = item;
+                break;
+              }
+            }
+          }
+        }
+      }
+
+      if (directoryItem) {
+        if (typeof directoryItem.getAsFileSystemHandle === "function") {
+          try {
+            const handle = await directoryItem.getAsFileSystemHandle();
+            if (handle && handle.kind === "directory") {
+              this.dispatchEvent(
+                new CustomEvent("drop-folder", {
+                  detail: handle,
+                  bubbles: true,
+                  composed: true,
+                }),
+              );
+              return;
+            }
+          } catch (err) {
+            console.error("Error getting dropped directory handle:", err);
+          }
+        }
+      }
+
+      if (files && files.length > 0) {
+        this.dispatchEvent(
+          new CustomEvent("drop-files", {
+            detail: files,
+            bubbles: true,
+            composed: true,
+          }),
+        );
+      }
+    }
   }
 
   private handleSelectFolder() {
@@ -200,13 +287,95 @@ export class RenamerSettingsPanel extends LitElement {
     this.dispatchEvent(new CustomEvent("delete-selected", { bubbles: true, composed: true }));
   }
 
+  private handleDetailsToggle(e: Event) {
+    e.preventDefault();
+    const summary = e.currentTarget as HTMLElement;
+    const details = summary.parentElement as HTMLDetailsElement;
+    if (!details) return;
+
+    const content = summary.nextElementSibling as HTMLElement;
+    if (!content) return;
+
+    if (details.dataset.transitioning === "true") return;
+
+    if (details.open) {
+      details.dataset.transitioning = "true";
+      const startHeight = content.scrollHeight;
+      content.style.height = `${startHeight}px`;
+      content.offsetHeight; // force reflow
+
+      content.style.transition = 'height 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease-out';
+      content.style.height = '0px';
+      content.style.opacity = '0';
+
+      const onEnd = (event: TransitionEvent) => {
+        if (event.propertyName === 'height') {
+          content.removeEventListener('transitionend', onEnd);
+          details.removeAttribute('open');
+          content.style.height = '';
+          content.style.opacity = '';
+          content.style.transition = '';
+          delete details.dataset.transitioning;
+        }
+      };
+      content.addEventListener('transitionend', onEnd);
+    } else {
+      details.dataset.transitioning = "true";
+      details.setAttribute('open', '');
+      const endHeight = content.scrollHeight;
+
+      content.style.height = '0px';
+      content.style.opacity = '0';
+      content.offsetHeight; // force reflow
+
+      content.style.transition = 'height 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease-out';
+      content.style.height = `${endHeight}px`;
+      content.style.opacity = '1';
+
+      const onEnd = (event: TransitionEvent) => {
+        if (event.propertyName === 'height') {
+          content.removeEventListener('transitionend', onEnd);
+          content.style.height = '';
+          content.style.opacity = '';
+          content.style.transition = '';
+          delete details.dataset.transitioning;
+        }
+      };
+      content.addEventListener('transitionend', onEnd);
+    }
+  }
+
   protected override render() {
     const activeT = t[this.lang];
 
     return html`
       <div class="space-y-6">
         <!-- Step 1: Directory Picker Card -->
-        <div class="glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden">
+        <div
+          class="glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden transition-all duration-300 ${this
+            .isDraggingFolder
+            ? "ring-2 ring-indigo-500 bg-indigo-500/10"
+            : ""}"
+          @dragover="${this.handleDragOver}"
+          @dragenter="${this.handleDragEnter}"
+          @dragleave="${this.handleDragLeave}"
+          @drop="${this.handleDrop}"
+        >
+          <!-- Drag Over Card Overlay -->
+          ${this.isDraggingFolder
+            ? html`
+                <div
+                  class="absolute inset-0 bg-indigo-950/85 backdrop-blur-md border-2 border-dashed border-indigo-500 rounded-3xl flex flex-col items-center justify-center text-indigo-300 z-30 transition-all duration-300"
+                >
+                  <i class="fa-solid fa-cloud-arrow-up text-3xl mb-2 animate-bounce"></i>
+                  <span class="text-xs font-bold text-center px-4"
+                    >${this.lang === "ko"
+                      ? "여기에 폴더 또는 파일을 놓으세요"
+                      : "Drop folder or files here"}</span
+                  >
+                </div>
+              `
+            : ""}
           <div
             class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-indigo-500 to-purple-600"
           ></div>
@@ -312,11 +481,20 @@ export class RenamerSettingsPanel extends LitElement {
                           </div>
                         `
                       : html`
-                          <div
-                            class="text-center py-2.5 px-4 bg-slate-950 border border-slate-800 rounded-2xl text-xs text-slate-500 font-sans tracking-wide"
-                          >
-                            <i class="fa-solid fa-circle-info mr-1 text-slate-600"></i>
-                            ${activeT.noFolderSelected}
+                          <div class="text-center">
+                            <span class="text-xs text-slate-500 font-medium">
+                              ${activeT.noFolderSelected}
+                            </span>
+
+                            <!-- Drag and Drop Hint -->
+                            <div
+                              class="text-center text-[10px] text-slate-500 font-sans select-none"
+                            >
+                              <i class="fa-solid fa-circle-info mr-1 text-slate-600"></i>
+                              ${this.lang === "ko"
+                                ? "여기에 드래그하여 바로 가져오세요."
+                                : "Drag & drop here to import."}
+                            </div>
                           </div>
                         `}
                 </div>
@@ -363,6 +541,14 @@ export class RenamerSettingsPanel extends LitElement {
                         ${activeT.selectFiles}
                       </span>
                     </button>
+                  </div>
+
+                  <!-- Drag and Drop Hint -->
+                  <div class="text-center text-[10px] text-slate-500 font-sans my-1 select-none">
+                    <i class="fa-solid fa-circle-info mr-1 text-slate-600"></i>
+                    ${this.lang === "ko"
+                      ? "여기에 드래그하여 바로 가져오세요."
+                      : "Drag & drop here to import."}
                   </div>
 
                   ${this.filesCount > 0
@@ -442,6 +628,7 @@ export class RenamerSettingsPanel extends LitElement {
               class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
             >
               <summary
+                @click="${this.handleDetailsToggle}"
                 class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
               >
                 <div class="flex items-center gap-1.5">
@@ -452,7 +639,8 @@ export class RenamerSettingsPanel extends LitElement {
                   class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
                 ></i>
               </summary>
-              <div class="space-y-3 px-4 pb-4 pt-0">
+              <div class="overflow-hidden">
+                <div class="space-y-3 px-4 pb-4 pt-0">
                 <div class="grid grid-cols-2 gap-2">
                   <input
                     type="text"
@@ -477,6 +665,7 @@ export class RenamerSettingsPanel extends LitElement {
                   ${activeT.btnApply}
                 </button>
               </div>
+              </div>
             </details>
 
             <!-- 2. 앞이름 / 뒷이름 붙이기 -->
@@ -484,6 +673,7 @@ export class RenamerSettingsPanel extends LitElement {
               class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
             >
               <summary
+                @click="${this.handleDetailsToggle}"
                 class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
               >
                 <div class="flex items-center gap-1.5">
@@ -494,7 +684,8 @@ export class RenamerSettingsPanel extends LitElement {
                   class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
                 ></i>
               </summary>
-              <div class="space-y-2 px-4 pb-4 pt-0">
+              <div class="overflow-hidden">
+                <div class="space-y-2 px-4 pb-4 pt-0">
                 <div class="flex gap-2">
                   <input
                     type="text"
@@ -528,6 +719,7 @@ export class RenamerSettingsPanel extends LitElement {
                   </button>
                 </div>
               </div>
+              </div>
             </details>
 
             <!-- 3. 특정 위치 지우기 -->
@@ -535,6 +727,7 @@ export class RenamerSettingsPanel extends LitElement {
               class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
             >
               <summary
+                @click="${this.handleDetailsToggle}"
                 class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
               >
                 <div class="flex items-center gap-1.5">
@@ -545,7 +738,8 @@ export class RenamerSettingsPanel extends LitElement {
                   class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
                 ></i>
               </summary>
-              <div class="space-y-3 px-4 pb-4 pt-0">
+              <div class="overflow-hidden">
+                <div class="space-y-3 px-4 pb-4 pt-0">
                 <div class="grid grid-cols-2 gap-2">
                   <div class="space-y-1">
                     <label class="text-[10px] text-slate-500 font-bold block"
@@ -582,6 +776,7 @@ export class RenamerSettingsPanel extends LitElement {
                   ${activeT.btnApply}
                 </button>
               </div>
+              </div>
             </details>
 
             <!-- 4. 일괄 정리 및 지우기 -->
@@ -589,6 +784,7 @@ export class RenamerSettingsPanel extends LitElement {
               class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
             >
               <summary
+                @click="${this.handleDetailsToggle}"
                 class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
               >
                 <div class="flex items-center gap-1.5">
@@ -599,7 +795,8 @@ export class RenamerSettingsPanel extends LitElement {
                   class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
                 ></i>
               </summary>
-              <div class="grid grid-cols-2 gap-2 px-4 pb-4 pt-0">
+              <div class="overflow-hidden">
+                <div class="grid grid-cols-2 gap-2 px-4 pb-4 pt-0">
                 <button
                   @click="${this.applyKeepNumbers}"
                   ?disabled="${this.isConverting || this.filesCount === 0}"
@@ -615,6 +812,7 @@ export class RenamerSettingsPanel extends LitElement {
                   ${activeT.btnRemoveBrackets}
                 </button>
               </div>
+              </div>
             </details>
 
             <!-- 5. 일련번호 붙이기 -->
@@ -622,6 +820,7 @@ export class RenamerSettingsPanel extends LitElement {
               class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
             >
               <summary
+                @click="${this.handleDetailsToggle}"
                 class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
               >
                 <div class="flex items-center gap-1.5">
@@ -632,7 +831,8 @@ export class RenamerSettingsPanel extends LitElement {
                   class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
                 ></i>
               </summary>
-              <div class="space-y-3 px-4 pb-4 pt-0">
+              <div class="overflow-hidden">
+                <div class="space-y-3 px-4 pb-4 pt-0">
                 <div class="grid grid-cols-3 gap-2">
                   <div class="space-y-1">
                     <label class="text-[10px] text-slate-500 font-bold block"
@@ -682,6 +882,7 @@ export class RenamerSettingsPanel extends LitElement {
                   ${activeT.btnApply}
                 </button>
               </div>
+              </div>
             </details>
 
             <!-- 6. 확장자 변경 및 추가 -->
@@ -689,6 +890,7 @@ export class RenamerSettingsPanel extends LitElement {
               class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
             >
               <summary
+                @click="${this.handleDetailsToggle}"
                 class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
               >
                 <div class="flex items-center gap-1.5">
@@ -699,7 +901,8 @@ export class RenamerSettingsPanel extends LitElement {
                   class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
                 ></i>
               </summary>
-              <div class="space-y-3 px-4 pb-4 pt-0">
+              <div class="overflow-hidden">
+                <div class="space-y-3 px-4 pb-4 pt-0">
                 <div class="grid grid-cols-2 gap-2">
                   <div class="space-y-1">
                     <label class="text-[10px] text-slate-500 font-bold block"
@@ -740,6 +943,7 @@ export class RenamerSettingsPanel extends LitElement {
                 >
                   ${activeT.btnApply}
                 </button>
+              </div>
               </div>
             </details>
           </div>
