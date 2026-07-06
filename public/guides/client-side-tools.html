@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-ko="100% 로컬 웹 도구의 구동 원리와 데이터 보안성 분석 - Batcher Tools" data-en="How Client-side Tools Work - Batcher Tools">100% 로컬 웹 도구의 구동 원리와 데이터 보안성 분석 - Batcher Tools</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #020617;
+      color: #cbd5e1;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      line-height: 1.7;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'Outfit', sans-serif;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 6rem;
+    }
+
+    .header {
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 2rem;
+      margin-bottom: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #818cf8;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .back-btn:hover {
+      color: #a5b4fc;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin: 0.5rem 0;
+      background: linear-gradient(to right, #ffffff, #94a3b8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.3;
+    }
+
+    .meta {
+      font-size: 0.875rem;
+      color: #64748b;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1.25rem;
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      border-left: 3px solid #6366f1;
+      padding-left: 0.75rem;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #e2e8f0;
+    }
+
+    p,
+    li {
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    ul,
+    ol {
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    .highlight-box {
+      background: rgba(99, 102, 241, 0.08);
+      border: 1px solid rgba(99, 102, 241, 0.15);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .highlight-box p {
+      margin: 0;
+      color: #a5b4fc;
+      font-weight: 500;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      font-size: 0.85rem;
+      color: #475569;
+      border-top: 1px solid #1e293b;
+      padding-top: 2rem;
+    }
+
+    /* Translation Styles */
+    .lang-ko,
+    .lang-en {
+      display: none !important;
+    }
+
+    body.lang-ko-active .lang-ko {
+      display: block !important;
+    }
+
+    body.lang-ko-active span.lang-ko,
+    body.lang-ko-active strong.lang-ko,
+    body.lang-ko-active a.lang-ko {
+      display: inline !important;
+    }
+
+    body.lang-en-active .lang-en {
+      display: block !important;
+    }
+
+    body.lang-en-active span.lang-en,
+    body.lang-en-active strong.lang-en,
+    body.lang-en-active a.lang-en {
+      display: inline !important;
+    }
+
+    .lang-selector {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0.5rem;
+      padding: 0.25rem 0.5rem;
+    }
+
+    .lang-btn {
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      transition: all 0.2s;
+    }
+
+    .lang-btn:hover {
+      color: #cbd5e1;
+    }
+
+    .lang-btn.active {
+      color: #818cf8;
+      background: rgba(99, 102, 241, 0.15);
+    }
+
+    .lang-divider {
+      color: #334155;
+      font-size: 0.8rem;
+    }
+  </style>
+  <script>
+    function setLanguage(lang) {
+      localStorage.setItem('batcher-lang', lang);
+      document.body.className = lang === 'ko' ? 'lang-ko-active' : 'lang-en-active';
+      
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+      });
+      
+      const titleEl = document.querySelector('title');
+      if (titleEl) {
+        titleEl.textContent = lang === 'ko' ? titleEl.getAttribute('data-ko') : titleEl.getAttribute('data-en');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      let lang = localStorage.getItem('batcher-lang');
+      if (!lang) {
+        lang = navigator.language.toLowerCase().startsWith('ko') ? 'ko' : 'en';
+      }
+      setLanguage(lang);
+      
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          setLanguage(btn.getAttribute('data-lang'));
+        });
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-content">
+        <a href="/guides/index.html" class="back-btn">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span class="lang-ko">가이드 목록으로 돌아가기</span>
+          <span class="lang-en">Back to Guides</span>
+        </a>
+        <div class="lang-selector">
+          <button class="lang-btn" data-lang="ko">KO</button>
+          <span class="lang-divider">|</span>
+          <button class="lang-btn" data-lang="en">EN</button>
+        </div>
+      </div>
+      <h1>
+        <span class="lang-ko">100% 로컬 웹 도구의 구동 원리와 데이터 보안성 분석</span>
+        <span class="lang-en">How 100% Local Web Tools Work and Their Security Benefits</span>
+      </h1>
+      <div class="meta">
+        <span><i class="fa-solid fa-calendar"></i> <span class="lang-ko">최종 업데이트: 2026-07-06</span><span class="lang-en">Last updated: 2026-07-06</span></span>
+        <span><i class="fa-solid fa-user"></i> <span class="lang-ko">작성자: Batcher Tools 팀</span><span class="lang-en">Author: Batcher Tools Team</span></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <!-- KOREAN CONTENT -->
+      <div class="lang-ko">
+        <p>흔히 인터넷 웹사이트 도구를 이용하려면 당연히 파일이 인터넷망을 거쳐 어딘가 먼 곳에 존재하는 서버에 전달되어 연산되고 다시 되돌아오는 과정을 거쳐야 한다고 생각합니다. PDF 결합, 이미지 압축, 오디오 파일 변환 등의 툴을 브라우저에서 돌릴 때 "파일 업로드 중..."이라는 안내 문구를 쉽게 발견할 수 있는 이유도 이 때문입니다.</p>
+
+        <p>하지만 최근 웹 브라우저 엔진의 성능이 비약적으로 향상되고 웹 표준 기술 규격이 발전하면서, 서버가 존재하지 않는 <strong>'100% 클라이언트 사이드(Client-side) 로컬 도구'</strong>가 대세로 떠오르고 있습니다. 배처 툴(Batcher Tools)이 지향하는 이 로컬 구동 웹 기술이 정확히 무엇인지, 왜 기존 방식보다 현저히 뛰어난 보안성과 성능을 가지는지 상세하게 기술 분석을 해드립니다.</p>
+
+        <h2>1. 클라이언트 사이드(Client-side) 실행이란?</h2>
+        <p>사용자가 특정 주소(예: `batchertools.com`)에 접속하면, 브라우저는 웹 서버로부터 사이트의 기본 구조를 이루는 HTML, CSS, JavaScript 코드 파일만 다운로드받아 옵니다. 이 다운로드가 완료되는 즉시 브라우저와 웹 서버 간의 주요 통신 세션은 종료됩니다.</p>
+        <p>이후 사용자가 화면에 WAV 음향 파일을 올리거나 SVG 디자인 에셋을 드래그해 놓았을 때 일어나는 연산 프로세스는 **웹 서버가 아닌 사용자의 개인 컴퓨터 하드웨어(CPU와 RAM, GPU) 자원만을 점유하여** 브라우저라는 샌드박스 보안 통제망 아래에서 독자적으로 수행됩니다. 즉, 사이트 서버는 최초에 연산 프로그램을 브라우저로 전송해 주는 배급 통로 역할만 수행하고, 연산의 수행 주체는 전적으로 사용자 기기가 됩니다.</p>
+
+        <h2>2. 이를 가능하게 하는 핵심 웹 기술들</h2>
+        <p>배처 툴은 최신 W3C 표준 및 WICG 드래프트 규격들을 다양하게 적용하여 로컬 컴퓨터와의 하이퍼 링크를 구축했습니다.</p>
+        <ul>
+          <li><strong>File System Access API (WICG):</strong> 사용자가 웹페이지 내에서 로컬 폴더를 직접 마운트하여 권한을 승인하면, 브라우저가 격리된 공간을 벗어나 지정된 폴더 안의 파일들을 고속으로 읽거나(Read) 신규 변경 결과물을 직접 해당 폴더에 작성(Direct Write)할 수 있게 해주는 고성능 로컬 연동 API입니다.</li>
+          <li><strong>Web Audio & WebCodecs API:</strong> 별도의 실행 모듈 설치 없이 브라우저 내장 음향 디코더를 활용하여 오디오 비트스트림 데이터를 빠른 속도로 프레임 단위 디코딩한 뒤, 지정한 타겟 코덱(MP3 등) 형식으로 인코딩하여 출력해 주는 고성능 오디오 가속 기술입니다.</li>
+          <li><strong>HTML5 Canvas API & Rasterization:</strong> 텍스트 좌표 형식으로 구성된 SVG 벡터 좌표 데이터를 캔버스 가상 평면에 실시간으로 고배율 투사하여 그려낸 뒤, 해당 도화지 평면을 디바이스 가속 픽셀 맵 데이터(PNG/JPG)로 고속 캡처해 추출하는 그래픽 처리 엔진입니다.</li>
+        </ul>
+
+        <div class="highlight-box">
+          <p><i class="fa-solid fa-shield-halved"></i> <strong>최상위 보안성 (기업 보안 규정 우회):</strong> 기업 내 보안팀에서는 설계 도면, 미공개 소스코드, 마스터링 음원 소스, 개인정보 데이터 등을 외주 웹사이트로 업로드하는 행위를 엄격히 금지합니다. 그러나 배처 툴과 같은 로컬 작동 웹 도구는 네트워크 탭을 모니터링해 보아도 알 수 있듯 외부 업로드 트래픽이 전혀 발생하지 않으므로 사내 보안 가이드라인에 완벽히 부합합니다.</p>
+        </div>
+
+        <h2>3. 로컬 웹 도구가 가져다주는 3대 혜택</h2>
+        <h3>A. 완벽에 가까운 프라이버시</h3>
+        <p>서버 침입이나 클라우드 데이터베이스(DB) 유출 사고는 끊임없이 보고되고 있습니다. 애초에 서버에 사용자의 작업 데이터가 닿지 않으므로, 사이트 서버가 해킹당하더라도 사용자가 다룬 개인 파일은 단 한 조각도 누출되지 않는 절대적 안전을 보장합니다.</p>
+
+        <h3>B. 네트워크 대역폭 한계 극복</h3>
+        <p>수백 개의 무압축 고음질 파일은 용량이 수 기가바이트(GB)에 달합니다. 이를 서버에 올리고 다시 다운받는다면 회선 속도에 따라 수십 분이 걸리고 통신 요금이 부과되겠지만, 로컬 방식은 SSD 디바이스 대역폭 속도를 그대로 사용하므로 순식간에 끝납니다.</p>
+
+        <h3>C. 영구적이고 자유로운 무료 이용성</h3>
+        <p>서버 연산식 유틸리티는 사용자 한 명이 늘어날 때마다 서버 사양 증설 비용(EC2 등 호스팅 인프라 비용)이 천문학적으로 누적되어 결국 유료 멤버십 가입이나 심각한 대기열 제한을 도입해야 합니다. 반면 로컬 처리 툴은 서버 유지비가 거의 제로에 가까워, 모든 사용자에게 상업적 상용 목적까지 완벽히 무료로 제한 없이 영구 개방될 수 있습니다.</p>
+      </div>
+
+      <!-- ENGLISH CONTENT -->
+      <div class="lang-en">
+        <p>People assume that using internet web tools requires uploading files to a remote server to be processed and then downloading them back. You often see 'Uploading file...' messages when merging PDFs or compressing images.</p>
+
+        <p>However, due to browser improvements and standard web APIs, <strong>'100% client-side local web tools'</strong> are emerging. This guide explains how they work and why they offer better security and performance than traditional cloud-based utilities.</p>
+
+        <h2>1. What is Client-Side Execution?</h2>
+        <p>When you visit a web address like `batchertools.com`, your browser downloads the basic structure (HTML, CSS, JavaScript) from the web server. Once the download is complete, the main connection to the server closes.</p>
+        <p>When you load WAV files or drag SVG files onto the page, all calculations are performed <strong>locally on your device using only your CPU, RAM, and GPU resources</strong>, under the browser's sandbox security system. The website server only acts as a distributor of the app code; your device does all the processing.</p>
+
+        <h2>2. Core Web Technologies Under the Hood</h2>
+        <p>Batcher Tools uses several modern W3C standards and WICG draft specifications to link with your local environment:</p>
+        <ul>
+          <li><strong>File System Access API (WICG):</strong> Allows the browser (with your permission) to mount a local directory, read files, and write outputs directly to your disk, skipping ZIP compression entirely.</li>
+          <li><strong>Web Audio & WebCodecs API:</strong> Accesses browser-native decoders to stream audio packets and encode them into target formats like MP3 on your local thread.</li>
+          <li><strong>HTML5 Canvas & Rasterization:</strong> Render SVG vector data onto virtual canvases and capture the pixels as high-resolution PNG/JPG files.</li>
+        </ul>
+
+        <div class="highlight-box">
+          <p><i class="fa-solid fa-shield-halved"></i> <strong>Enterprise Compliance:</strong> Enterprise security guidelines often prohibit uploading corporate code, source media, or design mockups to external web servers. Because local tools send no upload traffic, they comply perfectly with strict corporate security policies.</p>
+        </div>
+
+        <h2>3. Three Key Benefits of Local Web Tools</h2>
+        <h3>A. Absolute Privacy</h3>
+        <p>Since your files never touch the server, your files remain completely safe on your own device even if the website's host server is hacked or compromised.</p>
+
+        <h3>B. Bandwidth Independence</h3>
+        <p>Uploading and downloading gigabytes of WAV or design files takes considerable time and data. Local processing uses your SSD's read/write speed, completing tasks almost instantly.</p>
+
+        <h3>C. Free & Unlimited Usage</h3>
+        <p>Server-based utilities require expensive cloud computing infrastructure that grows with the user base, leading to paywalls or file limits. Local utilities run on the user's hardware, meaning hosting costs are minimal, allowing us to keep the service free forever for both personal and commercial use.</p>
+      </div>
+    </div>
+
+    <footer>
+      &copy; 2026 Batcher Tools. All rights reserved.
+    </footer>
+  </div>
+</body>
+
+</html>

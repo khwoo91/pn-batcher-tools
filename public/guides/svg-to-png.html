@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-ko="대량의 SVG 파일을 PNG/JPG 이미지로 일괄 변환하기 - Batcher Tools" data-en="Batch Convert SVG to PNG/JPG - Batcher Tools">대량의 SVG 파일을 PNG/JPG 이미지로 일괄 변환하기 - Batcher Tools</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #020617;
+      color: #cbd5e1;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      line-height: 1.7;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'Outfit', sans-serif;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 6rem;
+    }
+
+    .header {
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 2rem;
+      margin-bottom: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #818cf8;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .back-btn:hover {
+      color: #a5b4fc;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin: 0.5rem 0;
+      background: linear-gradient(to right, #ffffff, #94a3b8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.3;
+    }
+
+    .meta {
+      font-size: 0.875rem;
+      color: #64748b;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1.25rem;
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      border-left: 3px solid #6366f1;
+      padding-left: 0.75rem;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #e2e8f0;
+    }
+
+    p,
+    li {
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    ul,
+    ol {
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    .highlight-box {
+      background: rgba(99, 102, 241, 0.08);
+      border: 1px solid rgba(99, 102, 241, 0.15);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .highlight-box p {
+      margin: 0;
+      color: #a5b4fc;
+      font-weight: 500;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      font-size: 0.85rem;
+      color: #475569;
+      border-top: 1px solid #1e293b;
+      padding-top: 2rem;
+    }
+
+    /* Translation Styles */
+    .lang-ko,
+    .lang-en {
+      display: none !important;
+    }
+
+    body.lang-ko-active .lang-ko {
+      display: block !important;
+    }
+
+    body.lang-ko-active span.lang-ko,
+    body.lang-ko-active strong.lang-ko,
+    body.lang-ko-active a.lang-ko {
+      display: inline !important;
+    }
+
+    body.lang-en-active .lang-en {
+      display: block !important;
+    }
+
+    body.lang-en-active span.lang-en,
+    body.lang-en-active strong.lang-en,
+    body.lang-en-active a.lang-en {
+      display: inline !important;
+    }
+
+    .lang-selector {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0.5rem;
+      padding: 0.25rem 0.5rem;
+    }
+
+    .lang-btn {
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      transition: all 0.2s;
+    }
+
+    .lang-btn:hover {
+      color: #cbd5e1;
+    }
+
+    .lang-btn.active {
+      color: #818cf8;
+      background: rgba(99, 102, 241, 0.15);
+    }
+
+    .lang-divider {
+      color: #334155;
+      font-size: 0.8rem;
+    }
+  </style>
+  <script>
+    function setLanguage(lang) {
+      localStorage.setItem('batcher-lang', lang);
+      document.body.className = lang === 'ko' ? 'lang-ko-active' : 'lang-en-active';
+      
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+      });
+      
+      const titleEl = document.querySelector('title');
+      if (titleEl) {
+        titleEl.textContent = lang === 'ko' ? titleEl.getAttribute('data-ko') : titleEl.getAttribute('data-en');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      let lang = localStorage.getItem('batcher-lang');
+      if (!lang) {
+        lang = navigator.language.toLowerCase().startsWith('ko') ? 'ko' : 'en';
+      }
+      setLanguage(lang);
+      
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          setLanguage(btn.getAttribute('data-lang'));
+        });
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-content">
+        <a href="/guides/index.html" class="back-btn">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span class="lang-ko">가이드 목록으로 돌아가기</span>
+          <span class="lang-en">Back to Guides</span>
+        </a>
+        <div class="lang-selector">
+          <button class="lang-btn" data-lang="ko">KO</button>
+          <span class="lang-divider">|</span>
+          <button class="lang-btn" data-lang="en">EN</button>
+        </div>
+      </div>
+      <h1>
+        <span class="lang-ko">대량의 SVG 파일을 PNG/JPG 이미지로 일괄 변환하기</span>
+        <span class="lang-en">Batch Convert SVG Files into PNG/JPG Images</span>
+      </h1>
+      <div class="meta">
+        <span><i class="fa-solid fa-calendar"></i> <span class="lang-ko">최종 업데이트: 2026-07-06</span><span class="lang-en">Last updated: 2026-07-06</span></span>
+        <span><i class="fa-solid fa-user"></i> <span class="lang-ko">작성자: Batcher Tools 팀</span><span class="lang-en">Author: Batcher Tools Team</span></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <!-- KOREAN CONTENT -->
+      <div class="lang-ko">
+        <p>웹 디자인, UI/UX 설계, 앱 개발 과정에서 가장 자주 활용되는 벡터 포맷 중 하나는 바로 <strong>SVG(Scalable Vector Graphics)</strong>입니다. SVG는 크기를 키워도 깨지지 않는 강력한 장점이 있지만, 안드로이드나 iOS 앱 개발, 혹은 구형 브라우저와의 호환성 확보나 소셜 미디어(SNS) 공유용 이미지를 구축할 때는 여전히 <strong>PNG</strong>나 <strong>JPG</strong> 같은 비트맵 이미지 포맷이 꼭 필요합니다.</p>
+
+        <p>피그마(Figma)나 어도비 일러스트레이터(Adobe Illustrator)에서 매번 하나씩 수작업으로 포맷을 바꾸는 수고를 덜기 위해, 본 가이드에서는 배처 툴(Batcher Tools)을 활용하여 수십 수백 개의 SVG 에셋 파일을 한 번에 빠르고 손쉽게 PNG/JPG로 변환하는 방법을 안내합니다.</p>
+
+        <h2>1. 기존 웹 변환 툴의 문제점과 배처 툴의 차이점</h2>
+        <p>인터넷 검색을 통해 쉽게 접할 수 있는 대다수의 온라인 SVG 파일 변환기들은 사용자가 업로드한 파일을 자사 서버에 임시 저장한 후, 서버 측 렌더링 엔진을 가동하여 변환 결과를 다운로드하도록 설계되어 있습니다. 이 방식은 다음과 같은 두 가지 큰 치명적 단점을 안고 있습니다.</p>
+        <ul>
+          <li><strong>보안 및 유출 우려:</strong> 기업의 미공개 신규 프로젝트 리소스나 개인 디자인 지식재산(IP) 에셋이 승인되지 않은 외부 서버에 계속 쌓이고 저장되므로, 보안 정책이 엄격한 환경에서는 사용하기 꺼려집니다.</li>
+          <li><strong>업로드/다운로드 속도 지연:</strong> 파일 개수가 100개가 넘어가면 서버 네트워크 대역폭 제한으로 인해 전체 작업 시간이 길어지고, 툴 사용량 한도 초과 등의 경고 메시지가 빈번히 발생합니다.</li>
+        </ul>
+        <p>반면, <strong>배처 툴은 100% 로컬(Client-side) 방식</strong>으로 구동됩니다. 사용자가 추가한 이미지 데이터는 브라우저 내부 메모리상에서 즉시 렌더링되어 컴퓨터의 로컬 다운로드 드라이브로 곧바로 다운로드되므로 외부 유출 우려가 단 1%도 없으며 기가비트 이더넷 속도와 무관하게 사용자의 하드웨어 사양(CPU/RAM) 수준에서 고속 병렬로 변환됩니다.</p>
+
+        <div class="highlight-box">
+          <p><i class="fa-solid fa-circle-info"></i> <strong>알아두면 좋은 정보:</strong> 로컬 렌더링은 브라우저의 HTML5 Canvas 엘리먼트에 SVG 코드를 이미지 객체로 그린 뒤, 해당 캔버스의 바이너리 스트림을 이미지 포맷으로 내보내는 방식으로 설계되어 브라우저 호환성이 매우 우수합니다.</p>
+        </div>
+
+        <h2>2. 단계별 SVG 일괄 변환 순서</h2>
+        <ol>
+          <li>배처 툴 메인 화면에서 <strong>'이미지 변환 (SVG)'</strong> 탭을 클릭하여 선택합니다.</li>
+          <li><strong>'폴더 선택'</strong> 버튼을 클릭하여 변환하고자 하는 SVG 파일들이 모여 있는 로컬 디렉토리를 연결하거나, 파일 대기열에 파일을 끌어서(Drag & Drop) 놓습니다. (보안 경고 팝업이 뜨면 로컬 파일 읽기 권한을 허용해 주셔야 합니다.)</li>
+          <li>설정 패널(Settings Panel)에서 원하는 <strong>출력 이미지 포맷(PNG 또는 JPG)</strong>을 결정합니다.</li>
+          <li><strong>다중 배율(Scale Options)</strong> 기능을 설정합니다. 기본 1.0배율뿐만 아니라 모바일 개발에 대응하기 위한 1.5x, 2.0x 고해상도 옵션을 활성화할 수 있으며, 배율별로 파일명 뒤에 자동으로 붙을 접미사(예: @1.5x, @2x)를 원하는 규칙으로 재정의합니다.</li>
+          <li><strong>'변환 시작'</strong> 버튼을 누르면 순식간에 변환 프로세스가 개시되며 하단 콘솔 로그에 세부 정보가 출력됩니다.</li>
+        </ol>
+
+        <h2>3. 전문가를 위한 고급 조언 및 팁</h2>
+        <h3>A. 원본 SVG 파일의 ViewBox 설계 확인</h3>
+        <p>간혹 SVG 내부 소스코드에 `viewBox` 속성이 지정되어 있지 않고 고정된 `width`와 `height` 픽셀값만 명시되어 있는 경우, 변환된 비트맵 이미지의 테두리가 잘리거나 원치 않는 여백이 발생할 수 있습니다. 피그마에서 벡터 객체를 디자인해 내보낼 때 프레임(Frame) 규격을 유지하고 viewBox가 내장되도록 추출하는 습관을 들이는 것이 가장 깔끔한 결과물로 이어집니다.</p>
+
+        <h3>B. 로컬 디렉토리 직접 쓰기 기능 (Direct Output) 활용</h3>
+        <p>구글 크롬 브라우저를 활용할 경우 파일 시스템 액세스 규격이 허용되므로, 매번 압축 ZIP 파일을 풀 필요 없이 출력 디렉토리를 지정해 두면 원본 폴더 구조 그대로 변환 파일들이 로컬 디바이스에 즉각적으로 순차 기록되므로 워크플로우를 극적으로 단축할 수 있습니다.</p>
+      </div>
+
+      <!-- ENGLISH CONTENT -->
+      <div class="lang-en">
+        <p><strong>SVG (Scalable Vector Graphics)</strong> is one of the most popular vector formats in web design, UI/UX design, and app development. SVG is scale-independent, but PNG or JPG bitmap formats are still necessary when developing Android/iOS apps, ensuring compatibility with legacy browsers, or generating images for social media sharing.</p>
+
+        <p>To avoid manually exporting assets one by one in Figma or Adobe Illustrator, this guide shows you how to convert dozens or hundreds of SVG assets to PNG/JPG at once using Batcher Tools.</p>
+
+        <h2>1. Issues with Existing Web Converters vs. Batcher Tools</h2>
+        <p>Most online SVG converters findable on search engines upload your files to their servers, render them server-side, and then let you download the outputs. This approach has two major drawbacks:</p>
+        <ul>
+          <li><strong>Security & Piracy Concerns:</strong> Your unreleased design assets and proprietary IP are uploaded and stored on third-party servers, which is prohibited in many enterprise environments.</li>
+          <li><strong>Upload/Download Delays:</strong> When processing over 100 files, bandwidth caps throttle transmission speed, leading to timeouts or usage limits.</li>
+        </ul>
+        <p>In contrast, <strong>Batcher Tools works 100% client-side (locally)</strong>. Image data is rasterized inside the browser memory and written directly to your disk, meaning zero data is leaked and processing speeds are only limited by your device's CPU/RAM power.</p>
+
+        <div class="highlight-box">
+          <p><i class="fa-solid fa-circle-info"></i> <strong>Under the Hood:</strong> Local rendering parses SVG code into Canvas elements dynamically and exports the canvas stream as a PNG/JPG. This works entirely in modern sandboxed browser runtimes.</p>
+        </div>
+
+        <h2>2. Step-by-Step Conversion Guide</h2>
+        <ol>
+          <li>Open Batcher Tools and select the <strong>'SVG Images'</strong> tab.</li>
+          <li>Click the <strong>'Select Folder'</strong> button to mount your local directory or drag and drop SVG files directly into the file queue.</li>
+          <li>In the Settings Panel, choose the <strong>output format (PNG or JPG)</strong>.</li>
+          <li>Configure <strong>Scale Options</strong>. Enable multiple export scale sizes (1.0x, 1.5x, 2.0x) and customize target suffixes (e.g. @1.5x, @2x) for mobile density assets.</li>
+          <li>Click the <strong>'Start Conversion'</strong> button. Conversion runs in parallel and outputs are rendered immediately.</li>
+        </ol>
+
+        <h2>3. Pro Tips for Advanced Workflows</h2>
+        <h3>A. Inspect original viewBox attributes</h3>
+        <p>If your source SVG lacks a `viewBox` attribute and only defines absolute `width`/`height` pixel bounds, the converted bitmap boundaries might be cropped. Ensure your vector frames in Figma export viewBox parameters correctly before batch processing.</p>
+
+        <h3>B. Use Direct Write Mode</h3>
+        <p>In Google Chrome, the WICG File System Access API allows writing directly to the mounted directory. Instead of dealing with ZIP archives, check the direct write option to write outputs right next to the original files in real time.</p>
+      </div>
+    </div>
+
+    <footer>
+      &copy; 2026 Batcher Tools. All rights reserved.
+    </footer>
+  </div>
+</body>
+
+</html>
