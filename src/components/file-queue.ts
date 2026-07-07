@@ -17,6 +17,24 @@ export class FileQueue extends LitElement {
 
   @state() private isDragging = false;
   @state() private editingPath: string | null = null;
+  @state() private flatDownload = false;
+
+  private handleToggleFlatDownload(e: Event) {
+    const input = e.target as HTMLInputElement;
+    this.flatDownload = input.checked;
+  }
+
+  private handleDownloadSelected() {
+    const selectedFiles = this.files.filter((f) => f.selected);
+    if (selectedFiles.length === 0) return;
+    this.dispatchEvent(
+      new CustomEvent("download-originals", {
+        detail: { files: selectedFiles, flat: this.flatDownload },
+        bubbles: true,
+        composed: true,
+      }),
+    );
+  }
 
   private handleDragOver(e: DragEvent) {
     e.preventDefault();
@@ -169,6 +187,33 @@ export class FileQueue extends LitElement {
     );
   }
 
+  private handleRowClick(file: BatchFile, e: Event) {
+    if (this.isConverting) return;
+
+    const path = e.composedPath();
+    for (const target of path) {
+      if (target instanceof HTMLElement) {
+        const tagName = target.tagName.toLowerCase();
+        if (
+          tagName === "input" ||
+          tagName === "button" ||
+          tagName === "select" ||
+          (tagName === "i" && target.parentElement?.tagName.toLowerCase() === "button")
+        ) {
+          return;
+        }
+      }
+    }
+
+    this.dispatchEvent(
+      new CustomEvent("toggle-file-selected", {
+        detail: file,
+        bubbles: true,
+        composed: true,
+      }),
+    );
+  }
+
   private handleToggleAll(e: Event) {
     const target = e.target as HTMLInputElement;
     this.dispatchEvent(
@@ -311,14 +356,39 @@ export class FileQueue extends LitElement {
           </div>
           ${this.files.some((f) => f.selected)
             ? html`
-                <button
-                  @click="${this.handleDeleteSelectedFromQueue}"
-                  ?disabled="${this.isConverting}"
-                  class="px-3 py-1.5 hover:bg-rose-600 hover:text-white border border-rose-500/20 hover:border-rose-500 text-rose-600 dark:text-rose-400 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95"
-                >
-                  <i class="fa-regular fa-trash-can text-[10px]"></i>
-                  <span>${this.lang === "ko" ? "선택 삭제" : "Delete Selected"}</span>
-                </button>
+                <div class="flex items-center gap-2">
+                  <!-- Download Flat Checkbox -->
+                  <label class="flex items-center gap-1.5 text-[10px] text-slate-400 cursor-pointer select-none font-sans mr-2">
+                    <input
+                      type="checkbox"
+                      .checked="${this.flatDownload}"
+                      @change="${this.handleToggleFlatDownload}"
+                      ?disabled="${this.isConverting}"
+                      class="w-3.5 h-3.5 rounded text-indigo-600 bg-slate-950 border-slate-800 focus:ring-indigo-500 focus:ring-offset-slate-950 cursor-pointer transition-all"
+                    />
+                    <span>${this.lang === "ko" ? "폴더 구조 제외" : "Download flat"}</span>
+                  </label>
+
+                  <!-- Download Button -->
+                  <button
+                    @click="${this.handleDownloadSelected}"
+                    ?disabled="${this.isConverting}"
+                    class="px-3 py-1.5 hover:bg-indigo-600 hover:text-white border border-indigo-500/20 hover:border-indigo-500 text-indigo-400 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95"
+                  >
+                    <i class="fa-solid fa-download text-[10px]"></i>
+                    <span>${this.lang === "ko" ? "선택 원본 다운로드" : "Download Original"}</span>
+                  </button>
+
+                  <!-- Delete Button -->
+                  <button
+                    @click="${this.handleDeleteSelectedFromQueue}"
+                    ?disabled="${this.isConverting}"
+                    class="px-3 py-1.5 hover:bg-rose-600 hover:text-white border border-rose-500/20 hover:border-rose-500 text-rose-600 dark:text-rose-400 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95"
+                  >
+                    <i class="fa-regular fa-trash-can text-[10px]"></i>
+                    <span>${this.lang === "ko" ? "선택 삭제" : "Delete Selected"}</span>
+                  </button>
+                </div>
               `
             : ""}
         </div>
@@ -379,7 +449,8 @@ export class FileQueue extends LitElement {
                           const isChanged = newName !== file.name;
                           return html`
                             <tr
-                              class="hover:bg-slate-900/40 border-b border-slate-800 transition-all group/row"
+                              class="hover:bg-slate-900/40 border-b border-slate-800 transition-all group/row cursor-pointer"
+                              @click="${(e: Event) => this.handleRowClick(file, e)}"
                             >
                               <td class="py-3 pl-2">
                                 <input
@@ -460,7 +531,7 @@ export class FileQueue extends LitElement {
                                       : ""}
                                   </div>
                                   <button
-                                    @click="${(e: Event) => this.handleDeleteFile(file, e)}"
+                                    @click="${(e: Event) => { e.stopPropagation(); this.handleDeleteFile(file, e); }}"
                                     ?disabled="${this.isConverting}"
                                     class="text-slate-500 hover:text-rose-400 disabled:opacity-20 transition-all p-1 opacity-0 group-hover/row:opacity-100 cursor-pointer"
                                     title="${activeT.deleteTooltip}"
@@ -492,6 +563,7 @@ export class FileQueue extends LitElement {
                           class="flex items-center justify-between p-3 bg-slate-950 border border-slate-800 hover:border-brand-primary/40 focus-within:border-brand-primary/50 transition-all text-xs group/item outline-none cursor-pointer rounded-xl animate-fade-in"
                           tabindex="0"
                           @keydown="${(e: KeyboardEvent) => this.handleKeyDown(file, e)}"
+                          @click="${(e: Event) => this.handleRowClick(file, e)}"
                         >
                           <div class="flex items-center gap-3 min-w-0 font-sans flex-1">
                             <!-- Checkbox -->
@@ -559,8 +631,8 @@ export class FileQueue extends LitElement {
                             </div>
 
                             <!-- Delete Button (visible on hover) -->
-                            <button
-                              @click="${(e: Event) => this.handleDeleteFile(file, e)}"
+                             <button
+                               @click="${(e: Event) => { e.stopPropagation(); this.handleDeleteFile(file, e); }}"
                               ?disabled="${this.isConverting}"
                               class="text-slate-500 hover:text-rose-400 disabled:opacity-20 disabled:hover:text-slate-500 transition-all p-1 md:opacity-0 group-hover/item:opacity-100 focus:opacity-100 outline-none cursor-pointer animate-fade-in"
                               title="${activeT.deleteTooltip}"

@@ -1,6 +1,7 @@
 /// <reference types="wicg-file-system-access" />
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
+import JSZip from "jszip";
 
 import type { BatchFile, ScaleOption, ConversionLog } from "./types";
 import { scanDirectory } from "./utils/fs-utils";
@@ -1020,6 +1021,96 @@ export class BatcherApp extends LitElement {
     );
   }
 
+  private async handleDownloadOriginals(e: CustomEvent<{ files: BatchFile[]; flat: boolean }>) {
+    const { files, flat } = e.detail;
+    if (!files || files.length === 0) return;
+
+    this.isConverting = true;
+    this.conversionProgress = 0;
+    this.currentConversionIndex = 0;
+    this.addLog(
+      this.currentLang === "ko"
+        ? "원본 파일 일괄 다운로드 압축 준비 중..."
+        : "Preparing original files bulk download archive...",
+      "info",
+    );
+
+    try {
+      const zip = new JSZip();
+      const usedNames = new Set<string>();
+
+      for (let i = 0; i < files.length; i++) {
+        const fileItem = files[i];
+        const originalFile = fileItem.file;
+
+        if (flat) {
+          // Flattened structure, need to handle naming collisions
+          const name = originalFile.name;
+          const extIndex = name.lastIndexOf(".");
+          const baseName = extIndex !== -1 ? name.substring(0, extIndex) : name;
+          const ext = extIndex !== -1 ? name.substring(extIndex) : "";
+
+          let counter = 1;
+          let finalName = name;
+          while (usedNames.has(finalName.toLowerCase())) {
+            finalName = `${baseName} (${counter})${ext}`;
+            counter++;
+          }
+          usedNames.add(finalName.toLowerCase());
+          zip.file(finalName, originalFile);
+        } else {
+          // Preserved folder structure
+          const zipPath = fileItem.relativePath || originalFile.name;
+          zip.file(zipPath, originalFile);
+        }
+
+        // Update progress
+        this.conversionProgress = Math.round(((i + 1) / files.length) * 100);
+        this.currentConversionIndex = i + 1;
+      }
+
+      this.addLog(
+        this.currentLang === "ko"
+          ? "ZIP 파일 압축 진행 중..."
+          : "Compressing ZIP archive...",
+        "info",
+      );
+
+      const content = await zip.generateAsync({ type: "blob" });
+
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(content);
+
+      // Choose appropriate name based on tab
+      const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+      const zipName = `original_files_${this.activeTab}_${dateStr}`;
+      link.download = `${zipName}.zip`;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      this.addLog(
+        this.currentLang === "ko"
+          ? `압축 파일 다운로드 완료: ${zipName}.zip`
+          : `ZIP archive download complete: ${zipName}.zip`,
+        "success",
+      );
+    } catch (err: any) {
+      console.error("Failed to download original files:", err);
+      this.addLog(
+        this.currentLang === "ko"
+          ? `원본 파일 다운로드 실패: ${err.message}`
+          : `Failed to download original files: ${err.message}`,
+        "error",
+      );
+    } finally {
+      this.isConverting = false;
+      this.conversionProgress = 0;
+      this.currentConversionIndex = 0;
+    }
+  }
+
   private resetAll() {
     if (this.activeTab === "svg") {
       this.svgDirHandle = null;
@@ -1292,6 +1383,7 @@ export class BatcherApp extends LitElement {
               @load-sample="${this.loadSampleFile}"
               @change-file-new-name="${this.handleChangeFileNewName}"
               @delete-selected-from-queue="${this.handleDeleteSelectedFromQueue}"
+              @download-originals="${this.handleDownloadOriginals}"
             ></file-queue>
 
             <!-- AdSense Middle Slot -->
