@@ -161,7 +161,8 @@ export class BatcherApp extends LitElement {
     this.updateStaticElements(lang);
   }
 
-  override firstUpdated() {
+  override connectedCallback() {
+    super.connectedCallback();
     const savedLang = localStorage.getItem("batcher-lang");
     if (savedLang === "en" || savedLang === "ko") {
       this.currentLang = savedLang as "ko" | "en";
@@ -170,7 +171,6 @@ export class BatcherApp extends LitElement {
       this.currentLang = browserLang.startsWith("ko") ? "ko" : "en";
       localStorage.setItem("batcher-lang", this.currentLang);
     }
-    this.updateStaticElements(this.currentLang);
 
     // SVG export format restore
     const savedFormat = localStorage.getItem("batcher-svg-exportFormat");
@@ -207,6 +207,10 @@ export class BatcherApp extends LitElement {
     if (savedAudioDelete) {
       this.audioDeleteOriginal = savedAudioDelete === "true";
     }
+  }
+
+  override firstUpdated() {
+    this.updateStaticElements(this.currentLang);
   }
 
   private getRenameExtensions(): string[] {

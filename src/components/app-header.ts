@@ -24,14 +24,8 @@ export class AppHeader extends LitElement {
   override connectedCallback() {
     super.connectedCallback();
     document.addEventListener("click", this.handleDocumentClick);
-  }
 
-  override disconnectedCallback() {
-    document.removeEventListener("click", this.handleDocumentClick);
-    super.disconnectedCallback();
-  }
-
-  override firstUpdated() {
+    // Initialize theme before first render to prevent double-update warning
     const savedTheme = localStorage.getItem("batcher-theme");
     const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const shouldBeDark = savedTheme === "dark" || (savedTheme === null && systemPrefersDark);
@@ -44,6 +38,11 @@ export class AppHeader extends LitElement {
       document.documentElement.classList.add("light");
       document.documentElement.classList.remove("dark");
     }
+  }
+
+  override disconnectedCallback() {
+    document.removeEventListener("click", this.handleDocumentClick);
+    super.disconnectedCallback();
   }
 
   private toggleTheme() {

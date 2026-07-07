@@ -18,6 +18,46 @@ export class FileQueue extends LitElement {
   @state() private isDragging = false;
   @state() private editingPath: string | null = null;
   @state() private flatDownload = false;
+  @state() private currentWidth = 200;
+  @state() private newWidth = 200;
+
+  private handleMouseDownCurrent(e: MouseEvent) {
+    e.preventDefault();
+    const startX = e.clientX;
+    const startWidth = this.currentWidth;
+
+    const doDrag = (moveEvent: MouseEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      this.currentWidth = Math.max(120, startWidth + deltaX);
+    };
+
+    const stopDrag = () => {
+      window.removeEventListener("mousemove", doDrag);
+      window.removeEventListener("mouseup", stopDrag);
+    };
+
+    window.addEventListener("mousemove", doDrag);
+    window.addEventListener("mouseup", stopDrag);
+  }
+
+  private handleMouseDownNew(e: MouseEvent) {
+    e.preventDefault();
+    const startX = e.clientX;
+    const startWidth = this.newWidth;
+
+    const doDrag = (moveEvent: MouseEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      this.newWidth = Math.max(120, startWidth + deltaX);
+    };
+
+    const stopDrag = () => {
+      window.removeEventListener("mousemove", doDrag);
+      window.removeEventListener("mouseup", stopDrag);
+    };
+
+    window.addEventListener("mousemove", doDrag);
+    window.addEventListener("mouseup", stopDrag);
+  }
 
   private handleToggleFlatDownload(e: Event) {
     const input = e.target as HTMLInputElement;
@@ -393,7 +433,7 @@ export class FileQueue extends LitElement {
             : ""}
         </div>
 
-        <div class="flex-1 overflow-y-auto pr-1">
+        <div class="flex-1 overflow-auto pr-1">
           ${this.files.length === 0
             ? html`
                 <div
@@ -421,23 +461,34 @@ export class FileQueue extends LitElement {
             : this.activeTab === "rename"
               ? html`
                   <!-- Rename Mode Table View -->
-                  <div class="overflow-x-auto w-full">
-                    <table class="w-full text-left border-collapse text-xs">
+                  <div class="w-full">
+                    <table class="w-full text-left border-collapse text-xs" style="table-layout: fixed;">
                       <thead>
                         <tr class="border-b border-slate-800 pb-2">
-                          <th class="py-2 pl-2 w-8"></th>
+                          <th class="py-2 pl-2 sticky top-0 z-20" style="width: 36px; background: var(--bg-card);"></th>
                           <th
-                            class="py-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider"
+                            style="width: ${this.currentWidth}px; background: var(--bg-card);"
+                            class="py-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider select-none pr-3 sticky top-0 z-20"
                           >
                             ${this.lang === "ko" ? "현재 파일명" : "Current Name"}
+                            <div
+                              class="absolute right-0 top-0 bottom-0 w-2 cursor-col-resize hover:bg-brand-primary/30 active:bg-brand-primary z-10 transition-colors border-r border-slate-800/40 hover:border-brand-primary/50"
+                              @mousedown="${this.handleMouseDownCurrent}"
+                            ></div>
                           </th>
                           <th
-                            class="py-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider"
+                            style="width: ${this.newWidth}px; background: var(--bg-card);"
+                            class="py-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider select-none pr-3 sticky top-0 z-20"
                           >
                             ${this.lang === "ko" ? "변경할 파일명" : "New Name"}
+                            <div
+                              class="absolute right-0 top-0 bottom-0 w-2 cursor-col-resize hover:bg-brand-primary/30 active:bg-brand-primary z-10 transition-colors border-r border-slate-800/40 hover:border-brand-primary/50"
+                              @mousedown="${this.handleMouseDownNew}"
+                            ></div>
                           </th>
                           <th
-                            class="py-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider text-right pr-2"
+                            style="background: var(--bg-card); width: 120px; min-width: 120px;"
+                            class="py-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider text-center sticky top-0 z-20"
                           >
                             ${this.lang === "ko" ? "상태" : "Status"}
                           </th>
@@ -462,12 +513,12 @@ export class FileQueue extends LitElement {
                                 />
                               </td>
                               <td
-                                class="py-3 pr-4 text-slate-400 max-w-37.5 truncate font-medium font-sans"
+                                class="py-3 pr-4 text-slate-400 truncate font-medium font-sans"
                                 title="${file.relativePath}"
                               >
                                 ${file.name}
                               </td>
-                              <td class="py-3 pr-4 max-w-50 truncate font-sans">
+                              <td class="py-3 pr-4 truncate font-sans">
                                 ${this.editingPath === file.relativePath
                                   ? html`
                                       <input
@@ -497,24 +548,24 @@ export class FileQueue extends LitElement {
                                       </span>
                                     `}
                               </td>
-                              <td class="py-3 pr-2 text-right">
-                                <div class="flex items-center justify-end gap-2">
-                                  <div>
+                              <td class="py-3 text-center" style="width: 120px; min-width: 120px;">
+                                <div class="flex items-center justify-center">
+                                  <div class="shrink-0">
                                     ${file.status === "pending"
                                       ? html`<span
-                                          class="px-2 py-0.5 border border-slate-800 bg-slate-950 text-slate-500 rounded-full text-[10px] font-bold tracking-wide"
+                                          class="px-2 py-0.5 border border-slate-800 bg-slate-950 text-slate-500 rounded-full text-[10px] font-bold tracking-wide whitespace-nowrap"
                                           >${activeT.statusPending}</span
                                         >`
                                       : ""}
                                     ${file.status === "processing"
                                       ? html`<span
-                                          class="px-2 py-0.5 bg-brand-bg text-brand-text border border-brand-border rounded-full text-[10px] font-bold tracking-wide animate-pulse"
+                                          class="px-2 py-0.5 bg-brand-bg text-brand-text border border-brand-border rounded-full text-[10px] font-bold tracking-wide animate-pulse whitespace-nowrap"
                                           >${activeT.statusProcessing}</span
                                         >`
                                       : ""}
                                     ${file.status === "success"
                                       ? html` <span
-                                          class="px-2 py-0.5 bg-success-bg text-success-text border border-success-border rounded-full text-[10px] font-bold tracking-wide inline-flex items-center gap-0.5"
+                                          class="px-2 py-0.5 bg-success-bg text-success-text border border-success-border rounded-full text-[10px] font-bold tracking-wide inline-flex items-center gap-0.5 whitespace-nowrap"
                                         >
                                           <i class="fa-solid fa-check text-[9px]"></i>
                                           ${activeT.statusSuccess}
@@ -522,7 +573,7 @@ export class FileQueue extends LitElement {
                                       : ""}
                                     ${file.status === "error"
                                       ? html` <span
-                                          class="px-2 py-0.5 bg-warning-bg text-warning-text border border-warning-border rounded-full text-[10px] font-bold tracking-wide inline-flex items-center gap-0.5"
+                                          class="px-2 py-0.5 bg-warning-bg text-warning-text border border-warning-border rounded-full text-[10px] font-bold tracking-wide inline-flex items-center gap-0.5 whitespace-nowrap"
                                           title="${file.errorMsg || ""}"
                                         >
                                           <i class="fa-solid fa-exclamation text-[9px]"></i>
@@ -530,14 +581,6 @@ export class FileQueue extends LitElement {
                                         </span>`
                                       : ""}
                                   </div>
-                                  <button
-                                    @click="${(e: Event) => { e.stopPropagation(); this.handleDeleteFile(file, e); }}"
-                                    ?disabled="${this.isConverting}"
-                                    class="text-slate-500 hover:text-rose-400 disabled:opacity-20 transition-all p-1 opacity-0 group-hover/row:opacity-100 cursor-pointer"
-                                    title="${activeT.deleteTooltip}"
-                                  >
-                                    <i class="fa-regular fa-trash-can text-[11px]"></i>
-                                  </button>
                                 </div>
                               </td>
                             </tr>
