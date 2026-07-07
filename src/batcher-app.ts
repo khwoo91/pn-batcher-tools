@@ -1252,6 +1252,7 @@ export class BatcherApp extends LitElement {
         <!-- Main Layout Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start flex-1">
           <!-- Left Control Settings Panel (cols-5) -->
+          <!-- Left Control Settings Panel (cols-5) -->
           <div class="lg:col-span-5">
             ${isSvg
               ? html`

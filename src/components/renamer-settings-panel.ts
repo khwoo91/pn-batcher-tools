@@ -19,6 +19,61 @@ export class RenamerSettingsPanel extends LitElement {
 
   @state() private extMode: "keep" | "remove" | "change" = "keep";
   @state() private isDraggingFolder = false;
+  @state() private isSettingsOpen = true;
+  @state() private activePopup: "replace" | "prefix-suffix" | "remove-range" | "clean" | "numbering" | "extension" | null = null;
+
+  private handleKeyDownGlobal = (e: KeyboardEvent) => {
+    if (e.key === "Escape" && this.activePopup !== null) {
+      this.closePopup();
+    }
+  };
+
+  override connectedCallback() {
+    super.connectedCallback();
+    const saved = localStorage.getItem("pn-batcher-rename-settings-open");
+    if (saved !== null) {
+      this.isSettingsOpen = saved === "true";
+    } else {
+      this.isSettingsOpen = true;
+    }
+    window.addEventListener("keydown", this.handleKeyDownGlobal);
+  }
+
+  override disconnectedCallback() {
+    window.removeEventListener("keydown", this.handleKeyDownGlobal);
+    super.disconnectedCallback();
+  }
+
+  private openPopup(type: "replace" | "prefix-suffix" | "remove-range" | "clean" | "numbering" | "extension") {
+    if (this.isConverting || this.filesCount === 0) return;
+    this.activePopup = type;
+
+    // Autofocus input in next tick
+    setTimeout(() => {
+      let inputElement: HTMLInputElement | HTMLSelectElement | null = null;
+      if (type === "replace") {
+        inputElement = this.renderRoot.querySelector("#replace-find") as HTMLInputElement;
+      } else if (type === "prefix-suffix") {
+        inputElement = this.renderRoot.querySelector("#prefix-text") as HTMLInputElement;
+      } else if (type === "remove-range") {
+        inputElement = this.renderRoot.querySelector("#remove-start") as HTMLInputElement;
+      } else if (type === "numbering") {
+        inputElement = this.renderRoot.querySelector("#num-start") as HTMLInputElement;
+      } else if (type === "extension") {
+        inputElement = this.renderRoot.querySelector("#ext-new") as HTMLInputElement;
+      }
+      if (inputElement) {
+        inputElement.focus();
+        if (inputElement instanceof HTMLInputElement) {
+          inputElement.select();
+        }
+      }
+    }, 100);
+  }
+
+  private closePopup() {
+    this.activePopup = null;
+  }
 
   protected override createRenderRoot() {
     return this;
@@ -161,6 +216,7 @@ export class RenamerSettingsPanel extends LitElement {
     );
     findInput.value = "";
     replaceInput.value = "";
+    this.closePopup();
   }
 
   private applyPrefix() {
@@ -175,6 +231,7 @@ export class RenamerSettingsPanel extends LitElement {
       }),
     );
     prefixInput.value = "";
+    this.closePopup();
   }
 
   private applySuffix() {
@@ -189,6 +246,7 @@ export class RenamerSettingsPanel extends LitElement {
       }),
     );
     suffixInput.value = "";
+    this.closePopup();
   }
 
   private applyRemove() {
@@ -216,14 +274,17 @@ export class RenamerSettingsPanel extends LitElement {
     );
     startInput.value = "";
     lenInput.value = "";
+    this.closePopup();
   }
 
   private applyKeepNumbers() {
     this.dispatchEvent(new CustomEvent("apply-keep-numbers", { bubbles: true, composed: true }));
+    this.closePopup();
   }
 
   private applyRemoveBrackets() {
     this.dispatchEvent(new CustomEvent("apply-remove-brackets", { bubbles: true, composed: true }));
+    this.closePopup();
   }
 
   private applyClearFilename() {
@@ -250,6 +311,7 @@ export class RenamerSettingsPanel extends LitElement {
         composed: true,
       }),
     );
+    this.closePopup();
   }
 
   private applyExtension() {
@@ -273,6 +335,7 @@ export class RenamerSettingsPanel extends LitElement {
       }),
     );
     if (newExtInput) newExtInput.value = "";
+    this.closePopup();
   }
 
   private handleUndo() {
@@ -316,6 +379,8 @@ export class RenamerSettingsPanel extends LitElement {
           content.style.opacity = '';
           content.style.transition = '';
           delete details.dataset.transitioning;
+          this.isSettingsOpen = false;
+          localStorage.setItem("pn-batcher-rename-settings-open", "false");
         }
       };
       content.addEventListener('transitionend', onEnd);
@@ -339,11 +404,15 @@ export class RenamerSettingsPanel extends LitElement {
           content.style.opacity = '';
           content.style.transition = '';
           delete details.dataset.transitioning;
+          this.isSettingsOpen = true;
+          localStorage.setItem("pn-batcher-rename-settings-open", "true");
         }
       };
       content.addEventListener('transitionend', onEnd);
     }
   }
+
+
 
   protected override render() {
     const activeT = t[this.lang];
@@ -597,357 +666,374 @@ export class RenamerSettingsPanel extends LitElement {
         </div>
 
         <!-- Step 2: Configure Rename Rules Card -->
-        <div class="glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden">
-          <div
-            class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-purple-500 to-pink-600"
-          ></div>
-          <h2
-            class="text-md font-bold mb-5 text-slate-100 flex items-center gap-2.5 font-sans justify-between"
+        <details
+          class="group glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden [&_summary::-webkit-details-marker]:hidden"
+          ?open="${this.isSettingsOpen}"
+        >
+          <summary
+            @click="${this.handleDetailsToggle}"
+            class="list-none focus:outline-none select-none cursor-pointer"
           >
-            <div class="flex items-center gap-2.5">
-              <span
-                class="bg-linear-to-r from-purple-500 to-pink-600 text-white w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold shadow-[0_0_10px_rgba(168,85,247,0.3)]"
-              >
-                2
-              </span>
-              ${activeT.rulesHeader}
+            <div
+              class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-purple-500 to-pink-600"
+            ></div>
+            <h2
+              class="text-md font-bold text-slate-100 flex items-center gap-2.5 font-sans justify-between"
+            >
+              <div class="flex items-center gap-2.5">
+                <span
+                  class="bg-linear-to-r from-purple-500 to-pink-600 text-white w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold shadow-[0_0_10px_rgba(168,85,247,0.3)]"
+                >
+                  2
+                </span>
+                ${activeT.rulesHeader}
+              </div>
+              <div class="flex items-center gap-2" @click="${(e: Event) => e.stopPropagation()}">
+                <button
+                  @click="${this.applyClearFilename}"
+                  ?disabled="${this.isConverting || this.filesCount === 0}"
+                  class="py-1.5 px-3 bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-slate-700 disabled:opacity-30 disabled:cursor-not-allowed text-slate-400 hover:text-slate-200 rounded-xl text-[10px] font-extrabold transition-all cursor-pointer font-sans active:scale-95"
+                >
+                  ${this.lang === "ko" ? "전체 이름 지우기" : "Clear filenames"}
+                </button>
+                <i
+                  class="fa-solid fa-chevron-down text-slate-500 text-[12px] transition-transform duration-200 group-open:rotate-180 ml-2"
+                ></i>
+              </div>
+            </h2>
+          </summary>
+          <div class="overflow-hidden">
+            <div class="space-y-4 mt-5">
+              <!-- Compact Button Grid for Rename Rules -->
+              <div class="grid grid-cols-2 gap-3 mt-4">
+                <button
+                  @click="${() => this.openPopup("replace")}"
+                  ?disabled="${this.isConverting || this.filesCount === 0}"
+                  class="py-3 px-4 bg-slate-950 hover:bg-purple-primary/10 border border-slate-800 hover:border-purple-primary/45 disabled:opacity-40 disabled:hover:bg-slate-950 disabled:hover:border-slate-800 text-slate-300 hover:text-slate-100 rounded-2xl text-xs font-bold transition-all flex items-center gap-2.5 cursor-pointer font-sans active:scale-95 shadow-[0_0_15px_rgba(168,85,247,0.02)] text-left min-w-0"
+                >
+                  <div class="w-7 h-7 rounded-lg bg-purple-primary/10 flex items-center justify-center text-purple-primary shrink-0">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                  </div>
+                  <span class="truncate flex-1">${activeT.replaceHeader}</span>
+                </button>
+
+                <button
+                  @click="${() => this.openPopup("prefix-suffix")}"
+                  ?disabled="${this.isConverting || this.filesCount === 0}"
+                  class="py-3 px-4 bg-slate-950 hover:bg-purple-primary/10 border border-slate-800 hover:border-purple-primary/45 disabled:opacity-40 disabled:hover:bg-slate-950 disabled:hover:border-slate-800 text-slate-300 hover:text-slate-100 rounded-2xl text-xs font-bold transition-all flex items-center gap-2.5 cursor-pointer font-sans active:scale-95 shadow-[0_0_15px_rgba(168,85,247,0.02)] text-left min-w-0"
+                >
+                  <div class="w-7 h-7 rounded-lg bg-purple-primary/10 flex items-center justify-center text-purple-primary shrink-0">
+                    <i class="fa-solid fa-indent"></i>
+                  </div>
+                  <span class="truncate flex-1">${activeT.prefixHeader}</span>
+                </button>
+
+                <button
+                  @click="${() => this.openPopup("remove-range")}"
+                  ?disabled="${this.isConverting || this.filesCount === 0}"
+                  class="py-3 px-4 bg-slate-950 hover:bg-purple-primary/10 border border-slate-800 hover:border-purple-primary/45 disabled:opacity-40 disabled:hover:bg-slate-950 disabled:hover:border-slate-800 text-slate-300 hover:text-slate-100 rounded-2xl text-xs font-bold transition-all flex items-center gap-2.5 cursor-pointer font-sans active:scale-95 shadow-[0_0_15px_rgba(168,85,247,0.02)] text-left min-w-0"
+                >
+                  <div class="w-7 h-7 rounded-lg bg-purple-primary/10 flex items-center justify-center text-purple-primary shrink-0">
+                    <i class="fa-solid fa-scissors"></i>
+                  </div>
+                  <span class="truncate flex-1">${activeT.removeHeader}</span>
+                </button>
+
+                <button
+                  @click="${() => this.openPopup("clean")}"
+                  ?disabled="${this.isConverting || this.filesCount === 0}"
+                  class="py-3 px-4 bg-slate-950 hover:bg-purple-primary/10 border border-slate-800 hover:border-purple-primary/45 disabled:opacity-40 disabled:hover:bg-slate-950 disabled:hover:border-slate-800 text-slate-300 hover:text-slate-100 rounded-2xl text-xs font-bold transition-all flex items-center gap-2.5 cursor-pointer font-sans active:scale-95 shadow-[0_0_15px_rgba(168,85,247,0.02)] text-left min-w-0"
+                >
+                  <div class="w-7 h-7 rounded-lg bg-purple-primary/10 flex items-center justify-center text-purple-primary shrink-0">
+                    <i class="fa-solid fa-broom"></i>
+                  </div>
+                  <span class="truncate flex-1">${activeT.cleanHeader}</span>
+                </button>
+
+                <button
+                  @click="${() => this.openPopup("numbering")}"
+                  ?disabled="${this.isConverting || this.filesCount === 0}"
+                  class="py-3 px-4 bg-slate-950 hover:bg-purple-primary/10 border border-slate-800 hover:border-purple-primary/45 disabled:opacity-40 disabled:hover:bg-slate-950 disabled:hover:border-slate-800 text-slate-300 hover:text-slate-100 rounded-2xl text-xs font-bold transition-all flex items-center gap-2.5 cursor-pointer font-sans active:scale-95 shadow-[0_0_15px_rgba(168,85,247,0.02)] text-left min-w-0"
+                >
+                  <div class="w-7 h-7 rounded-lg bg-purple-primary/10 flex items-center justify-center text-purple-primary shrink-0">
+                    <i class="fa-solid fa-list-ol"></i>
+                  </div>
+                  <span class="truncate flex-1">${activeT.numberingHeader}</span>
+                </button>
+
+                <button
+                  @click="${() => this.openPopup("extension")}"
+                  ?disabled="${this.isConverting || this.filesCount === 0}"
+                  class="py-3 px-4 bg-slate-950 hover:bg-purple-primary/10 border border-slate-800 hover:border-purple-primary/45 disabled:opacity-40 disabled:hover:bg-slate-950 disabled:hover:border-slate-800 text-slate-300 hover:text-slate-100 rounded-2xl text-xs font-bold transition-all flex items-center gap-2.5 cursor-pointer font-sans active:scale-95 shadow-[0_0_15px_rgba(168,85,247,0.02)] text-left min-w-0"
+                >
+                  <div class="w-7 h-7 rounded-lg bg-purple-primary/10 flex items-center justify-center text-purple-primary shrink-0">
+                    <i class="fa-solid fa-file-signature"></i>
+                  </div>
+                  <span class="truncate flex-1">${activeT.extHeader}</span>
+                </button>
+              </div>
+
+              <!-- Floating Lightbox Dialog Modal -->
+              ${this.activePopup
+                ? html`
+                    <div
+                      class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-fade-in"
+                      @click="${this.closePopup}"
+                    >
+                      <div
+                        class="bg-slate-900 border border-slate-850 rounded-3xl p-6 w-full max-w-sm shadow-[0_10px_50px_rgba(0,0,0,0.5)] relative animate-scale-in"
+                        @click="${(e: Event) => e.stopPropagation()}"
+                      >
+                        <!-- Close Button -->
+                        <button
+                          @click="${this.closePopup}"
+                          class="absolute top-4.5 right-4.5 text-slate-500 hover:text-slate-300 transition-all cursor-pointer w-6 h-6 flex items-center justify-center rounded-lg hover:bg-slate-800/50"
+                        >
+                          <i class="fa-solid fa-xmark text-xs"></i>
+                        </button>
+
+                        <!-- Modal Content -->
+                        ${this.activePopup === "replace"
+                          ? html`
+                              <h3 class="text-xs font-bold text-slate-100 flex items-center gap-2 mb-5">
+                                <i class="fa-solid fa-arrows-rotate text-purple-primary text-sm"></i>
+                                <span>${activeT.replaceHeader}</span>
+                              </h3>
+                              <div class="space-y-4">
+                                <div class="grid grid-cols-2 gap-3">
+                                  <div class="space-y-1">
+                                    <label class="text-[10px] text-slate-500 font-bold block"
+                                      >${this.lang === "ko" ? "찾을 글자" : "Find Text"}</label
+                                    >
+                                    <input
+                                      type="text"
+                                      id="replace-find"
+                                      placeholder="${activeT.replaceFind}"
+                                      class="w-full bg-slate-950 border border-slate-850 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
+                                    />
+                                  </div>
+                                  <div class="space-y-1">
+                                    <label class="text-[10px] text-slate-500 font-bold block"
+                                      >${this.lang === "ko" ? "바꿀 글자" : "Replace Text"}</label
+                                    >
+                                    <input
+                                      type="text"
+                                      id="replace-replace"
+                                      placeholder="${activeT.replaceReplace}"
+                                      class="w-full bg-slate-950 border border-slate-850 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
+                                    />
+                                  </div>
+                                </div>
+                                <button
+                                  @click="${this.applyReplace}"
+                                  class="w-full py-2.5 bg-purple-primary hover:opacity-90 text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans active:scale-95"
+                                >
+                                  ${activeT.btnApply}
+                                </button>
+                              </div>
+                            `
+                          : this.activePopup === "prefix-suffix"
+                            ? html`
+                                <h3 class="text-xs font-bold text-slate-100 flex items-center gap-2 mb-5">
+                                  <i class="fa-solid fa-indent text-purple-primary text-sm"></i>
+                                  <span>${activeT.prefixHeader}</span>
+                                </h3>
+                                <div class="space-y-4">
+                                  <div class="flex gap-2">
+                                    <input
+                                      type="text"
+                                      id="prefix-text"
+                                      placeholder="${activeT.prefixLabel}"
+                                      class="flex-1 bg-slate-950 border border-slate-850 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
+                                    />
+                                    <button
+                                      @click="${this.applyPrefix}"
+                                      class="px-4 py-2.5 bg-purple-primary hover:opacity-90 text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans active:scale-95"
+                                    >
+                                      ${activeT.btnApply}
+                                    </button>
+                                  </div>
+                                  <div class="border-t border-slate-800/50 my-1"></div>
+                                  <div class="flex gap-2">
+                                    <input
+                                      type="text"
+                                      id="suffix-text"
+                                      placeholder="${activeT.suffixLabel}"
+                                      class="flex-1 bg-slate-950 border border-slate-850 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
+                                    />
+                                    <button
+                                      @click="${this.applySuffix}"
+                                      class="px-4 py-2.5 bg-purple-primary hover:opacity-90 text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans active:scale-95"
+                                    >
+                                      ${activeT.btnApply}
+                                    </button>
+                                  </div>
+                                </div>
+                              `
+                            : this.activePopup === "remove-range"
+                              ? html`
+                                  <h3 class="text-xs font-bold text-slate-100 flex items-center gap-2 mb-5">
+                                    <i class="fa-solid fa-scissors text-purple-primary text-sm"></i>
+                                    <span>${activeT.removeHeader}</span>
+                                  </h3>
+                                  <div class="space-y-4">
+                                    <div class="grid grid-cols-2 gap-3">
+                                      <div class="space-y-1">
+                                        <label class="text-[10px] text-slate-500 font-bold block"
+                                          >${activeT.removeStart}</label
+                                        >
+                                        <input
+                                          type="number"
+                                          id="remove-start"
+                                          min="1"
+                                          placeholder="예: 3"
+                                          class="w-full bg-slate-950 border border-slate-850 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
+                                        />
+                                      </div>
+                                      <div class="space-y-1">
+                                        <label class="text-[10px] text-slate-500 font-bold block"
+                                          >${activeT.removeLen}</label
+                                        >
+                                        <input
+                                          type="number"
+                                          id="remove-len"
+                                          min="1"
+                                          placeholder="예: 2"
+                                          class="w-full bg-slate-950 border border-slate-850 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
+                                        />
+                                      </div>
+                                    </div>
+                                    <button
+                                      @click="${this.applyRemove}"
+                                      class="w-full py-2.5 bg-purple-primary hover:opacity-90 text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans active:scale-95"
+                                    >
+                                      ${activeT.btnApply}
+                                    </button>
+                                  </div>
+                                `
+                              : this.activePopup === "clean"
+                                ? html`
+                                    <h3 class="text-xs font-bold text-slate-100 flex items-center gap-2 mb-5">
+                                      <i class="fa-solid fa-broom text-purple-primary text-sm"></i>
+                                      <span>${activeT.cleanHeader}</span>
+                                    </h3>
+                                    <div class="grid grid-cols-2 gap-3">
+                                      <button
+                                        @click="${this.applyKeepNumbers}"
+                                        class="py-3 px-2 bg-slate-950 border border-slate-800 hover:border-purple-primary/45 text-slate-400 hover:text-slate-200 rounded-xl text-xs font-bold transition-all cursor-pointer font-sans active:scale-95 text-center"
+                                      >
+                                        ${activeT.btnKeepNumbers}
+                                      </button>
+                                      <button
+                                        @click="${this.applyRemoveBrackets}"
+                                        class="py-3 px-2 bg-slate-950 border border-slate-800 hover:border-purple-primary/45 text-slate-400 hover:text-slate-200 rounded-xl text-xs font-bold transition-all cursor-pointer font-sans active:scale-95 text-center"
+                                      >
+                                        ${activeT.btnRemoveBrackets}
+                                      </button>
+                                    </div>
+                                  `
+                                : this.activePopup === "numbering"
+                                  ? html`
+                                      <h3 class="text-xs font-bold text-slate-100 flex items-center gap-2 mb-5">
+                                        <i class="fa-solid fa-list-ol text-purple-primary text-sm"></i>
+                                        <span>${activeT.numberingHeader}</span>
+                                      </h3>
+                                      <div class="space-y-4">
+                                        <div class="grid grid-cols-3 gap-2">
+                                          <div class="space-y-1">
+                                            <label class="text-[10px] text-slate-500 font-bold block"
+                                              >${activeT.numberingStart}</label
+                                            >
+                                            <input
+                                              type="number"
+                                              id="num-start"
+                                              min="0"
+                                              value="1"
+                                              class="w-full bg-slate-950 border border-slate-850 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none transition-all font-sans"
+                                            />
+                                          </div>
+                                          <div class="space-y-1">
+                                            <label class="text-[10px] text-slate-500 font-bold block"
+                                              >${activeT.numberingDigits}</label
+                                            >
+                                            <input
+                                              type="number"
+                                              id="num-digits"
+                                              min="1"
+                                              value="2"
+                                              class="w-full bg-slate-950 border border-slate-850 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none transition-all font-sans"
+                                            />
+                                          </div>
+                                          <div class="space-y-1">
+                                            <label class="text-[10px] text-slate-500 font-bold block"
+                                              >${activeT.numberingPosition}</label
+                                            >
+                                            <select
+                                              id="num-position"
+                                              class="w-full bg-slate-950 border border-slate-850 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-2 py-2 text-[11px] text-slate-100 focus:outline-none transition-all font-sans cursor-pointer h-8.5"
+                                            >
+                                              <option value="suffix" selected>${activeT.posSuffix}</option>
+                                              <option value="prefix">${activeT.posPrefix}</option>
+                                            </select>
+                                          </div>
+                                        </div>
+                                        <button
+                                          @click="${this.applyNumbering}"
+                                          class="w-full py-2.5 bg-purple-primary hover:opacity-90 text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans active:scale-95"
+                                        >
+                                          ${activeT.btnApply}
+                                        </button>
+                                      </div>
+                                    `
+                                  : html`
+                                      <h3 class="text-xs font-bold text-slate-100 flex items-center gap-2 mb-5">
+                                        <i class="fa-solid fa-file-signature text-purple-primary text-sm"></i>
+                                        <span>${activeT.extHeader}</span>
+                                      </h3>
+                                      <div class="space-y-4">
+                                        <div class="grid grid-cols-2 gap-2">
+                                          <div class="space-y-1">
+                                            <label class="text-[10px] text-slate-500 font-bold block"
+                                              >${activeT.extMode}</label
+                                            >
+                                            <select
+                                              @change="${(e: Event) =>
+                                                (this.extMode = (e.target as HTMLSelectElement).value as any)}"
+                                              class="w-full bg-slate-950 border border-slate-850 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-2 py-2 text-[11px] text-slate-100 focus:outline-none transition-all font-sans cursor-pointer h-8.5"
+                                            >
+                                              <option value="keep" ?selected="${this.extMode === "keep"}">${activeT.extModeKeep}</option>
+                                              <option value="remove" ?selected="${this.extMode === "remove"}">${activeT.extModeRemove}</option>
+                                              <option value="change" ?selected="${this.extMode === "change"}">${activeT.extModeChange}</option>
+                                            </select>
+                                          </div>
+                                          <div class="space-y-1">
+                                            <label class="text-[10px] text-slate-500 font-bold block"
+                                              >${activeT.extNew}</label
+                                            >
+                                            <input
+                                              type="text"
+                                              id="ext-new"
+                                              placeholder=".txt"
+                                              class="w-full bg-slate-950 border border-slate-850 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
+                                              ?disabled="${this.extMode !== "change"}"
+                                            />
+                                          </div>
+                                        </div>
+                                        <button
+                                          @click="${this.applyExtension}"
+                                          ?disabled="${this.extMode === "keep"}"
+                                          class="w-full py-2.5 bg-purple-primary hover:opacity-90 text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans active:scale-95"
+                                        >
+                                          ${activeT.btnApply}
+                                        </button>
+                                      </div>
+                                    `}
+                      </div>
+                    </div>
+                  `
+                : ""}
             </div>
-            <button
-              @click="${this.applyClearFilename}"
-              ?disabled="${this.isConverting || this.filesCount === 0}"
-              class="col-span-2 py-2.5 px-2 bg-slate-950 border border-slate-800 hover:border-rose-500/30 text-rose-600 hover:text-rose-500 dark:text-rose-400 dark:hover:text-rose-300 rounded-xl text-xs font-bold transition-all cursor-pointer font-sans active:scale-95 text-center flex items-center justify-center gap-1.5"
-            >
-              <i class="fa-regular fa-trash-can text-[10px]"></i>
-              <span>${activeT.btnDeleteAllName}</span>
-            </button>
-          </h2>
-
-          <div class="space-y-4">
-            <!-- 1. 문자열 바꾸기 -->
-            <details
-              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
-            >
-              <summary
-                @click="${this.handleDetailsToggle}"
-                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
-              >
-                <div class="flex items-center gap-1.5">
-                  <i class="fa-solid fa-arrows-rotate text-purple-primary"></i>
-                  <span>${activeT.replaceHeader}</span>
-                </div>
-                <i
-                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
-                ></i>
-              </summary>
-              <div class="overflow-hidden">
-                <div class="space-y-3 px-4 pb-4 pt-0">
-                <div class="grid grid-cols-2 gap-2">
-                  <input
-                    type="text"
-                    id="replace-find"
-                    placeholder="${activeT.replaceFind}"
-                    class="bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
-                    ?disabled="${this.isConverting || this.filesCount === 0}"
-                  />
-                  <input
-                    type="text"
-                    id="replace-replace"
-                    placeholder="${activeT.replaceReplace}"
-                    class="bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
-                    ?disabled="${this.isConverting || this.filesCount === 0}"
-                  />
-                </div>
-                <button
-                  @click="${this.applyReplace}"
-                  ?disabled="${this.isConverting || this.filesCount === 0}"
-                  class="w-full py-2 bg-purple-primary hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans"
-                >
-                  ${activeT.btnApply}
-                </button>
-              </div>
-              </div>
-            </details>
-
-            <!-- 2. 앞이름 / 뒷이름 붙이기 -->
-            <details
-              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
-            >
-              <summary
-                @click="${this.handleDetailsToggle}"
-                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
-              >
-                <div class="flex items-center gap-1.5">
-                  <i class="fa-solid fa-indent text-purple-primary"></i>
-                  <span>${activeT.prefixHeader}</span>
-                </div>
-                <i
-                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
-                ></i>
-              </summary>
-              <div class="overflow-hidden">
-                <div class="space-y-2 px-4 pb-4 pt-0">
-                <div class="flex gap-2">
-                  <input
-                    type="text"
-                    id="prefix-text"
-                    placeholder="${activeT.prefixLabel}"
-                    class="flex-1 bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
-                    ?disabled="${this.isConverting || this.filesCount === 0}"
-                  />
-                  <button
-                    @click="${this.applyPrefix}"
-                    ?disabled="${this.isConverting || this.filesCount === 0}"
-                    class="px-4 py-2 bg-purple-primary hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans"
-                  >
-                    ${activeT.btnApply}
-                  </button>
-                </div>
-                <div class="flex gap-2">
-                  <input
-                    type="text"
-                    id="suffix-text"
-                    placeholder="${activeT.suffixLabel}"
-                    class="flex-1 bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
-                    ?disabled="${this.isConverting || this.filesCount === 0}"
-                  />
-                  <button
-                    @click="${this.applySuffix}"
-                    ?disabled="${this.isConverting || this.filesCount === 0}"
-                    class="px-4 py-2 bg-purple-primary hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans"
-                  >
-                    ${activeT.btnApply}
-                  </button>
-                </div>
-              </div>
-              </div>
-            </details>
-
-            <!-- 3. 특정 위치 지우기 -->
-            <details
-              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
-            >
-              <summary
-                @click="${this.handleDetailsToggle}"
-                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
-              >
-                <div class="flex items-center gap-1.5">
-                  <i class="fa-solid fa-scissors text-purple-primary"></i>
-                  <span>${activeT.removeHeader}</span>
-                </div>
-                <i
-                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
-                ></i>
-              </summary>
-              <div class="overflow-hidden">
-                <div class="space-y-3 px-4 pb-4 pt-0">
-                <div class="grid grid-cols-2 gap-2">
-                  <div class="space-y-1">
-                    <label class="text-[10px] text-slate-500 font-bold block"
-                      >${activeT.removeStart}</label
-                    >
-                    <input
-                      type="number"
-                      id="remove-start"
-                      min="1"
-                      placeholder="예: 3"
-                      class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
-                      ?disabled="${this.isConverting || this.filesCount === 0}"
-                    />
-                  </div>
-                  <div class="space-y-1">
-                    <label class="text-[10px] text-slate-500 font-bold block"
-                      >${activeT.removeLen}</label
-                    >
-                    <input
-                      type="number"
-                      id="remove-len"
-                      min="1"
-                      placeholder="예: 2"
-                      class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
-                      ?disabled="${this.isConverting || this.filesCount === 0}"
-                    />
-                  </div>
-                </div>
-                <button
-                  @click="${this.applyRemove}"
-                  ?disabled="${this.isConverting || this.filesCount === 0}"
-                  class="w-full py-2 bg-purple-primary hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans"
-                >
-                  ${activeT.btnApply}
-                </button>
-              </div>
-              </div>
-            </details>
-
-            <!-- 4. 일괄 정리 및 지우기 -->
-            <details
-              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
-            >
-              <summary
-                @click="${this.handleDetailsToggle}"
-                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
-              >
-                <div class="flex items-center gap-1.5">
-                  <i class="fa-solid fa-broom text-purple-primary"></i>
-                  <span>${activeT.cleanHeader}</span>
-                </div>
-                <i
-                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
-                ></i>
-              </summary>
-              <div class="overflow-hidden">
-                <div class="grid grid-cols-2 gap-2 px-4 pb-4 pt-0">
-                <button
-                  @click="${this.applyKeepNumbers}"
-                  ?disabled="${this.isConverting || this.filesCount === 0}"
-                  class="py-2.5 px-2 bg-slate-950 border border-slate-800 hover:border-purple-primary/40 disabled:opacity-30 text-slate-400 hover:text-slate-200 rounded-xl text-xs font-bold transition-all cursor-pointer font-sans active:scale-95 text-center"
-                >
-                  ${activeT.btnKeepNumbers}
-                </button>
-                <button
-                  @click="${this.applyRemoveBrackets}"
-                  ?disabled="${this.isConverting || this.filesCount === 0}"
-                  class="py-2.5 px-2 bg-slate-950 border border-slate-800 hover:border-purple-primary/40 disabled:opacity-30 text-slate-400 hover:text-slate-200 rounded-xl text-xs font-bold transition-all cursor-pointer font-sans active:scale-95 text-center"
-                >
-                  ${activeT.btnRemoveBrackets}
-                </button>
-              </div>
-              </div>
-            </details>
-
-            <!-- 5. 일련번호 붙이기 -->
-            <details
-              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
-            >
-              <summary
-                @click="${this.handleDetailsToggle}"
-                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
-              >
-                <div class="flex items-center gap-1.5">
-                  <i class="fa-solid fa-list-ol text-purple-primary"></i>
-                  <span>${activeT.numberingHeader}</span>
-                </div>
-                <i
-                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
-                ></i>
-              </summary>
-              <div class="overflow-hidden">
-                <div class="space-y-3 px-4 pb-4 pt-0">
-                <div class="grid grid-cols-3 gap-2">
-                  <div class="space-y-1">
-                    <label class="text-[10px] text-slate-500 font-bold block"
-                      >${activeT.numberingStart}</label
-                    >
-                    <input
-                      type="number"
-                      id="num-start"
-                      min="0"
-                      value="1"
-                      class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none transition-all font-sans"
-                      ?disabled="${this.isConverting || this.filesCount === 0}"
-                    />
-                  </div>
-                  <div class="space-y-1">
-                    <label class="text-[10px] text-slate-500 font-bold block"
-                      >${activeT.numberingDigits}</label
-                    >
-                    <input
-                      type="number"
-                      id="num-digits"
-                      min="1"
-                      value="2"
-                      class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none transition-all font-sans"
-                      ?disabled="${this.isConverting || this.filesCount === 0}"
-                    />
-                  </div>
-                  <div class="space-y-1">
-                    <label class="text-[10px] text-slate-500 font-bold block"
-                      >${activeT.numberingPosition}</label
-                    >
-                    <select
-                      id="num-position"
-                      class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-2 py-2 text-[11px] text-slate-100 focus:outline-none transition-all font-sans cursor-pointer h-8.5"
-                      ?disabled="${this.isConverting || this.filesCount === 0}"
-                    >
-                      <option value="suffix" selected>${activeT.posSuffix}</option>
-                      <option value="prefix">${activeT.posPrefix}</option>
-                    </select>
-                  </div>
-                </div>
-                <button
-                  @click="${this.applyNumbering}"
-                  ?disabled="${this.isConverting || this.filesCount === 0}"
-                  class="w-full py-2 bg-purple-primary hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans"
-                >
-                  ${activeT.btnApply}
-                </button>
-              </div>
-              </div>
-            </details>
-
-            <!-- 6. 확장자 변경 및 추가 -->
-            <details
-              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
-            >
-              <summary
-                @click="${this.handleDetailsToggle}"
-                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
-              >
-                <div class="flex items-center gap-1.5">
-                  <i class="fa-solid fa-file-signature text-purple-primary"></i>
-                  <span>${activeT.extHeader}</span>
-                </div>
-                <i
-                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
-                ></i>
-              </summary>
-              <div class="overflow-hidden">
-                <div class="space-y-3 px-4 pb-4 pt-0">
-                <div class="grid grid-cols-2 gap-2">
-                  <div class="space-y-1">
-                    <label class="text-[10px] text-slate-500 font-bold block"
-                      >${activeT.extMode}</label
-                    >
-                    <select
-                      @change="${(e: Event) =>
-                        (this.extMode = (e.target as HTMLSelectElement).value as any)}"
-                      class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-2 py-2 text-[11px] text-slate-100 focus:outline-none transition-all font-sans cursor-pointer h-8.5"
-                      ?disabled="${this.isConverting || this.filesCount === 0}"
-                    >
-                      <option value="keep" selected>${activeT.extModeKeep}</option>
-                      <option value="remove">${activeT.extModeRemove}</option>
-                      <option value="change">${activeT.extModeChange}</option>
-                    </select>
-                  </div>
-                  <div class="space-y-1">
-                    <label class="text-[10px] text-slate-500 font-bold block"
-                      >${activeT.extNew}</label
-                    >
-                    <input
-                      type="text"
-                      id="ext-new"
-                      placeholder=".txt"
-                      class="w-full bg-slate-950 border border-slate-800 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
-                      ?disabled="${this.isConverting ||
-                      this.filesCount === 0 ||
-                      this.extMode !== "change"}"
-                    />
-                  </div>
-                </div>
-                <button
-                  @click="${this.applyExtension}"
-                  ?disabled="${this.isConverting ||
-                  this.filesCount === 0 ||
-                  this.extMode === "keep"}"
-                  class="w-full py-2 bg-purple-primary hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-xl text-xs font-bold transition-all cursor-pointer font-sans"
-                >
-                  ${activeT.btnApply}
-                </button>
-              </div>
-              </div>
-            </details>
-          </div>
-        </div>
+        </details>
 
         <!-- Step 3: Rename History & Dangerous Actions Card -->
         <div class="glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden">

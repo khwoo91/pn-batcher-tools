@@ -24,6 +24,17 @@ export class SettingsPanel extends LitElement {
   @property({ type: Number }) conversionProgress = 0;
 
   @state() private isDraggingFolder = false;
+  @state() private isSettingsOpen = true;
+
+  override connectedCallback() {
+    super.connectedCallback();
+    const saved = localStorage.getItem("pn-batcher-svg-settings-open");
+    if (saved !== null) {
+      this.isSettingsOpen = saved === "true";
+    } else {
+      this.isSettingsOpen = true;
+    }
+  }
 
   protected override createRenderRoot() {
     return this;
@@ -228,6 +239,8 @@ export class SettingsPanel extends LitElement {
           content.style.opacity = '';
           content.style.transition = '';
           delete details.dataset.transitioning;
+          this.isSettingsOpen = false;
+          localStorage.setItem("pn-batcher-svg-settings-open", "false");
         }
       };
       content.addEventListener('transitionend', onEnd);
@@ -251,11 +264,15 @@ export class SettingsPanel extends LitElement {
           content.style.opacity = '';
           content.style.transition = '';
           delete details.dataset.transitioning;
+          this.isSettingsOpen = true;
+          localStorage.setItem("pn-batcher-svg-settings-open", "true");
         }
       };
       content.addEventListener('transitionend', onEnd);
     }
   }
+
+
 
   protected override render() {
     const activeT = t[this.lang];
@@ -483,26 +500,38 @@ export class SettingsPanel extends LitElement {
         </div>
 
         <!-- Step 2: Settings Card -->
-        <div class="glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden">
-          <div
-            class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-indigo-500 to-purple-600"
-          ></div>
-          <h2 class="text-md font-bold mb-5 text-slate-100 flex items-center gap-2.5 font-sans">
-            <span
-              class="bg-linear-to-r from-indigo-500 to-purple-600 text-white w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold shadow-[0_0_10px_rgba(99,102,241,0.3)]"
-              >2</span
-            >
-            ${activeT.rulesHeader}
-          </h2>
-
-          <div class="space-y-4">
+        <details
+          class="group glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden [&_summary::-webkit-details-marker]:hidden"
+          ?open="${this.isSettingsOpen}"
+        >
+          <summary
+            @click="${this.handleDetailsToggle}"
+            class="list-none focus:outline-none select-none cursor-pointer"
+          >
+            <div
+              class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-indigo-500 to-purple-600"
+            ></div>
+            <h2 class="text-md font-bold text-slate-100 flex items-center gap-2.5 font-sans justify-between">
+              <div class="flex items-center gap-2.5">
+                <span
+                  class="bg-linear-to-r from-indigo-500 to-purple-600 text-white w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold shadow-[0_0_10px_rgba(99,102,241,0.3)]"
+                  >2</span
+                >
+                ${activeT.rulesHeader}
+              </div>
+              <i
+                class="fa-solid fa-chevron-down text-slate-500 text-[12px] transition-transform duration-200 group-open:rotate-180"
+              ></i>
+            </h2>
+          </summary>
+          <div class="overflow-hidden">
+            <div class="space-y-4 mt-5">
             <!-- 1. 출력 이미지 포맷 및 배율 설정 -->
-            <details
-              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
+            <div
+              class="bg-slate-950 border border-slate-800 rounded-2xl"
             >
-              <summary
-                @click="${this.handleDetailsToggle}"
-                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
+              <div
+                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between select-none"
               >
                 <div class="flex items-center gap-1.5">
                   <i class="fa-solid fa-sliders text-indigo-400"></i>
@@ -512,12 +541,8 @@ export class SettingsPanel extends LitElement {
                       : "Output Format & Scale"}</span
                   >
                 </div>
-                <i
-                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
-                ></i>
-              </summary>
-              <div class="overflow-hidden">
-                <div class="p-4 pt-0 border-t border-slate-800/50 space-y-4">
+              </div>
+              <div class="p-4 pt-0 border-t border-slate-800/50 space-y-4">
                 <!-- Format selection (PNG / JPG) -->
                 <div class="mt-4">
                   <label
@@ -604,16 +629,13 @@ export class SettingsPanel extends LitElement {
                   </div>
                 </div>
               </div>
-              </div>
-            </details>
+            </div>
 
-            <!-- 2. 저장 위치 지정 -->
-            <details
-              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
+            <div
+              class="bg-slate-950 border border-slate-800 rounded-2xl"
             >
-              <summary
-                @click="${this.handleDetailsToggle}"
-                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
+              <div
+                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between select-none"
               >
                 <div class="flex items-center gap-1.5">
                   <i class="fa-regular fa-folder-open text-brand-primary"></i>
@@ -623,12 +645,8 @@ export class SettingsPanel extends LitElement {
                       : "Export Target Folder"}</span
                   >
                 </div>
-                <i
-                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
-                ></i>
-              </summary>
-              <div class="overflow-hidden">
-                <div class="p-4 pt-0 border-t border-slate-800/50 space-y-4">
+              </div>
+              <div class="p-4 pt-0 border-t border-slate-800/50 space-y-4">
                 <div class="mt-4">
                   ${this.apiSupported
                     ? html`
@@ -682,16 +700,14 @@ export class SettingsPanel extends LitElement {
                   </p>
                 </div>
               </div>
-              </div>
-            </details>
+            </div>
 
             <!-- 3. 원본 파일 관리 옵션 -->
-            <details
-              class="group bg-slate-950 border border-slate-800 rounded-2xl [&_summary::-webkit-details-marker]:hidden"
+            <div
+              class="bg-slate-950 border border-slate-800 rounded-2xl"
             >
-              <summary
-                @click="${this.handleDetailsToggle}"
-                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-slate-100 transition-colors duration-200"
+              <div
+                class="p-4 text-xs font-bold text-slate-300 flex items-center justify-between select-none"
               >
                 <div class="flex items-center gap-1.5">
                   <i class="fa-regular fa-trash-can text-indigo-400"></i>
@@ -699,12 +715,8 @@ export class SettingsPanel extends LitElement {
                     >${this.lang === "ko" ? "원본 파일 정리 옵션" : "Original File Cleanup"}</span
                   >
                 </div>
-                <i
-                  class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-200 group-open:rotate-180"
-                ></i>
-              </summary>
-              <div class="overflow-hidden">
-                <div class="p-4 pt-0 border-t border-slate-800/50 space-y-4">
+              </div>
+              <div class="p-4 pt-0 border-t border-slate-800/50 space-y-4">
                 <div
                   class="mt-4 bg-slate-950 p-4.5 rounded-2xl border border-slate-800 shadow-inner"
                 >
@@ -738,10 +750,9 @@ export class SettingsPanel extends LitElement {
                     : ""}
                 </div>
               </div>
-              </div>
-            </details>
+            </div>
           </div>
-        </div>
+        </details>
       </div>
     `;
   }
