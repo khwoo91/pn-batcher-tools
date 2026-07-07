@@ -667,12 +667,12 @@ export class RenamerSettingsPanel extends LitElement {
 
         <!-- Step 2: Configure Rename Rules Card -->
         <details
-          class="group glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden [&_summary::-webkit-details-marker]:hidden"
+          class="group glass-panel rounded-3xl p-0 shadow-xl relative overflow-hidden [&_summary::-webkit-details-marker]:hidden"
           ?open="${this.isSettingsOpen}"
         >
           <summary
             @click="${this.handleDetailsToggle}"
-            class="list-none focus:outline-none select-none cursor-pointer"
+            class="list-none focus:outline-none select-none cursor-pointer p-6"
           >
             <div
               class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-purple-500 to-pink-600"
@@ -688,9 +688,9 @@ export class RenamerSettingsPanel extends LitElement {
                 </span>
                 ${activeT.rulesHeader}
               </div>
-              <div class="flex items-center gap-2" @click="${(e: Event) => e.stopPropagation()}">
+              <div class="flex items-center gap-2">
                 <button
-                  @click="${this.applyClearFilename}"
+                  @click="${(e: Event) => { e.stopPropagation(); this.applyClearFilename(); }}"
                   ?disabled="${this.isConverting || this.filesCount === 0}"
                   class="py-1.5 px-3 bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-slate-700 disabled:opacity-30 disabled:cursor-not-allowed text-slate-400 hover:text-slate-200 rounded-xl text-[10px] font-extrabold transition-all cursor-pointer font-sans active:scale-95"
                 >
@@ -703,7 +703,7 @@ export class RenamerSettingsPanel extends LitElement {
             </h2>
           </summary>
           <div class="overflow-hidden">
-            <div class="space-y-4 mt-5">
+            <div class="px-6 pb-6 space-y-4 mt-2">
               <!-- Compact Button Grid for Rename Rules -->
               <div class="grid grid-cols-2 gap-3 mt-4">
                 <button

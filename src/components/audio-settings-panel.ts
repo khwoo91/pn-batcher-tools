@@ -534,12 +534,12 @@ export class AudioSettingsPanel extends LitElement {
 
         <!-- Step 2: Settings Card -->
         <details
-          class="group glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden [&_summary::-webkit-details-marker]:hidden"
+          class="group glass-panel rounded-3xl p-0 shadow-xl relative overflow-hidden [&_summary::-webkit-details-marker]:hidden"
           ?open="${this.isSettingsOpen}"
         >
           <summary
             @click="${this.handleDetailsToggle}"
-            class="list-none focus:outline-none select-none cursor-pointer"
+            class="list-none focus:outline-none select-none cursor-pointer p-6"
           >
             <div
               class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-indigo-500 to-purple-600"
@@ -559,7 +559,7 @@ export class AudioSettingsPanel extends LitElement {
             </h2>
           </summary>
           <div class="overflow-hidden">
-            <div class="space-y-4 mt-5">
+            <div class="px-6 pb-6 space-y-4 mt-2">
             <!-- 1. MP3 변환 품질 설정 -->
             <div
               class="bg-slate-950 border border-slate-800 rounded-2xl"
