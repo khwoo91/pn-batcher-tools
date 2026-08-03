@@ -171,6 +171,15 @@ export class AppHeader extends LitElement {
         </div>
 
         <div class="flex items-center gap-3 self-end md:self-center">
+          <!-- Nav Link to Guides/Blog -->
+          <a
+            href="/guides/index.html"
+            class="flex items-center gap-1.5 px-3 py-2 bg-indigo-600/10 border border-indigo-500/30 hover:bg-indigo-600/20 text-indigo-400 hover:text-indigo-300 rounded-xl text-xs font-semibold transition-all shadow-sm"
+          >
+            <i class="fa-solid fa-book-open"></i>
+            <span>${this.lang === "ko" ? "가이드 / 블로그" : "Guides / Blog"}</span>
+          </a>
+
           <!-- Theme Toggle Switch -->
           <button
             @click="${this.toggleTheme}"

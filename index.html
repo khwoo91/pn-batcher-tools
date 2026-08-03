@@ -45,6 +45,47 @@
     gtag('config', 'G-1KFDQ1NJZG');
   </script>
 
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "배처 툴(Batcher Tools)은 어떤 도구인가요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "배처 툴(Batcher Tools)은 대용량 SVG 벡터 이미지 변환(PNG/JPG), WAV/MP3 오디오 변환, 대량의 파일 이름 일괄 변경(Batch Rename) 기능을 웹 브라우저 내에서 쉽고 빠르게 처리해 주는 스마트 로컬 유틸리티 도구입니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "SVG를 PNG로 변환할 때 왜 배율(1.5x, 2.0x, 3.0x) 설정이 중요한가요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SVG 벡터 이미지는 수학적 곡선으로 표현되지만, 모바일 앱(iOS Retina, Android mdpi/xhdpi/xxhdpi)이나 웹 사이트에 적용할 때는 픽셀 기반의 비트맵 포맷(PNG/JPG)으로 래스터화(Rasterization)해야 합니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "파일 이름을 일괄 변경할 때 정규식(Regex)을 활용하는 방법은 무엇인가요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "정규표현식(Regex)을 이용하면 복잡한 규칙의 파일 이름을 손쉽게 일괄 치환하거나 재구성할 수 있습니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "웹 브라우저 내부(Client-side) 처리가 서버 업로드 방식보다 보안상 우수한 이유는 무엇인가요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "배처 툴은 최신 WICG File System Access API 및 HTML5 Canvas, Web Audio API 기술을 활용하여 모든 파일 읽기, 인코딩, 변환 및 저장 작업을 100% 사용자의 PC/웹 브라우저 내부(Client-Side)에서 처리합니다."
+          }
+        }
+      ]
+    }
+  </script>
+
   <link rel="stylesheet" href="./src/index.css" />
   <script type="module" src="/src/batcher-app.ts"></script>
 </head>
@@ -55,10 +96,10 @@
     <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] animate-glow-indigo">
     </div>
     <div
-      class="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[130px] animate-glow-purple">
+      class="absolute top-1/3 left-1/4 w-125 h-125 bg-purple-500/5 rounded-full blur-[130px] animate-glow-purple">
     </div>
     <div
-      class="absolute -bottom-40 -right-40 w-[450px] h-[450px] bg-emerald-500/5 rounded-full blur-[120px] animate-glow-emerald">
+      class="absolute -bottom-40 -right-40 w-112.5 h-112.5 bg-emerald-500/5 rounded-full blur-[120px] animate-glow-emerald">
     </div>
   </div>
 
@@ -66,129 +107,140 @@
   <batcher-app class="block min-h-screen relative z-20"></batcher-app>
 
   <!-- SEO & FAQ Section for Google AdSense and Users (KO) -->
-  <!-- SEO & FAQ Section for Google AdSense and Users (KO) -->
   <section id="faq-ko" class="max-w-7xl mx-auto px-6 py-16 border-t border-slate-800 relative z-10 pb-20">
     <div class="max-w-3xl mx-auto">
-      <h2 class="text-3xl font-extrabold text-slate-100 mb-12 text-center tracking-tight">자주 묻는 질문 (FAQ)</h2>
+      <h2 class="text-3xl font-extrabold text-slate-100 mb-4 text-center tracking-tight">자주 묻는 질문 (FAQ) 및 상세 가이드</h2>
+      <p class="text-slate-400 text-sm text-center mb-12">배처 툴의 핵심 기능과 기술적 동작 원리, 효율적인 파일 가공 노하우를 상세히 확인해 보세요.</p>
 
       <div class="border-t border-b border-slate-800 divide-y divide-slate-800">
-        <details class="group">
+        <details class="group" open>
           <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
+            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-question text-indigo-600 dark:text-indigo-400 text-base"></i> 배처 툴(Batcher Tools)은 어떤 도구인가요?
+              <i class="fa-solid fa-circle-question text-indigo-400 text-base"></i> 배처 툴(Batcher Tools)은 어떤 도구이며 주요 특징은 무엇인가요?
             </span>
             <i
               class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
           </summary>
           <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2">
-              배처 툴(Batcher Tools)은 대용량 SVG 벡터 이미지 변환(PNG/JPG), WAV/MP3 오디오 변환, 대량의 파일 이름 일괄 변경(Batch Rename) 기능을 웹 브라우저 내에서 쉽고 빠르게 처리해 주는 스마트 로컬 유틸리티 도구입니다.
-              복잡한 개발 환경 세팅이나 프로그램 설치 없이 크롬이나 웨일 등 브라우저에서 바로 작동하며, 다중 배율 내보내기, 오디오 음질 세부 조절, 다채로운 파일 이름 변경 규칙 적용 등 디자이너와 개발자들을 위한 유용한 편의 기능들을 지원합니다.
+            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
+              <p>배처 툴(Batcher Tools)은 대용량 SVG 벡터 이미지 변환(PNG/JPG), WAV/MP3 오디오 변환, 대량 파일 이름 일괄 변경(Batch Rename) 기능을 웹 브라우저 내에서 100% 로컬로 처리해 주는 스마트 유틸리티 도구입니다.</p>
+              <p>복잡한 개발 환경 세팅이나 프로그램 설치 없이 크롬이나 웨일, 에지 등 브라우저에서 즉시 작동하며, 다중 배율 내보내기(@2x, @3x), 오디오 비트레이트 세부 조절, 다채로운 파일 이름 변경 규칙 및 정규식 치환을 지원합니다. 디자이너, 모바일 앱 개발자, 팟캐스터, 영상 편집자를 위해 개발되었으며 최상의 작업 효율성을 보장합니다.</p>
             </div>
           </div>
         </details>
 
         <details class="group">
           <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
+            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-shield-halved text-indigo-600 dark:text-indigo-400 text-base"></i> 내가 입력한 파일이나 파일명이 외부 서버로 전송되나요?
+              <i class="fa-solid fa-expand text-indigo-400 text-base"></i> SVG를 PNG로 변환할 때 왜 배율(1.5x, 2.0x) 설정이 중요한가요?
             </span>
             <i
               class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
           </summary>
           <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2">
-              <strong>아니요, 절대 전송되지 않습니다!</strong> 본 사이트는 최신 브라우저의 File System Access API 및 웹 이미지/오디오 디코딩 기술을 활용하여 모든 파일 읽기, 이미지 변환, 이름 변경 및 포맷 패키징 작업을 <strong>100% 사용자의 PC/웹 브라우저 내부(Client-Side)에서 처리</strong>합니다.
-              서버로 어떠한 파일 정보나 이미지/오디오 바이너리 데이터도 전송하지 않으므로 기밀 프로젝트 리소스나 개인 미디어 유출 걱정 없이 안전하게 사용하실 수 있습니다.
+            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
+              <p><strong>SVG(Scalable Vector Graphics)</strong>는 크기를 아무리 키워도 깨지지 않는 무한 해상도 벡터 포맷이지만, 모바일 앱(iOS, Android)이나 게임 엔진, 구형 웹 환경에 적용할 때는 픽셀 기반의 비트맵 이미지(PNG/JPG)로 래스터화(Rasterization)하여 내보내야 합니다.</p>
+              <p>최신 스마트폰과 고해상도 레티나 디스플레이는 일반 화면보다 2배~3배 높은 픽셀 밀도(DPI)를 가집니다. 따라서 기본 1.0x 배율로만 변환하면 레티나 디스플레이에서 아이콘이나 이미지가 흐릿하게 뭉개질 수 있습니다. 배처 툴에서는 <strong>1.0x(표준), 1.5x(HDPI), 2.0x(@2x 레티나), 3.0x(@3x 고해상도)</strong> 배율을 동시 설정하고 각 배율별 접미사를 커스텀 지정하여 클릭 한 번으로 모든 해상도별 이미지 에셋 패키지를 일괄 추출할 수 있습니다.</p>
             </div>
           </div>
         </details>
 
         <details class="group">
           <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
+            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-laptop-code text-indigo-600 dark:text-indigo-400 text-base"></i> 브라우저 호환성 및 출력 디렉토리(폴더) 기능은 어떻게 동작하나요?
+              <i class="fa-solid fa-code text-indigo-400 text-base"></i> 파일 이름을 일괄 변경할 때 정규식(Regex)을 활용하는 방법은 무엇인가요?
             </span>
             <i
               class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
           </summary>
           <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2">
-              Google Chrome, Microsoft Edge 등 최신 File System Access API를 지원하는 브라우저에서는 사용자가 연동한 로컬 원본 디렉토리 구조 그대로 변환된 파일을 직접 저장하거나 파일명을 실제 로컬에서 즉시 변경(Direct Write Mode)할 수 있습니다.
-              Safari, Firefox 등 해당 API를 완벽히 지원하지 않는 브라우저의 경우, 브라우저가 제공하는 안전 메모리 환경 안에서 폴더 구조를 유지한 채 파일 처리를 마친 뒤 최종적으로 하나의 ZIP 압축 패키지로 자동 빌드되어 일괄 다운로드되도록 동작합니다.
+            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
+              <p>정규표현식(Regular Expression)은 복잡한 이름 패턴을 한 번에 정리하는 강력한 방법입니다. 배처 툴의 '문자열 치환' 모드에서 정규식 옵션을 활성화하면 캡처 그룹(Group)과 백레퍼런스(`$1`, `$2`)를 활용하여 문자열의 위치를 바꾸거나 특정 패턴만 선택 제거할 수 있습니다.</p>
+              <ul class="list-disc pl-5 space-y-1 text-slate-400">
+                <li><strong>날짜 포맷 변경:</strong> 검색 패턴 `(\d{4})-(\d{2})-(\d{2})`, 치환 패턴 `$1_$2_$3` 적용 시 `2026-08-03_photo.jpg` -> `2026_08_03_photo.jpg`로 변경.</li>
+                <li><strong>대괄호 및 태그 일괄 삭제:</strong> 검색 패턴 `\[.*?\]` 입력 후 치환 문자열을 비워두면 `[HD]_vlog_01.mp4` -> `_vlog_01.mp4`로 대괄호와 안쪽 텍스트가 순식간에 삭제됩니다.</li>
+                <li><strong>특수문자 및 공백 정리:</strong> 검색 패턴 `[\s\-_]+`, 치환 패턴 `_` 적용 시 불규칙한 공백과 하이픈을 깔끔한 언더스코어로 통일할 수 있습니다.</li>
+              </ul>
             </div>
           </div>
         </details>
 
         <details class="group">
           <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
+            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-sliders text-indigo-600 dark:text-indigo-400 text-base"></i> 각 탭별로 어떤 변환 설정과 변경 규칙을 사용할 수 있나요?
+              <i class="fa-solid fa-shield-halved text-indigo-400 text-base"></i> 웹 브라우저 내부(Client-side) 처리가 서버 업로드 방식보다 보안상 우수한 이유
             </span>
             <i
               class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
           </summary>
           <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2">
-              선택한 탭에 따라 각각 다른 세부 설정 패널이 제공됩니다.<br>
-              - <strong>이미지 변환 탭</strong>: 필요한 배율(1.0x, 1.5x, 2.0x)을 동시 활성화하고 파일명 끝에 붙을 접미사(예: @2x, @1.5x)를 커스텀하여 자동 적용할 수 있으며, PNG 또는 JPG 포맷으로 저장 가능합니다.<br>
-              - <strong>오디오 변환 탭</strong>: 원하는 출력 음질 비트레이트(128kbps, 192kbps, 256kbps, 320kbps)를 조절하고, 탐색할 입력 확장자 필터(.wav, .mp3 등)를 세부 선택할 수 있습니다.<br>
-              - <strong>이름 변경 탭</strong>: 특정 문자열 치환, 앞이름/뒷이름 붙이기, 특정 위치 문자 지우기, 숫자만 남기기, 괄호 내용 지우기, 순차적인 일련번호 매기기, 확장자 강제 일괄 변경/삭제 등 다양한 규칙 조합을 제공합니다. 더불어 대기열 목록 내의 이름을 <strong>더블클릭하여 직접 개별 수정</strong>하는 것도 가능합니다.
+            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
+              <p><strong>완전한 데이터 프라이버시 보장:</strong> 기존 웹 변환기들은 사용자 파일을 타사 클라우드 서버로 업로드한 뒤 변환하여 다시 내려받는 방식을 사용합니다. 이 과정에서 기밀 프로젝트 리소스, 미발표 디자인 에셋, 개인 음성 파일이 유출되거나 서버에 임시 보관될 위험이 존재합니다.</p>
+              <p>반면 배처 툴은 최신 WICG File System Access API 및 HTML5 Canvas, Web Worker 기반 인코딩 엔진을 사용하여 **100% 사용자의 웹 브라우저 메모리 안에서 모든 변환과 리네이밍을 수행**합니다. 파일이 외부 네트워크로 단 1바이트도 유출되지 않으며 인터넷 연결이 끊긴 상태(Offline)에서도 정상 구동됩니다.</p>
             </div>
           </div>
         </details>
 
         <details class="group">
           <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
+            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-rotate-left text-indigo-600 dark:text-indigo-400 text-base"></i> 이름 변경 적용 전에 실수를 방지하거나 되돌릴 수 있나요?
+              <i class="fa-solid fa-sliders text-indigo-400 text-base"></i> WAV 오디오 변환 시 비트레이트(128kbps ~ 320kbps) 선택 가이드
             </span>
             <i
               class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
           </summary>
           <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2">
-              이름 변경 탭에서는 규칙을 적용할 때마다 우측 대기열의 '변경할 파일명' 칸에 실시간으로 어떻게 변경될지 미리 시각적으로 보여줍니다. 
-              최종적으로 '이름 변경 적용' 버튼을 누르기 전에는 실제 로컬 파일명이 바뀌지 않으므로 안전하며, 규칙을 적용하는 도중 실수했다면 <strong>'실행 취소(Undo)'</strong> 버튼을 눌러 이전 상태의 임시 이름으로 되돌리거나 <strong>'이름 복원(Reset)'</strong>을 눌러 최초의 원래 이름으로 한 번에 초기화할 수 있습니다.
+            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
+              <p>WAV 포맷은 비압축 원음 오디오 데이터를 담고 있어 용량이 매우 큽니다. MP3로 인코딩할 때 적절한 비트레이트(Bitrate)를 선택하면 용량을 1/10 수준으로 줄이면서 목적에 맞는 음질을 확보할 수 있습니다.</p>
+              <ul class="list-disc pl-5 space-y-1 text-slate-400">
+                <li><strong>128 kbps:</strong> 단순 보이스 레코딩, 강의 녹음, 팟캐스트 및 파일 용량 최소화 목적에 적합합니다.</li>
+                <li><strong>192 kbps:</strong> 웹 스트리밍 및 일반 음악 감상용 표준 비트레이트입니다. 용량과 음질의 최적 균형을 제공합니다.</li>
+                <li><strong>256 kbps:</strong> 고음질 유튜브 배경음악, BGM 및 정교한 음향 효과 리소스 제작에 권장됩니다.</li>
+                <li><strong>320 kbps:</strong> MP3가 제공하는 최고 음질 수준으로 스튜디오 모니터링, 음원 소장 및 프로페셔널 아카이빙용에 필수적입니다.</li>
+              </ul>
             </div>
           </div>
         </details>
 
         <details class="group">
           <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
+            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-exclamation text-indigo-600 dark:text-indigo-400 text-base"></i> '원본 파일 자동 정리' 또는 '선택 파일 삭제' 시 주의할 점은 무엇인가요?
+              <i class="fa-solid fa-rotate-left text-indigo-400 text-base"></i> 대량 파일 이름 변경 시 실수 방지 및 실행 취소(Undo/Reset) 기능
             </span>
             <i
               class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
           </summary>
           <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2">
-              이미지/오디오 변환 탭에서 제공되는 '원본 파일 자동 정리'는 변환 작업 성공 시 불필요해진 이전 포맷 원본 파일을 로컬 디렉토리에서 자동으로 안전하게 영구 삭제해 주는 편의 기능입니다. 또한, 이름 변경 탭의 '선택 파일 삭제'는 연동된 폴더 내의 특정 파일들을 일괄적으로 삭제하는 기능입니다.
-              해당 동작들은 로컬 디스크에서 <strong>영구 삭제되어 되돌릴 수 없으므로 중요 원본 데이터는 작업 전에 반드시 사전에 복사해 두거나 백업</strong>해 두시는 것을 강력히 권장합니다.
+            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
+              <p>수백 개의 파일 이름을 한 번에 변경할 때는 규칙 적용 실수가 치명적일 수 있습니다. 배처 툴은 실수 방지를 위해 <strong>3단계 안전장치</strong>를 제공합니다.</p>
+              <ol class="list-decimal pl-5 space-y-1 text-slate-400">
+                <li><strong>실시간 미리보기:</strong> 규칙을 추가할 때마다 대기열의 '변경될 이름' 열에 결과가 즉시 시각적으로 미리 표시되며, '이름 변경 적용' 버튼을 누르기 전까지는 로컬 파일이 변경되지 않습니다.</li>
+                <li><strong>단계별 실행 취소 (Undo):</strong> 실수로 잘못된 규칙을 적용했다면 'Undo' 버튼을 눌러 직전 규칙 적용 상태로 되돌릴 수 있습니다.</li>
+                <li><strong>전체 이름 복원 (Reset):</strong> 여러 규칙이 얽혀 초기 상태로 돌아가고 싶다면 'Reset' 버튼 한 번으로 원본 파일명 상태로 즉시 초기화됩니다.</li>
+              </ol>
             </div>
           </div>
         </details>
 
         <details class="group">
           <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
+            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-scale-balanced text-indigo-600 dark:text-indigo-400 text-base"></i> 변환되거나 변경된 파일들을 상업적 용도로 배포/사용해도 되나요?
+              <i class="fa-solid fa-scale-balanced text-indigo-400 text-base"></i> 변환된 결과물 파일의 상업적 이용 및 라이선스 관련 안내
             </span>
             <i
               class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
           </summary>
           <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2">
-              <strong>네, 전적으로 가능합니다.</strong> 배처 툴 자체와 내부 동작에 이용되는 각종 오픈소스 모듈들은 MIT, BSD, SIL 등 저작권 제약이 거의 없는 무료 라이선스로 구성되어 있습니다.
-              변환되거나 이름이 변경된 결과물 파일에 어떠한 소유권이나 권리 제약도 설정하지 않으므로 개인적 이용은 물론이고, 상업용 소프트웨어 개발 리소스나 유료 디자인 팩, 비즈니스 콘텐츠 제작 및 배포 등 모든 산업 영역에서 제약 없이 자유롭게 활용하실 수 있습니다.
+            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
+              <p><strong>상업적 목적 사용 전면 무료:</strong> 배처 툴을 이용해 변환하거나 이름 변경한 결과물 파일에 대한 소유권 및 권리는 100% 사용자 본인에게 있습니다.</p>
+              <p>본 서비스와 내부 엔진은 자유로운 오픈소스 라이선스(MIT, BSD, SIL 등)를 기반으로 빌드되었습니다. 개인적 프로젝트는 물론, 모바일 앱 유료 판매, 상업적 게임 그래픽 에셋 배포, 웹 디자인 스토어 판매 등 어떠한 상업적 활용에도 법적 제약이 전혀 없습니다.</p>
             </div>
           </div>
         </details>
@@ -199,126 +251,138 @@
   <!-- SEO & FAQ Section for Google AdSense and Users (EN) -->
   <section id="faq-en" class="hidden max-w-7xl mx-auto px-6 py-16 border-t border-slate-800 relative z-10 pb-20">
     <div class="max-w-3xl mx-auto">
-      <h2 class="text-3xl font-extrabold text-slate-100 mb-12 text-center tracking-tight">Frequently Asked Questions (FAQ)</h2>
+      <h2 class="text-3xl font-extrabold text-slate-100 mb-4 text-center tracking-tight">Frequently Asked Questions (FAQ) & Detailed Guides</h2>
+      <p class="text-slate-400 text-sm text-center mb-12">Learn everything about Batcher Tools features, technical mechanisms, and high-efficiency workflow tips.</p>
 
       <div class="border-t border-b border-slate-800 divide-y divide-slate-800">
-        <details class="group">
+        <details class="group" open>
           <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
+            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-question text-indigo-600 dark:text-indigo-400 text-base"></i> What kind of tool is Batcher Tools?
+              <i class="fa-solid fa-circle-question text-indigo-400 text-base"></i> What is Batcher Tools and what are its key features?
             </span>
             <i
               class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
           </summary>
           <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2">
-              Batcher Tools is a smart, local utility tool designed to batch convert SVG images (to PNG/JPG), batch convert audio formats (WAV/MP3 to MP3), and bulk rename large sets of files directly inside the web browser. 
-              It works immediately in modern browsers without requiring any installation or software setup and includes multi-scale scaling options, audio bitrate adjustment, and powerful filename editing rules.
+            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
+              <p>Batcher Tools is a smart local utility for batch converting SVG images (to PNG/JPG), encoding WAV/MP3 audio formats, and bulk renaming files 100% inside your web browser.</p>
+              <p>It works instantly in Chrome, Edge, and modern browsers without software installations. Features include multi-resolution scaling (@2x, @3x), audio bitrate customization, and regular expression (Regex) renaming rules tailored for UI designers, developers, podcasters, and media creators.</p>
             </div>
           </div>
         </details>
 
         <details class="group">
           <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
+            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-shield-halved text-indigo-600 dark:text-indigo-400 text-base"></i> Are my files or filenames uploaded to external servers?
+              <i class="fa-solid fa-expand text-indigo-400 text-base"></i> Why are scaling settings (1.5x, 2.0x, 3.0x) crucial when converting SVG to PNG?
             </span>
             <i
               class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
           </summary>
           <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2">
-              <strong>No, never!</strong> This tool leverages the browser's File System Access API and client-side rasterization/decoding capabilities to read, process, and download files <strong>100% locally inside your web browser (Client-Side)</strong>.
-              No file buffers, audio/image binary data, or filenames are ever sent to an external server. You can safely use it for confidential or proprietary project assets.
+            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
+              <p><strong>SVG (Scalable Vector Graphics)</strong> files are resolution-independent, but mobile operating systems (iOS Retina & Android mdpi/xhdpi/xxhdpi) require rasterized bitmap images (PNG/JPG) for native UI components and app icons.</p>
+              <p>Converting at 1.0x scale only results in blurry icons on modern high-DPI retina screens. Batcher Tools allows simultaneous multi-scale exports (<strong>1.0x, 1.5x, 2.0x @2x, 3.0x @3x</strong>) with custom filename suffixes, allowing you to generate ready-to-deploy multi-density asset packages in one click.</p>
             </div>
           </div>
         </details>
 
         <details class="group">
           <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
+            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-laptop-code text-indigo-600 dark:text-indigo-400 text-base"></i> How do browser compatibility and local directory modes work?
+              <i class="fa-solid fa-code text-indigo-400 text-base"></i> How do I leverage Regular Expressions (Regex) for bulk file renaming?
             </span>
             <i
               class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
           </summary>
           <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2">
-              Modern browsers like Google Chrome and Microsoft Edge that support the WICG File System Access API can save converted images directly into your local directory or rename local files instantly.
-              For browsers that do not support this API (such as Safari or Firefox), file processing occurs in browser-protected memory, and output results are packaged into a standard ZIP archive for batch downloading, retaining your original folder layout.
+            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
+              <p>Regular expressions empower you to perform complex string matching and restructuring. Enabling Regex in Batcher Tools lets you use capture groups and backreferences (`$1`, `$2`):</p>
+              <ul class="list-disc pl-5 space-y-1 text-slate-400">
+                <li><strong>Reorder Dates:</strong> Search pattern `(\d{4})-(\d{2})-(\d{2})` and replace `$1_$2_$3` converts `2026-08-03_photo.jpg` to `2026_08_03_photo.jpg`.</li>
+                <li><strong>Remove Bracket Tags:</strong> Search `\[.*?\]` with empty replacement strips `[HD]_vlog_01.mp4` down to `_vlog_01.mp4`.</li>
+                <li><strong>Sanitize Whitespace:</strong> Search `[\s\-_]+` and replace with `_` to unify messy filenames into clean underscores.</li>
+              </ul>
             </div>
           </div>
         </details>
 
         <details class="group">
           <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
+            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-sliders text-indigo-600 dark:text-indigo-400 text-base"></i> What options and renaming rules are available in each tab?
+              <i class="fa-solid fa-shield-halved text-indigo-400 text-base"></i> Why 100% Client-Side browser processing provides superior security
             </span>
             <i
               class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
           </summary>
           <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2">
-              Settings panels adapt depending on the active tab:<br>
-              - <strong>SVG Images Tab</strong>: Toggle multiple output scale ratios (1.0x, 1.5x, 2.0x), set custom suffixes (e.g. @2x, @1.5x), and export as PNG or JPG format.<br>
-              - <strong>Audio Tab</strong>: Adjust the encoding bitrate (128kbps, 192kbps, 256kbps, 320kbps) and specify the target extensions to scan for (.wav, .mp3, etc.).<br>
-              - <strong>Rename Tab</strong>: Apply rules like replacing text, adding prefixes/suffixes, cutting character ranges, keeping numbers only, stripping bracketed content, applying auto-incremental serial numbers, and modifying extensions. You can also **double-click any filename** in the queue to edit it manually.
+            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
+              <p><strong>Complete Privacy Protection:</strong> Traditional web tools upload your files to remote cloud servers for rendering, which risks leaking confidential design assets, unreleased IP, and personal media files.</p>
+              <p>Batcher Tools utilizes the WICG File System Access API, HTML5 Canvas, and Web Worker decoders to execute **all file operations 100% inside your browser sandbox**. Zero bytes are sent over the network, ensuring complete confidentiality and offline execution capability.</p>
             </div>
           </div>
         </details>
 
         <details class="group">
           <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
+            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-rotate-left text-indigo-600 dark:text-indigo-400 text-base"></i> Can I undo changes or prevent mistakes when bulk renaming?
+              <i class="fa-solid fa-sliders text-indigo-400 text-base"></i> Audio Bitrate Selection Guide (128kbps ~ 320kbps)
             </span>
             <i
               class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
           </summary>
           <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2">
-              Yes. The rename tab shows a real-time preview of the target filenames under the "New Name" column as you add rules. 
-              No changes are written to the actual files until you click "Apply Rename." If you apply a rule by mistake, you can use the **"Undo"** button to revert the last rule or **"Reset"** to restore all names to their original filenames instantly.
+            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
+              <p>Uncompressed WAV files take up significant disk space. Encoding to MP3 reduces file sizes up to 90% while maintaining target audio clarity:</p>
+              <ul class="list-disc pl-5 space-y-1 text-slate-400">
+                <li><strong>128 kbps:</strong> Best for voice recordings, lectures, podcasts, and minimal file size requirements.</li>
+                <li><strong>192 kbps:</strong> Standard bitrate for web audio streaming and general music listening.</li>
+                <li><strong>256 kbps:</strong> Recommended for high-quality YouTube background music and audio effects.</li>
+                <li><strong>320 kbps:</strong> Maximum MP3 quality setting for studio monitoring, archiving, and pro audio distribution.</li>
+              </ul>
             </div>
           </div>
         </details>
 
         <details class="group">
           <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
+            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-exclamation text-indigo-600 dark:text-indigo-400 text-base"></i> What precautions apply for 'Clean up original files' or 'Delete Selected'?
+              <i class="fa-solid fa-rotate-left text-indigo-400 text-base"></i> Safeguards, Real-Time Preview, and Undo/Reset for Bulk Renaming
             </span>
             <i
               class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
           </summary>
           <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2">
-              The 'Clean up original files' option automatically deletes the original SVG or WAV files after successful conversion. The 'Delete Selected' button in the rename tab physically deletes chosen files from your directory.
-              Because these operations permanently erase files on your disk, **they cannot be undone. We strongly advise backing up important files** before utilizing these features.
+            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
+              <p>Renaming hundreds of files at once requires foolproof safeguards. Batcher Tools includes <strong>3 layers of protection</strong>:</p>
+              <ol class="list-decimal pl-5 space-y-1 text-slate-400">
+                <li><strong>Live Preview:</strong> Target names update instantly in the file table before committing changes to disk.</li>
+                <li><strong>Undo:</strong> Step back through previous rule operations seamlessly if an error occurs.</li>
+                <li><strong>Reset:</strong> Instantly revert all target names back to original filenames in one click.</li>
+              </ol>
             </div>
           </div>
         </details>
 
         <details class="group">
           <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
+            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-scale-balanced text-indigo-600 dark:text-indigo-400 text-base"></i> Can I use the processed files for commercial purposes?
+              <i class="fa-solid fa-scale-balanced text-indigo-400 text-base"></i> Commercial Usage Rights & Open-Source Licenses
             </span>
             <i
               class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
           </summary>
           <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2">
-              <strong>Yes, completely!</strong> Batcher Tools and its core conversion algorithms are built using free, open-source packages (such as MIT, BSD, SIL licenses) with no usage restrictions.
-              We impose no copyright terms or licenses on your converted or renamed output files, so you can freely distribute and use them for commercial projects, design bundles, software builds, or paywalled content.
+            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
+              <p><strong>100% Free for Commercial Use:</strong> You retain full ownership and copyright of all files converted or renamed using Batcher Tools.</p>
+              <p>Built with permissive open-source libraries (MIT, BSD, SIL), there are no royalties, licenses, or restrictions for personal or commercial projects.</p>
             </div>
           </div>
         </details>
