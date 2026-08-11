@@ -862,6 +862,20 @@ export class BatcherApp extends LitElement {
 
       this.isConverting = false;
 
+      if (result.canceled) {
+        this.addLog(
+          this.currentLang === "ko"
+            ? "[작업 취소] 변경 사항 저장이 취소되었습니다."
+            : "[Canceled] Save changes operation was canceled by user.",
+          "info",
+        );
+        this.showAlert(
+          this.currentLang === "ko" ? "작업이 취소되었습니다." : "Operation was canceled.",
+          "info",
+        );
+        return;
+      }
+
       if (result.successCount > 0) {
         this.showAlert(activeT.alertRenameSuccessText(result.isLocalDirMode), "success");
 
@@ -928,6 +942,20 @@ export class BatcherApp extends LitElement {
       });
 
       this.isConverting = false;
+
+      if (result.canceled) {
+        this.addLog(
+          this.currentLang === "ko"
+            ? "[작업 취소] 변경 사항 저장이 취소되었습니다."
+            : "[Canceled] Save changes operation was canceled by user.",
+          "info",
+        );
+        this.showAlert(
+          this.currentLang === "ko" ? "작업이 취소되었습니다." : "Operation was canceled.",
+          "info",
+        );
+        return;
+      }
 
       const deletedPaths = new Set(
         selectedFiles.filter((f) => f.status === "success").map((f) => f.relativePath),
@@ -997,6 +1025,20 @@ export class BatcherApp extends LitElement {
       });
 
       this.isConverting = false;
+      if (result.canceled) {
+        this.addLog(
+          this.currentLang === "ko"
+            ? "[작업 취소] 변경 사항 저장이 취소되었습니다."
+            : "[Canceled] Save changes operation was canceled by user.",
+          "info",
+        );
+        this.showAlert(
+          this.currentLang === "ko" ? "작업이 취소되었습니다." : "Operation was canceled.",
+          "info",
+        );
+        return;
+      }
+
       const isLocalDirMode = !!(this.apiSupported && this.svgDirHandle && !this.useFallback);
       const hasOutputDir = this.svgOutputDirHandle !== null;
 
@@ -1063,6 +1105,19 @@ export class BatcherApp extends LitElement {
       });
 
       this.isConverting = false;
+      if (result.canceled) {
+        this.addLog(
+          this.currentLang === "ko"
+            ? "[작업 취소] 변경 사항 저장이 취소되었습니다."
+            : "[Canceled] Save changes operation was canceled by user.",
+          "info",
+        );
+        this.showAlert(
+          this.currentLang === "ko" ? "작업이 취소되었습니다." : "Operation was canceled.",
+          "info",
+        );
+        return;
+      }
       const isLocalDirMode = !!(this.apiSupported && this.audioDirHandle && !this.useFallback);
       const hasOutputDir = this.audioOutputDirHandle !== null;
 
@@ -1391,6 +1446,20 @@ export class BatcherApp extends LitElement {
           this.conversionProgress = p;
         },
       });
+
+      if (res.canceled) {
+        this.addLog(
+          this.currentLang === "ko"
+            ? "[작업 취소] 변경 사항 저장이 취소되었습니다."
+            : "[Canceled] Save changes operation was canceled by user.",
+          "info",
+        );
+        this.showAlert(
+          this.currentLang === "ko" ? "작업이 취소되었습니다." : "Operation was canceled.",
+          "info",
+        );
+        return;
+      }
 
       this.addLog(
         this.currentLang === "ko"

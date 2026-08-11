@@ -30,7 +30,7 @@ export interface BatchConvertOptions {
  */
 export async function batchConvertSvg(
   options: BatchConvertOptions,
-): Promise<{ successCount: number; failCount: number; isLocalDirMode: boolean }> {
+): Promise<{ successCount: number; failCount: number; isLocalDirMode: boolean; canceled?: boolean }> {
   const {
     selectedFiles,
     exportFormat,
@@ -57,25 +57,49 @@ export async function batchConvertSvg(
   const isLocalDirMode = !!(apiSupported && dirHandle && !useFallback);
   const hasOutputDir = outputDirHandle !== null;
 
-  // 1. Acquire Local Directory Permissions or fallback to ZIP
+  const isPermissionDeniedError = (err: any): boolean => {
+    if (!err) return false;
+    return (
+      err.name === "NotAllowedError" ||
+      err.name === "AbortError" ||
+      err.name === "SecurityError" ||
+      (typeof err.message === "string" &&
+        (err.message.includes("denied") ||
+          err.message.includes("not allowed") ||
+          err.message.includes("User cancelled") ||
+          err.message.includes("user agent")))
+    );
+  };
+
+  // 1. Acquire Local Directory Permissions
   if (isLocalDirMode && dirHandle) {
     try {
       const opts = { mode: "readwrite" as const };
-      if ((await dirHandle.queryPermission(opts)) !== "granted") {
-        await dirHandle.requestPermission(opts);
+      let perm = await dirHandle.queryPermission(opts);
+      if (perm !== "granted") {
+        perm = await dirHandle.requestPermission(opts);
       }
+      if (perm !== "granted") {
+        onLog("[작업 취소] 디렉토리 변경 권한이 거부되어 작업을 취소했습니다.", "warning");
+        return { successCount: 0, failCount: 0, isLocalDirMode, canceled: true };
+      }
+
       if (hasOutputDir && outputDirHandle) {
-        if ((await outputDirHandle.queryPermission(opts)) !== "granted") {
-          await outputDirHandle.requestPermission(opts);
+        let outPerm = await outputDirHandle.queryPermission(opts);
+        if (outPerm !== "granted") {
+          outPerm = await outputDirHandle.requestPermission(opts);
+        }
+        if (outPerm !== "granted") {
+          onLog("[작업 취소] 출력 디렉토리 변경 권한이 거부되어 작업을 취소했습니다.", "warning");
+          return { successCount: 0, failCount: 0, isLocalDirMode, canceled: true };
         }
         onLog(t.localOutputDirReady(outputDirHandle.name), "success");
       } else {
         onLog(t.directWriteNotice, "info");
       }
-    } catch (err) {
-      console.error("Local directory permission check failed. Falling back to ZIP.", err);
-      onLog(t.permissionFailFallback, "warning");
-      zip = new JSZip();
+    } catch (err: any) {
+      onLog("[작업 취소] 폴더 권한 요청이 취소되었습니다.", "warning");
+      return { successCount: 0, failCount: 0, isLocalDirMode, canceled: true };
     }
   } else {
     zip = new JSZip();
@@ -150,17 +174,29 @@ export async function batchConvertSvg(
             await targetDirHandle.removeEntry(svgItem.name);
             onLog(t.originalDeleted(svgItem.relativePath), "info");
           } catch (delErr: any) {
+            if (isPermissionDeniedError(delErr)) {
+              onLog("[작업 취소] 사용자가 변경 권한을 거부하여 작업을 취소했습니다.", "warning");
+              return { successCount, failCount, isLocalDirMode, canceled: true };
+            }
             onLog(t.originalDeleteFail(svgItem.relativePath, delErr.message), "warning");
           }
         }
 
         onFileStatusChange(svgItem.relativePath, "success");
       } catch (scaleErr: any) {
+        if (isPermissionDeniedError(scaleErr)) {
+          onLog("[작업 취소] 사용자가 변경 권한을 거부하여 작업을 취소했습니다.", "warning");
+          return { successCount, failCount, isLocalDirMode, canceled: true };
+        }
         failCount++;
         onFileStatusChange(svgItem.relativePath, "error", scaleErr.message);
         onLog(t.convertFail(svgItem.relativePath, scaleErr.message), "error");
       }
     } catch (fileErr: any) {
+      if (isPermissionDeniedError(fileErr)) {
+        onLog("[작업 취소] 사용자가 변경 권한을 거부하여 작업을 취소했습니다.", "warning");
+        return { successCount, failCount, isLocalDirMode, canceled: true };
+      }
       failCount++;
       onFileStatusChange(svgItem.relativePath, "error", fileErr.message);
       onLog(t.parseError(svgItem.relativePath, fileErr.message), "error");

@@ -23,7 +23,7 @@ export interface RenameBatchOptions {
  */
 export async function batchRenameFiles(
   options: RenameBatchOptions,
-): Promise<{ successCount: number; failCount: number; isLocalDirMode: boolean }> {
+): Promise<{ successCount: number; failCount: number; isLocalDirMode: boolean; canceled?: boolean }> {
   const {
     selectedFiles,
     dirHandle,
@@ -43,18 +43,36 @@ export async function batchRenameFiles(
   const isLocalDirMode = !!(apiSupported && dirHandle && !useFallback);
   let zip: JSZip | null = null;
 
-  // 1. Acquire Local Directory Permissions or fallback to ZIP
+  const isPermissionDeniedError = (err: any): boolean => {
+    if (!err) return false;
+    return (
+      err.name === "NotAllowedError" ||
+      err.name === "AbortError" ||
+      err.name === "SecurityError" ||
+      (typeof err.message === "string" &&
+        (err.message.includes("denied") ||
+          err.message.includes("not allowed") ||
+          err.message.includes("User cancelled") ||
+          err.message.includes("user agent")))
+    );
+  };
+
+  // 1. Acquire Local Directory Permissions
   if (isLocalDirMode && dirHandle) {
     try {
       const opts = { mode: "readwrite" as const };
-      if ((await dirHandle.queryPermission(opts)) !== "granted") {
-        await dirHandle.requestPermission(opts);
+      let perm = await dirHandle.queryPermission(opts);
+      if (perm !== "granted") {
+        perm = await dirHandle.requestPermission(opts);
+      }
+      if (perm !== "granted") {
+        onLog("[작업 취소] 디렉토리 변경 권한이 거부되어 작업을 취소했습니다.", "warning");
+        return { successCount: 0, failCount: 0, isLocalDirMode: true, canceled: true };
       }
       onLog("로컬 디렉토리 권한이 확인되었습니다.", "success");
-    } catch (err) {
-      console.error("Local directory permission check failed. Falling back to ZIP.", err);
-      onLog(t.permissionFailFallback, "warning");
-      zip = new JSZip();
+    } catch (err: any) {
+      onLog("[작업 취소] 폴더 권한 요청이 취소되었습니다.", "warning");
+      return { successCount: 0, failCount: 0, isLocalDirMode: true, canceled: true };
     }
   } else {
     zip = new JSZip();
@@ -90,27 +108,31 @@ export async function batchRenameFiles(
             await writable.close();
             await parentDirHandle.removeEntry(originalName);
           }
+          onLog(`이름 변경 성공: ${fileItem.relativePath} -> ${newName}`, "success");
         }
-
         successCount++;
-        onLog(t.renameSuccess(fileItem.relativePath, newName), "success");
         onFileStatusChange(fileItem.relativePath, "success");
       } else if (zip) {
-        // Zip Mode fallback
-        const parts = fileItem.relativePath.split("/");
-        parts[parts.length - 1] = newName;
-        const zipPath = parts.join("/");
+        // Add to ZIP archive
+        const zipPath = fileItem.relativePath || fileItem.name;
+        const parts = zipPath.split("/");
+        parts.pop(); // Remove old filename
+        const newZipPath = parts.length > 0 ? `${parts.join("/")}/${newName}` : newName;
 
-        zip.file(zipPath, fileItem.file);
+        zip.file(newZipPath, fileItem.file);
         successCount++;
-        onLog(t.renameSuccess(fileItem.relativePath, newName), "success");
+        onLog(`ZIP 내 이름 변경 준비: ${fileItem.relativePath} -> ${newZipPath}`, "info");
         onFileStatusChange(fileItem.relativePath, "success");
       }
     } catch (err: any) {
+      if (isPermissionDeniedError(err)) {
+        onLog("[작업 취소] 사용자가 변경 권한을 거부하여 작업을 취소했습니다.", "warning");
+        return { successCount, failCount, isLocalDirMode: true, canceled: true };
+      }
       failCount++;
       console.error(err);
       onFileStatusChange(fileItem.relativePath, "error", err.message);
-      onLog(t.renameFail(fileItem.relativePath, err.message), "error");
+      onLog(`이름 변경 실패 (${fileItem.relativePath}): ${err.message}`, "error");
     }
 
     currentStep++;
@@ -125,20 +147,19 @@ export async function batchRenameFiles(
 
       const link = document.createElement("a");
       link.href = URL.createObjectURL(content);
-      const zipName = "renamed_files";
-      link.download = `${zipName}.zip`;
+      const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+      link.download = `renamed_files_${dateStr}.zip`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
 
-      onLog(t.zipDownloadDone(zipName), "success");
+      onLog(`이름 변경 완료 압축 파일 다운로드 완료.`, "success");
     } catch (zipErr: any) {
-      onLog(t.zipDownloadFail(zipErr.message), "error");
+      console.error("ZIP Generation Error:", zipErr);
+      onLog(`ZIP 생성 중 오류 발생: ${zipErr.message}`, "error");
     }
   }
 
-  // 4. Return summary
-  onLog(t.conversionEnded(successCount, failCount), successCount > 0 ? "success" : "error");
   return { successCount, failCount, isLocalDirMode };
 }
 
@@ -156,11 +177,11 @@ export interface DeleteBatchOptions {
 }
 
 /**
- * Executes batch deletion of files.
+ * Executes batch deletion of selected physical files in local directory.
  */
 export async function batchDeleteFiles(
   options: DeleteBatchOptions,
-): Promise<{ successCount: number; failCount: number }> {
+): Promise<{ successCount: number; failCount: number; canceled?: boolean }> {
   const { selectedFiles, dirHandle, t, onProgress, onFileStatusChange, onLog } = options;
 
   let successCount = 0;
@@ -173,9 +194,19 @@ export async function batchDeleteFiles(
   }
 
   // Acquire permissions
-  const opts = { mode: "readwrite" as const };
-  if ((await dirHandle.queryPermission(opts)) !== "granted") {
-    await dirHandle.requestPermission(opts);
+  try {
+    const opts = { mode: "readwrite" as const };
+    let perm = await dirHandle.queryPermission(opts);
+    if (perm !== "granted") {
+      perm = await dirHandle.requestPermission(opts);
+    }
+    if (perm !== "granted") {
+      onLog("[작업 취소] 디렉토리 변경 권한이 거부되어 파일 삭제를 취소했습니다.", "warning");
+      return { successCount: 0, failCount: 0, canceled: true };
+    }
+  } catch (err: any) {
+    onLog("[작업 취소] 폴더 권한 요청이 취소되었습니다.", "warning");
+    return { successCount: 0, failCount: 0, canceled: true };
   }
 
   // Deletion loop
@@ -191,6 +222,14 @@ export async function batchDeleteFiles(
       onLog(t.deleteSuccess(fileItem.relativePath), "success");
       onFileStatusChange(fileItem.relativePath, "success");
     } catch (err: any) {
+      if (
+        err.name === "NotAllowedError" ||
+        err.name === "AbortError" ||
+        (err.message && (err.message.includes("denied") || err.message.includes("not allowed")))
+      ) {
+        onLog("[작업 취소] 사용자가 삭제 권한을 거부하여 작업을 취소했습니다.", "warning");
+        return { successCount, failCount, canceled: true };
+      }
       failCount++;
       console.error(err);
       onFileStatusChange(fileItem.relativePath, "error", err.message);

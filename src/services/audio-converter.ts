@@ -40,7 +40,7 @@ function float32ToInt16(float32Array: Float32Array): Int16Array {
  */
 export async function batchConvertAudio(
   options: AudioBatchConvertOptions,
-): Promise<{ successCount: number; failCount: number; isLocalDirMode: boolean }> {
+): Promise<{ successCount: number; failCount: number; isLocalDirMode: boolean; canceled?: boolean }> {
   const {
     selectedFiles,
     bitrate,
@@ -65,25 +65,34 @@ export async function batchConvertAudio(
   const isLocalDirMode = !!(apiSupported && dirHandle && !useFallback);
   const hasOutputDir = outputDirHandle !== null;
 
-  // 1. Acquire Local Directory Permissions or fallback to ZIP
+  // 1. Acquire Local Directory Permissions
   if (isLocalDirMode && dirHandle) {
     try {
       const opts = { mode: "readwrite" as const };
-      if ((await dirHandle.queryPermission(opts)) !== "granted") {
-        await dirHandle.requestPermission(opts);
+      let perm = await dirHandle.queryPermission(opts);
+      if (perm !== "granted") {
+        perm = await dirHandle.requestPermission(opts);
+      }
+      if (perm !== "granted") {
+        onLog("[작업 취소] 디렉토리 변경 권한이 거부되어 작업을 취소했습니다.", "warning");
+        return { successCount: 0, failCount: 0, isLocalDirMode: true, canceled: true };
       }
       if (hasOutputDir && outputDirHandle) {
-        if ((await outputDirHandle.queryPermission(opts)) !== "granted") {
-          await outputDirHandle.requestPermission(opts);
+        let outPerm = await outputDirHandle.queryPermission(opts);
+        if (outPerm !== "granted") {
+          outPerm = await outputDirHandle.requestPermission(opts);
+        }
+        if (outPerm !== "granted") {
+          onLog("[작업 취소] 출력 디렉토리 변경 권한이 거부되어 작업을 취소했습니다.", "warning");
+          return { successCount: 0, failCount: 0, isLocalDirMode: true, canceled: true };
         }
         onLog(t.localOutputDirReady(outputDirHandle.name), "success");
       } else {
         onLog(t.directWriteNotice, "info");
       }
-    } catch (err) {
-      console.error("Local directory permission check failed. Falling back to ZIP.", err);
-      onLog(t.permissionFailFallback, "warning");
-      zip = new JSZip();
+    } catch (err: any) {
+      onLog("[작업 취소] 폴더 권한 요청이 취소되었습니다.", "warning");
+      return { successCount: 0, failCount: 0, isLocalDirMode: true, canceled: true };
     }
   } else {
     zip = new JSZip();

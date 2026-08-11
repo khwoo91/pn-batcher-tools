@@ -508,7 +508,7 @@ export async function executeResourceCleanup(options: {
   lang?: "ko" | "en";
   onLog: (text: string, type: "info" | "success" | "error" | "warning") => void;
   onProgress: (progress: number) => void;
-}): Promise<{ deletedFileCount: number; cleanedCodeCount: number; zipResultBlob?: Blob }> {
+}): Promise<{ deletedFileCount: number; cleanedCodeCount: number; canceled?: boolean; zipResultBlob?: Blob }> {
   const {
     unusedFilesToDelete,
     brokenLinksToClean,
@@ -525,8 +525,49 @@ export async function executeResourceCleanup(options: {
   const totalTasks = unusedFilesToDelete.length + (codeCleanMode !== "none" ? brokenLinksToClean.length : 0);
   let completedTasks = 0;
 
+  // Helper to check if error is user permission denial/cancellation
+  const isPermissionDeniedError = (err: any): boolean => {
+    if (!err) return false;
+    return (
+      err.name === "NotAllowedError" ||
+      err.name === "AbortError" ||
+      err.name === "SecurityError" ||
+      (typeof err.message === "string" &&
+        (err.message.includes("denied") ||
+          err.message.includes("not allowed") ||
+          err.message.includes("User cancelled") ||
+          err.message.includes("user agent")))
+    );
+  };
+
   // 1. Local Directory Mode (File System Access API)
   if (!useFallback && dirHandle) {
+    // Upfront readwrite permission verification for directory handle
+    try {
+      const opts = { mode: "readwrite" as const };
+      let perm = await dirHandle.queryPermission(opts);
+      if (perm !== "granted") {
+        perm = await dirHandle.requestPermission(opts);
+      }
+      if (perm !== "granted") {
+        onLog(
+          lang === "ko"
+            ? "[작업 취소] 사용자가 디렉토리 변경 권한을 거부하여 작업이 취소되었습니다."
+            : "[Canceled] User denied directory write permission.",
+          "warning",
+        );
+        return { deletedFileCount: 0, cleanedCodeCount: 0, canceled: true };
+      }
+    } catch (permErr: any) {
+      onLog(
+        lang === "ko"
+          ? "[작업 취소] 디렉토리 변경 권한 요청이 취소되었습니다."
+          : "[Canceled] Directory write permission request was canceled.",
+        "warning",
+      );
+      return { deletedFileCount: 0, cleanedCodeCount: 0, canceled: true };
+    }
+
     // A. Delete physical files
     for (const unused of unusedFilesToDelete) {
       try {
@@ -542,6 +583,15 @@ export async function executeResourceCleanup(options: {
           onLog(`[Warning] Could not find folder for ${unused.relativePath}`, "warning");
         }
       } catch (err: any) {
+        if (isPermissionDeniedError(err)) {
+          onLog(
+            lang === "ko"
+              ? "[작업 취소] 사용자가 변경 권한을 거부하여 작업을 취소했습니다."
+              : "[Canceled] Operation canceled due to permission denial.",
+            "warning",
+          );
+          return { deletedFileCount, cleanedCodeCount, canceled: true };
+        }
         onLog(`[Error Deleting File] ${unused.relativePath}: ${err.message}`, "error");
       }
       completedTasks++;
@@ -599,6 +649,15 @@ export async function executeResourceCleanup(options: {
             onLog(`[Cleaned Code] Updated ${sourcePath}`, "info");
           }
         } catch (err: any) {
+          if (isPermissionDeniedError(err)) {
+            onLog(
+              lang === "ko"
+                ? "[작업 취소] 사용자가 코드 변경 권한을 거부하여 작업을 취소했습니다."
+                : "[Canceled] Operation canceled due to permission denial.",
+              "warning",
+            );
+            return { deletedFileCount, cleanedCodeCount, canceled: true };
+          }
           onLog(`[Error Cleaning Code] ${sourcePath}: ${err.message}`, "error");
         }
         completedTasks += links.length;
