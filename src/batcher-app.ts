@@ -1385,6 +1385,7 @@ export class BatcherApp extends LitElement {
         dirHandle: this.resourceDirHandle,
         outputDirHandle: null,
         useFallback: this.useFallback,
+        lang: this.currentLang,
         onLog: (text, type) => this.addLog(text, type),
         onProgress: (p) => {
           this.conversionProgress = p;

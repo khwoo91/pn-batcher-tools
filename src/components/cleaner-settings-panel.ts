@@ -467,7 +467,7 @@ export class CleanerSettingsPanel extends LitElement {
                   >
                     <div class="flex flex-col items-center justify-center space-y-3">
                       <div
-                        class="w-14 h-14 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-emerald-700 dark:text-emerald-400 shadow-inner"
+                        class="w-14 h-14 rounded-full bg-slate-800/80 border border-slate-500/10 flex items-center justify-center text-emerald-700 dark:text-emerald-400 shadow-inner"
                       >
                         <i class="fa-solid fa-folder-open text-2xl"></i>
                       </div>

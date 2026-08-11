@@ -85,14 +85,17 @@ function getLineNumber(content: string, matchIndex: number): number {
 }
 
 /**
- * Masks comments and lines containing [리소스 확인 필요], [불필요한 코드], [Cleaned]
+ * Masks comments and lines containing [연결되지 않은 URL], [Unlinked URL], [리소스 확인 필요], [불필요한 코드], [Cleaned]
  * so they are ignored during scan. Preserves line breaks for exact line numbers.
  */
 function maskCommentsAndTaggedLines(content: string, isCss: boolean): string {
   // 1. Mask lines containing comment markers
-  let clean = content.replace(/^.*(\[리소스 확인 필요\]|\[불필요한 코드\]|\[Cleaned\]).*$/gm, (lineMatch) => {
-    return lineMatch.replace(/[^\r\n]/g, " ");
-  });
+  let clean = content.replace(
+    /^.*(\[연결되지 않은 URL\]|\[Unlinked URL\]|\[리소스 확인 필요\]|\[불필요한 코드\]|\[Cleaned\]).*$/gm,
+    (lineMatch) => {
+      return lineMatch.replace(/[^\r\n]/g, " ");
+    },
+  );
 
   // 2. Mask block comments while preserving newlines
   if (isCss) {
@@ -458,20 +461,31 @@ function parseCssContent(
 }
 
 /**
- * Appends /* [리소스 확인 필요] *\/ (or <!-- [리소스 확인 필요] -->) at line end.
+ * Appends /* [연결되지 않은 URL] *\/ (or <!-- [연결되지 않은 URL] -->) at line end.
  */
-function applyLineEndComment(fileText: string, snippet: string, isCss: boolean): { newText: string; modified: boolean } {
+function applyLineEndComment(
+  fileText: string,
+  snippet: string,
+  isCss: boolean,
+  lang: "ko" | "en" = "ko",
+): { newText: string; modified: boolean } {
   if (!snippet || !fileText.includes(snippet)) {
     return { newText: fileText, modified: false };
   }
 
-  const tagText = isCss ? "/* [리소스 확인 필요] */" : "<!-- [리소스 확인 필요] -->";
+  const commentText = lang === "en" ? "[Unlinked URL]" : "[연결되지 않은 URL]";
+  const tagText = isCss ? `/* ${commentText} */` : `<!-- ${commentText} -->`;
   const lines = fileText.split("\n");
   let modified = false;
 
   for (let i = 0; i < lines.length; i++) {
     if (lines[i].includes(snippet)) {
-      if (!lines[i].includes("[리소스 확인 필요]") && !lines[i].includes("[불필요한 코드]")) {
+      if (
+        !lines[i].includes("[연결되지 않은 URL]") &&
+        !lines[i].includes("[Unlinked URL]") &&
+        !lines[i].includes("[리소스 확인 필요]") &&
+        !lines[i].includes("[불필요한 코드]")
+      ) {
         lines[i] = lines[i].replace(/\r$/, "") + ` ${tagText}`;
         modified = true;
       }
@@ -491,6 +505,7 @@ export async function executeResourceCleanup(options: {
   dirHandle: FileSystemDirectoryHandle | null;
   outputDirHandle: FileSystemDirectoryHandle | null;
   useFallback: boolean;
+  lang?: "ko" | "en";
   onLog: (text: string, type: "info" | "success" | "error" | "warning") => void;
   onProgress: (progress: number) => void;
 }): Promise<{ deletedFileCount: number; cleanedCodeCount: number; zipResultBlob?: Blob }> {
@@ -500,6 +515,7 @@ export async function executeResourceCleanup(options: {
     codeCleanMode,
     dirHandle,
     useFallback,
+    lang = "ko",
     onLog,
     onProgress,
   } = options;
@@ -556,7 +572,12 @@ export async function executeResourceCleanup(options: {
 
           for (const item of links) {
             if (codeCleanMode === "comment") {
-              const res = applyLineEndComment(text, item.snippet, isCssFile || item.tagType.includes("CSS"));
+              const res = applyLineEndComment(
+                text,
+                item.snippet,
+                isCssFile || item.tagType.includes("CSS"),
+                lang,
+              );
               if (res.modified) {
                 text = res.newText;
                 modified = true;
