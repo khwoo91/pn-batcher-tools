@@ -282,9 +282,9 @@ export class CleanerSettingsPanel extends LitElement {
         labelKo: "미사용 파일 삭제 및 미연결 URL에 주석 추가",
         labelEn: "Delete Unused Files & Note Unlinked URLs",
         descKo:
-          "사용하지 않는 파일은 삭제하고 사용하지 않는 코드 옆에 <!-- [연결되지 않은 URL] --> 주석을 추가합니다. (권장)",
+          "사용하지 않는 파일은 삭제하고 사용하지 않는 코드 옆에 [연결되지 않은 URL] 주석을 추가합니다.",
         descEn:
-          "Deletes files that are not used and adds a comment <!-- [Unlinked URL] --> next to unused code. (Recommended)",
+          "Deletes files that are not used and adds a comment [Unlinked URL] next to unused code.",
         icon: "fa-code",
         tagKo: "추천",
         tagEn: "Recommended",
