@@ -87,8 +87,8 @@ export class CleanerResultsView extends LitElement {
             class="text-xs text-slate-400 mt-1 max-w-md mx-auto leading-relaxed whitespace-pre-line"
           >
             ${isKo
-              ? "왼쪽 화면에서 정리를 시작할 폴더를 선택한 후,\n하단 바의 [🔍 검사 시작] 버튼을 누르면 정밀 검사 결과가 표시됩니다."
-              : "Select a target folder on the left and click [Start Scan] at the bottom action bar."}
+              ? "정리를 시작할 폴더를 선택한 후,\n하단의 [🔍 검사 시작] 버튼을 누르면 정밀 검사 결과가 표시됩니다."
+              : "Select a target folder and click [Start Scan]."}
           </p>
         </div>
       `;
