@@ -3,6 +3,7 @@ export const en = {
     svg: "SVG Image Export",
     audio: "Audio Convert (MP3)",
     rename: "Batch File Rename",
+    resource: "Unused Resource Cleaner",
   },
   main: {
     compatAlert:

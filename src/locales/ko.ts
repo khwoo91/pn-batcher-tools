@@ -3,6 +3,7 @@ export const ko = {
     svg: "SVG 이미지 변환",
     audio: "오디오 변환 (MP3)",
     rename: "파일명 일괄 변경",
+    resource: "미사용 리소스 일괄 정리",
   },
   main: {
     compatAlert:

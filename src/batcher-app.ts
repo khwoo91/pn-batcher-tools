@@ -3,11 +3,21 @@ import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import JSZip from "jszip";
 
-import type { BatchFile, ScaleOption, ConversionLog } from "./types";
-import { scanDirectory } from "./utils/fs-utils";
+import type {
+  BatchFile,
+  ScaleOption,
+  ConversionLog,
+  ActiveTabType,
+  CodeCleanMode,
+  CleanScanResult,
+  UnusedFileItem,
+  BrokenLinkItem,
+} from "./types";
+import { scanDirectory, getNestedDirHandle } from "./utils/fs-utils";
 import { batchConvertSvg } from "./services/batch-converter";
 import { batchConvertAudio } from "./services/audio-converter";
 import { batchRenameFiles, batchDeleteFiles } from "./services/file-renamer";
+import { scanProjectResources, executeResourceCleanup } from "./services/resource-cleaner";
 import { locales } from "./locales";
 
 import {
@@ -32,6 +42,8 @@ import "./components/app-header";
 import "./components/settings-panel";
 import "./components/audio-settings-panel";
 import "./components/renamer-settings-panel";
+import "./components/cleaner-settings-panel";
+import "./components/cleaner-results-view";
 import "./components/file-queue";
 import "./components/log-console";
 import "./components/alert-modal";
@@ -43,7 +55,7 @@ const t = {
 
 @customElement("batcher-app")
 export class BatcherApp extends LitElement {
-  @state() private activeTab: "svg" | "audio" | "rename" = "svg";
+  @state() private activeTab: ActiveTabType = "svg";
   @state() private currentLang: "ko" | "en" = (() => {
     const saved = localStorage.getItem("batcher-lang");
     if (saved === "ko" || saved === "en") return saved;
@@ -72,6 +84,15 @@ export class BatcherApp extends LitElement {
   @state() private renameExtFilter = "";
   @state() private renameHistoryStack: string[][] = [];
 
+  // Resource Cleaner specific states
+  @state() private resourceDirHandle: FileSystemDirectoryHandle | null = null;
+  @state() private resourceFiles: BatchFile[] = [];
+  @state() private resourceCodeCleanMode: CodeCleanMode = "comment";
+  @state() private isResourceScanning = false;
+  @state() private isResourceExecuting = false;
+  @state() private resourceScanResult: CleanScanResult | null = null;
+  @state() private resourceSelectedRootSegment: string = "";
+
   // Shared UI states
   @state() private isConverting = false;
   @state() private conversionProgress = 0;
@@ -97,7 +118,8 @@ export class BatcherApp extends LitElement {
   private get activeFiles(): BatchFile[] {
     if (this.activeTab === "svg") return this.svgFiles;
     if (this.activeTab === "audio") return this.audioFiles;
-    return this.renameFiles;
+    if (this.activeTab === "rename") return this.renameFiles;
+    return this.resourceFiles;
   }
 
   private set activeFiles(files: BatchFile[]) {
@@ -105,8 +127,10 @@ export class BatcherApp extends LitElement {
       this.svgFiles = files;
     } else if (this.activeTab === "audio") {
       this.audioFiles = files;
-    } else {
+    } else if (this.activeTab === "rename") {
       this.renameFiles = files;
+    } else {
+      this.resourceFiles = files;
     }
   }
 
@@ -121,8 +145,8 @@ export class BatcherApp extends LitElement {
     this.conversionLogs = [{ timestamp, text, type }, ...this.conversionLogs];
   }
 
-  private handleTabChange(tab: "svg" | "audio" | "rename") {
-    if (this.isConverting) return;
+  private handleTabChange(tab: ActiveTabType) {
+    if (this.isConverting || this.isResourceScanning || this.isResourceExecuting) return;
     this.activeTab = tab;
     this.conversionProgress = 0;
     this.currentConversionIndex = 0;
@@ -247,7 +271,7 @@ export class BatcherApp extends LitElement {
         },
         noFilesMessage: t[this.currentLang].noWavInFolder,
       };
-    } else {
+    } else if (this.activeTab === "rename") {
       return {
         exts: this.getRenameExtensions(),
         outputDirHandle: null,
@@ -262,6 +286,21 @@ export class BatcherApp extends LitElement {
           }));
         },
         noFilesMessage: t[this.currentLang].noRenameFiles,
+      };
+    } else {
+      return {
+        exts: ["*"],
+        outputDirHandle: null,
+        setDirHandle: (h: FileSystemDirectoryHandle) => {
+          this.resourceDirHandle = h;
+        },
+        setFiles: (fs: BatchFile[]) => {
+          this.resourceFiles = fs;
+        },
+        noFilesMessage:
+          this.currentLang === "ko"
+            ? "선택한 폴더에 분석할 파일이 존재하지 않습니다."
+            : "No files found in the selected folder.",
       };
     }
   }
@@ -279,6 +318,18 @@ export class BatcherApp extends LitElement {
 
       const config = this.getTabConfig();
       config.setDirHandle(handle);
+
+      if (this.activeTab === "resource") {
+        this.resourceFiles = [];
+        this.resourceScanResult = null;
+        this.addLog(
+          this.currentLang === "ko"
+            ? `[폴더 선택 완료] '${handle.name}' 계층 구조가 탐색기에 로드되었습니다. 하위 폴더 선택 후 [스캔 시작]을 눌러주세요.`
+            : `[Folder Selected] '${handle.name}' loaded into tree navigator. Click [Start Scan] when ready.`,
+          "success",
+        );
+        return;
+      }
 
       const files: BatchFile[] = [];
       this.conversionProgress = 0;
@@ -378,12 +429,45 @@ export class BatcherApp extends LitElement {
     }
   }
 
-  private handleFallbackUpload(e: Event) {
-    const target = e.target as HTMLInputElement;
-    const files = target.files;
+  private handleFallbackUpload(detail: any) {
+    let files: FileList | File[] | null = null;
+    if (detail && detail.files) {
+      files = detail.files;
+    } else if (detail && detail.target) {
+      files = (detail.target as HTMLInputElement).files;
+      (detail.target as HTMLInputElement).value = "";
+    }
+
     if (!files || files.length === 0) return;
-    this.appendFiles(files, false);
-    target.value = ""; // Reset so same file can be uploaded again
+
+    if (this.activeTab === "resource") {
+      const batchFiles: BatchFile[] = [];
+      const fileList = Array.from(files);
+      for (let i = 0; i < fileList.length; i++) {
+        const file = fileList[i];
+        const relPath =
+          file.webkitRelativePath || (file as any).customRelativePath || file.name;
+        batchFiles.push({
+          name: file.name,
+          file: file,
+          relativePath: relPath,
+          status: "pending",
+          selected: true,
+        });
+      }
+      this.resourceFiles = batchFiles;
+      this.resourceScanResult = null;
+      this.resourceSelectedRootSegment = "";
+      const folderName = batchFiles[0]?.relativePath?.split("/")[0] || (this.currentLang === "ko" ? "선택된 폴더" : "Selected Folder");
+      this.addLog(
+        this.currentLang === "ko"
+          ? `[폴더 준비 완료] '${folderName}' 폴더의 총 ${batchFiles.length}개 파일 준비 완료.`
+          : `[Folder Prepared] Prepared ${batchFiles.length} files from '${folderName}'.`,
+        "success",
+      );
+    } else {
+      this.appendFiles(files, false);
+    }
   }
 
   private handleDropFiles(e: CustomEvent<FileList>) {
@@ -401,6 +485,19 @@ export class BatcherApp extends LitElement {
     try {
       const config = this.getTabConfig();
       config.setDirHandle(handle);
+
+      if (this.activeTab === "resource") {
+        this.resourceFiles = [];
+        this.resourceScanResult = null;
+        this.resourceSelectedRootSegment = "";
+        this.addLog(
+          this.currentLang === "ko"
+            ? `[폴더 드롭 완료] '${handle.name}' 계층 구조가 탐색기에 로드되었습니다. 하위 폴더 선택 후 [스캔 시작]을 눌러주세요.`
+            : `[Folder Dropped] '${handle.name}' loaded into tree navigator. Click [Start Scan] when ready.`,
+          "success",
+        );
+        return;
+      }
 
       const files: BatchFile[] = [];
       this.conversionProgress = 0;
@@ -1074,9 +1171,7 @@ export class BatcherApp extends LitElement {
       }
 
       this.addLog(
-        this.currentLang === "ko"
-          ? "ZIP 파일 압축 진행 중..."
-          : "Compressing ZIP archive...",
+        this.currentLang === "ko" ? "ZIP 파일 압축 진행 중..." : "Compressing ZIP archive...",
         "info",
       );
 
@@ -1115,6 +1210,213 @@ export class BatcherApp extends LitElement {
     }
   }
 
+  private get resourcePathSegments(): string[] {
+    if (this.resourceFiles.length === 0) {
+      return this.resourceDirHandle ? [this.resourceDirHandle.name] : [];
+    }
+    const sampleFile =
+      this.resourceFiles.find((f) => /\.(html|htm|css|js)$/i.test(f.name)) ||
+      this.resourceFiles[0];
+
+    const parts = sampleFile.relativePath.split("/").filter(Boolean);
+    parts.pop(); // Remove filename
+
+    const segments: string[] = [];
+    parts.forEach((p) => {
+      if (!segments.includes(p)) segments.push(p);
+    });
+
+    if (this.resourceDirHandle && !segments.includes(this.resourceDirHandle.name)) {
+      segments.unshift(this.resourceDirHandle.name);
+    }
+
+    return segments.slice(0, 8);
+  }
+
+  private handleSelectRootSegment(segment: string) {
+    this.resourceSelectedRootSegment = segment;
+    const rootName =
+      this.resourceDirHandle?.name ||
+      this.resourceFiles[0]?.relativePath?.split("/")[0] ||
+      (this.currentLang === "ko" ? "전체 프로젝트" : "Entire Project");
+
+    const targetName = segment || rootName;
+
+    this.addLog(
+      this.currentLang === "ko"
+        ? `[스캔 타겟 지정] '${targetName}' 폴더가 타겟으로 지정되었습니다. [스캔 시작] 버튼을 눌러 스캔을 실행하세요.`
+        : `[Target Selected] Set '${targetName}' as target. Click [Start Scan] when ready.`,
+      "info",
+    );
+  }
+
+  private async handleStartResourceScan() {
+    if (!this.resourceDirHandle && this.resourceFiles.length === 0) {
+      this.showAlert(
+        this.currentLang === "ko"
+          ? "분석할 파일이 존재하지 않습니다. 먼저 프로젝트 폴더를 선택해주세요."
+          : "No files to scan. Please select a project folder first.",
+        "error",
+      );
+      return;
+    }
+
+    // Reset scan result state immediately to clear stale lists
+    this.resourceScanResult = null;
+    this.isResourceScanning = true;
+
+    const targetScope = this.resourceSelectedRootSegment;
+
+    // Refresh file list directly from disk directory focusing on target subfolder scope
+    if (this.resourceDirHandle) {
+      try {
+        const freshFiles: BatchFile[] = [];
+
+        if (targetScope) {
+          this.addLog(
+            this.currentLang === "ko"
+              ? `[타겟 스캔 시작] 선택된 타겟 폴더 '${targetScope}' 디스크 탐색 중...`
+              : `[Target Scan] Scanning files in target '${targetScope}'...`,
+            "info",
+          );
+
+          // 1. Scan target subfolder
+          const targetHandle = await getNestedDirHandle(this.resourceDirHandle, targetScope, false);
+          if (targetHandle) {
+            await scanDirectory(targetHandle, targetScope, freshFiles, "*");
+          } else {
+            // Fallback: scan root if target handle lookup fails
+            await scanDirectory(this.resourceDirHandle, "", freshFiles, "*");
+          }
+
+          // 2. ALSO scan any shared include/ folders across workspace (e.g. contents/include, include)
+          const existingPaths = new Set(freshFiles.map((f) => f.relativePath));
+          const scanIncludeFolders = async (dirHandle: FileSystemDirectoryHandle, currentPath = "", depth = 0) => {
+            if (depth > 3) return;
+            try {
+              for await (const entry of dirHandle.values()) {
+                if (entry.kind === "directory") {
+                  const childPath = currentPath ? `${currentPath}/${entry.name}` : entry.name;
+                  if (entry.name.toLowerCase() === "include") {
+                    const incFiles: BatchFile[] = [];
+                    await scanDirectory(entry as FileSystemDirectoryHandle, childPath, incFiles, "*");
+                    incFiles.forEach((incFile) => {
+                      if (!existingPaths.has(incFile.relativePath)) {
+                        freshFiles.push(incFile);
+                        existingPaths.add(incFile.relativePath);
+                      }
+                    });
+                  } else if (entry.name !== ".svn" && entry.name !== ".git" && entry.name !== "node_modules") {
+                    await scanIncludeFolders(entry as FileSystemDirectoryHandle, childPath, depth + 1);
+                  }
+                }
+              }
+            } catch (e) {
+              // Ignore folder access errors
+            }
+          };
+
+          await scanIncludeFolders(this.resourceDirHandle, "", 0);
+        } else {
+          // No subfolder scope selected: scan root
+          this.addLog(
+            this.currentLang === "ko"
+              ? `[전체 정밀 검사] '${this.resourceDirHandle.name}' 전체 파일 탐색 중...`
+              : `[Full Scan] Scanning folder '${this.resourceDirHandle.name}'...`,
+            "info",
+          );
+          await scanDirectory(this.resourceDirHandle, "", freshFiles, "*");
+        }
+
+        this.resourceFiles = freshFiles;
+      } catch (err: any) {
+        console.warn("Failed to scan target directory handle from disk:", err);
+      }
+    }
+
+    this.addLog(
+      this.currentLang === "ko"
+        ? `[정밀 검사 진행 중] 총 ${this.resourceFiles.length}개 대상 파일 연관성 분석 중...`
+        : `[Analyzing Files] Checking ${this.resourceFiles.length} files...`,
+      "info",
+    );
+
+    try {
+      const result = await scanProjectResources(
+        this.resourceFiles,
+        this.resourceSelectedRootSegment,
+      );
+      this.resourceScanResult = result;
+
+      this.addLog(
+        this.currentLang === "ko"
+          ? `[검사 완료] 사용하지 않는 파일: ${result.unusedFiles.length}개, 잘못 연결된 링크: ${result.brokenLinks.length}개`
+          : `[Scan Complete] Unused files: ${result.unusedFiles.length}, Broken links: ${result.brokenLinks.length}`,
+        "success",
+      );
+    } catch (err: any) {
+      console.error(err);
+      this.addLog(`[Scan Error] ${err.message}`, "error");
+      this.showAlert(`Scan error: ${err.message}`, "error");
+    } finally {
+      this.isResourceScanning = false;
+    }
+  }
+
+  private async handleConfirmResourceCleanup(detail: {
+    selectedUnused: UnusedFileItem[];
+    selectedBroken: BrokenLinkItem[];
+  }) {
+    const { selectedUnused, selectedBroken } = detail;
+    this.isResourceExecuting = true;
+
+    this.addLog(
+      this.currentLang === "ko"
+        ? `[정리 진행] 사용하지 않는 파일 ${selectedUnused.length}개 삭제, 잘못 연결된 링크 ${selectedBroken.length}개 정리 시작...`
+        : `[Executing Cleanup] Deleting ${selectedUnused.length} files, updating ${selectedBroken.length} link entries...`,
+      "info",
+    );
+
+    try {
+      const res = await executeResourceCleanup({
+        unusedFilesToDelete: selectedUnused,
+        brokenLinksToClean: selectedBroken,
+        codeCleanMode: this.resourceCodeCleanMode,
+        dirHandle: this.resourceDirHandle,
+        outputDirHandle: null,
+        useFallback: this.useFallback,
+        onLog: (text, type) => this.addLog(text, type),
+        onProgress: (p) => {
+          this.conversionProgress = p;
+        },
+      });
+
+      this.addLog(
+        this.currentLang === "ko"
+          ? `[정리 완료] 사용하지 않는 파일 ${res.deletedFileCount}개 삭제 완료, 잘못 연결된 링크 ${res.cleanedCodeCount}개 정리 완료!`
+          : `[Cleanup Complete] Deleted ${res.deletedFileCount} files, updated ${res.cleanedCodeCount} link entries!`,
+        "success",
+      );
+
+      const msg =
+        this.currentLang === "ko"
+          ? `정리가 완벽하게 완료되었습니다!\n\n- 삭제된 물리 파일: ${res.deletedFileCount}개\n- 처리된 소스 코드: ${res.cleanedCodeCount}개`
+          : `Cleanup Complete!\n\n- Deleted Files: ${res.deletedFileCount}\n- Cleaned Code: ${res.cleanedCodeCount}`;
+
+      this.showAlert(msg, "success");
+
+      // Fast re-scan target scope to refresh scan results
+      await this.handleStartResourceScan();
+    } catch (err: any) {
+      console.error(err);
+      this.addLog(`[Cleanup Error] ${err.message}`, "error");
+      this.showAlert(`Cleanup error: ${err.message}`, "error");
+    } finally {
+      this.isResourceExecuting = false;
+      this.conversionProgress = 0;
+    }
+  }
+
   private resetAll() {
     if (this.activeTab === "svg") {
       this.svgDirHandle = null;
@@ -1124,10 +1426,14 @@ export class BatcherApp extends LitElement {
       this.audioDirHandle = null;
       this.audioOutputDirHandle = null;
       this.audioFiles = [];
-    } else {
+    } else if (this.activeTab === "rename") {
       this.renameDirHandle = null;
       this.renameFiles = [];
       this.renameHistoryStack = [];
+    } else {
+      this.resourceDirHandle = null;
+      this.resourceFiles = [];
+      this.resourceScanResult = null;
     }
     this.isConverting = false;
     this.conversionProgress = 0;
@@ -1167,6 +1473,7 @@ export class BatcherApp extends LitElement {
     const isSvg = this.activeTab === "svg";
     const isAudio = this.activeTab === "audio";
     const isRename = this.activeTab === "rename";
+    const isResource = this.activeTab === "resource";
 
     const currentFiles = this.activeFiles;
     const selectedFilesCount = currentFiles.filter((f) => f.selected).length;
@@ -1194,37 +1501,47 @@ export class BatcherApp extends LitElement {
 
         <!-- Tabs Navigation -->
         <div
-          class="flex items-center gap-2 p-1.5 bg-slate-900/40 border border-white/5 rounded-2xl w-full max-w-lg mx-auto mb-8 shadow-inner backdrop-blur-md"
+          class="flex items-center gap-2 p-1.5 bg-slate-900/40 border border-white/5 rounded-2xl w-full max-w-3xl mx-auto mb-8 shadow-inner backdrop-blur-md overflow-x-auto"
         >
           <button
             @click="${() => this.handleTabChange("svg")}"
-            ?disabled="${this.isConverting}"
-            class="flex-1 py-3 px-4 rounded-xl text-xs font-bold font-sans transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isSvg
+            ?disabled="${this.isConverting || this.isResourceScanning || this.isResourceExecuting}"
+            class="flex-1 py-3 px-4 rounded-xl text-xs font-bold font-sans whitespace-nowrap transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isSvg
               ? "bg-indigo-600 text-white shadow-[0_0_15px_rgba(99,102,241,0.3)]"
               : "text-slate-400 hover:text-slate-200"}"
           >
-            <i class="fa-solid fa-file-image"></i>
-            <span>${locales[this.currentLang].tabs.svg}</span>
+            <i class="fa-solid fa-file-image shrink-0"></i>
+            <span class="whitespace-nowrap">${locales[this.currentLang].tabs.svg}</span>
           </button>
           <button
             @click="${() => this.handleTabChange("audio")}"
-            ?disabled="${this.isConverting}"
-            class="flex-1 py-3 px-4 rounded-xl text-xs font-bold font-sans transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isAudio
+            ?disabled="${this.isConverting || this.isResourceScanning || this.isResourceExecuting}"
+            class="flex-1 py-3 px-4 rounded-xl text-xs font-bold font-sans whitespace-nowrap transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isAudio
               ? "bg-purple-600 text-white shadow-[0_0_15px_rgba(168,85,247,0.3)]"
               : "text-slate-400 hover:text-slate-200"}"
           >
-            <i class="fa-solid fa-music"></i>
-            <span>${locales[this.currentLang].tabs.audio}</span>
+            <i class="fa-solid fa-music shrink-0"></i>
+            <span class="whitespace-nowrap">${locales[this.currentLang].tabs.audio}</span>
           </button>
           <button
             @click="${() => this.handleTabChange("rename")}"
-            ?disabled="${this.isConverting}"
-            class="flex-1 py-3 px-4 rounded-xl text-xs font-bold font-sans transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isRename
+            ?disabled="${this.isConverting || this.isResourceScanning || this.isResourceExecuting}"
+            class="flex-1 py-3 px-4 rounded-xl text-xs font-bold font-sans whitespace-nowrap transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isRename
               ? "bg-pink-600 text-white shadow-[0_0_15px_rgba(236,72,153,0.3)]"
               : "text-slate-400 hover:text-slate-200"}"
           >
-            <i class="fa-solid fa-file-signature"></i>
-            <span>${locales[this.currentLang].tabs.rename}</span>
+            <i class="fa-solid fa-file-signature shrink-0"></i>
+            <span class="whitespace-nowrap">${locales[this.currentLang].tabs.rename}</span>
+          </button>
+          <button
+            @click="${() => this.handleTabChange("resource")}"
+            ?disabled="${this.isConverting || this.isResourceScanning || this.isResourceExecuting}"
+            class="flex-1 py-3 px-4 rounded-xl text-xs font-bold font-sans whitespace-nowrap transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isResource
+              ? "bg-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+              : "text-slate-400 hover:text-slate-200"}"
+          >
+            <i class="fa-solid fa-broom shrink-0"></i>
+            <span class="whitespace-nowrap">${locales[this.currentLang].tabs.resource}</span>
           </button>
         </div>
 
@@ -1256,7 +1573,6 @@ export class BatcherApp extends LitElement {
         <!-- Main Layout Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start flex-1">
           <!-- Left Control Settings Panel (cols-5) -->
-          <!-- Left Control Settings Panel (cols-5) -->
           <div class="lg:col-span-5">
             ${isSvg
               ? html`
@@ -1277,7 +1593,8 @@ export class BatcherApp extends LitElement {
                     @reset-output-folder="${() => (this.svgOutputDirHandle = null)}"
                     @upload-files="${(e: CustomEvent) => this.handleFallbackUpload(e.detail)}"
                     @drop-files="${this.handleDropFiles}"
-                    @drop-folder="${(e: CustomEvent<FileSystemDirectoryHandle>) => this.handleDropFolder(e.detail)}"
+                    @drop-folder="${(e: CustomEvent<FileSystemDirectoryHandle>) =>
+                      this.handleDropFolder(e.detail)}"
                     @load-sample="${this.loadSampleFile}"
                     @change-format="${(e: CustomEvent<"png" | "jpg">) =>
                       (this.exportFormat = e.detail)}"
@@ -1305,7 +1622,8 @@ export class BatcherApp extends LitElement {
                       @reset-output-folder="${() => (this.audioOutputDirHandle = null)}"
                       @upload-files="${(e: CustomEvent) => this.handleFallbackUpload(e.detail)}"
                       @drop-files="${this.handleDropFiles}"
-                      @drop-folder="${(e: CustomEvent<FileSystemDirectoryHandle>) => this.handleDropFolder(e.detail)}"
+                      @drop-folder="${(e: CustomEvent<FileSystemDirectoryHandle>) =>
+                        this.handleDropFolder(e.detail)}"
                       @load-sample="${this.loadSampleFile}"
                       @change-bitrate="${(e: CustomEvent<number>) =>
                         (this.audioBitrate = e.detail)}"
@@ -1314,48 +1632,75 @@ export class BatcherApp extends LitElement {
                       @change-input-exts="${this.handleChangeInputExts}"
                     ></audio-settings-panel>
                   `
-                : html`
-                    <renamer-settings-panel
-                      .lang="${this.currentLang}"
-                      .apiSupported="${this.apiSupported}"
-                      .dirHandle="${this.renameDirHandle}"
-                      .filesCount="${this.renameFiles.length}"
-                      .extFilter="${this.renameExtFilter}"
-                      .isConverting="${this.isConverting}"
-                      .conversionProgress="${this.conversionProgress}"
-                      @select-folder="${this.selectFolder}"
-                      @upload-files="${(e: CustomEvent) => this.handleFallbackUpload(e.detail)}"
-                      @drop-files="${this.handleDropFiles}"
-                      @drop-folder="${(e: CustomEvent<FileSystemDirectoryHandle>) => this.handleDropFolder(e.detail)}"
-                      @load-sample="${this.loadSampleFile}"
-                      @change-ext-filter="${(e: CustomEvent<string>) => {
-                        this.renameExtFilter = e.detail;
-                        if (this.renameDirHandle) {
-                           this.reScanRenameDirectory();
-                        }
-                      }}"
-                      @apply-replace="${this.handleApplyReplace}"
-                      @apply-prefix="${this.handleApplyPrefix}"
-                      @apply-suffix="${this.handleApplySuffix}"
-                      @apply-remove="${this.handleApplyRemove}"
-                      @apply-keep-numbers="${this.handleKeepNumbers}"
-                      @apply-remove-brackets="${this.handleRemoveBrackets}"
-                      @apply-numbering="${this.handleApplyNumbering}"
-                      @apply-extension="${this.handleApplyExtension}"
-                      @apply-clear-filename="${this.handleApplyClearFilename}"
-                      @undo-rename="${this.handleUndoRename}"
-                      @reset-names="${this.handleResetNames}"
-                      @delete-selected="${this.handleDeleteSelectedFiles}"
-                      @clear-all-files="${this.resetAll}"
-                    ></renamer-settings-panel>
-                  `}
+                : isRename
+                  ? html`
+                      <renamer-settings-panel
+                        .lang="${this.currentLang}"
+                        .apiSupported="${this.apiSupported}"
+                        .dirHandle="${this.renameDirHandle}"
+                        .filesCount="${this.renameFiles.length}"
+                        .extFilter="${this.renameExtFilter}"
+                        .isConverting="${this.isConverting}"
+                        .conversionProgress="${this.conversionProgress}"
+                        @select-folder="${this.selectFolder}"
+                        @upload-files="${(e: CustomEvent) => this.handleFallbackUpload(e.detail)}"
+                        @drop-files="${this.handleDropFiles}"
+                        @drop-folder="${(e: CustomEvent<FileSystemDirectoryHandle>) =>
+                          this.handleDropFolder(e.detail)}"
+                        @load-sample="${this.loadSampleFile}"
+                        @change-ext-filter="${(e: CustomEvent<string>) => {
+                          this.renameExtFilter = e.detail;
+                          if (this.renameDirHandle) {
+                            this.reScanRenameDirectory();
+                          }
+                        }}"
+                        @apply-replace="${this.handleApplyReplace}"
+                        @apply-prefix="${this.handleApplyPrefix}"
+                        @apply-suffix="${this.handleApplySuffix}"
+                        @apply-remove="${this.handleApplyRemove}"
+                        @apply-keep-numbers="${this.handleKeepNumbers}"
+                        @apply-remove-brackets="${this.handleRemoveBrackets}"
+                        @apply-numbering="${this.handleApplyNumbering}"
+                        @apply-extension="${this.handleApplyExtension}"
+                        @apply-clear-filename="${this.handleApplyClearFilename}"
+                        @undo-rename="${this.handleUndoRename}"
+                        @reset-names="${this.handleResetNames}"
+                        @delete-selected="${this.handleDeleteSelectedFiles}"
+                        @clear-all-files="${this.resetAll}"
+                      ></renamer-settings-panel>
+                    `
+                  : html`
+                      <cleaner-settings-panel
+                        .lang="${this.currentLang}"
+                        .apiSupported="${this.apiSupported}"
+                        .dirHandle="${this.resourceDirHandle}"
+                        .resourceFiles="${this.resourceFiles}"
+                        .filesCount="${this.resourceFiles.length}"
+                        .isScanning="${this.isResourceScanning}"
+                        .codeCleanMode="${this.resourceCodeCleanMode}"
+                        .samplePathSegments="${this.resourcePathSegments}"
+                        .selectedRootSegment="${this.resourceSelectedRootSegment}"
+                        @select-folder="${this.selectFolder}"
+                        @select-folder-handle="${(
+                          e: CustomEvent<{ handle: FileSystemDirectoryHandle }>,
+                        ) => {
+                          this.handleDropFolder(e.detail.handle);
+                        }}"
+                        @fallback-upload="${(e: CustomEvent) =>
+                          this.handleFallbackUpload(e.detail)}"
+                        @change-clean-mode="${(e: CustomEvent<{ mode: CodeCleanMode }>) =>
+                          (this.resourceCodeCleanMode = e.detail.mode)}"
+                        @select-root-segment="${(e: CustomEvent<{ segment: string }>) =>
+                          this.handleSelectRootSegment(e.detail.segment)}"
+                      ></cleaner-settings-panel>
+                    `}
           </div>
- 
+
           <!-- Right Real-Time Display & Logger Panel (cols-7) -->
           <div class="lg:col-span-7 space-y-6 flex flex-col">
             <!-- AdSense Top Banner Slot -->
             <div
-              class="p-3 bg-slate-900/40 border border-slate-800/40 rounded-2xl flex flex-col items-center justify-center min-h-[90px] relative overflow-hidden group"
+              class="p-3 bg-slate-900/40 border border-slate-800/40 rounded-2xl flex flex-col items-center justify-center min-h-22.5 relative overflow-hidden group"
             >
               <div
                 class="absolute inset-0 bg-linear-to-r from-indigo-500/5 via-purple-500/5 to-pink-500/5 opacity-50"
@@ -1373,27 +1718,44 @@ export class BatcherApp extends LitElement {
                   : "Google AdSense Responsive Ad Placement"}
               </div>
             </div>
- 
-            <!-- File List Queue -->
-            <file-queue
-              .lang="${this.currentLang}"
-              .files="${currentFiles}"
-              .isConverting="${this.isConverting}"
-              .activeTab="${this.activeTab}"
-              @toggle-file-selected="${this.handleToggleFileSelected}"
-              @toggle-all-files="${this.handleToggleAllFiles}"
-              @delete-file="${this.handleDeleteFile}"
-              @drop-files="${this.handleDropFiles}"
-              @drop-folder="${(e: CustomEvent<FileSystemDirectoryHandle>) => this.handleDropFolder(e.detail)}"
-              @load-sample="${this.loadSampleFile}"
-              @change-file-new-name="${this.handleChangeFileNewName}"
-              @delete-selected-from-queue="${this.handleDeleteSelectedFromQueue}"
-              @download-originals="${this.handleDownloadOriginals}"
-            ></file-queue>
+
+            <!-- Main Right Card (File List Queue OR Scan Results Card) -->
+            ${isResource
+              ? html`
+                  <cleaner-results-view
+                    .lang="${this.currentLang}"
+                    .scanResult="${this.resourceScanResult}"
+                    .isExecuting="${this.isResourceExecuting}"
+                    @confirm-cleanup="${(
+                      e: CustomEvent<{
+                        selectedUnused: UnusedFileItem[];
+                        selectedBroken: BrokenLinkItem[];
+                      }>,
+                    ) => this.handleConfirmResourceCleanup(e.detail)}"
+                  ></cleaner-results-view>
+                `
+              : html`
+                  <file-queue
+                    .lang="${this.currentLang}"
+                    .files="${currentFiles}"
+                    .isConverting="${this.isConverting}"
+                    .activeTab="${this.activeTab}"
+                    @toggle-file-selected="${this.handleToggleFileSelected}"
+                    @toggle-all-files="${this.handleToggleAllFiles}"
+                    @delete-file="${this.handleDeleteFile}"
+                    @drop-files="${this.handleDropFiles}"
+                    @drop-folder="${(e: CustomEvent<FileSystemDirectoryHandle>) =>
+                      this.handleDropFolder(e.detail)}"
+                    @load-sample="${this.loadSampleFile}"
+                    @change-file-new-name="${this.handleChangeFileNewName}"
+                    @delete-selected-from-queue="${this.handleDeleteSelectedFromQueue}"
+                    @download-originals="${this.handleDownloadOriginals}"
+                  ></file-queue>
+                `}
 
             <!-- AdSense Middle Slot -->
             <div
-              class="p-3 bg-slate-900/40 border border-slate-800/40 rounded-2xl flex flex-col items-center justify-center min-h-[90px] relative overflow-hidden group"
+              class="p-3 bg-slate-900/40 border border-slate-800/40 rounded-2xl flex flex-col items-center justify-center min-h-22.5 relative overflow-hidden group"
             >
               <div
                 class="absolute inset-0 bg-linear-to-r from-emerald-500/5 via-indigo-500/5 to-purple-500/5 opacity-50"
@@ -1427,13 +1789,13 @@ export class BatcherApp extends LitElement {
         class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl bg-[rgba(255,255,255,0.75)] dark:bg-[rgba(15,23,42,0.65)] backdrop-blur-[13px] backdrop-saturate-183 border border-[rgba(255,255,255,0.35)] dark:border-white/10 py-4.5 px-6 z-40 rounded-3xl shadow-[0px_8px_32px_rgba(31,38,135,0.25)] dark:shadow-[0px_15px_50px_rgba(0,0,0,0.6)] transition-all duration-300 hover:border-[rgba(255,255,255,0.5)] dark:hover:border-white/15"
       >
         <!-- Progress bar along the top inner edge -->
-        ${this.isConverting || this.conversionProgress > 0
+        ${this.isConverting || this.isResourceScanning || this.conversionProgress > 0
           ? html`
               <div
                 class="absolute top-0 left-6 right-6 h-1 bg-slate-950/20 dark:bg-white/10 rounded-full overflow-hidden"
               >
                 <div
-                  class="progress-bar-inner h-full bg-linear-to-r from-indigo-500 via-purple-500 to-emerald-500 transition-all duration-300 shadow-[0_0_8px_rgba(99,102,241,0.6)]"
+                  class="progress-bar-inner h-full bg-linear-to-r from-emerald-500 via-teal-500 to-indigo-500 transition-all duration-300 shadow-[0_0_8px_rgba(16,185,129,0.6)]"
                 ></div>
               </div>
             `
@@ -1501,18 +1863,36 @@ export class BatcherApp extends LitElement {
                 >
                   <div class="flex items-center gap-2">
                     <span
-                      class="w-2 h-2 rounded-full ${selectedFilesCount > 0
-                        ? "bg-indigo-400 animate-ping"
-                        : "bg-slate-300 dark:bg-slate-700"}"
+                      class="w-2 h-2 rounded-full ${isResource
+                        ? (this.resourceDirHandle || this.resourceFiles.length > 0)
+                          ? "bg-emerald-400 animate-ping"
+                          : "bg-slate-700"
+                        : selectedFilesCount > 0
+                          ? "bg-indigo-400 animate-ping"
+                          : "bg-slate-300 dark:bg-slate-700"}"
                     ></span>
                     <span>
-                      ${activeT.waitingFiles}
+                      ${isResource
+                        ? this.currentLang === "ko"
+                          ? "대상 파일"
+                          : "Target Files"
+                        : activeT.waitingFiles}
                       <strong class="text-slate-100 font-extrabold">
-                        ${selectedFilesCount}${this.currentLang === "ko" ? "개" : ""}
+                        ${isResource
+                          ? this.resourceFiles.length > 0
+                            ? `${this.resourceFiles.length}개`
+                            : this.resourceDirHandle
+                              ? `${this.resourceSelectedRootSegment || this.resourceDirHandle.name}`
+                              : "0개"
+                          : selectedFilesCount}
                       </strong>
-                      <span class="text-slate-500 dark:text-slate-500 font-normal">
-                        / ${currentFiles.length}${this.currentLang === "ko" ? "개" : ""}
-                      </span>
+                      ${!isResource
+                        ? html`
+                            <span class="text-slate-500 dark:text-slate-500 font-normal">
+                              / ${currentFiles.length}${this.currentLang === "ko" ? "개" : ""}
+                            </span>
+                          `
+                        : ""}
                     </span>
                   </div>
 
@@ -1546,23 +1926,35 @@ export class BatcherApp extends LitElement {
                             >
                           </span>
                         `
-                      : html`
-                          <span class="text-black/10 dark:text-white/10 hidden md:inline">|</span>
-                          <span>
-                            ${this.currentLang === "ko" ? "모드" : "Mode"}:
-                            <strong
-                              class="text-pink-600 dark:text-pink-400 uppercase font-extrabold"
-                              >${this.currentLang === "ko"
-                                ? "파일 일괄 변경"
-                                : "Batch Rename"}</strong
-                            >
-                          </span>
-                        `}
+                      : isResource
+                        ? html`
+                            <span class="text-black/10 dark:text-white/10 hidden md:inline">|</span>
+                            <span>
+                              ${this.currentLang === "ko" ? "모드" : "Mode"}:
+                              <strong class="text-emerald-400 uppercase font-extrabold"
+                                >${this.currentLang === "ko"
+                                  ? "미사용 파일 정리"
+                                  : "Unused Files Cleaner"}</strong
+                              >
+                            </span>
+                          `
+                        : html`
+                            <span class="text-black/10 dark:text-white/10 hidden md:inline">|</span>
+                            <span>
+                              ${this.currentLang === "ko" ? "모드" : "Mode"}:
+                              <strong
+                                class="text-pink-600 dark:text-pink-400 uppercase font-extrabold"
+                                >${this.currentLang === "ko"
+                                  ? "파일 일괄 변경"
+                                  : "Batch Rename"}</strong
+                              >
+                            </span>
+                          `}
                 </div>
               `}
 
           <div class="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end">
-            ${currentFiles.length > 0
+            ${currentFiles.length > 0 && !isResource
               ? html`
                   <button
                     @click="${this.resetAll}"
@@ -1574,52 +1966,85 @@ export class BatcherApp extends LitElement {
                   </button>
                 `
               : ""}
-
-            <button
-              @click="${this.startConversion}"
-              ?disabled="${this.isConverting || selectedFilesCount === 0}"
-              class="flex-1 md:flex-initial w-full md:w-auto px-8 py-3 bg-linear-to-r ${isSvg
-                ? "from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500"
-                : isAudio
-                  ? "from-purple-600 via-fuchsia-600 to-pink-600 hover:from-purple-500 hover:via-fuchsia-500 hover:to-pink-500"
-                  : "from-pink-600 via-rose-600 to-red-600 hover:from-pink-500 hover:via-rose-500 hover:to-red-500"} disabled:bg-none disabled:bg-black/5 dark:disabled:bg-white/5 disabled:text-black/30 dark:disabled:text-white/30 disabled:border-black/5 dark:disabled:border-white/5 disabled:cursor-not-allowed disabled:shadow-none hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] active:scale-[0.97] text-white font-bold text-sm tracking-wide rounded-xl border border-white/20 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shrink-0"
-            >
-              ${this.isConverting
-                ? html`
-                    <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                      <circle
-                        class="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        stroke-width="4"
-                      ></circle>
-                      <path
-                        class="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    <span
-                      >${isRename
-                        ? this.currentLang === "ko"
-                          ? "변경 중..."
-                          : "Renaming..."
-                        : activeT.btnConverting}</span
-                    >
-                  `
-                : html`
-                    <i class="fa-solid fa-play text-[10px]"></i>
-                    <span
-                      >${isRename
-                        ? this.currentLang === "ko"
-                          ? "이름 변경 적용"
-                          : "Apply Rename"
-                        : activeT.btnConvert}</span
-                    >
-                  `}
-            </button>
+            ${isResource
+              ? html`
+                  <button
+                    @click="${this.handleStartResourceScan}"
+                    ?disabled="${this.isResourceScanning || (!this.resourceDirHandle && this.resourceFiles.length === 0)}"
+                    class="flex-1 md:flex-initial w-full md:w-auto px-8 py-3 bg-linear-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:via-teal-500 hover:to-cyan-500 disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold text-sm tracking-wide rounded-xl border border-white/20 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shrink-0"
+                  >
+                    ${this.isResourceScanning
+                      ? html`
+                          <i class="fa-solid fa-spinner fa-spin text-xs"></i>
+                          <span
+                            >${this.currentLang === "ko" ? "파일 검사 중..." : "Scanning files..."}</span
+                          >
+                        `
+                      : html`
+                          <i class="fa-solid fa-magnifying-glass-chart text-xs"></i>
+                          <span
+                            >${this.resourceScanResult
+                              ? this.currentLang === "ko"
+                                ? "다시 검사하기"
+                                : "Rescan Folder"
+                              : this.currentLang === "ko"
+                                ? "검사 시작"
+                                : "Start Scan"}</span
+                          >
+                        `}
+                  </button>
+                `
+              : html`
+                  <button
+                    @click="${this.startConversion}"
+                    ?disabled="${this.isConverting || selectedFilesCount === 0}"
+                    class="flex-1 md:flex-initial w-full md:w-auto px-8 py-3 bg-linear-to-r ${isSvg
+                      ? "from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500"
+                      : isAudio
+                        ? "from-purple-600 via-fuchsia-600 to-pink-600 hover:from-purple-500 hover:via-fuchsia-500 hover:to-pink-500"
+                        : "from-pink-600 via-rose-600 to-red-600 hover:from-pink-500 hover:via-rose-500 hover:to-red-500"} disabled:bg-none disabled:bg-black/5 dark:disabled:bg-white/5 disabled:text-black/30 dark:disabled:text-white/30 disabled:border-black/5 dark:disabled:border-white/5 disabled:cursor-not-allowed disabled:shadow-none hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] active:scale-[0.97] text-white font-bold text-sm tracking-wide rounded-xl border border-white/20 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shrink-0"
+                  >
+                    ${this.isConverting
+                      ? html`
+                          <svg
+                            class="animate-spin h-4 w-4 text-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              class="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              stroke-width="4"
+                            ></circle>
+                            <path
+                              class="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          <span
+                            >${isRename
+                              ? this.currentLang === "ko"
+                                ? "변경 중..."
+                                : "Renaming..."
+                              : activeT.btnConverting}</span
+                          >
+                        `
+                      : html`
+                          <i class="fa-solid fa-play text-[10px]"></i>
+                          <span
+                            >${isRename
+                              ? this.currentLang === "ko"
+                                ? "이름 변경 적용"
+                                : "Apply Rename"
+                              : activeT.btnConvert}</span
+                          >
+                        `}
+                  </button>
+                `}
           </div>
         </div>
       </div>
