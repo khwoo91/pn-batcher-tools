@@ -19,12 +19,16 @@ export class CleanerSettingsPanel extends LitElement {
     const saved = localStorage.getItem("pn-batcher-cleaner-settings-open");
     return saved !== "false";
   })();
+  @state() private isOptionsOpen = (() => {
+    const saved = localStorage.getItem("pn-batcher-cleaner-options-open");
+    return saved !== "false";
+  })();
 
   protected override createRenderRoot() {
     return this;
   }
 
-  private handleDetailsToggle(e: Event) {
+  private handleDetailsToggle(e: Event, key: "settings" | "options" = "settings") {
     e.preventDefault();
     const summary = e.currentTarget as HTMLElement;
     const details = summary.parentElement as HTMLDetailsElement;
@@ -34,6 +38,11 @@ export class CleanerSettingsPanel extends LitElement {
     if (!content) return;
 
     if (details.dataset.transitioning === "true") return;
+
+    const storageKey =
+      key === "settings"
+        ? "pn-batcher-cleaner-settings-open"
+        : "pn-batcher-cleaner-options-open";
 
     if (details.open) {
       details.dataset.transitioning = "true";
@@ -53,8 +62,12 @@ export class CleanerSettingsPanel extends LitElement {
           content.style.opacity = "";
           content.style.transition = "";
           delete details.dataset.transitioning;
-          this.isSettingsOpen = false;
-          localStorage.setItem("pn-batcher-cleaner-settings-open", "false");
+          if (key === "settings") {
+            this.isSettingsOpen = false;
+          } else {
+            this.isOptionsOpen = false;
+          }
+          localStorage.setItem(storageKey, "false");
         }
       };
       content.addEventListener("transitionend", onEnd);
@@ -79,8 +92,12 @@ export class CleanerSettingsPanel extends LitElement {
           content.style.opacity = "";
           content.style.transition = "";
           delete details.dataset.transitioning;
-          this.isSettingsOpen = true;
-          localStorage.setItem("pn-batcher-cleaner-settings-open", "true");
+          if (key === "settings") {
+            this.isSettingsOpen = true;
+          } else {
+            this.isOptionsOpen = true;
+          }
+          localStorage.setItem(storageKey, "true");
         }
       };
       content.addEventListener("transitionend", onEnd);
@@ -312,8 +329,9 @@ export class CleanerSettingsPanel extends LitElement {
     ];
 
     return html`
+      <!-- Card 1: Target Folder & Folder Structure Explorer -->
       <details
-        class="group bg-slate-900/80 backdrop-blur-md rounded-2xl border border-slate-800 p-0 mb-6 shadow-xl text-slate-200 overflow-hidden [&_summary::-webkit-details-marker]:hidden"
+        class="group bg-slate-900/80 backdrop-blur-md rounded-2xl border border-slate-800 p-0 mb-4 shadow-xl text-slate-200 overflow-hidden [&_summary::-webkit-details-marker]:hidden"
         ?open="${this.isSettingsOpen}"
       >
         <!-- Panel Header (Summary) -->
@@ -328,12 +346,12 @@ export class CleanerSettingsPanel extends LitElement {
               <i class="fa-solid fa-broom text-lg"></i>
             </div>
             <div>
-              <h2 class="font-bold text-slate-100 text-lg tracking-wide">
-                ${isKo ? "사용하지 않는 파일 및 링크 정리" : "Unused File & Link Cleaner"}
+              <h2 class="font-bold text-slate-100 text-base tracking-wide">
+                ${isKo ? "대상 폴더 디렉토리(경로) 설정" : "Target Folder Directory(Path) Setting"}
               </h2>
               <p class="text-xs text-slate-400">
                 ${isKo
-                  ? "웹페이지 및 폴더 내 사용하지 않는 파일과 잘못 연결된 링크를 찾아 정리합니다."
+                  ? "해당 폴더 내 사용하지 않는 파일과 잘못 연결된 링크를 찾아 정리합니다."
                   : "Find and clean unlinked files and broken links in your folder"}
               </p>
             </div>
@@ -347,7 +365,7 @@ export class CleanerSettingsPanel extends LitElement {
 
         <!-- Collapsible Content Wrapper with Smooth Height & Opacity Animation -->
         <div class="overflow-hidden">
-          <div class="px-5 pb-5 pt-2 border-t border-slate-800/80 space-y-5">
+          <div class="px-5 pb-5 pt-2 border-t border-slate-800/80 space-y-4">
             <!-- Folder Selection Area -->
             ${this.dirHandle || this.resourceFiles.length > 0
               ? html`
@@ -531,61 +549,88 @@ export class CleanerSettingsPanel extends LitElement {
                     </div>
                   </div>
                 `}
+          </div>
+        </div>
+      </details>
 
-            <!-- Options Section Header -->
+      <!-- Card 2: Collapsible Options Card for Cleanup Method Selection -->
+      <details
+        class="group bg-slate-900/80 backdrop-blur-md rounded-2xl border border-slate-800 p-0 mb-6 shadow-xl text-slate-200 overflow-hidden [&_summary::-webkit-details-marker]:hidden"
+        ?open="${this.isOptionsOpen}"
+      >
+        <!-- Card 2 Header (Summary) -->
+        <summary
+          class="flex items-center justify-between cursor-pointer select-none p-5 transition-colors hover:bg-slate-800/30 list-none focus:outline-none"
+          @click="${(e: Event) => this.handleDetailsToggle(e, "options")}"
+        >
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-700 dark:text-emerald-400"
+            >
+              <i class="fa-solid fa-sliders text-lg"></i>
+            </div>
             <div>
-              <h3
-                class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center space-x-2 mb-3"
-              >
-                <i class="fa-solid fa-sliders text-emerald-700 dark:text-emerald-400"></i>
-                <span>${isKo ? "정리 방식 선택" : "Cleanup Method"}</span>
+              <h3 class="font-bold text-slate-100 text-base tracking-wide">
+                ${isKo ? "정리 방식 선택" : "Cleanup Method"}
               </h3>
+              <p class="text-xs text-slate-400">
+                ${isKo
+                  ? "프로젝트 분석 후 수행할 정리 작업 방식을 선택합니다."
+                  : "Select the action strategy to execute after analysis"}
+              </p>
             </div>
+          </div>
+          <button
+            class="text-slate-400 hover:text-slate-200 transition-transform duration-200 group-open:rotate-180"
+          >
+            <i class="fa-solid fa-chevron-down cursor-pointer"></i>
+          </button>
+        </summary>
 
-            <!-- Option Selector Cards -->
-            <div class="space-y-2.5">
-              ${optionsList.map((opt) => {
-                const isSelected = this.codeCleanMode === opt.mode;
-                return html`
+        <!-- Card 2 Collapsible Content -->
+        <div class="overflow-hidden">
+          <div class="px-5 pb-5 pt-2 border-t border-slate-800/80 space-y-2.5">
+            ${optionsList.map((opt) => {
+              const isSelected = this.codeCleanMode === opt.mode;
+              return html`
+                <div
+                  @click="${() => this.selectMode(opt.mode)}"
+                  class="p-3.5 rounded-xl border transition-colors duration-150 cursor-pointer select-none flex items-start space-x-3 ${isSelected
+                    ? "bg-emerald-500/10 dark:bg-emerald-500/15 border-emerald-500/50 shadow-md shadow-emerald-950/10 dark:shadow-emerald-950/20"
+                    : "bg-slate-950/40 border-slate-800/80 hover:border-slate-700 hover:bg-slate-950/70"}"
+                >
                   <div
-                    @click="${() => this.selectMode(opt.mode)}"
-                    class="p-3.5 rounded-xl border transition-colors duration-150 cursor-pointer select-none flex items-start space-x-3 ${isSelected
-                      ? "bg-emerald-500/10 dark:bg-emerald-500/15 border-emerald-500/50 shadow-md shadow-emerald-950/10 dark:shadow-emerald-950/20"
-                      : "bg-slate-950/40 border-slate-800/80 hover:border-slate-700 hover:bg-slate-950/70"}"
+                    class="mt-0.5 w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-colors duration-150 ${isSelected
+                      ? "border-emerald-600 bg-emerald-600 dark:border-emerald-400 dark:bg-emerald-500 text-white dark:text-slate-950"
+                      : "border-slate-700 bg-slate-900 text-transparent"}"
                   >
-                    <div
-                      class="mt-0.5 w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-colors duration-150 ${isSelected
-                        ? "border-emerald-600 bg-emerald-600 dark:border-emerald-400 dark:bg-emerald-500 text-white dark:text-slate-950"
-                        : "border-slate-700 bg-slate-900 text-transparent"}"
-                    >
-                      <i class="fa-solid fa-check text-[10px]"></i>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <div class="flex items-center justify-between gap-2">
-                        <span
-                          class="text-xs font-bold transition-colors duration-150 truncate ${isSelected
-                            ? "text-emerald-800 dark:text-emerald-300"
-                            : "text-slate-200"}"
-                        >
-                          <i class="fa-solid ${opt.icon} mr-1.5 opacity-70"></i>
-                          ${isKo ? opt.labelKo : opt.labelEn}
-                        </span>
-                        <span
-                          class="px-2 py-0.5 rounded text-[10px] font-bold border transition-colors duration-150 shrink-0 ${isSelected
-                            ? "bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/30"
-                            : "bg-slate-800 text-slate-400 border-transparent"}"
-                        >
-                          ${isKo ? opt.tagKo : opt.tagEn}
-                        </span>
-                      </div>
-                      <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">
-                        ${isKo ? opt.descKo : opt.descEn}
-                      </p>
-                    </div>
+                    <i class="fa-solid fa-check text-[10px]"></i>
                   </div>
-                `;
-              })}
-            </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2">
+                      <span
+                        class="text-xs font-bold transition-colors duration-150 truncate ${isSelected
+                          ? "text-emerald-800 dark:text-emerald-300"
+                          : "text-slate-200"}"
+                      >
+                        <i class="fa-solid ${opt.icon} mr-1.5 opacity-70"></i>
+                        ${isKo ? opt.labelKo : opt.labelEn}
+                      </span>
+                      <span
+                        class="px-2 py-0.5 rounded text-[10px] font-bold border transition-colors duration-150 shrink-0 ${isSelected
+                          ? "bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/30"
+                          : "bg-slate-800 text-slate-400 border-transparent"}"
+                      >
+                        ${isKo ? opt.tagKo : opt.tagEn}
+                      </span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                      ${isKo ? opt.descKo : opt.descEn}
+                    </p>
+                  </div>
+                </div>
+              `;
+            })}
           </div>
         </div>
       </details>
