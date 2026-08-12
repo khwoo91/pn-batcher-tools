@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "gitpush": "git add . && git commit -m 'update' && git push"
+    "gitpush": "node -e \"const t=new Date().toLocaleString('sv'); require('child_process').execSync(`git add . && git commit -m \\\"update ${t}\\\" && git push`,{stdio:'inherit'})\""
   },
   "dependencies": {
     "@breezystack/lamejs": "^1.2.7",
