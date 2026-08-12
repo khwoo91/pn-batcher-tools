@@ -85,6 +85,31 @@
       ]
     }
   </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "웹 브라우저에서 대량 파일 이름을 한 번에 변경하고 SVG/오디오를 변환하는 방법",
+      "description": "서버 업로드 없이 100% 사용자의 브라우저 로컬 메모리에서 대량의 파일 이름을 한 번에 바꾸고, SVG 이미지를 고화질 PNG/JPG로 변환하며, WAV 오디오를 MP3로 인코딩하는 방법입니다.",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "파일 또는 폴더 선택",
+          "text": "변환하거나 파일명을 변경할 파일/폴더를 웹 브라우저 화면으로 드래그 앤 드롭하거나 폴더 선택 버튼을 클릭합니다."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "변환 규칙 및 옵션 설정",
+          "text": "SVG 배율(@2x, @3x), 오디오 비트레이트(128kbps~320kbps), 문자열 치환/일련번호/정규식 등의 이름 변경 규칙을 설정합니다."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "일괄 변환 및 원클릭 다운로드",
+          "text": "변환 및 적용 버튼을 누르면 서버 전송 없이 100% 로컬에서 가공된 결과물 파일이나 ZIP 압축파일을 즉시 다운로드합니다."
+        }
+      ]
+    }
+  </script>
 
   <link rel="stylesheet" href="./src/index.css" />
   <script type="module" src="/src/batcher-app.ts"></script>
@@ -105,6 +130,248 @@
 
   <!-- Lit Component Container -->
   <batcher-app class="block min-h-screen relative z-20"></batcher-app>
+
+  <!-- Static SEO Feature Summary & Guide Cards Section for Crawlers & Users (KO) -->
+  <section id="features-summary-ko" class="max-w-7xl mx-auto px-6 pt-12 pb-8 relative z-10">
+    <!-- Static Pre-rendered Features Overview for Search Crawlers -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
+        <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg">
+          <i class="fa-solid fa-file-image"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-100 mb-2 font-sans">SVG 고화질 변환</h3>
+        <p class="text-xs text-slate-400 leading-relaxed font-sans">
+          SVG 벡터 이미지를 1.0x, 1.5x, 2.0x, 3.0x 고해상도 PNG/JPG로 손실 없이 일괄 래스터화 내보내기합니다.
+        </p>
+      </div>
+
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
+        <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-4 text-lg">
+          <i class="fa-solid fa-music"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-100 mb-2 font-sans">WAV / MP3 오디오 변환</h3>
+        <p class="text-xs text-slate-400 leading-relaxed font-sans">
+          대용량 WAV 음원을 128kbps~320kbps 맞춤 비트레이트로 브라우저에서 직접 MP3 인코딩합니다.
+        </p>
+      </div>
+
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
+        <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 mb-4 text-lg">
+          <i class="fa-solid fa-file-signature"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-100 mb-2 font-sans">대량 파일명 일괄 변경</h3>
+        <p class="text-xs text-slate-400 leading-relaxed font-sans">
+          문자열 치환, 접두사/접미사, 정규식(Regex), 일련번호 부여로 수백 개 파일 이름을 한 번에 리네이밍합니다.
+        </p>
+      </div>
+
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4 text-lg">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-100 mb-2 font-sans">100% 로컬 데이터 보안</h3>
+        <p class="text-xs text-slate-400 leading-relaxed font-sans">
+          서버 업로드 없이 사용자의 웹 브라우저 메모리 안에서 모든 가공이 완료되므로 프라이버시가 안전합니다.
+        </p>
+      </div>
+    </div>
+
+    <!-- Featured Guides Links Grid (Crawler Internal Link Optimization) -->
+    <div class="mb-8">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-100 font-sans tracking-tight">인기 사용 가이드 & 팁</h2>
+          <p class="text-xs text-slate-400 font-sans mt-1">파일 변환 및 리네이밍 효율을 극대화하는 전문가 노하우 가이드입니다.</p>
+        </div>
+        <a href="/guides/index.html" class="text-xs font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 transition-colors">
+          전체 가이드 보기 <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <a href="/guides/svg-to-png.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
+          <div>
+            <div class="text-[10px] font-extrabold text-indigo-400 uppercase tracking-wider mb-2 font-sans">Guide 01</div>
+            <h3 class="text-sm font-bold text-slate-200 group-hover:text-indigo-300 transition-colors font-sans mb-1 line-clamp-2">
+              SVG PNG/JPG 고화질 변환 및 레티나 배율 가이드
+            </h3>
+            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
+              1.0x, 2.0x(@2x), 3.0x(@3x) 해상도별 이미지 에셋을 깨짐 없이 일괄 내보내는 방법
+            </p>
+          </div>
+          <div class="mt-4 flex items-center text-xs font-bold text-indigo-400 group-hover:translate-x-1 transition-transform">
+            자세히 읽기 <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
+          </div>
+        </a>
+
+        <a href="/guides/wav-to-mp3.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-purple-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
+          <div>
+            <div class="text-[10px] font-extrabold text-purple-400 uppercase tracking-wider mb-2 font-sans">Guide 02</div>
+            <h3 class="text-sm font-bold text-slate-200 group-hover:text-purple-300 transition-colors font-sans mb-1 line-clamp-2">
+              WAV MP3 오디오 변환 및 비트레이트 설정법
+            </h3>
+            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
+              128kbps부터 320kbps까지 음질 손실을 최소화하며 용량을 90% 압축하는 오디오 인코딩 팁
+            </p>
+          </div>
+          <div class="mt-4 flex items-center text-xs font-bold text-purple-400 group-hover:translate-x-1 transition-transform">
+            자세히 읽기 <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
+          </div>
+        </a>
+
+        <a href="/guides/batch-rename.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-pink-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
+          <div>
+            <div class="text-[10px] font-extrabold text-pink-400 uppercase tracking-wider mb-2 font-sans">Guide 03</div>
+            <h3 class="text-sm font-bold text-slate-200 group-hover:text-pink-300 transition-colors font-sans mb-1 line-clamp-2">
+              대량 파일 이름 일괄 변경 및 정규식 치환 활용법
+            </h3>
+            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
+              문자열 검색/바꾸기, 접두사/접미사, 정규표현식으로 수백 개 파일명을 한 번에 대량 리네이밍
+            </p>
+          </div>
+          <div class="mt-4 flex items-center text-xs font-bold text-pink-400 group-hover:translate-x-1 transition-transform">
+            자세히 읽기 <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
+          </div>
+        </a>
+
+        <a href="/guides/serverless-local-conversion.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-emerald-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
+          <div>
+            <div class="text-[10px] font-extrabold text-emerald-400 uppercase tracking-wider mb-2 font-sans">Guide 04</div>
+            <h3 class="text-sm font-bold text-slate-200 group-hover:text-emerald-300 transition-colors font-sans mb-1 line-clamp-2">
+              100% 브라우저 로컬 데이터 처리와 보안 우수성
+            </h3>
+            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
+              서버 전송 없이 사용자의 PC 메모리 내부에서 구동되는 프라이버시 보호 기술 원리 안내
+            </p>
+          </div>
+          <div class="mt-4 flex items-center text-xs font-bold text-emerald-400 group-hover:translate-x-1 transition-transform">
+            자세히 읽기 <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Static SEO Feature Summary & Guide Cards Section for Crawlers & Users (EN) -->
+  <section id="features-summary-en" class="hidden max-w-7xl mx-auto px-6 pt-12 pb-8 relative z-10">
+    <!-- Static Pre-rendered Features Overview for Search Crawlers -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
+        <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg">
+          <i class="fa-solid fa-file-image"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-100 mb-2 font-sans">SVG High-Res Export</h3>
+        <p class="text-xs text-slate-400 leading-relaxed font-sans">
+          Batch convert SVG vector graphics to 1.0x, 1.5x, 2.0x (@2x), and 3.0x (@3x) crisp PNG/JPG bitmap files seamlessly.
+        </p>
+      </div>
+
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
+        <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-4 text-lg">
+          <i class="fa-solid fa-music"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-100 mb-2 font-sans">WAV / MP3 Audio Converter</h3>
+        <p class="text-xs text-slate-400 leading-relaxed font-sans">
+          Encode large WAV audio files into lightweight MP3 format with custom bitrates from 128kbps up to 320kbps in-browser.
+        </p>
+      </div>
+
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
+        <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 mb-4 text-lg">
+          <i class="fa-solid fa-file-signature"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-100 mb-2 font-sans">Bulk File Renamer</h3>
+        <p class="text-xs text-slate-400 leading-relaxed font-sans">
+          Batch rename hundreds of files using text replacement, prefix/suffix, regular expressions (Regex), and sequential numbering.
+        </p>
+      </div>
+
+      <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4 text-lg">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-100 mb-2 font-sans">100% Client-Side Privacy</h3>
+        <p class="text-xs text-slate-400 leading-relaxed font-sans">
+          Zero server uploads. All processing happens entirely within your web browser memory for absolute privacy.
+        </p>
+      </div>
+    </div>
+
+    <!-- Featured Guides Links Grid (Crawler Internal Link Optimization) -->
+    <div class="mb-8">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-100 font-sans tracking-tight">Featured Guides & Workflow Tips</h2>
+          <p class="text-xs text-slate-400 font-sans mt-1">Expert guides and practical tips to maximize your file processing efficiency.</p>
+        </div>
+        <a href="/guides/index.html" class="text-xs font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 transition-colors">
+          View All Guides <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <a href="/guides/svg-to-png.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
+          <div>
+            <div class="text-[10px] font-extrabold text-indigo-400 uppercase tracking-wider mb-2 font-sans">Guide 01</div>
+            <h3 class="text-sm font-bold text-slate-200 group-hover:text-indigo-300 transition-colors font-sans mb-1 line-clamp-2">
+              SVG to PNG/JPG High-Res Conversion & Retina Scaling Guide
+            </h3>
+            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
+              Learn how to export 1.0x, 2.0x (@2x), and 3.0x (@3x) bitmap image assets without pixelation.
+            </p>
+          </div>
+          <div class="mt-4 flex items-center text-xs font-bold text-indigo-400 group-hover:translate-x-1 transition-transform">
+            Read More <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
+          </div>
+        </a>
+
+        <a href="/guides/wav-to-mp3.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-purple-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
+          <div>
+            <div class="text-[10px] font-extrabold text-purple-400 uppercase tracking-wider mb-2 font-sans">Guide 02</div>
+            <h3 class="text-sm font-bold text-slate-200 group-hover:text-purple-300 transition-colors font-sans mb-1 line-clamp-2">
+              WAV to MP3 Audio Conversion & Bitrate Setup Guide
+            </h3>
+            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
+              Encoding tips for optimizing file size by 90% while maintaining crisp sound quality from 128kbps to 320kbps.
+            </p>
+          </div>
+          <div class="mt-4 flex items-center text-xs font-bold text-purple-400 group-hover:translate-x-1 transition-transform">
+            Read More <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
+          </div>
+        </a>
+
+        <a href="/guides/batch-rename.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-pink-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
+          <div>
+            <div class="text-[10px] font-extrabold text-pink-400 uppercase tracking-wider mb-2 font-sans">Guide 03</div>
+            <h3 class="text-sm font-bold text-slate-200 group-hover:text-pink-300 transition-colors font-sans mb-1 line-clamp-2">
+              Bulk File Renaming & Regular Expression (Regex) Usage
+            </h3>
+            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
+              Master string search & replace, prefixing, suffixing, and Regex patterns to rename hundreds of files in seconds.
+            </p>
+          </div>
+          <div class="mt-4 flex items-center text-xs font-bold text-pink-400 group-hover:translate-x-1 transition-transform">
+            Read More <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
+          </div>
+        </a>
+
+        <a href="/guides/serverless-local-conversion.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-emerald-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
+          <div>
+            <div class="text-[10px] font-extrabold text-emerald-400 uppercase tracking-wider mb-2 font-sans">Guide 04</div>
+            <h3 class="text-sm font-bold text-slate-200 group-hover:text-emerald-300 transition-colors font-sans mb-1 line-clamp-2">
+              100% In-Browser Local Processing & Security Architecture
+            </h3>
+            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
+              Discover how client-side WebAssembly, Canvas, and WICG File System Access API protect your private data.
+            </p>
+          </div>
+          <div class="mt-4 flex items-center text-xs font-bold text-emerald-400 group-hover:translate-x-1 transition-transform">
+            Read More <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
 
   <!-- SEO & FAQ Section for Google AdSense and Users (KO) -->
   <section id="faq-ko" class="max-w-7xl mx-auto px-6 py-16 border-t border-slate-800 relative z-10 pb-20">

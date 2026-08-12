@@ -171,6 +171,28 @@ export class AppHeader extends LitElement {
         </div>
 
         <div class="flex items-center gap-3 self-end md:self-center">
+          <!-- Main Nav Links for SEO & AdSense Crawlers -->
+          <nav class="flex items-center gap-1 sm:gap-2 text-xs font-semibold text-slate-300 mr-1 sm:mr-3 font-sans">
+            <a
+              href="/guides/index.html"
+              class="hover:text-indigo-400 transition-colors py-1.5 px-2.5 rounded-lg hover:bg-slate-900/80 border border-transparent hover:border-slate-800"
+            >
+              ${this.lang === "ko" ? "사용 가이드" : "Guides"}
+            </a>
+            <a
+              href="/about.html"
+              class="hover:text-indigo-400 transition-colors py-1.5 px-2.5 rounded-lg hover:bg-slate-900/80 border border-transparent hover:border-slate-800"
+            >
+              ${this.lang === "ko" ? "소개" : "About"}
+            </a>
+            <a
+              href="/contact.html"
+              class="hover:text-indigo-400 transition-colors py-1.5 px-2.5 rounded-lg hover:bg-slate-900/80 border border-transparent hover:border-slate-800"
+            >
+              ${this.lang === "ko" ? "문의" : "Contact"}
+            </a>
+          </nav>
+
           <!-- Theme Toggle Switch -->
           <button
             @click="${this.toggleTheme}"

@@ -163,6 +163,8 @@ export class BatcherApp extends LitElement {
     const faqEn = document.getElementById("faq-en");
     const footerKo = document.getElementById("footer-ko");
     const footerEn = document.getElementById("footer-en");
+    const featuresSummaryKo = document.getElementById("features-summary-ko");
+    const featuresSummaryEn = document.getElementById("features-summary-en");
 
     if (faqKo && faqEn && footerKo && footerEn) {
       if (lang === "ko") {
@@ -170,11 +172,15 @@ export class BatcherApp extends LitElement {
         faqEn.classList.add("hidden");
         footerKo.classList.remove("hidden");
         footerEn.classList.add("hidden");
+        if (featuresSummaryKo) featuresSummaryKo.classList.remove("hidden");
+        if (featuresSummaryEn) featuresSummaryEn.classList.add("hidden");
       } else {
         faqKo.classList.add("hidden");
         faqEn.classList.remove("hidden");
         footerKo.classList.add("hidden");
         footerEn.classList.remove("hidden");
+        if (featuresSummaryKo) featuresSummaryKo.classList.add("hidden");
+        if (featuresSummaryEn) featuresSummaryEn.classList.remove("hidden");
       }
     }
   }
