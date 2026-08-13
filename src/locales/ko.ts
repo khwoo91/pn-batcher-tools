@@ -172,6 +172,10 @@ export const ko = {
       "변환 프로세스가 완전히 정상 종료되면 해당 로컬 원본 오디오 파일(.wav, .mp3)을 대상 폴더에서 삭제합니다.",
     deleteOriginalAlert:
       "로컬 디렉토리가 브라우저 상에 정상 연동되어 있어야 원본 제어가 가능합니다.",
+    timestampCardTitle: "SMIL / 타임스탬프 (clipBegin & clipEnd) 추출",
+    timestampCardDesc: "로드된 오디오 파일의 전체 재생 길이를 분석하여 EPUB/SMIL용 clipBegin과 clipEnd 타임스탬프를 일괄 생성합니다.",
+    btnExtractTimestamps: "타임스탬프 추출 및 SMIL/JSON 생성",
+    extractingProgress: (current: number, total: number) => `오디오 분석 중... (${current}/${total})`,
   },
   renameSettings: {
     linkFolder: "대상 작업 폴더 연동하기",

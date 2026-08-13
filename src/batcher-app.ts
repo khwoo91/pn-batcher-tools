@@ -12,12 +12,14 @@ import type {
   CleanScanResult,
   UnusedFileItem,
   BrokenLinkItem,
+  AudioClipItem,
 } from "./types";
 import { scanDirectory, getNestedDirHandle } from "./utils/fs-utils";
 import { batchConvertSvg } from "./services/batch-converter";
 import { batchConvertAudio } from "./services/audio-converter";
 import { batchRenameFiles, batchDeleteFiles } from "./services/file-renamer";
 import { scanProjectResources, executeResourceCleanup } from "./services/resource-cleaner";
+import { extractAudioClipInfos } from "./utils/audio-duration-utils";
 import { locales } from "./locales";
 
 import {
@@ -47,6 +49,7 @@ import "./components/cleaner-results-view";
 import "./components/file-queue";
 import "./components/log-console";
 import "./components/alert-modal";
+import "./components/audio-timestamp-modal";
 
 const t = {
   ko: locales.ko.main,
@@ -77,6 +80,9 @@ export class BatcherApp extends LitElement {
   @state() private audioDeleteOriginal = false;
   @state() private audioOutputDirHandle: FileSystemDirectoryHandle | null = null;
   @state() private audioInputExts: string[] = [".wav", ".mp3"];
+  @state() private isExtractingTimestamps = false;
+  @state() private showTimestampModal = false;
+  @state() private extractedAudioClips: AudioClipItem[] = [];
 
   // Rename specific states
   @state() private renameDirHandle: FileSystemDirectoryHandle | null = null;
@@ -425,7 +431,14 @@ export class BatcherApp extends LitElement {
     const activeT = t[this.currentLang];
     const currentPaths = new Set(this.activeFiles.map((f) => f.relativePath));
     const filteredNew = newBatchFiles.filter((f) => !currentPaths.has(f.relativePath));
-    this.activeFiles = [...this.activeFiles, ...filteredNew];
+    const mergedFiles = [...this.activeFiles, ...filteredNew];
+    mergedFiles.sort((a, b) =>
+      (a.relativePath || a.name).localeCompare(b.relativePath || b.name, undefined, {
+        numeric: true,
+        sensitivity: "base",
+      }),
+    );
+    this.activeFiles = mergedFiles;
     const count = filteredNew.length;
     if (count > 0) {
       this.addLog(
@@ -461,6 +474,12 @@ export class BatcherApp extends LitElement {
           selected: true,
         });
       }
+      batchFiles.sort((a, b) =>
+        (a.relativePath || a.name).localeCompare(b.relativePath || b.name, undefined, {
+          numeric: true,
+          sensitivity: "base",
+        }),
+      );
       this.resourceFiles = batchFiles;
       this.resourceScanResult = null;
       this.resourceSelectedRootSegment = "";
@@ -526,6 +545,45 @@ export class BatcherApp extends LitElement {
     this.audioInputExts = e.detail;
     if (this.audioDirHandle) {
       this.reScanAudioDirectory();
+    }
+  }
+
+  private async handleExtractTimestamps() {
+    if (this.audioFiles.length === 0) {
+      const msg =
+        this.currentLang === "ko"
+          ? "분석할 오디오 파일이 대기열에 존재하지 않습니다. 먼저 오디오 파일/폴더를 선택해 주세요."
+          : "No audio files available. Please select audio files or a folder first.";
+      this.addLog(msg, "warning");
+      this.showAlert(msg, "error");
+      return;
+    }
+
+    const targetFiles = this.audioFiles.filter((f) => f.selected !== false);
+    const filesToProcess = targetFiles.length > 0 ? targetFiles : this.audioFiles;
+
+    this.isExtractingTimestamps = true;
+    this.addLog(
+      this.currentLang === "ko"
+        ? `오디오 타임스탬프 (clipBegin & clipEnd) 분석 중... (총 ${filesToProcess.length}개)`
+        : `Analyzing audio timestamps... (Total ${filesToProcess.length} files)`,
+      "info",
+    );
+
+    try {
+      const results = await extractAudioClipInfos(filesToProcess);
+      this.extractedAudioClips = results;
+      this.showTimestampModal = true;
+      this.addLog(
+        this.currentLang === "ko"
+          ? `[타임스탬프 추출 완료] 총 ${results.length}개 오디오 파일의 clipBegin 및 clipEnd 타임스탬프를 추출했습니다.`
+          : `[Extraction Complete] Successfully extracted timestamps for ${results.length} audio files.`,
+        "success",
+      );
+    } catch (err: any) {
+      this.addLog(`[타임스탬프 추출 오류] ${err?.message || err}`, "error");
+    } finally {
+      this.isExtractingTimestamps = false;
     }
   }
 
@@ -1691,6 +1749,7 @@ export class BatcherApp extends LitElement {
                       .outputDirHandle="${this.audioOutputDirHandle}"
                       .deleteOriginal="${this.audioDeleteOriginal}"
                       .isConverting="${this.isConverting}"
+                      .isExtracting="${this.isExtractingTimestamps}"
                       .conversionProgress="${this.conversionProgress}"
                       .inputExts="${this.audioInputExts}"
                       @select-folder="${this.selectFolder}"
@@ -1706,6 +1765,7 @@ export class BatcherApp extends LitElement {
                       @toggle-delete="${() =>
                         (this.audioDeleteOriginal = !this.audioDeleteOriginal)}"
                       @change-input-exts="${this.handleChangeInputExts}"
+                      @extract-timestamps="${this.handleExtractTimestamps}"
                     ></audio-settings-panel>
                   `
                 : isRename
@@ -2132,6 +2192,14 @@ export class BatcherApp extends LitElement {
         .type="${this.modalType}"
         @close="${() => (this.showModal = false)}"
       ></alert-modal>
+
+      <!-- Audio Timestamps Extractor Modal Overlay -->
+      <audio-timestamp-modal
+        .show="${this.showTimestampModal}"
+        .items="${this.extractedAudioClips}"
+        .lang="${this.currentLang}"
+        @close="${() => (this.showTimestampModal = false)}"
+      ></audio-timestamp-modal>
     `;
   }
 }

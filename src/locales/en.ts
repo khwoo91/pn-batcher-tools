@@ -172,6 +172,10 @@ export const en = {
       "Removes original audio (.wav, .mp3) files from the target directory after conversion completes successfully.",
     deleteOriginalAlert:
       "Original files can only be controlled when a local directory is successfully linked to the browser.",
+    timestampCardTitle: "SMIL / Timestamp (clipBegin & clipEnd) Extractor",
+    timestampCardDesc: "Analyzes total playback duration of loaded audio files and generates clipBegin and clipEnd timestamps for EPUB/SMIL.",
+    btnExtractTimestamps: "Extract Timestamps & Generate SMIL/JSON",
+    extractingProgress: (current: number, total: number) => `Analyzing audio... (${current}/${total})`,
   },
   renameSettings: {
     linkFolder: "Link Target Workspace Folder",

@@ -55,3 +55,16 @@ export interface ResourceCleanOptions {
   codeCleanMode: CodeCleanMode;
   deleteUnusedFiles: boolean;
 }
+
+export interface AudioClipItem {
+  id: string;
+  name: string;
+  relativePath: string;
+  sizeBytes: number;
+  durationSec: number;
+  clipBegin: string;
+  clipEnd: string;
+  smilTag: string;
+  errorMsg?: string;
+}
+

@@ -17,6 +17,7 @@ export class AudioSettingsPanel extends LitElement {
   @property({ type: Object }) outputDirHandle: FileSystemDirectoryHandle | null = null;
   @property({ type: Boolean }) deleteOriginal = false;
   @property({ type: Boolean }) isConverting = false;
+  @property({ type: Boolean }) isExtracting = false;
   @property({ type: Number }) conversionProgress = 0;
   @property({ type: Array }) inputExts: string[] = [".wav", ".mp3"];
 
@@ -35,6 +36,10 @@ export class AudioSettingsPanel extends LitElement {
 
   protected override createRenderRoot() {
     return this;
+  }
+
+  private handleExtractTimestamps() {
+    this.dispatchEvent(new CustomEvent("extract-timestamps", { bubbles: true, composed: true }));
   }
 
   private handleDragOver(e: DragEvent) {
@@ -532,7 +537,39 @@ export class AudioSettingsPanel extends LitElement {
           </div>
         </div>
 
-        <!-- Step 2: Settings Card -->
+        <!-- Step 2 Option Card: SMIL / Timestamp Extractor -->
+        <div class="glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden border border-slate-800">
+          <div class="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-purple-500 to-indigo-600"></div>
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-md font-bold text-slate-100 flex items-center gap-2.5 font-sans">
+              <span
+                class="bg-linear-to-r from-purple-500 to-indigo-600 text-white w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold shadow-[0_0_10px_rgba(168,85,247,0.3)]"
+              >
+                <i class="fa-solid fa-stopwatch text-[11px]"></i>
+              </span>
+              ${activeT.timestampCardTitle}
+            </h2>
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 font-mono">
+              EPUB / SMIL
+            </span>
+          </div>
+
+          <p class="text-xs text-slate-400 font-sans leading-relaxed mb-4">
+            ${activeT.timestampCardDesc}
+          </p>
+
+          <button
+            @click="${this.handleExtractTimestamps}"
+            ?disabled="${this.filesCount === 0 || this.isConverting || this.isExtracting}"
+            class="w-full py-3.5 px-4 bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold rounded-2xl border border-purple-500/30 shadow-[0_0_20px_rgba(168,85,247,0.2)] disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-[0_0_25px_rgba(168,85,247,0.4)] active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 cursor-pointer font-sans text-xs"
+          >
+            ${this.isExtracting
+              ? html`<i class="fa-solid fa-spinner animate-spin text-sm"></i> <span>${this.lang === "ko" ? "오디오 분석 중..." : "Extracting..."}</span>`
+              : html`<i class="fa-solid fa-bolt-lightning text-sm text-yellow-300"></i> <span>${activeT.btnExtractTimestamps}</span>`}
+          </button>
+        </div>
+
+        <!-- Step 3: Settings Card -->
         <details
           class="group glass-panel rounded-3xl p-0 shadow-xl relative overflow-hidden [&_summary::-webkit-details-marker]:hidden"
           ?open="${this.isSettingsOpen}"

@@ -156,6 +156,15 @@ export async function scanDirectory(
         console.warn(`Skipping inaccessible entry in ${path}/${entry.name}:`, entryErr);
       }
     }
+
+    if (path === "") {
+      fileAccumulator.sort((a, b) =>
+        (a.relativePath || a.name).localeCompare(b.relativePath || b.name, undefined, {
+          numeric: true,
+          sensitivity: "base",
+        })
+      );
+    }
   } catch (dirErr) {
     console.warn(`Failed to read directory handle ${dirHandle.name}:`, dirErr);
   }
