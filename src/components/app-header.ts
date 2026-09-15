@@ -16,19 +16,40 @@ export class AppHeader extends LitElement {
     const isClickInside = path.some(
       (el) => el instanceof HTMLElement && el.classList.contains("custom-dropdown-container"),
     );
-    if (!isClickInside) {
+    if (!isClickInside && this.dropdownOpen) {
       this.dropdownOpen = false;
+    }
+  };
+
+  private handleExternalLangChange = (e: Event) => {
+    const customEvent = e as CustomEvent<"ko" | "en">;
+    if (customEvent.detail && (customEvent.detail === "ko" || customEvent.detail === "en")) {
+      if (this.lang !== customEvent.detail) {
+        this.lang = customEvent.detail;
+      }
     }
   };
 
   override connectedCallback() {
     super.connectedCallback();
     document.addEventListener("click", this.handleDocumentClick);
+    window.addEventListener("change-lang", this.handleExternalLangChange);
+
+    // Initialize lang from localStorage or data-current-lang
+    const savedLang = localStorage.getItem("batcher-lang");
+    if (savedLang === "en" || savedLang === "ko") {
+      this.lang = savedLang as "ko" | "en";
+    } else {
+      const docLang = document.documentElement.getAttribute("data-current-lang");
+      if (docLang === "en" || docLang === "ko") {
+        this.lang = docLang as "ko" | "en";
+      }
+    }
 
     // Initialize theme before first render to prevent double-update warning
+    // Default to light unless user explicitly chose dark
     const savedTheme = localStorage.getItem("batcher-theme");
-    const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const shouldBeDark = savedTheme === "dark" || (savedTheme === null && systemPrefersDark);
+    const shouldBeDark = savedTheme === "dark";
 
     this.isDark = shouldBeDark;
     if (shouldBeDark) {
@@ -42,6 +63,7 @@ export class AppHeader extends LitElement {
 
   override disconnectedCallback() {
     document.removeEventListener("click", this.handleDocumentClick);
+    window.removeEventListener("change-lang", this.handleExternalLangChange);
     super.disconnectedCallback();
   }
 
@@ -60,6 +82,17 @@ export class AppHeader extends LitElement {
 
   private selectLanguage(lang: "ko" | "en") {
     this.dropdownOpen = false;
+    this.lang = lang;
+    localStorage.setItem("batcher-lang", lang);
+    document.documentElement.setAttribute("data-current-lang", lang);
+    document.documentElement.lang = lang;
+    window.dispatchEvent(
+      new CustomEvent("change-lang", {
+        detail: lang,
+        bubbles: true,
+        composed: true,
+      }),
+    );
     this.dispatchEvent(
       new CustomEvent("change-lang", {
         detail: lang,
@@ -71,6 +104,12 @@ export class AppHeader extends LitElement {
 
   private handleSupportClick(e: MouseEvent) {
     e.preventDefault();
+    window.dispatchEvent(
+      new CustomEvent("open-support", {
+        bubbles: true,
+        composed: true,
+      }),
+    );
     this.dispatchEvent(
       new CustomEvent("open-support", {
         bubbles: true,
@@ -80,211 +119,143 @@ export class AppHeader extends LitElement {
   }
 
   protected override render() {
-    const desc = this.lang === "ko" ? "쉽고 빠른 파일 변환 툴" : "Easy and Fast File Converter";
+    const desc = this.lang === "ko" ? "금융권 수준 안심 로컬 파일 변환 툴" : "100% Safe Local File Processor";
 
     return html`
       <header
-        class="flex flex-col md:flex-row items-center justify-between border-b border-slate-800 pb-6 mb-8 gap-4"
+        class="relative z-50 w-full bg-surface-container-lowest/90 backdrop-blur-xl rounded-3xl p-4 sm:px-6 shadow-sm border border-outline-variant/20 mb-8 transition-all"
       >
-        <div class="flex items-center gap-3">
-          <div class="flex items-center justify-center w-14 h-14 animate-logo-float">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="w-full h-full">
-              <defs>
-                <linearGradient id="header-primary-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#6366f1" />
-                  <stop offset="100%" stop-color="#4f46e5" />
-                </linearGradient>
-                <linearGradient id="header-accent-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#a855f7" />
-                  <stop offset="100%" stop-color="#6366f1" />
-                </linearGradient>
-                <linearGradient id="header-emerald-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#34d399" />
-                  <stop offset="100%" stop-color="#059669" />
-                </linearGradient>
-                <filter id="header-glow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="1" result="blur" />
-                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                </filter>
-              </defs>
+        <div class="flex items-center justify-between gap-4 w-full">
+          <!-- Logo & Trust Badge -->
+          <div class="flex items-center gap-3 sm:gap-4 shrink-0">
+            <a href="/" class="flex items-center gap-2.5 sm:gap-3 group select-none shrink-0">
+              <div
+                class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-primary flex items-center justify-center shadow-md shadow-primary/25 group-hover:scale-95 transition-transform shrink-0"
+              >
+                <span class="material-symbols-outlined text-white text-[22px] sm:text-[24px]">account_balance_wallet</span>
+              </div>
+              <div class="flex flex-col">
+                <div class="font-title-md text-title-md text-on-surface tracking-tight font-extrabold flex items-center gap-1 whitespace-nowrap">
+                  배처 <span class="text-primary font-black">Batcher</span>
+                </div>
+                <p class="text-[11px] text-on-surface-variant font-medium whitespace-nowrap">${desc}</p>
+              </div>
+            </a>
 
-              <!-- Stack Layer 3 (Background) -->
-              <rect
-                x="10"
-                y="4"
-                width="16"
-                height="16"
-                rx="4"
-                fill="#1e293b"
-                stroke="#334155"
-                stroke-width="1.2"
-                opacity="0.4"
-                transform="rotate(-6 18 12)"
-              />
-
-              <!-- Stack Layer 2 (Middle) -->
-              <rect
-                x="8"
-                y="6"
-                width="16"
-                height="16"
-                rx="4"
-                fill="url(#header-accent-grad)"
-                stroke="#ffffff"
-                stroke-width="0.8"
-                stroke-opacity="0.15"
-                opacity="0.8"
-                transform="rotate(3 16 14)"
-              />
-
-              <!-- Stack Layer 1 (Foreground/Main) -->
-              <g transform="translate(4, 8)">
-                <rect
-                  x="0"
-                  y="0"
-                  width="18"
-                  height="18"
-                  rx="4.5"
-                  fill="url(#header-primary-grad)"
-                  stroke="#ffffff"
-                  stroke-width="1"
-                  stroke-opacity="0.25"
-                  filter="url(#header-glow)"
-                />
-                <path
-                  d="M3 14 L7.5 8.5 L11 12.5 L13 10 L15.5 14 Z"
-                  fill="#ffffff"
-                  fill-opacity="0.95"
-                />
-                <circle cx="12.5" cy="5.5" r="2" fill="#34d399" />
-              </g>
-
-              <!-- Export Dynamic Arrow -->
-              <path
-                d="M21 17 L27 17 L27 23 M27 17 L18 26"
-                stroke="#34d399"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                filter="url(#header-glow)"
-              />
-            </svg>
+            <div
+              class="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-low border border-outline-variant/25 whitespace-nowrap shrink-0"
+            >
+              <span class="material-symbols-outlined text-primary text-[16px] shrink-0">verified_user</span>
+              <span class="text-xs text-on-surface-variant font-medium whitespace-nowrap">
+                ${this.lang === "ko" ? "100% 브라우저 로컬 안전 처리" : "100% Browser Local Safe"}
+              </span>
+            </div>
           </div>
-          <div>
-            <h1
-              class="text-xl font-extrabold tracking-tight text-slate-100 flex items-center gap-2 font-sans"
-            >
-              배처 툴(Batcher Tools)
-            </h1>
-            <p class="text-xs text-slate-400 font-medium tracking-wide">${desc}</p>
-          </div>
-        </div>
 
-        <div class="flex items-center gap-2 sm:gap-3 self-end md:self-center">
-          <!-- Main Nav Links for SEO & AdSense Crawlers -->
-          <nav class="flex items-center gap-1 sm:gap-2 text-xs font-semibold text-slate-300 mr-1 sm:mr-2 font-sans">
-            <a
-              href="/guides/index.html"
-              class="hover:text-indigo-400 transition-colors py-1.5 px-2.5 rounded-lg hover:bg-slate-900/80 border border-transparent hover:border-slate-800"
-            >
-              ${this.lang === "ko" ? "사용 가이드" : "Guides"}
-            </a>
-            <a
-              href="/about.html"
-              class="hover:text-indigo-400 transition-colors py-1.5 px-2.5 rounded-lg hover:bg-slate-900/80 border border-transparent hover:border-slate-800"
-            >
-              ${this.lang === "ko" ? "소개" : "About"}
-            </a>
-            <a
-              href="/contact.html"
-              class="hover:text-indigo-400 transition-colors py-1.5 px-2.5 rounded-lg hover:bg-slate-900/80 border border-transparent hover:border-slate-800"
-            >
-              ${this.lang === "ko" ? "문의" : "Contact"}
-            </a>
-          </nav>
+          <!-- Navigation & Quick Actions -->
+          <div class="flex items-center gap-2 sm:gap-3 justify-end shrink-0">
+            <!-- Nav Links -->
+            <nav class="hidden lg:flex items-center gap-1 text-xs font-semibold text-on-surface-variant shrink-0">
+              <a
+                href="/svg-to-png.html"
+                class="hover:text-primary hover:bg-surface-container-low px-2 sm:px-2.5 py-1.5 rounded-xl transition-colors whitespace-nowrap"
+              >
+                ${this.lang === "ko" ? "SVG 변환기" : "SVG Converter"}
+              </a>
+              <a
+                href="/wav-to-mp3.html"
+                class="hover:text-primary hover:bg-surface-container-low px-2 sm:px-2.5 py-1.5 rounded-xl transition-colors whitespace-nowrap"
+              >
+                ${this.lang === "ko" ? "오디오 변환기" : "Audio Converter"}
+              </a>
+              <a
+                href="/batch-rename.html"
+                class="hover:text-primary hover:bg-surface-container-low px-2 sm:px-2.5 py-1.5 rounded-xl transition-colors whitespace-nowrap"
+              >
+                ${this.lang === "ko" ? "대량 이름 바꾸기" : "Batch Rename"}
+              </a>
+              <a
+                href="/guides/index.html"
+                class="hover:text-primary hover:bg-surface-container-low px-2 sm:px-2.5 py-1.5 rounded-xl transition-colors whitespace-nowrap"
+              >
+                ${this.lang === "ko" ? "가이드" : "Guides"}
+              </a>
+            </nav>
 
-          <!-- Buy Me a Coffee Support Button (Opens in-app Modal) -->
-          <button
-            @click="${this.handleSupportClick}"
-            class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 hover:text-amber-300 border border-amber-500/30 hover:border-amber-500/50 text-xs font-bold transition-all shadow-sm active:scale-95 group font-sans shrink-0 hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] cursor-pointer"
-            title="${this.lang === "ko" ? "따뜻한 커피 한 잔으로 개발자를 응원해주세요! ☕" : "Support the developer with a cup of coffee! ☕"}"
-          >
-            <span class="text-sm group-hover:scale-110 transition-transform inline-block">☕</span>
-            <span class="hidden sm:inline">${this.lang === "ko" ? "개발자 응원하기" : "Support Developer"}</span>
-          </button>
-
-          <!-- Theme Toggle Switch -->
-          <button
-            @click="${this.toggleTheme}"
-            class="flex items-center justify-center w-10 h-10 bg-slate-950 border border-slate-800 hover:border-brand-primary/30 hover:bg-slate-900 text-slate-400 hover:text-brand-primary rounded-xl cursor-pointer focus:outline-none transition-all shadow-sm active:scale-95"
-            title="${this.lang === "ko" ? "테마 변경" : "Change Theme"}"
-          >
-            ${this.isDark
-              ? html`<i class="fa-solid fa-circle-half-stroke text-white"></i>`
-              : html`<i class="fa-solid fa-circle-half-stroke text-gray-700"></i>`}
-          </button>
-
-          <!-- Language Selector dropdown -->
-          <div class="relative inline-block text-left w-32.5 custom-dropdown-container">
+            <!-- Support Button -->
             <button
-              @click="${() => (this.dropdownOpen = !this.dropdownOpen)}"
-              class="flex items-center justify-start w-full pl-9 pr-8 py-2.5 bg-slate-950 border border-slate-800 hover:border-brand-primary/30 hover:bg-slate-900 text-slate-200 rounded-xl text-xs cursor-pointer focus:outline-none transition-all font-sans font-medium shadow-sm hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] focus:border-brand-primary select-none relative"
+              @click="${this.handleSupportClick}"
+              class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/25 text-xs font-bold transition-all shadow-xs active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
+              title="${this.lang === "ko" ? "따뜻한 커피 한 잔으로 개발자를 응원해주세요! ☕" : "Support the developer! ☕"}"
             >
-              <div
-                class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400"
-              >
-                <i class="fa-solid fa-globe text-xs"></i>
-              </div>
-              <span>${this.lang === "ko" ? "한국어" : "English"}</span>
-              <div
-                class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500 text-xs"
-              >
-                <i
-                  class="fa-solid fa-chevron-down transition-transform duration-200 ${this
-                    .dropdownOpen
-                    ? "rotate-180"
-                    : ""}"
-                ></i>
-              </div>
+              <span class="text-xs">☕</span>
+              <span class="hidden sm:inline whitespace-nowrap">${this.lang === "ko" ? "응원하기" : "Support"}</span>
             </button>
 
-            <!-- Custom Dropdown Menu -->
-            ${this.dropdownOpen
-              ? html`
-                  <div
-                    class="absolute right-0 mt-2 w-full bg-slate-900/95 backdrop-blur-xl border border-slate-800 rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.5)] z-50 py-1.5 focus:outline-none animate-fade-in font-sans"
-                  >
-                    <button
-                      @click="${() => this.selectLanguage("ko")}"
-                      class="w-full pl-5 pr-3 py-2 text-xs font-semibold transition-colors flex items-center justify-between cursor-pointer ${this
-                        .lang === "ko"
-                        ? "text-brand-text bg-brand-bg"
-                        : "text-slate-400 hover:bg-brand-bg hover:text-brand-text"}"
+            <!-- Theme Toggle Switch -->
+            <button
+              @click="${this.toggleTheme}"
+              class="flex items-center justify-center w-9 h-9 bg-surface-container-low hover:bg-surface-container border border-outline-variant/30 text-on-surface-variant hover:text-primary rounded-xl cursor-pointer focus:outline-none transition-all shadow-xs active:scale-95 shrink-0"
+              title="${this.lang === "ko" ? "테마 변경" : "Change Theme"}"
+            >
+              <span class="material-symbols-outlined text-[18px]">
+                ${this.isDark ? "light_mode" : "dark_mode"}
+              </span>
+            </button>
+
+            <!-- Language Selector Dropdown -->
+            <div class="relative inline-block text-left custom-dropdown-container shrink-0">
+              <button
+                type="button"
+                @click="${(e: MouseEvent) => {
+                  e.stopPropagation();
+                  this.dropdownOpen = !this.dropdownOpen;
+                }}"
+                class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container-low hover:bg-surface-container border border-outline-variant/30 text-on-surface rounded-xl text-xs cursor-pointer focus:outline-none transition-all font-semibold shadow-xs select-none whitespace-nowrap"
+                aria-haspopup="true"
+                aria-expanded="${this.dropdownOpen}"
+              >
+                <span class="material-symbols-outlined text-[16px] text-on-surface-variant shrink-0">language</span>
+                <span class="font-bold whitespace-nowrap">${this.lang === "ko" ? "한국어" : "English"}</span>
+                <span
+                  class="material-symbols-outlined text-[16px] text-on-surface-variant transition-transform duration-200 shrink-0 ${this.dropdownOpen ? "rotate-180" : ""}"
+                >expand_more</span>
+              </button>
+
+              <!-- Dropdown Menu -->
+              ${this.dropdownOpen
+                ? html`
+                    <div
+                      class="absolute right-0 mt-2 w-32 bg-surface-container-lowest border border-outline-variant/30 rounded-2xl shadow-xl z-50 py-1 focus:outline-none animate-fade-in overflow-hidden"
                     >
-                      <span>한국어</span>
-                      <div class="w-3.5 flex items-center justify-center shrink-0">
+                      <button
+                        type="button"
+                        @click="${() => this.selectLanguage("ko")}"
+                        class="w-full px-3.5 py-2 text-xs font-semibold transition-colors flex items-center justify-between cursor-pointer ${this.lang === "ko"
+                          ? "text-primary bg-primary/10 font-bold"
+                          : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"}"
+                      >
+                        <span>한국어</span>
                         ${this.lang === "ko"
-                          ? html`<i class="fa-solid fa-check text-brand-primary text-xs"></i>`
+                          ? html`<span class="material-symbols-outlined text-[16px] text-primary">check</span>`
                           : ""}
-                      </div>
-                    </button>
-                    <button
-                      @click="${() => this.selectLanguage("en")}"
-                      class="w-full pl-5 pr-3 py-2 text-xs font-semibold transition-colors flex items-center justify-between cursor-pointer ${this
-                        .lang === "en"
-                        ? "text-brand-text bg-brand-bg"
-                        : "text-slate-400 hover:bg-brand-bg hover:text-brand-text"}"
-                    >
-                      <span>English</span>
-                      <div class="w-3.5 flex items-center justify-center shrink-0">
+                      </button>
+                      <button
+                        type="button"
+                        @click="${() => this.selectLanguage("en")}"
+                        class="w-full px-3.5 py-2 text-xs font-semibold transition-colors flex items-center justify-between cursor-pointer ${this.lang === "en"
+                          ? "text-primary bg-primary/10 font-bold"
+                          : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"}"
+                      >
+                        <span>English</span>
                         ${this.lang === "en"
-                          ? html`<i class="fa-solid fa-check text-brand-primary text-xs"></i>`
+                          ? html`<span class="material-symbols-outlined text-[16px] text-primary">check</span>`
                           : ""}
-                      </div>
-                    </button>
-                  </div>
-                `
-              : ""}
+                      </button>
+                    </div>
+                  `
+                : ""}
+            </div>
           </div>
         </div>
       </header>

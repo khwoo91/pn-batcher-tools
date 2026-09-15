@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko" class="h-full bg-slate-950 text-slate-100">
+<html lang="ko" class="h-full bg-surface text-on-surface">
 
 <head>
   <meta charset="UTF-8" />
@@ -12,7 +12,8 @@
   <link rel="canonical" href="https://batchertools.com/" />
   <link rel="alternate" hreflang="x-default" href="https://batchertools.com/" />
   <link rel="alternate" hreflang="en" href="https://batchertools.com/" />
-  <link rel="alternate" hreflang="ko" href="https://batchertools.com/ko" /> <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="alternate" hreflang="ko" href="https://batchertools.com/ko" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="shortcut icon" href="/favicon.ico" />
@@ -36,6 +37,12 @@
   <meta name="twitter:title" content="배처 툴(Batcher Tools) | 쉽고 빠른 파일 이름 일괄 변경 및 포맷 변환" />
   <meta name="twitter:description" content="웹 브라우저 내부에서 100% 로컬로 안전하게 작동하는 대량 파일명 리네이머 및 SVG/오디오 변환기" />
   <meta name="twitter:image" content="https://batchertools.com/og-image.png" />
+
+  <!-- Google Fonts: Plus Jakarta Sans & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-1KFDQ1NJZG"></script>
   <script>
@@ -111,748 +118,887 @@
     }
   </script>
 
+  <!-- WebApplication Structured Data Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Batcher Tools",
+    "url": "https://batchertools.com",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires HTML5 Canvas and File System Access API support",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <!-- Client-side Language Switching Control via data-lang -->
+  <style>
+    html[data-current-lang="ko"] [data-lang="en"],
+    body[data-current-lang="ko"] [data-lang="en"] {
+      display: none !important;
+    }
+    html[data-current-lang="en"] [data-lang="ko"],
+    body[data-current-lang="en"] [data-lang="ko"] {
+      display: none !important;
+    }
+  </style>
+  <script>
+    (function() {
+      try {
+        var savedLang = localStorage.getItem('batcher-lang');
+        var lang = (savedLang === 'en' || savedLang === 'ko') ? savedLang : ((navigator.language && navigator.language.toLowerCase().startsWith('ko')) ? 'ko' : 'en');
+        document.documentElement.setAttribute('data-current-lang', lang);
+        document.documentElement.lang = lang;
+      } catch (e) {}
+    })();
+  </script>
+
   <link rel="stylesheet" href="./src/index.css" />
+  <script type="module" src="/src/components/app-header.ts"></script>
   <script type="module" src="/src/batcher-app.ts"></script>
 </head>
 
-<body class="h-full">
-  <!-- Dynamic Ambient Glow Background Spots -->
+<body class="h-full bg-surface text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed font-sans">
+  <!-- Subtle Minimal Ambient Accent Gradient -->
   <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-    <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] animate-glow-indigo">
-    </div>
-    <div
-      class="absolute top-1/3 left-1/4 w-125 h-125 bg-purple-500/5 rounded-full blur-[130px] animate-glow-purple">
-    </div>
-    <div
-      class="absolute -bottom-40 -right-40 w-112.5 h-112.5 bg-emerald-500/5 rounded-full blur-[120px] animate-glow-emerald">
-    </div>
+    <div class="absolute -top-32 -right-32 w-96 h-96 bg-primary/5 rounded-full blur-[120px]"></div>
+    <div class="absolute top-1/3 left-1/4 w-120 h-120 bg-primary/3 rounded-full blur-[140px]"></div>
   </div>
 
-  <!-- Lit Component Container -->
-  <batcher-app class="block min-h-screen relative z-20"></batcher-app>
+  <main class="w-full relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
+      
+      <!-- Main Global Navigation Header (Top Stitch Fintech Header) -->
+      <app-header id="global-header"></app-header>
 
-  <!-- Static SEO Feature Summary & Guide Cards Section for Crawlers & Users (KO) -->
-  <section id="features-summary-ko" class="max-w-7xl mx-auto px-6 pt-12 pb-8 relative z-10">
-    <!-- Static Pre-rendered Features Overview for Search Crawlers -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-      <a href="/svg-to-png.html" class="group glass-panel p-6 rounded-2xl border border-slate-800/80 hover:border-indigo-500/50 bg-slate-900/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 block">
-        <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-file-image"></i>
-        </div>
-        <div class="flex items-center justify-between mb-1">
-          <h3 class="text-base font-bold text-slate-100 group-hover:text-indigo-300 transition-colors font-sans">SVG 고화질 변환</h3>
-          <i class="fa-solid fa-arrow-right text-[11px] text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
-        </div>
-        <p class="text-xs text-slate-400 leading-relaxed font-sans">
-          SVG 벡터 이미지를 1.0x, 1.5x, 2.0x, 3.0x 고해상도 PNG/JPG로 손실 없이 일괄 래스터화 내보내기합니다.
-        </p>
-      </a>
+      <!-- 1. Hero & Quick Start Card (토스형 메인 송금/계좌 카드 콘셉트) -->
+      <section class="w-full mb-8">
+        <div class="bg-surface-container-lowest rounded-3xl p-6 sm:p-8 shadow-xs border border-outline-variant/20 relative overflow-hidden">
+          <div class="absolute -right-20 -top-20 w-72 h-72 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
 
-      <a href="/wav-to-mp3.html" class="group glass-panel p-6 rounded-2xl border border-slate-800/80 hover:border-purple-500/50 bg-slate-900/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 block">
-        <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-4 text-lg group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-music"></i>
-        </div>
-        <div class="flex items-center justify-between mb-1">
-          <h3 class="text-base font-bold text-slate-100 group-hover:text-purple-300 transition-colors font-sans">WAV / MP3 오디오 변환</h3>
-          <i class="fa-solid fa-arrow-right text-[11px] text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
-        </div>
-        <p class="text-xs text-slate-400 leading-relaxed font-sans">
-          대용량 WAV 음원을 128kbps~320kbps 맞춤 비트레이트로 브라우저에서 직접 MP3 인코딩합니다.
-        </p>
-      </a>
+          <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-6">
+            <div class="space-y-2 max-w-2xl">
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold">
+                <span class="material-symbols-outlined text-[16px]">bolt</span>
+                <span data-lang="ko">스마트 파일 자동 감지</span>
+                <span data-lang="en">Smart File Auto-Detection</span>
+              </div>
+              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface leading-snug" data-lang="ko">
+                어떤 파일이든 끌어다 놓으세요.<br/>
+                <span class="text-primary">배처가 알아서 정리해 드려요.</span>
+              </h1>
+              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface leading-snug" data-lang="en">
+                Drag and drop any files.<br/>
+                <span class="text-primary">Batcher organizes everything for you.</span>
+              </h1>
+              <p class="text-sm text-on-surface-variant leading-relaxed" data-lang="ko">
+                SVG 이미지 선명화부터 오디오 압축, 수백 개 파일 이름 일괄 변경까지 단 1초 만에 실행됩니다.
+              </p>
+              <p class="text-sm text-on-surface-variant leading-relaxed" data-lang="en">
+                From crisp SVG vector rasterization to audio encoding and bulk file renaming in 1 second.
+              </p>
+            </div>
+            <!-- Try Sample Fast Action Button -->
+            <div class="flex items-center gap-2 w-full lg:w-auto">
+              <button class="h-11 px-5 rounded-2xl bg-surface-container-low hover:bg-surface-container text-on-surface text-sm font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer border border-outline-variant/25" id="sample-trigger-btn" type="button">
+                <span class="material-symbols-outlined text-primary text-[20px]">play_circle</span>
+                <span data-lang="ko">3초 만에 샘플로 체험하기</span>
+                <span data-lang="en">Try with 3-sec sample</span>
+              </button>
+            </div>
+          </div>
 
-      <a href="/batch-rename.html" class="group glass-panel p-6 rounded-2xl border border-slate-800/80 hover:border-pink-500/50 bg-slate-900/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 block">
-        <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 mb-4 text-lg group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-file-signature"></i>
-        </div>
-        <div class="flex items-center justify-between mb-1">
-          <h3 class="text-base font-bold text-slate-100 group-hover:text-pink-300 transition-colors font-sans">대량 파일명 일괄 변경</h3>
-          <i class="fa-solid fa-arrow-right text-[11px] text-pink-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
-        </div>
-        <p class="text-xs text-slate-400 leading-relaxed font-sans">
-          문자열 치환, 접두사/접미사, 정규식(Regex), 일련번호 부여로 수백 개 파일 이름을 한 번에 리네이밍합니다.
-        </p>
-      </a>
+          <!-- Main Drag & Drop Zone (Fintech Minimal Card Interior) -->
+          <div class="w-full rounded-2xl bg-surface-container-low/70 hover:bg-surface-container-low p-6 sm:p-8 transition-all cursor-pointer group text-center flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/40 hover:border-primary/60" id="hero-dropzone">
+            <input class="hidden" id="hero-file-input" multiple="" type="file" />
+            <div class="w-14 h-14 rounded-2xl bg-primary text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform mb-3">
+              <span class="material-symbols-outlined text-[28px]">folder_open</span>
+            </div>
+            <div class="text-base font-bold text-on-surface mb-1" data-lang="ko">
+              컴퓨터의 파일이나 폴더를 여기에 놓아주세요
+            </div>
+            <div class="text-base font-bold text-on-surface mb-1" data-lang="en">
+              Drop your files or folders here
+            </div>
+            <p class="text-xs text-on-surface-variant mb-4" data-lang="ko">
+              SVG, WAV, MP3, PNG, 문서 등 여러 개를 한꺼번에 올려도 멈춤 없이 작동합니다
+            </p>
+            <p class="text-xs text-on-surface-variant mb-4" data-lang="en">
+              Process multiple SVGs, audio tracks, and images smoothly with zero lag
+            </p>
+            <!-- Quick Tags -->
+            <div class="flex flex-wrap items-center justify-center gap-2">
+              <span class="px-3 py-1 rounded-full bg-surface-container-lowest text-on-surface-variant text-xs font-medium shadow-xs border border-outline-variant/20">
+                <span data-lang="ko">• 아이콘·일러스트 (SVG)</span>
+                <span data-lang="en">• Icons & Vectors (SVG)</span>
+              </span>
+              <span class="px-3 py-1 rounded-full bg-surface-container-lowest text-on-surface-variant text-xs font-medium shadow-xs border border-outline-variant/20">
+                <span data-lang="ko">• 음성·녹음본 (WAV)</span>
+                <span data-lang="en">• Audio & Recordings (WAV)</span>
+              </span>
+              <span class="px-3 py-1 rounded-full bg-surface-container-lowest text-on-surface-variant text-xs font-medium shadow-xs border border-outline-variant/20">
+                <span data-lang="ko">• 수백 개 사진·자료 파일 일괄 리네임</span>
+                <span data-lang="en">• Bulk File Renaming</span>
+              </span>
+            </div>
+          </div>
 
-      <a href="/guides/serverless-local-conversion.html" class="group glass-panel p-6 rounded-2xl border border-slate-800/80 hover:border-emerald-500/50 bg-slate-900/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 block">
-        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4 text-lg group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-shield-halved"></i>
+          <!-- Quick Interactive Detection Drawer -->
+          <div class="hidden mt-4 pt-4 border-t border-outline-variant/20" id="interactive-preview-panel">
+            <div class="flex items-center justify-between gap-2 pb-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+                <span class="text-sm font-bold text-on-surface">샘플 대기열 3건 준비됨</span>
+                <span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[11px] font-bold">준비 완료</span>
+              </div>
+              <button class="text-xs text-on-surface-variant hover:text-error transition-colors flex items-center gap-1 cursor-pointer" id="clear-preview-btn" type="button">
+                <span class="material-symbols-outlined text-[16px]">delete_sweep</span>
+                <span>목록 닫기</span>
+              </button>
+            </div>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between p-3 rounded-2xl bg-surface-container-low border border-outline-variant/20">
+                <div class="flex items-center gap-3 min-w-0">
+                  <span class="material-symbols-outlined text-primary text-[24px]">category</span>
+                  <div class="truncate">
+                    <div class="text-sm font-bold text-on-surface truncate">app_icon_core.svg</div>
+                    <div class="text-xs text-on-surface-variant">추천: 2.0x (@2x 레티나) PNG 선명 변환</div>
+                  </div>
+                </div>
+                <a class="px-3.5 py-1.5 rounded-xl bg-primary hover:bg-primary/90 text-white text-xs font-bold shrink-0 transition-colors" href="/svg-to-png.html">
+                  바로 변환
+                </a>
+              </div>
+              <div class="flex items-center justify-between p-3 rounded-2xl bg-surface-container-low border border-outline-variant/20">
+                <div class="flex items-center gap-3 min-w-0">
+                  <span class="material-symbols-outlined text-primary text-[24px]">graphic_eq</span>
+                  <div class="truncate">
+                    <div class="text-sm font-bold text-on-surface truncate">interview_recording_master.wav</div>
+                    <div class="text-xs text-on-surface-variant">추천: 192kbps 고음질 압축 (용량 88% 절감)</div>
+                  </div>
+                </div>
+                <a class="px-3.5 py-1.5 rounded-xl bg-primary hover:bg-primary/90 text-white text-xs font-bold shrink-0 transition-colors" href="/wav-to-mp3.html">
+                  바로 변환
+                </a>
+              </div>
+              <div class="flex items-center justify-between p-3 rounded-2xl bg-surface-container-low border border-outline-variant/20">
+                <div class="flex items-center gap-3 min-w-0">
+                  <span class="material-symbols-outlined text-primary text-[24px]">drive_file_rename_outline</span>
+                  <div class="truncate">
+                    <div class="text-sm font-bold text-on-surface truncate">2026-08-03_IMG_draft_01.jpg 외 24개</div>
+                    <div class="text-xs text-on-surface-variant">추천: 날짜 형식 통일 및 일련번호 부여</div>
+                  </div>
+                </div>
+                <a class="px-3.5 py-1.5 rounded-xl bg-primary hover:bg-primary/90 text-white text-xs font-bold shrink-0 transition-colors" href="/batch-rename.html">
+                  이름 정리
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="flex items-center justify-between mb-1">
-          <h3 class="text-base font-bold text-slate-100 group-hover:text-emerald-300 transition-colors font-sans">100% 로컬 데이터 보안</h3>
-          <i class="fa-solid fa-arrow-right text-[11px] text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+      </section>
+
+      <!-- 2. 자주 찾는 3대 핵심 작업 카드 (3-Column Banking Action Hub) -->
+      <section class="w-full mb-10">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-bold text-on-surface" data-lang="ko">자주 찾는 3대 도구</h2>
+            <h2 class="text-xl sm:text-2xl font-bold text-on-surface" data-lang="en">Top 3 Most Used Tools</h2>
+            <p class="text-xs text-on-surface-variant mt-0.5" data-lang="ko">매일 가장 많이 쓰이는 필수 일괄 처리 작업을 빠르게 선택하세요.</p>
+            <p class="text-xs text-on-surface-variant mt-0.5" data-lang="en">Choose essential batch processing workflows with a single tap.</p>
+          </div>
+          <span class="hidden sm:inline-flex items-center gap-1 text-xs text-primary font-bold">
+            <span class="material-symbols-outlined text-[16px]">touch_app</span>
+            <span data-lang="ko">원클릭 프리셋</span>
+            <span data-lang="en">One-click presets</span>
+          </span>
         </div>
-        <p class="text-xs text-slate-400 leading-relaxed font-sans">
-          서버 업로드 없이 사용자의 웹 브라우저 메모리 안에서 모든 가공이 완료되므로 프라이버시가 안전합니다.
-        </p>
-      </a>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Card 1: SVG -> PNG High-Res -->
+          <div class="bg-surface-container-lowest rounded-3xl p-6 shadow-xs border border-outline-variant/20 hover:shadow-md transition-all flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">view_in_ar</span>
+                </div>
+                <span class="px-2.5 py-1 rounded-full bg-surface-container text-[11px] text-primary font-bold">
+                  <span data-lang="ko">인기 1위</span>
+                  <span data-lang="en">#1 Popular</span>
+                </span>
+              </div>
+              <h3 class="text-base font-bold text-on-surface mb-1" data-lang="ko">
+                아이콘·이미지 선명하게 바꾸기
+              </h3>
+              <h3 class="text-base font-bold text-on-surface mb-1" data-lang="en">
+                Rasterize SVG to Crisp Image
+              </h3>
+              <p class="text-xs text-on-surface-variant mb-4 leading-relaxed" data-lang="ko">
+                SVG 벡터 이미지를 1.0x부터 3.0x 레티나 고해상도 PNG/JPG로 깨짐 없이 일괄 저장합니다.
+              </p>
+              <p class="text-xs text-on-surface-variant mb-4 leading-relaxed" data-lang="en">
+                Batch export SVGs into 1.0x~3.0x high-res Retina PNG/JPG without blur.
+              </p>
+              <!-- Scale Switch Chips -->
+              <div class="bg-surface-container-low p-2 rounded-2xl mb-6">
+                <div class="text-[11px] text-on-surface-variant font-semibold mb-1.5 px-1">
+                  <span data-lang="ko">배율 빠른 선택</span>
+                  <span data-lang="en">Scale Presets</span>
+                </div>
+                <div class="grid grid-cols-4 gap-1" id="svg-chips">
+                  <button class="svg-chip active py-1.5 rounded-xl text-center text-xs bg-surface-container-lowest text-primary font-bold shadow-xs cursor-pointer transition-all" type="button">1.0x</button>
+                  <button class="svg-chip py-1.5 rounded-xl text-center text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-all" type="button">1.5x</button>
+                  <button class="svg-chip py-1.5 rounded-xl text-center text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-all" type="button">2.0x</button>
+                  <button class="svg-chip py-1.5 rounded-xl text-center text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-all" type="button">3.0x</button>
+                </div>
+              </div>
+            </div>
+            <a class="w-full h-11 rounded-2xl bg-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-primary/90 transition-all shadow-xs" href="/svg-to-png.html">
+              <span data-lang="ko">SVG 변환 시작하기</span>
+              <span data-lang="en">Start SVG Conversion</span>
+              <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </a>
+          </div>
+
+          <!-- Card 2: Bulk File Renamer -->
+          <div class="bg-surface-container-lowest rounded-3xl p-6 shadow-xs border border-outline-variant/20 hover:shadow-md transition-all flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">edit_calendar</span>
+                </div>
+                <span class="px-2.5 py-1 rounded-full bg-surface-container text-[11px] text-on-surface font-semibold">
+                  <span data-lang="ko">실수 방지 안심</span>
+                  <span data-lang="en">Reversible & Safe</span>
+                </span>
+              </div>
+              <h3 class="text-base font-bold text-on-surface mb-1" data-lang="ko">
+                파일 이름 한 번에 깔끔 정리
+              </h3>
+              <h3 class="text-base font-bold text-on-surface mb-1" data-lang="en">
+                Bulk File Name Cleanup
+              </h3>
+              <p class="text-xs text-on-surface-variant mb-4 leading-relaxed" data-lang="ko">
+                수백 개 파일에 순번 매기기, 날짜 서식 통일, 정규식 치환을 실시간 미리보며 안전하게 바꿉니다.
+              </p>
+              <p class="text-xs text-on-surface-variant mb-4 leading-relaxed" data-lang="en">
+                Safely renumber files, unify date formats, and replace text with live preview.
+              </p>
+              <!-- Rename Presets -->
+              <div class="bg-surface-container-low p-2 rounded-2xl mb-6">
+                <div class="text-[11px] text-on-surface-variant font-semibold mb-1.5 px-1">
+                  <span data-lang="ko">자주 쓰는 규칙 템플릿</span>
+                  <span data-lang="en">Rule Presets</span>
+                </div>
+                <div class="grid grid-cols-2 gap-1.5" id="rename-chips">
+                  <button class="rename-chip active py-1.5 px-2 rounded-xl text-center text-xs bg-surface-container-lowest text-primary font-bold shadow-xs cursor-pointer transition-all truncate" type="button">
+                    <span data-lang="ko"># 01부터 번호</span>
+                    <span data-lang="en"># 01 Numbers</span>
+                  </button>
+                  <button class="rename-chip py-1.5 px-2 rounded-xl text-center text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-all truncate" type="button">
+                    <span data-lang="ko">[태그] 일괄 삭제</span>
+                    <span data-lang="en">Remove [Tags]</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <a class="w-full h-11 rounded-2xl bg-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-primary/90 transition-all shadow-xs" href="/batch-rename.html">
+              <span data-lang="ko">대량 이름 바꾸기 시작</span>
+              <span data-lang="en">Start Batch Rename</span>
+              <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </a>
+          </div>
+
+          <!-- Card 3: Audio Converter (WAV -> MP3) -->
+          <div class="bg-surface-container-lowest rounded-3xl p-6 shadow-xs border border-outline-variant/20 hover:shadow-md transition-all flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">headphones</span>
+                </div>
+                <span class="px-2.5 py-1 rounded-full bg-surface-container text-[11px] text-on-surface font-semibold">
+                  <span data-lang="ko">용량 90% 절약</span>
+                  <span data-lang="en">Save 90% Size</span>
+                </span>
+              </div>
+              <h3 class="text-base font-bold text-on-surface mb-1" data-lang="ko">
+                용량 줄여 음원으로 저장하기
+              </h3>
+              <h3 class="text-base font-bold text-on-surface mb-1" data-lang="en">
+                Compress & Encode Audio
+              </h3>
+              <p class="text-xs text-on-surface-variant mb-4 leading-relaxed" data-lang="ko">
+                무거운 WAV 음원을 128k부터 320kbps까지 원하는 음질 수준으로 가볍게 인코딩합니다.
+              </p>
+              <p class="text-xs text-on-surface-variant mb-4 leading-relaxed" data-lang="en">
+                Fast, lossless-quality audio encoding from large WAVs into 128k~320kbps MP3s.
+              </p>
+              <!-- Bitrate Chips -->
+              <div class="bg-surface-container-low p-2 rounded-2xl mb-6">
+                <div class="text-[11px] text-on-surface-variant font-semibold mb-1.5 px-1">
+                  <span data-lang="ko">비트레이트 맞춤 프리셋</span>
+                  <span data-lang="en">Bitrate Presets</span>
+                </div>
+                <div class="grid grid-cols-3 gap-1" id="audio-chips">
+                  <button class="audio-chip py-1.5 rounded-xl text-center text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-all" type="button">128k</button>
+                  <button class="audio-chip active py-1.5 rounded-xl text-center text-xs bg-surface-container-lowest text-primary font-bold shadow-xs cursor-pointer transition-all" type="button">
+                    <span data-lang="ko">192k (표준)</span>
+                    <span data-lang="en">192k (Std)</span>
+                  </button>
+                  <button class="audio-chip py-1.5 rounded-xl text-center text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-all" type="button">320k</button>
+                </div>
+              </div>
+            </div>
+            <a class="w-full h-11 rounded-2xl bg-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-primary/90 transition-all shadow-xs" href="/wav-to-mp3.html">
+              <span data-lang="ko">오디오 변환 시작하기</span>
+              <span data-lang="en">Start Audio Encoding</span>
+              <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
 
-    <!-- Featured Guides Links Grid (Crawler Internal Link Optimization) -->
-    <div class="mb-8">
-      <div class="flex items-center justify-between mb-6">
-        <div>
-          <h2 class="text-xl font-extrabold text-slate-100 font-sans tracking-tight">인기 사용 가이드 & 팁</h2>
-          <p class="text-xs text-slate-400 font-sans mt-1">파일 변환 및 리네이밍 효율을 극대화하는 전문가 노하우 가이드입니다.</p>
+    <!-- Main In-Browser Workspace (Lit Component) -->
+    <batcher-app id="main-workspace" hide-header class="block relative z-20"></batcher-app>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <!-- 3. 더 많은 작업 도구 (확장성을 고려한 모듈형 그리드 섹션) -->
+      <section class="w-full my-12">
+        <div class="flex items-center justify-between mb-5">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-bold text-on-surface" data-lang="ko">더 많은 작업 도구</h2>
+            <h2 class="text-xl sm:text-2xl font-bold text-on-surface" data-lang="en">More Utility Tools</h2>
+            <p class="text-xs text-on-surface-variant mt-0.5" data-lang="ko">디자이너와 크리에이터의 반복 작업을 없애주는 추가 유틸리티입니다.</p>
+            <p class="text-xs text-on-surface-variant mt-0.5" data-lang="en">Extra productivity utilities for designers and content creators.</p>
+          </div>
+          <a class="text-xs text-primary font-bold hover:underline flex items-center gap-1" href="/guides/index.html">
+            <span data-lang="ko">전체 보기</span>
+            <span data-lang="en">View All</span>
+            <span class="material-symbols-outlined text-[16px]">east</span>
+          </a>
         </div>
-        <a href="/guides/index.html" class="text-xs font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 transition-colors">
-          전체 가이드 보기 <i class="fa-solid fa-arrow-right text-[10px]"></i>
-        </a>
-      </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <a href="/guides/svg-to-png.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
-          <div>
-            <div class="text-[10px] font-extrabold text-indigo-400 uppercase tracking-wider mb-2 font-sans">Guide 01</div>
-            <h3 class="text-sm font-bold text-slate-200 group-hover:text-indigo-300 transition-colors font-sans mb-1 line-clamp-2">
-              SVG PNG/JPG 고화질 변환 및 레티나 배율 가이드
-            </h3>
-            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
-              1.0x, 2.0x(@2x), 3.0x(@3x) 해상도별 이미지 에셋을 깨짐 없이 일괄 내보내는 방법
-            </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Sub Tool 1 -->
+          <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-xs border border-outline-variant/20 hover:shadow-md transition-all flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary mb-3">
+                <span class="material-symbols-outlined text-[22px]">auto_fix_high</span>
+              </div>
+              <div class="text-sm font-bold text-on-surface mb-1" data-lang="ko">이미지 포맷 일괄 변환</div>
+              <div class="text-sm font-bold text-on-surface mb-1" data-lang="en">Batch Image Format Converter</div>
+              <p class="text-xs text-on-surface-variant mb-4 leading-relaxed" data-lang="ko">
+                PNG, JPG, WebP 형식을 클릭 한 번으로 통일하여 내보냅니다.
+              </p>
+              <p class="text-xs text-on-surface-variant mb-4 leading-relaxed" data-lang="en">
+                Batch convert PNG, JPG, and WebP assets with a single click.
+              </p>
+            </div>
+            <a class="inline-flex items-center gap-1 text-xs text-primary font-bold hover:gap-1.5 transition-all" href="/svg-to-png.html">
+              <span data-lang="ko">사용하기</span>
+              <span data-lang="en">Use Tool</span>
+              <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            </a>
           </div>
-          <div class="mt-4 flex items-center text-xs font-bold text-indigo-400 group-hover:translate-x-1 transition-transform">
-            자세히 읽기 <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
-          </div>
-        </a>
 
-        <a href="/guides/wav-to-mp3.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-purple-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
-          <div>
-            <div class="text-[10px] font-extrabold text-purple-400 uppercase tracking-wider mb-2 font-sans">Guide 02</div>
-            <h3 class="text-sm font-bold text-slate-200 group-hover:text-purple-300 transition-colors font-sans mb-1 line-clamp-2">
-              WAV MP3 오디오 변환 및 비트레이트 설정법
-            </h3>
-            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
-              128kbps부터 320kbps까지 음질 손실을 최소화하며 용량을 90% 압축하는 오디오 인코딩 팁
-            </p>
+          <!-- Sub Tool 2 -->
+          <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-xs border border-outline-variant/20 hover:shadow-md transition-all flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary mb-3">
+                <span class="material-symbols-outlined text-[22px]">find_replace</span>
+              </div>
+              <div class="text-sm font-bold text-on-surface mb-1" data-lang="ko">중복 파일 탐지 정리기</div>
+              <div class="text-sm font-bold text-on-surface mb-1" data-lang="en">Duplicate Resource Cleaner</div>
+              <p class="text-xs text-on-surface-variant mb-4 leading-relaxed" data-lang="ko">
+                내용이 동일한 복제 사진과 소리 파일을 찾아 디스크 용량을 확보합니다.
+              </p>
+              <p class="text-xs text-on-surface-variant mb-4 leading-relaxed" data-lang="en">
+                Detect duplicate media and clean unreferenced project resources.
+              </p>
+            </div>
+            <a class="inline-flex items-center gap-1 text-xs text-primary font-bold hover:gap-1.5 transition-all" href="#main-workspace">
+              <span data-lang="ko">사용하기</span>
+              <span data-lang="en">Use Tool</span>
+              <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            </a>
           </div>
-          <div class="mt-4 flex items-center text-xs font-bold text-purple-400 group-hover:translate-x-1 transition-transform">
-            자세히 읽기 <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
-          </div>
-        </a>
 
-        <a href="/guides/batch-rename.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-pink-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
-          <div>
-            <div class="text-[10px] font-extrabold text-pink-400 uppercase tracking-wider mb-2 font-sans">Guide 03</div>
-            <h3 class="text-sm font-bold text-slate-200 group-hover:text-pink-300 transition-colors font-sans mb-1 line-clamp-2">
-              대량 파일 이름 일괄 변경 및 정규식 치환 활용법
-            </h3>
-            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
-              문자열 검색/바꾸기, 접두사/접미사, 정규표현식으로 수백 개 파일명을 한 번에 대량 리네이밍
-            </p>
+          <!-- Sub Tool 3 -->
+          <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-xs border border-outline-variant/20 hover:shadow-md transition-all flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary mb-3">
+                <span class="material-symbols-outlined text-[22px]">description</span>
+              </div>
+              <div class="text-sm font-bold text-on-surface mb-1" data-lang="ko">텍스트 및 메타데이터 추출</div>
+              <div class="text-sm font-bold text-on-surface mb-1" data-lang="en">Text & Metadata Extraction</div>
+              <p class="text-xs text-on-surface-variant mb-4 leading-relaxed" data-lang="ko">
+                이미지 EXIF 정보 삭제 및 파일 목록 엑셀(CSV) 내보내기 기능.
+              </p>
+              <p class="text-xs text-on-surface-variant mb-4 leading-relaxed" data-lang="en">
+                Strip EXIF data and export sorted directory listings to CSV.
+              </p>
+            </div>
+            <a class="inline-flex items-center gap-1 text-xs text-primary font-bold hover:gap-1.5 transition-all" href="/batch-rename.html">
+              <span data-lang="ko">사용하기</span>
+              <span data-lang="en">Use Tool</span>
+              <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            </a>
           </div>
-          <div class="mt-4 flex items-center text-xs font-bold text-pink-400 group-hover:translate-x-1 transition-transform">
-            자세히 읽기 <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
-          </div>
-        </a>
 
-        <a href="/guides/serverless-local-conversion.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-emerald-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
-          <div>
-            <div class="text-[10px] font-extrabold text-emerald-400 uppercase tracking-wider mb-2 font-sans">Guide 04</div>
-            <h3 class="text-sm font-bold text-slate-200 group-hover:text-emerald-300 transition-colors font-sans mb-1 line-clamp-2">
-              100% 브라우저 로컬 데이터 처리와 보안 우수성
-            </h3>
-            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
-              서버 전송 없이 사용자의 PC 메모리 내부에서 구동되는 프라이버시 보호 기술 원리 안내
-            </p>
+          <!-- Sub Tool 4 (Proposal Box) -->
+          <div class="bg-surface-container-low rounded-2xl p-5 border border-outline-variant/20 flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center text-primary mb-3">
+                <span class="material-symbols-outlined text-[22px]">add</span>
+              </div>
+              <div class="text-sm font-bold text-on-surface mb-1" data-lang="ko">새로운 도구 제안하기</div>
+              <div class="text-sm font-bold text-on-surface mb-1" data-lang="en">Propose a New Tool</div>
+              <p class="text-xs text-on-surface-variant mb-4 leading-relaxed" data-lang="ko">
+                필요한 파일 일괄 처리 작업이 있나요? 개발팀에 의견을 보내주세요.
+              </p>
+              <p class="text-xs text-on-surface-variant mb-4 leading-relaxed" data-lang="en">
+                Have a recurring workflow idea? Send feedback to the developer.
+              </p>
+            </div>
+            <a class="inline-flex items-center gap-1 text-xs text-primary font-bold hover:underline" href="/contact.html">
+              <span data-lang="ko">의견 남기기</span>
+              <span data-lang="en">Send Feedback</span>
+              <span class="material-symbols-outlined text-[16px]">send</span>
+            </a>
           </div>
-          <div class="mt-4 flex items-center text-xs font-bold text-emerald-400 group-hover:translate-x-1 transition-transform">
-            자세히 읽기 <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
-          </div>
-        </a>
+        </div>
+      </section>
 
-        <a href="/guides/figma-illustrator-svg-export-troubleshooting.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
+      <!-- 4. 인기 사용 가이드 & 팁 (Reference Text Guides) -->
+      <section class="w-full my-12">
+        <div class="flex items-center justify-between mb-5">
           <div>
-            <div class="text-[10px] font-extrabold text-indigo-400 uppercase tracking-wider mb-2 font-sans">Guide 05</div>
-            <h3 class="text-sm font-bold text-slate-200 group-hover:text-indigo-300 transition-colors font-sans mb-1 line-clamp-2">
-              피그마/일러스트레이터 SVG 추출 오류 해결법
-            </h3>
-            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
-              viewBox 누락, 폰트 깨짐 방지 윤곽선 변환 및 마스크 오류 수정 가이드
-            </p>
+            <h2 class="text-xl sm:text-2xl font-bold text-on-surface" data-lang="ko">인기 사용 가이드 &amp; 팁</h2>
+            <h2 class="text-xl sm:text-2xl font-bold text-on-surface" data-lang="en">Featured Guides &amp; Tips</h2>
+            <p class="text-xs text-on-surface-variant mt-0.5" data-lang="ko">작업 속도를 10배 높여주는 실무자 핵심 가이드입니다.</p>
+            <p class="text-xs text-on-surface-variant mt-0.5" data-lang="en">Workflow guides and production secrets to accelerate your file handling.</p>
           </div>
-          <div class="mt-4 flex items-center text-xs font-bold text-indigo-400 group-hover:translate-x-1 transition-transform">
-            자세히 읽기 <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
-          </div>
-        </a>
+          <a class="text-xs text-primary font-bold hover:underline" href="/guides/index.html">
+            <span data-lang="ko">전체 가이드 보기</span>
+            <span data-lang="en">View All Guides</span>
+          </a>
+        </div>
 
-        <a href="/guides/os-batch-rename-cli-vs-web.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-pink-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
-          <div>
-            <div class="text-[10px] font-extrabold text-pink-400 uppercase tracking-wider mb-2 font-sans">Guide 06</div>
-            <h3 class="text-sm font-bold text-slate-200 group-hover:text-pink-300 transition-colors font-sans mb-1 line-clamp-2">
-              PowerShell vs Mac 터미널 vs 웹 리네이머 비교
-            </h3>
-            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
-              명령줄 CLI 스크립트와 웹 GUI 도구의 안전장치 및 생산성 심층 비교
-            </p>
-          </div>
-          <div class="mt-4 flex items-center text-xs font-bold text-pink-400 group-hover:translate-x-1 transition-transform">
-            자세히 읽기 <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
-          </div>
-        </a>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Guide 01 -->
+          <a class="bg-surface-container-lowest rounded-2xl p-5 shadow-xs border border-outline-variant/20 hover:shadow-md transition-all flex flex-col justify-between group" href="/guides/svg-to-png.html">
+            <div class="space-y-1 mb-4">
+              <span class="text-[11px] font-bold text-primary">Guide 01</span>
+              <div class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors leading-snug">
+                SVG 고화질 변환 및 레티나 배율 가이드
+              </div>
+              <p class="text-xs text-on-surface-variant line-clamp-3 leading-relaxed">
+                1.0x, 2.0x(@2x), 3.0x(@3x) 해상도별 이미지 에셋을 깨짐 없이 일괄 내보내는 방법과 접미사 설정 요령.
+              </p>
+            </div>
+            <span class="text-xs text-primary font-bold flex items-center gap-1">
+              자세히 읽기
+              <span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </span>
+          </a>
 
-        <a href="/guides/audio-lossless-flac-wav-vs-mp3.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-purple-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
-          <div>
-            <div class="text-[10px] font-extrabold text-purple-400 uppercase tracking-wider mb-2 font-sans">Guide 07</div>
-            <h3 class="text-sm font-bold text-slate-200 group-hover:text-purple-300 transition-colors font-sans mb-1 line-clamp-2">
-              무손실 FLAC/WAV vs MP3 포맷 비교 및 선택
-            </h3>
-            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
-              비압축 원음, 가역 무손실, 손실 압축의 주파수 대역 및 용량 비교 기준
-            </p>
-          </div>
-          <div class="mt-4 flex items-center text-xs font-bold text-purple-400 group-hover:translate-x-1 transition-transform">
-            자세히 읽기 <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
-          </div>
-        </a>
+          <!-- Guide 02 -->
+          <a class="bg-surface-container-lowest rounded-2xl p-5 shadow-xs border border-outline-variant/20 hover:shadow-md transition-all flex flex-col justify-between group" href="/guides/wav-to-mp3.html">
+            <div class="space-y-1 mb-4">
+              <span class="text-[11px] font-bold text-primary">Guide 02</span>
+              <div class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors leading-snug">
+                WAV MP3 오디오 변환 및 비트레이트 설정법
+              </div>
+              <p class="text-xs text-on-surface-variant line-clamp-3 leading-relaxed">
+                128kbps부터 320kbps까지 음질 손실을 최소화하며 파일 용량을 90% 압축하는 오디오 인코딩 팁.
+              </p>
+            </div>
+            <span class="text-xs text-primary font-bold flex items-center gap-1">
+              자세히 읽기
+              <span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </span>
+          </a>
 
-        <a href="/guides/regex-advanced-pattern-guide.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-pink-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
-          <div>
-            <div class="text-[10px] font-extrabold text-pink-400 uppercase tracking-wider mb-2 font-sans">Guide 08</div>
-            <h3 class="text-sm font-bold text-slate-200 group-hover:text-pink-300 transition-colors font-sans mb-1 line-clamp-2">
-              실무 고급 정규식(Regex) 파일 리네이밍 15선
-            </h3>
-            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
-              날짜 치환, 괄호/특수문자 제거, 버전 태그 정렬 실전 치트시트 모음
-            </p>
+          <!-- Guide 03 -->
+          <a class="bg-surface-container-lowest rounded-2xl p-5 shadow-xs border border-outline-variant/20 hover:shadow-md transition-all flex flex-col justify-between group" href="/guides/batch-rename.html">
+            <div class="space-y-1 mb-4">
+              <span class="text-[11px] font-bold text-primary">Guide 03</span>
+              <div class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors leading-snug">
+                대량 파일 이름 변경 및 정규식 치환 활용
+              </div>
+              <p class="text-xs text-on-surface-variant line-clamp-3 leading-relaxed">
+                문자열 검색/바꾸기, 날짜 치환, 괄호/특수문자 정규식 제거로 수백 개 파일명을 한 번에 정리하기.
+              </p>
+            </div>
+            <span class="text-xs text-primary font-bold flex items-center gap-1">
+              자세히 읽기
+              <span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </span>
+          </a>
+
+          <!-- Guide 04 -->
+          <a class="bg-surface-container-lowest rounded-2xl p-5 shadow-xs border border-outline-variant/20 hover:shadow-md transition-all flex flex-col justify-between group" href="/guides/serverless-local-conversion.html">
+            <div class="space-y-1 mb-4">
+              <span class="text-[11px] font-bold text-primary">Guide 04</span>
+              <div class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors leading-snug">
+                100% 브라우저 로컬 데이터 처리 보안 원리
+              </div>
+              <p class="text-xs text-on-surface-variant line-clamp-3 leading-relaxed">
+                서버 전송 없이 사용자의 PC 메모리(WICG File System Access &amp; Web Workers) 안에서 구동되는 프라이버시 보호 구조.
+              </p>
+            </div>
+            <span class="text-xs text-primary font-bold flex items-center gap-1">
+              자세히 읽기
+              <span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </span>
+          </a>
+        </div>
+      </section>
+
+      <!-- 5. 자주 묻는 질문 (Accordion FAQ) (KO) -->
+      <section id="faq-ko" data-lang="ko" class="w-full my-12 pb-16">
+        <div class="bg-surface-container-lowest rounded-3xl p-6 sm:p-8 shadow-xs border border-outline-variant/20">
+          <div class="max-w-2xl mb-6">
+            <span class="text-[11px] text-primary font-bold uppercase tracking-wider">FAQ</span>
+            <h2 class="text-2xl font-bold text-on-surface mt-1">자주 묻는 질문</h2>
+            <p class="text-xs text-on-surface-variant mt-0.5">배처의 기술적 원리와 안전성에 대해 명쾌하게 답변해 드립니다.</p>
           </div>
-          <div class="mt-4 flex items-center text-xs font-bold text-pink-400 group-hover:translate-x-1 transition-transform">
-            자세히 읽기 <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
+          <div class="space-y-2.5" id="faq-accordion-group-ko">
+            <!-- FAQ Item 1 -->
+            <div class="faq-item rounded-2xl bg-surface-container-low border border-outline-variant/20 overflow-hidden transition-colors">
+              <button class="faq-toggle w-full p-4 text-left flex items-center justify-between gap-4 text-sm font-bold text-on-surface cursor-pointer" type="button">
+                <span>배처 툴(Batcher Tools)은 어떤 도구이며 주요 특징은 무엇인가요?</span>
+                <span class="material-symbols-outlined text-on-surface-variant transition-transform shrink-0">expand_more</span>
+              </button>
+              <div class="faq-content hidden px-4 pb-4 text-on-surface-variant text-xs leading-relaxed space-y-2">
+                <p>배처 툴(Batcher Tools)은 대용량 SVG 벡터 이미지 변환(PNG/JPG), WAV/MP3 오디오 변환, 대량 파일 이름 일괄 변경(Batch Rename) 기능을 웹 브라우저 내에서 100% 로컬로 처리해 주는 스마트 유틸리티 도구입니다.</p>
+                <p>복잡한 개발 환경 세팅이나 프로그램 설치 없이 크롬이나 웨일, 에지 등 브라우저에서 즉시 작동하며, 다중 배율 내보내기(@2x, @3x), 오디오 비트레이트 세부 조절, 다채로운 정규식 치환을 지원합니다.</p>
+              </div>
+            </div>
+            <!-- FAQ Item 2 -->
+            <div class="faq-item rounded-2xl bg-surface-container-low border border-outline-variant/20 overflow-hidden transition-colors">
+              <button class="faq-toggle w-full p-4 text-left flex items-center justify-between gap-4 text-sm font-bold text-on-surface cursor-pointer" type="button">
+                <span>SVG를 PNG로 바꿀 때 왜 배율(1.5x, 2.0x, 3.0x) 설정이 중요한가요?</span>
+                <span class="material-symbols-outlined text-on-surface-variant transition-transform shrink-0">expand_more</span>
+              </button>
+              <div class="faq-content hidden px-4 pb-4 text-on-surface-variant text-xs leading-relaxed space-y-2">
+                <p><strong>SVG</strong>는 무한 해상도 벡터이지만, 모바일 앱(iOS, Android)이나 웹에 배치할 때는 픽셀 기반의 비트맵 이미지(PNG)로 변환해야 합니다.</p>
+                <p>최신 스마트폰과 고해상도 레티나 디스플레이는 2배~3배 높은 픽셀 밀도(DPI)를 가집니다. 따라서 기본 1.0x 배율로만 변환하면 레티나 디스플레이에서 아이콘이나 이미지가 흐릿하게 뭉개질 수 있습니다. 배처에서는 1.0x(표준), 1.5x(HDPI), 2.0x(@2x 레티나), 3.0x(@3x 고해상도) 배율을 한 번에 추출할 수 있습니다.</p>
+              </div>
+            </div>
+            <!-- FAQ Item 3 -->
+            <div class="faq-item rounded-2xl bg-surface-container-low border border-outline-variant/20 overflow-hidden transition-colors">
+              <button class="faq-toggle w-full p-4 text-left flex items-center justify-between gap-4 text-sm font-bold text-on-surface cursor-pointer" type="button">
+                <span>서버 업로드 없이 내 컴퓨터 안에서만 처리되는 게 왜 더 안전한가요?</span>
+                <span class="material-symbols-outlined text-on-surface-variant transition-transform shrink-0">expand_more</span>
+              </button>
+              <div class="faq-content hidden px-4 pb-4 text-on-surface-variant text-xs leading-relaxed space-y-2">
+                <p>기존 변환기는 사용자 파일을 외부 클라우드 서버로 업로드한 뒤 결과물을 다운로드받으므로, 사내 기밀 디자인이나 개인 녹음본이 서버에 저장되거나 유출될 위험이 있습니다.</p>
+                <p>배처 툴은 최신 WICG File System Access API 및 Web Worker를 활용하여 <strong>100% 사용자의 웹 브라우저 메모리 안에서 모든 변환을 끝냅니다</strong>. 파일이 외부 네트워크로 단 1바이트도 나가지 않으며 심지어 오프라인 상태에서도 정상 작동합니다.</p>
+              </div>
+            </div>
+            <!-- FAQ Item 4 -->
+            <div class="faq-item rounded-2xl bg-surface-container-low border border-outline-variant/20 overflow-hidden transition-colors">
+              <button class="faq-toggle w-full p-4 text-left flex items-center justify-between gap-4 text-sm font-bold text-on-surface cursor-pointer" type="button">
+                <span>수백 개 파일 이름을 바꿀 때 실수하면 되돌릴 수 있나요? (안전장치)</span>
+                <span class="material-symbols-outlined text-on-surface-variant transition-transform shrink-0">expand_more</span>
+              </button>
+              <div class="faq-content hidden px-4 pb-4 text-on-surface-variant text-xs leading-relaxed space-y-2">
+                <p>실수를 방지하기 위해 <strong>3단계 안심 보호 장치</strong>가 마련되어 있습니다:</p>
+                <ul class="list-disc list-inside mt-1 space-y-1">
+                  <li><strong>실시간 미리보기:</strong> 실제 파일이 바뀌기 전 화면에서 결과 파일명을 눈으로 직접 대조합니다.</li>
+                  <li><strong>단계별 실행 취소 (Undo):</strong> 직전에 잘못 적용한 규칙만 한 단계 뒤로 되돌립니다.</li>
+                  <li><strong>전체 이름 복원 (Reset):</strong> 클릭 한 번으로 불러왔던 처음 원본 파일명으로 깨끗이 되돌립니다.</li>
+                </ul>
+              </div>
+            </div>
+            <!-- FAQ Item 5 -->
+            <div class="faq-item rounded-2xl bg-surface-container-low border border-outline-variant/20 overflow-hidden transition-colors">
+              <button class="faq-toggle w-full p-4 text-left flex items-center justify-between gap-4 text-sm font-bold text-on-surface cursor-pointer" type="button">
+                <span>변환된 파일의 상업적 이용 및 라이선스 정책은 어떻게 되나요?</span>
+                <span class="material-symbols-outlined text-on-surface-variant transition-transform shrink-0">expand_more</span>
+              </button>
+              <div class="faq-content hidden px-4 pb-4 text-on-surface-variant text-xs leading-relaxed space-y-2">
+                <p><strong>상업적 목적 사용 전면 무료:</strong> 배처 툴을 이용해 가공하거나 이름 변경한 결과물에 대한 소유권과 저작권은 100% 사용자 본인에게 있습니다.</p>
+                <p>오픈소스 라이선스(MIT, BSD)를 기반으로 구축되어 개인 포트폴리오뿐 아니라 유료 앱 판매, 게임 에셋 상용 배포 등 모든 프로젝트에 제약 없이 안심하고 사용하실 수 있습니다.</p>
+              </div>
+            </div>
           </div>
-        </a>
-      </div>
+        </div>
+      </section>
+
+      <!-- 5. Frequently Asked Questions (Accordion FAQ) (EN) -->
+      <section id="faq-en" data-lang="en" class="hidden w-full my-12 pb-16">
+        <div class="bg-surface-container-lowest rounded-3xl p-6 sm:p-8 shadow-xs border border-outline-variant/20">
+          <div class="max-w-2xl mb-6">
+            <span class="text-[11px] text-primary font-bold uppercase tracking-wider">FAQ</span>
+            <h2 class="text-2xl font-bold text-on-surface mt-1">Frequently Asked Questions</h2>
+            <p class="text-xs text-on-surface-variant mt-0.5">Clear answers about Batcher's technology, security, and usage.</p>
+          </div>
+          <div class="space-y-2.5" id="faq-accordion-group-en">
+            <!-- FAQ Item 1 -->
+            <div class="faq-item rounded-2xl bg-surface-container-low border border-outline-variant/20 overflow-hidden transition-colors">
+              <button class="faq-toggle w-full p-4 text-left flex items-center justify-between gap-4 text-sm font-bold text-on-surface cursor-pointer" type="button">
+                <span>What is Batcher Tools and what are its key features?</span>
+                <span class="material-symbols-outlined text-on-surface-variant transition-transform shrink-0">expand_more</span>
+              </button>
+              <div class="faq-content hidden px-4 pb-4 text-on-surface-variant text-xs leading-relaxed space-y-2">
+                <p>Batcher Tools is a smart local utility for batch SVG-to-PNG conversion, WAV-to-MP3 audio encoding, and mass file renaming right inside your browser.</p>
+                <p>Requires zero installation, supports multi-scale retina exports (@2x, @3x), precise audio bitrate control, and advanced regex substitutions.</p>
+              </div>
+            </div>
+            <!-- FAQ Item 2 -->
+            <div class="faq-item rounded-2xl bg-surface-container-low border border-outline-variant/20 overflow-hidden transition-colors">
+              <button class="faq-toggle w-full p-4 text-left flex items-center justify-between gap-4 text-sm font-bold text-on-surface cursor-pointer" type="button">
+                <span>Why is scale selection (1.5x, 2.0x, 3.0x) crucial when converting SVG to PNG?</span>
+                <span class="material-symbols-outlined text-on-surface-variant transition-transform shrink-0">expand_more</span>
+              </button>
+              <div class="faq-content hidden px-4 pb-4 text-on-surface-variant text-xs leading-relaxed space-y-2">
+                <p>SVG vectors look sharp at any resolution, but mobile apps (iOS, Android) require bitmap PNGs. High-density retina screens have 2x or 3x higher pixel densities, so exporting at 1.0x looks blurry. Batcher exports standard, @2x, and @3x scales simultaneously.</p>
+              </div>
+            </div>
+            <!-- FAQ Item 3 -->
+            <div class="faq-item rounded-2xl bg-surface-container-low border border-outline-variant/20 overflow-hidden transition-colors">
+              <button class="faq-toggle w-full p-4 text-left flex items-center justify-between gap-4 text-sm font-bold text-on-surface cursor-pointer" type="button">
+                <span>Why is client-side in-device processing safer than server uploads?</span>
+                <span class="material-symbols-outlined text-on-surface-variant transition-transform shrink-0">expand_more</span>
+              </button>
+              <div class="faq-content hidden px-4 pb-4 text-on-surface-variant text-xs leading-relaxed space-y-2">
+                <p>Traditional tools send files to remote servers, creating leakage risks for private graphics or sensitive audio. Batcher uses the WICG File System Access API and Web Workers so 100% of data processing occurs inside your device memory.</p>
+              </div>
+            </div>
+            <!-- FAQ Item 4 -->
+            <div class="faq-item rounded-2xl bg-surface-container-low border border-outline-variant/20 overflow-hidden transition-colors">
+              <button class="faq-toggle w-full p-4 text-left flex items-center justify-between gap-4 text-sm font-bold text-on-surface cursor-pointer" type="button">
+                <span>What safeguards exist if I make a mistake while renaming files?</span>
+                <span class="material-symbols-outlined text-on-surface-variant transition-transform shrink-0">expand_more</span>
+              </button>
+              <div class="faq-content hidden px-4 pb-4 text-on-surface-variant text-xs leading-relaxed space-y-2">
+                <p>Batcher includes 3 layers of safety: Live Preview before applying changes, step-by-step Undo, and one-click Reset to restore original filenames.</p>
+              </div>
+            </div>
+            <!-- FAQ Item 5 -->
+            <div class="faq-item rounded-2xl bg-surface-container-low border border-outline-variant/20 overflow-hidden transition-colors">
+              <button class="faq-toggle w-full p-4 text-left flex items-center justify-between gap-4 text-sm font-bold text-on-surface cursor-pointer" type="button">
+                <span>What is the commercial usage and license policy for processed files?</span>
+                <span class="material-symbols-outlined text-on-surface-variant transition-transform shrink-0">expand_more</span>
+              </button>
+              <div class="faq-content hidden px-4 pb-4 text-on-surface-variant text-xs leading-relaxed space-y-2">
+                <p>100% free for commercial use. You retain full copyright and ownership of all files. Built with permissive open-source licenses (MIT, BSD).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
-  </section>
+  </main>
 
-  <!-- Static SEO Feature Summary & Guide Cards Section for Crawlers & Users (EN) -->
-  <section id="features-summary-en" class="hidden max-w-7xl mx-auto px-6 pt-12 pb-8 relative z-10">
-    <!-- Static Pre-rendered Features Overview for Search Crawlers -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-      <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
-        <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg">
-          <i class="fa-solid fa-file-image"></i>
+  <!-- Fintech Security Footer (KO) -->
+  <footer id="footer-ko" data-lang="ko" class="w-full bg-surface-container-low border-t border-outline-variant/20 mt-12 pb-24 relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      <div class="flex flex-col md:flex-row md:items-start justify-between gap-8 mb-8">
+        <div class="space-y-2 max-w-md">
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-lg bg-primary flex items-center justify-center">
+              <span class="material-symbols-outlined text-white text-[14px]">lock</span>
+            </div>
+            <span class="text-sm font-bold text-on-surface">배처 금융권 수준 로컬 안심 보안</span>
+          </div>
+          <p class="text-xs text-on-surface-variant leading-relaxed">
+            업로드하신 모든 그래픽, 음원, 문서는 외부 서버로 전송되지 않고 사용자의 기기 브라우저(WebAssembly &amp; Web Workers) 안에서 100% 즉시 처리 후 파기됩니다.
+          </p>
         </div>
-        <h3 class="text-base font-bold text-slate-100 mb-2 font-sans">SVG High-Res Export</h3>
-        <p class="text-xs text-slate-400 leading-relaxed font-sans">
-          Batch convert SVG vector graphics to 1.0x, 1.5x, 2.0x (@2x), and 3.0x (@3x) crisp PNG/JPG bitmap files seamlessly.
-        </p>
-      </div>
-
-      <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
-        <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-4 text-lg">
-          <i class="fa-solid fa-music"></i>
+        <div class="flex flex-wrap gap-x-12 gap-y-4 text-xs font-semibold">
+          <div class="flex flex-col gap-2">
+            <span class="font-bold text-on-surface">도구 바로가기</span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/svg-to-png.html">SVG 변환기</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/wav-to-mp3.html">오디오 변환기</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/batch-rename.html">대량 이름 바꾸기</a>
+          </div>
+          <div class="flex flex-col gap-2">
+            <span class="font-bold text-on-surface">보안 및 안내</span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/serverless-local-conversion.html">데이터 무전송 증명</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/about.html">소개</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/index.html">사용 가이드</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/contact.html">문의하기</a>
+          </div>
+          <div class="flex flex-col gap-2">
+            <span class="font-bold text-on-surface">정책</span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/privacy.html">개인정보처리방침</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/terms.html">서비스 이용약관</a>
+            <a class="text-amber-600 dark:text-amber-400 hover:underline inline-flex items-center gap-1 font-bold" href="https://buymeacoffee.com/playNolang" target="_blank" rel="noopener noreferrer">
+              <span>☕</span> 커피 후원
+            </a>
+          </div>
         </div>
-        <h3 class="text-base font-bold text-slate-100 mb-2 font-sans">WAV / MP3 Audio Converter</h3>
-        <p class="text-xs text-slate-400 leading-relaxed font-sans">
-          Encode large WAV audio files into lightweight MP3 format with custom bitrates from 128kbps up to 320kbps in-browser.
-        </p>
       </div>
-
-      <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
-        <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 mb-4 text-lg">
-          <i class="fa-solid fa-file-signature"></i>
+      <div class="pt-6 border-t border-outline-variant/20 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="text-[11px] text-on-surface-variant">© 2026 Batcher. 금융권 감성의 안심 로컬 생산성 플랫폼. All rights reserved.</div>
+        <div class="flex items-center gap-2 text-[11px] text-on-surface-variant">
+          <span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+          <span>온디바이스 가속 활성화됨</span>
         </div>
-        <h3 class="text-base font-bold text-slate-100 mb-2 font-sans">Bulk File Renamer</h3>
-        <p class="text-xs text-slate-400 leading-relaxed font-sans">
-          Batch rename hundreds of files using text replacement, prefix/suffix, regular expressions (Regex), and sequential numbering.
-        </p>
-      </div>
-
-      <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
-        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4 text-lg">
-          <i class="fa-solid fa-shield-halved"></i>
-        </div>
-        <h3 class="text-base font-bold text-slate-100 mb-2 font-sans">100% Client-Side Privacy</h3>
-        <p class="text-xs text-slate-400 leading-relaxed font-sans">
-          Zero server uploads. All processing happens entirely within your web browser memory for absolute privacy.
-        </p>
-      </div>
-    </div>
-
-    <!-- Featured Guides Links Grid (Crawler Internal Link Optimization) -->
-    <div class="mb-8">
-      <div class="flex items-center justify-between mb-6">
-        <div>
-          <h2 class="text-xl font-extrabold text-slate-100 font-sans tracking-tight">Featured Guides & Workflow Tips</h2>
-          <p class="text-xs text-slate-400 font-sans mt-1">Expert guides and practical tips to maximize your file processing efficiency.</p>
-        </div>
-        <a href="/guides/index.html" class="text-xs font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 transition-colors">
-          View All Guides <i class="fa-solid fa-arrow-right text-[10px]"></i>
-        </a>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <a href="/guides/svg-to-png.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
-          <div>
-            <div class="text-[10px] font-extrabold text-indigo-400 uppercase tracking-wider mb-2 font-sans">Guide 01</div>
-            <h3 class="text-sm font-bold text-slate-200 group-hover:text-indigo-300 transition-colors font-sans mb-1 line-clamp-2">
-              SVG to PNG/JPG High-Res Conversion & Retina Scaling Guide
-            </h3>
-            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
-              Learn how to export 1.0x, 2.0x (@2x), and 3.0x (@3x) bitmap image assets without pixelation.
-            </p>
-          </div>
-          <div class="mt-4 flex items-center text-xs font-bold text-indigo-400 group-hover:translate-x-1 transition-transform">
-            Read More <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
-          </div>
-        </a>
-
-        <a href="/guides/wav-to-mp3.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-purple-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
-          <div>
-            <div class="text-[10px] font-extrabold text-purple-400 uppercase tracking-wider mb-2 font-sans">Guide 02</div>
-            <h3 class="text-sm font-bold text-slate-200 group-hover:text-purple-300 transition-colors font-sans mb-1 line-clamp-2">
-              WAV to MP3 Audio Conversion & Bitrate Setup Guide
-            </h3>
-            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
-              Encoding tips for optimizing file size by 90% while maintaining crisp sound quality from 128kbps to 320kbps.
-            </p>
-          </div>
-          <div class="mt-4 flex items-center text-xs font-bold text-purple-400 group-hover:translate-x-1 transition-transform">
-            Read More <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
-          </div>
-        </a>
-
-        <a href="/guides/batch-rename.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-pink-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
-          <div>
-            <div class="text-[10px] font-extrabold text-pink-400 uppercase tracking-wider mb-2 font-sans">Guide 03</div>
-            <h3 class="text-sm font-bold text-slate-200 group-hover:text-pink-300 transition-colors font-sans mb-1 line-clamp-2">
-              Bulk File Renaming & Regular Expression (Regex) Usage
-            </h3>
-            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
-              Master string search & replace, prefixing, suffixing, and Regex patterns to rename hundreds of files in seconds.
-            </p>
-          </div>
-          <div class="mt-4 flex items-center text-xs font-bold text-pink-400 group-hover:translate-x-1 transition-transform">
-            Read More <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
-          </div>
-        </a>
-
-        <a href="/guides/serverless-local-conversion.html" class="group glass-panel p-5 rounded-2xl border border-slate-800/80 hover:border-emerald-500/50 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
-          <div>
-            <div class="text-[10px] font-extrabold text-emerald-400 uppercase tracking-wider mb-2 font-sans">Guide 04</div>
-            <h3 class="text-sm font-bold text-slate-200 group-hover:text-emerald-300 transition-colors font-sans mb-1 line-clamp-2">
-              100% In-Browser Local Processing & Security Architecture
-            </h3>
-            <p class="text-xs text-slate-400 line-clamp-2 font-sans leading-relaxed">
-              Discover how client-side WebAssembly, Canvas, and WICG File System Access API protect your private data.
-            </p>
-          </div>
-          <div class="mt-4 flex items-center text-xs font-bold text-emerald-400 group-hover:translate-x-1 transition-transform">
-            Read More <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i>
-          </div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- SEO & FAQ Section for Google AdSense and Users (KO) -->
-  <section id="faq-ko" class="max-w-7xl mx-auto px-6 py-16 border-t border-slate-800 relative z-10 pb-20">
-    <div class="max-w-3xl mx-auto">
-      <h2 class="text-3xl font-extrabold text-slate-100 mb-4 text-center tracking-tight">자주 묻는 질문 (FAQ) 및 상세 가이드</h2>
-      <p class="text-slate-400 text-sm text-center mb-12">배처 툴의 핵심 기능과 기술적 동작 원리, 효율적인 파일 가공 노하우를 상세히 확인해 보세요.</p>
-
-      <div class="border-t border-b border-slate-800 divide-y divide-slate-800">
-        <details class="group" open>
-          <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-question text-indigo-400 text-base"></i> 배처 툴(Batcher Tools)은 어떤 도구이며 주요 특징은 무엇인가요?
-            </span>
-            <i
-              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
-          </summary>
-          <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
-              <p>배처 툴(Batcher Tools)은 대용량 SVG 벡터 이미지 변환(PNG/JPG), WAV/MP3 오디오 변환, 대량 파일 이름 일괄 변경(Batch Rename) 기능을 웹 브라우저 내에서 100% 로컬로 처리해 주는 스마트 유틸리티 도구입니다.</p>
-              <p>복잡한 개발 환경 세팅이나 프로그램 설치 없이 크롬이나 웨일, 에지 등 브라우저에서 즉시 작동하며, 다중 배율 내보내기(@2x, @3x), 오디오 비트레이트 세부 조절, 다채로운 파일 이름 변경 규칙 및 정규식 치환을 지원합니다. 디자이너, 모바일 앱 개발자, 팟캐스터, 영상 편집자를 위해 개발되었으며 최상의 작업 효율성을 보장합니다.</p>
-            </div>
-          </div>
-        </details>
-
-        <details class="group">
-          <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-expand text-indigo-400 text-base"></i> SVG를 PNG로 변환할 때 왜 배율(1.5x, 2.0x) 설정이 중요한가요?
-            </span>
-            <i
-              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
-          </summary>
-          <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
-              <p><strong>SVG(Scalable Vector Graphics)</strong>는 크기를 아무리 키워도 깨지지 않는 무한 해상도 벡터 포맷이지만, 모바일 앱(iOS, Android)이나 게임 엔진, 구형 웹 환경에 적용할 때는 픽셀 기반의 비트맵 이미지(PNG/JPG)로 래스터화(Rasterization)하여 내보내야 합니다.</p>
-              <p>최신 스마트폰과 고해상도 레티나 디스플레이는 일반 화면보다 2배~3배 높은 픽셀 밀도(DPI)를 가집니다. 따라서 기본 1.0x 배율로만 변환하면 레티나 디스플레이에서 아이콘이나 이미지가 흐릿하게 뭉개질 수 있습니다. 배처 툴에서는 <strong>1.0x(표준), 1.5x(HDPI), 2.0x(@2x 레티나), 3.0x(@3x 고해상도)</strong> 배율을 동시 설정하고 각 배율별 접미사를 커스텀 지정하여 클릭 한 번으로 모든 해상도별 이미지 에셋 패키지를 일괄 추출할 수 있습니다.</p>
-            </div>
-          </div>
-        </details>
-
-        <details class="group">
-          <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-code text-indigo-400 text-base"></i> 파일 이름을 일괄 변경할 때 정규식(Regex)을 활용하는 방법은 무엇인가요?
-            </span>
-            <i
-              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
-          </summary>
-          <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
-              <p>정규표현식(Regular Expression)은 복잡한 이름 패턴을 한 번에 정리하는 강력한 방법입니다. 배처 툴의 '문자열 치환' 모드에서 정규식 옵션을 활성화하면 캡처 그룹(Group)과 백레퍼런스(`$1`, `$2`)를 활용하여 문자열의 위치를 바꾸거나 특정 패턴만 선택 제거할 수 있습니다.</p>
-              <ul class="list-disc pl-5 space-y-1 text-slate-400">
-                <li><strong>날짜 포맷 변경:</strong> 검색 패턴 `(\d{4})-(\d{2})-(\d{2})`, 치환 패턴 `$1_$2_$3` 적용 시 `2026-08-03_photo.jpg` -> `2026_08_03_photo.jpg`로 변경.</li>
-                <li><strong>대괄호 및 태그 일괄 삭제:</strong> 검색 패턴 `\[.*?\]` 입력 후 치환 문자열을 비워두면 `[HD]_vlog_01.mp4` -> `_vlog_01.mp4`로 대괄호와 안쪽 텍스트가 순식간에 삭제됩니다.</li>
-                <li><strong>특수문자 및 공백 정리:</strong> 검색 패턴 `[\s\-_]+`, 치환 패턴 `_` 적용 시 불규칙한 공백과 하이픈을 깔끔한 언더스코어로 통일할 수 있습니다.</li>
-              </ul>
-            </div>
-          </div>
-        </details>
-
-        <details class="group">
-          <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-shield-halved text-indigo-400 text-base"></i> 웹 브라우저 내부(Client-side) 처리가 서버 업로드 방식보다 보안상 우수한 이유
-            </span>
-            <i
-              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
-          </summary>
-          <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
-              <p><strong>완전한 데이터 프라이버시 보장:</strong> 기존 웹 변환기들은 사용자 파일을 타사 클라우드 서버로 업로드한 뒤 변환하여 다시 내려받는 방식을 사용합니다. 이 과정에서 기밀 프로젝트 리소스, 미발표 디자인 에셋, 개인 음성 파일이 유출되거나 서버에 임시 보관될 위험이 존재합니다.</p>
-              <p>반면 배처 툴은 최신 WICG File System Access API 및 HTML5 Canvas, Web Worker 기반 인코딩 엔진을 사용하여 **100% 사용자의 웹 브라우저 메모리 안에서 모든 변환과 리네이밍을 수행**합니다. 파일이 외부 네트워크로 단 1바이트도 유출되지 않으며 인터넷 연결이 끊긴 상태(Offline)에서도 정상 구동됩니다.</p>
-            </div>
-          </div>
-        </details>
-
-        <details class="group">
-          <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-sliders text-indigo-400 text-base"></i> WAV 오디오 변환 시 비트레이트(128kbps ~ 320kbps) 선택 가이드
-            </span>
-            <i
-              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
-          </summary>
-          <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
-              <p>WAV 포맷은 비압축 원음 오디오 데이터를 담고 있어 용량이 매우 큽니다. MP3로 인코딩할 때 적절한 비트레이트(Bitrate)를 선택하면 용량을 1/10 수준으로 줄이면서 목적에 맞는 음질을 확보할 수 있습니다.</p>
-              <ul class="list-disc pl-5 space-y-1 text-slate-400">
-                <li><strong>128 kbps:</strong> 단순 보이스 레코딩, 강의 녹음, 팟캐스트 및 파일 용량 최소화 목적에 적합합니다.</li>
-                <li><strong>192 kbps:</strong> 웹 스트리밍 및 일반 음악 감상용 표준 비트레이트입니다. 용량과 음질의 최적 균형을 제공합니다.</li>
-                <li><strong>256 kbps:</strong> 고음질 유튜브 배경음악, BGM 및 정교한 음향 효과 리소스 제작에 권장됩니다.</li>
-                <li><strong>320 kbps:</strong> MP3가 제공하는 최고 음질 수준으로 스튜디오 모니터링, 음원 소장 및 프로페셔널 아카이빙용에 필수적입니다.</li>
-              </ul>
-            </div>
-          </div>
-        </details>
-
-        <details class="group">
-          <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-rotate-left text-indigo-400 text-base"></i> 대량 파일 이름 변경 시 실수 방지 및 실행 취소(Undo/Reset) 기능
-            </span>
-            <i
-              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
-          </summary>
-          <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
-              <p>수백 개의 파일 이름을 한 번에 변경할 때는 규칙 적용 실수가 치명적일 수 있습니다. 배처 툴은 실수 방지를 위해 <strong>3단계 안전장치</strong>를 제공합니다.</p>
-              <ol class="list-decimal pl-5 space-y-1 text-slate-400">
-                <li><strong>실시간 미리보기:</strong> 규칙을 추가할 때마다 대기열의 '변경될 이름' 열에 결과가 즉시 시각적으로 미리 표시되며, '이름 변경 적용' 버튼을 누르기 전까지는 로컬 파일이 변경되지 않습니다.</li>
-                <li><strong>단계별 실행 취소 (Undo):</strong> 실수로 잘못된 규칙을 적용했다면 'Undo' 버튼을 눌러 직전 규칙 적용 상태로 되돌릴 수 있습니다.</li>
-                <li><strong>전체 이름 복원 (Reset):</strong> 여러 규칙이 얽혀 초기 상태로 돌아가고 싶다면 'Reset' 버튼 한 번으로 원본 파일명 상태로 즉시 초기화됩니다.</li>
-              </ol>
-            </div>
-          </div>
-        </details>
-
-        <details class="group">
-          <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-scale-balanced text-indigo-400 text-base"></i> 변환된 결과물 파일의 상업적 이용 및 라이선스 관련 안내
-            </span>
-            <i
-              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
-          </summary>
-          <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
-              <p><strong>상업적 목적 사용 전면 무료:</strong> 배처 툴을 이용해 변환하거나 이름 변경한 결과물 파일에 대한 소유권 및 권리는 100% 사용자 본인에게 있습니다.</p>
-              <p>본 서비스와 내부 엔진은 자유로운 오픈소스 라이선스(MIT, BSD, SIL 등)를 기반으로 빌드되었습니다. 개인적 프로젝트는 물론, 모바일 앱 유료 판매, 상업적 게임 그래픽 에셋 배포, 웹 디자인 스토어 판매 등 어떠한 상업적 활용에도 법적 제약이 전혀 없습니다.</p>
-            </div>
-          </div>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- SEO & FAQ Section for Google AdSense and Users (EN) -->
-  <section id="faq-en" class="hidden max-w-7xl mx-auto px-6 py-16 border-t border-slate-800 relative z-10 pb-20">
-    <div class="max-w-3xl mx-auto">
-      <h2 class="text-3xl font-extrabold text-slate-100 mb-4 text-center tracking-tight">Frequently Asked Questions (FAQ) & Detailed Guides</h2>
-      <p class="text-slate-400 text-sm text-center mb-12">Learn everything about Batcher Tools features, technical mechanisms, and high-efficiency workflow tips.</p>
-
-      <div class="border-t border-b border-slate-800 divide-y divide-slate-800">
-        <details class="group" open>
-          <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-question text-indigo-400 text-base"></i> What is Batcher Tools and what are its key features?
-            </span>
-            <i
-              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
-          </summary>
-          <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
-              <p>Batcher Tools is a smart local utility for batch converting SVG images (to PNG/JPG), encoding WAV/MP3 audio formats, and bulk renaming files 100% inside your web browser.</p>
-              <p>It works instantly in Chrome, Edge, and modern browsers without software installations. Features include multi-resolution scaling (@2x, @3x), audio bitrate customization, and regular expression (Regex) renaming rules tailored for UI designers, developers, podcasters, and media creators.</p>
-            </div>
-          </div>
-        </details>
-
-        <details class="group">
-          <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-expand text-indigo-400 text-base"></i> Why are scaling settings (1.5x, 2.0x, 3.0x) crucial when converting SVG to PNG?
-            </span>
-            <i
-              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
-          </summary>
-          <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
-              <p><strong>SVG (Scalable Vector Graphics)</strong> files are resolution-independent, but mobile operating systems (iOS Retina & Android mdpi/xhdpi/xxhdpi) require rasterized bitmap images (PNG/JPG) for native UI components and app icons.</p>
-              <p>Converting at 1.0x scale only results in blurry icons on modern high-DPI retina screens. Batcher Tools allows simultaneous multi-scale exports (<strong>1.0x, 1.5x, 2.0x @2x, 3.0x @3x</strong>) with custom filename suffixes, allowing you to generate ready-to-deploy multi-density asset packages in one click.</p>
-            </div>
-          </div>
-        </details>
-
-        <details class="group">
-          <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-code text-indigo-400 text-base"></i> How do I leverage Regular Expressions (Regex) for bulk file renaming?
-            </span>
-            <i
-              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
-          </summary>
-          <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
-              <p>Regular expressions empower you to perform complex string matching and restructuring. Enabling Regex in Batcher Tools lets you use capture groups and backreferences (`$1`, `$2`):</p>
-              <ul class="list-disc pl-5 space-y-1 text-slate-400">
-                <li><strong>Reorder Dates:</strong> Search pattern `(\d{4})-(\d{2})-(\d{2})` and replace `$1_$2_$3` converts `2026-08-03_photo.jpg` to `2026_08_03_photo.jpg`.</li>
-                <li><strong>Remove Bracket Tags:</strong> Search `\[.*?\]` with empty replacement strips `[HD]_vlog_01.mp4` down to `_vlog_01.mp4`.</li>
-                <li><strong>Sanitize Whitespace:</strong> Search `[\s\-_]+` and replace with `_` to unify messy filenames into clean underscores.</li>
-              </ul>
-            </div>
-          </div>
-        </details>
-
-        <details class="group">
-          <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-shield-halved text-indigo-400 text-base"></i> Why 100% Client-Side browser processing provides superior security
-            </span>
-            <i
-              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
-          </summary>
-          <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
-              <p><strong>Complete Privacy Protection:</strong> Traditional web tools upload your files to remote cloud servers for rendering, which risks leaking confidential design assets, unreleased IP, and personal media files.</p>
-              <p>Batcher Tools utilizes the WICG File System Access API, HTML5 Canvas, and Web Worker decoders to execute **all file operations 100% inside your browser sandbox**. Zero bytes are sent over the network, ensuring complete confidentiality and offline execution capability.</p>
-            </div>
-          </div>
-        </details>
-
-        <details class="group">
-          <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-sliders text-indigo-400 text-base"></i> Audio Bitrate Selection Guide (128kbps ~ 320kbps)
-            </span>
-            <i
-              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
-          </summary>
-          <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
-              <p>Uncompressed WAV files take up significant disk space. Encoding to MP3 reduces file sizes up to 90% while maintaining target audio clarity:</p>
-              <ul class="list-disc pl-5 space-y-1 text-slate-400">
-                <li><strong>128 kbps:</strong> Best for voice recordings, lectures, podcasts, and minimal file size requirements.</li>
-                <li><strong>192 kbps:</strong> Standard bitrate for web audio streaming and general music listening.</li>
-                <li><strong>256 kbps:</strong> Recommended for high-quality YouTube background music and audio effects.</li>
-                <li><strong>320 kbps:</strong> Maximum MP3 quality setting for studio monitoring, archiving, and pro audio distribution.</li>
-              </ul>
-            </div>
-          </div>
-        </details>
-
-        <details class="group">
-          <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-rotate-left text-indigo-400 text-base"></i> Safeguards, Real-Time Preview, and Undo/Reset for Bulk Renaming
-            </span>
-            <i
-              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
-          </summary>
-          <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
-              <p>Renaming hundreds of files at once requires foolproof safeguards. Batcher Tools includes <strong>3 layers of protection</strong>:</p>
-              <ol class="list-decimal pl-5 space-y-1 text-slate-400">
-                <li><strong>Live Preview:</strong> Target names update instantly in the file table before committing changes to disk.</li>
-                <li><strong>Undo:</strong> Step back through previous rule operations seamlessly if an error occurs.</li>
-                <li><strong>Reset:</strong> Instantly revert all target names back to original filenames in one click.</li>
-              </ol>
-            </div>
-          </div>
-        </details>
-
-        <details class="group">
-          <summary
-            class="text-lg font-semibold text-slate-100 py-6 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors duration-200">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-scale-balanced text-indigo-400 text-base"></i> Commercial Usage Rights & Open-Source Licenses
-            </span>
-            <i
-              class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
-          </summary>
-          <div class="faq-content overflow-hidden">
-            <div class="px-1 pb-6 text-slate-300 text-sm leading-relaxed pt-2 space-y-3">
-              <p><strong>100% Free for Commercial Use:</strong> You retain full ownership and copyright of all files converted or renamed using Batcher Tools.</p>
-              <p>Built with permissive open-source libraries (MIT, BSD, SIL), there are no royalties, licenses, or restrictions for personal or commercial projects.</p>
-            </div>
-          </div>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- Global Footer (KO) -->
-  <footer id="footer-ko"
-    class="bg-slate-950 border-t border-slate-800 py-8 text-left text-xs text-slate-500 pb-36 relative z-10">
-    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div>
-        <p>&copy; 2026 Batcher. All rights reserved.</p>
-        <p class="text-slate-600 mt-1">All image conversion processes occur completely locally on the client-side
-          browser.</p>
-      </div>
-      <div class="flex items-center gap-4 text-slate-400 font-medium flex-wrap">
-        <a href="/about.html" class="hover:text-indigo-400 transition-colors">소개</a>
-        <span class="text-slate-800">|</span>
-        <a href="/guides/index.html" class="hover:text-indigo-400 transition-colors">사용 가이드</a>
-        <span class="text-slate-800">|</span>
-        <a href="/contact.html" class="hover:text-indigo-400 transition-colors">문의하기</a>
-        <span class="text-slate-800">|</span>
-        <a href="/privacy.html" class="hover:text-indigo-400 transition-colors">개인정보처리방침</a>
-        <span class="text-slate-800">|</span>
-        <a href="/terms.html" class="hover:text-indigo-400 transition-colors">이용약관</a>
-        <span class="text-slate-800">|</span>
-        <a href="https://buymeacoffee.com/playNolang" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 transition-colors inline-flex items-center gap-1 font-semibold">
-          <span>☕</span> 커피 후원
-        </a>
       </div>
     </div>
   </footer>
 
-  <!-- Global Footer (EN) -->
-  <footer id="footer-en"
-    class="hidden bg-slate-950 border-t border-slate-800 py-8 text-left text-xs text-slate-500 pb-36 relative z-10">
-    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div>
-        <p>&copy; 2026 Batcher. All rights reserved.</p>
-        <p class="text-slate-600 mt-1">All image conversion processes occur completely locally on the client-side
-          browser.</p>
+  <!-- Fintech Security Footer (EN) -->
+  <footer id="footer-en" data-lang="en" class="hidden w-full bg-surface-container-low border-t border-outline-variant/20 mt-12 pb-24 relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      <div class="flex flex-col md:flex-row md:items-start justify-between gap-8 mb-8">
+        <div class="space-y-2 max-w-md">
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-lg bg-primary flex items-center justify-center">
+              <span class="material-symbols-outlined text-white text-[14px]">lock</span>
+            </div>
+            <span class="text-sm font-bold text-on-surface">Batcher Bank-Grade Local Security</span>
+          </div>
+          <p class="text-xs text-on-surface-variant leading-relaxed">
+            All graphics, audio, and documents remain strictly confidential within your browser sandbox (WebAssembly &amp; Web Workers) with zero external server upload.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-x-12 gap-y-4 text-xs font-semibold">
+          <div class="flex flex-col gap-2">
+            <span class="font-bold text-on-surface">Tools</span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/svg-to-png.html">SVG Converter</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/wav-to-mp3.html">Audio Converter</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/batch-rename.html">Batch Rename</a>
+          </div>
+          <div class="flex flex-col gap-2">
+            <span class="font-bold text-on-surface">About & Support</span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/serverless-local-conversion.html">Security Specs</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/about.html">About</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/index.html">Guides</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/contact.html">Contact</a>
+          </div>
+          <div class="flex flex-col gap-2">
+            <span class="font-bold text-on-surface">Legal</span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/privacy.html">Privacy Policy</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/terms.html">Terms of Service</a>
+            <a class="text-amber-600 dark:text-amber-400 hover:underline inline-flex items-center gap-1 font-bold" href="https://buymeacoffee.com/playNolang" target="_blank" rel="noopener noreferrer">
+              <span>☕</span> Buy me a coffee
+            </a>
+          </div>
+        </div>
       </div>
-      <div class="flex items-center gap-4 text-slate-400 font-medium flex-wrap">
-        <a href="/about.html" class="hover:text-indigo-400 transition-colors">About</a>
-        <span class="text-slate-800">|</span>
-        <a href="/guides/index.html" class="hover:text-indigo-400 transition-colors">Guides</a>
-        <span class="text-slate-800">|</span>
-        <a href="/contact.html" class="hover:text-indigo-400 transition-colors">Contact</a>
-        <span class="text-slate-800">|</span>
-        <a href="/privacy.html" class="hover:text-indigo-400 transition-colors">Privacy Policy</a>
-        <span class="text-slate-800">|</span>
-        <a href="/terms.html" class="hover:text-indigo-400 transition-colors">Terms of Service</a>
-        <span class="text-slate-800">|</span>
-        <a href="https://buymeacoffee.com/playNolang" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 transition-colors inline-flex items-center gap-1 font-semibold">
-          <span>☕</span> Buy me a coffee
-        </a>
+      <div class="pt-6 border-t border-outline-variant/20 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="text-[11px] text-on-surface-variant">© 2026 Batcher. Bank-Grade Private Local Productivity Platform. All rights reserved.</div>
+        <div class="flex items-center gap-2 text-[11px] text-on-surface-variant">
+          <span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+          <span>On-Device Acceleration Active</span>
+        </div>
       </div>
     </div>
   </footer>
+
+  <!-- Interactive Scripts for Chips, Sample Trigger, and FAQ Accordion -->
   <script>
     if (location.hostname.includes('svgbatcher.com')) {
       location.href = 'https://batchertools.com' + location.pathname + location.search;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('#faq-ko details, #faq-en details').forEach((details) => {
-        const summary = details.querySelector('summary');
-        const content = details.querySelector('.faq-content');
-        let isTransitioning = false;
+      // 1. Sample Trigger Demo State
+      const sampleTriggerBtn = document.getElementById('sample-trigger-btn');
+      const heroDropzone = document.getElementById('hero-dropzone');
+      const fileInput = document.getElementById('hero-file-input');
+      const previewPanel = document.getElementById('interactive-preview-panel');
+      const clearBtn = document.getElementById('clear-preview-btn');
 
-        summary.addEventListener('click', (e) => {
+      if (sampleTriggerBtn && previewPanel) {
+        sampleTriggerBtn.addEventListener('click', () => {
+          previewPanel.classList.remove('hidden');
+          previewPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+      }
+
+      if (heroDropzone && fileInput && previewPanel) {
+        heroDropzone.addEventListener('click', () => {
+          fileInput.click();
+        });
+
+        fileInput.addEventListener('change', () => {
+          previewPanel.classList.remove('hidden');
+        });
+
+        heroDropzone.addEventListener('dragover', (e) => {
           e.preventDefault();
-          if (isTransitioning) return;
+          heroDropzone.classList.add('border-primary', 'bg-primary/5');
+        });
 
-          if (details.open) {
-            // Shrink / Close
-            isTransitioning = true;
-            const startHeight = content.scrollHeight;
-            content.style.height = `${startHeight}px`;
+        heroDropzone.addEventListener('dragleave', () => {
+          heroDropzone.classList.remove('border-primary', 'bg-primary/5');
+        });
 
-            // force reflow
-            content.offsetHeight;
+        heroDropzone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          heroDropzone.classList.remove('border-primary', 'bg-primary/5');
+          previewPanel.classList.remove('hidden');
+        });
+      }
 
-            content.style.transition = 'height 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease-out';
-            content.style.height = '0px';
-            content.style.opacity = '0';
+      if (clearBtn && previewPanel) {
+        clearBtn.addEventListener('click', () => {
+          previewPanel.classList.add('hidden');
+        });
+      }
 
-            const onEnd = (event) => {
-              if (event.propertyName === 'height') {
-                content.removeEventListener('transitionend', onEnd);
-                details.removeAttribute('open');
-                content.style.height = '';
-                content.style.opacity = '';
-                content.style.transition = '';
-                isTransitioning = false;
-              }
-            };
-            content.addEventListener('transitionend', onEnd);
+      // 2. Interactive Quick Filter Chips
+      function setupChips(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const buttons = container.querySelectorAll('button');
+        buttons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            buttons.forEach(b => {
+              b.classList.remove('active', 'bg-surface-container-lowest', 'text-primary', 'font-bold', 'shadow-xs');
+              b.classList.add('text-on-surface-variant');
+            });
+            btn.classList.add('active', 'bg-surface-container-lowest', 'text-primary', 'font-bold', 'shadow-xs');
+            btn.classList.remove('text-on-surface-variant');
+          });
+        });
+      }
+      setupChips('svg-chips');
+      setupChips('rename-chips');
+      setupChips('audio-chips');
+
+      // 3. Simple Accessible Accordion for FAQ
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(item => {
+        const toggle = item.querySelector('.faq-toggle');
+        const content = item.querySelector('.faq-content');
+        const icon = toggle ? toggle.querySelector('.material-symbols-outlined') : null;
+        if (!toggle || !content || !icon) return;
+
+        toggle.addEventListener('click', () => {
+          const isHidden = content.classList.contains('hidden');
+          // Close others for clean banking feel
+          faqItems.forEach(otherItem => {
+            const otherContent = otherItem.querySelector('.faq-content');
+            const otherIcon = otherItem.querySelector('.material-symbols-outlined');
+            if (otherContent) otherContent.classList.add('hidden');
+            if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
+          });
+
+          if (isHidden) {
+            content.classList.remove('hidden');
+            icon.style.transform = 'rotate(180deg)';
           } else {
-            // Expand / Open
-            isTransitioning = true;
-            details.setAttribute('open', '');
-            const endHeight = content.scrollHeight;
-
-            content.style.height = '0px';
-            content.style.opacity = '0';
-
-            // force reflow
-            content.offsetHeight;
-
-            content.style.transition = 'height 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease-out';
-            content.style.height = `${endHeight}px`;
-            content.style.opacity = '1';
-
-            const onEnd = (event) => {
-              if (event.propertyName === 'height') {
-                content.removeEventListener('transitionend', onEnd);
-                content.style.height = '';
-                content.style.opacity = '';
-                content.style.transition = '';
-                isTransitioning = false;
-              }
-            };
-            content.addEventListener('transitionend', onEnd);
+            content.classList.add('hidden');
+            icon.style.transform = 'rotate(0deg)';
           }
         });
       });
     });
   </script>
-
 </body>
 
 </html>

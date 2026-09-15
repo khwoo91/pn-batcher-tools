@@ -1,24 +1,40 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 @import "@fortawesome/fontawesome-free/css/all.css";
 
-/* Apple Premium Design Theme Variables */
+/* Stitch Fintech / Banking Minimalist Theme Variables */
 :root {
-  --bg-deep: #ffffff;
-  --bg-card: #f5f5f7;
-  --border-color: rgba(0, 0, 0, 0.08);
-  --text-primary: #1d1d1f;
-  --text-secondary: #424245;
-  --text-tertiary: #6e6e73;
-  --glass-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.02);
+  --surface: #f8f9fb;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f2f4f6;
+  --surface-container: #eceef0;
+  --surface-container-high: #e6e8ea;
+  --surface-container-highest: #e0e3e5;
+
+  --primary: #004ac6;
+  --primary-container: #2563eb;
+  --on-primary: #ffffff;
+  --on-surface: #191c1e;
+  --on-surface-variant: #434655;
+  --outline: #737686;
+  --outline-variant: #c3c6d7;
+
+  --bg-deep: #f8f9fb;
+  --bg-card: #ffffff;
+  --border-color: rgba(0, 0, 0, 0.07);
+  --text-primary: #191c1e;
+  --text-secondary: #434655;
+  --text-tertiary: #737686;
+  --glass-shadow: 0 1px 6px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.03);
 
   /* Brand/Indigo colors theme-aware */
-  --brand-primary: #4f46e5;
-  --brand-bg: rgba(79, 70, 229, 0.06);
-  --brand-border: rgba(79, 70, 229, 0.2);
-  --brand-text: #3730a3;
-  --brand-text-accent: #312e81;
+  --brand-primary: #004ac6;
+  --brand-bg: rgba(0, 74, 198, 0.08);
+  --brand-border: rgba(0, 74, 198, 0.2);
+  --brand-text: #004ac6;
+  --brand-text-accent: #2563eb;
 
   /* Purple/renamer colors theme-aware */
   --purple-primary: #7c3aed;
@@ -46,16 +62,31 @@
 }
 
 .dark {
-  --bg-deep: #000000;
-  --bg-card: #1c1c1e;
-  --border-color: rgba(255, 255, 255, 0.08);
-  --text-primary: #f5f5f7;
-  --text-secondary: #a1a1a6;
-  --text-tertiary: #86868b;
-  --glass-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.7);
+  --surface: #0b0f17;
+  --surface-container-lowest: #141a24;
+  --surface-container-low: #1a2230;
+  --surface-container: #222b3d;
+  --surface-container-high: #2a354b;
+  --surface-container-highest: #33405a;
+
+  --primary: #8ab4f8;
+  --primary-container: #2563eb;
+  --on-primary: #ffffff;
+  --on-surface: #eff1f3;
+  --on-surface-variant: #c3c6d7;
+  --outline: #8e93a6;
+  --outline-variant: #434857;
+
+  --bg-deep: #0b0f17;
+  --bg-card: #141a24;
+  --border-color: rgba(255, 255, 255, 0.09);
+  --text-primary: #eff1f3;
+  --text-secondary: #c3c6d7;
+  --text-tertiary: #8e93a6;
+  --glass-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.6);
 
   /* Brand/Indigo colors theme-aware */
-  --brand-primary: #818cf8;
+  --brand-primary: #8ab4f8;
   --brand-bg: rgba(99, 102, 241, 0.12);
   --brand-border: rgba(99, 102, 241, 0.3);
   --brand-text: #a5b4fc;
@@ -88,6 +119,21 @@
 
 /* Tailwind v4 Config Mapping */
 @theme {
+  --color-surface: var(--surface);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+
+  --color-primary: var(--primary);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary: var(--on-primary);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+
   --color-slate-950: var(--bg-deep);
   --color-slate-900: var(--bg-card);
   --color-slate-800: var(--border-color);
@@ -124,18 +170,18 @@
 
 html {
   font-size: 16px;
-  background-color: var(--bg-deep);
+  background-color: var(--surface);
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "SF Pro Neo", "Apple SD Gothic Neo", "Inter", system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
-  background-color: var(--bg-deep);
-  color: var(--text-primary);
-  transition: background-color 0.3s cubic-bezier(0.25, 1, 0.5, 1), color 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  background-color: var(--surface);
+  color: var(--on-surface);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 h1,
@@ -144,9 +190,9 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro", "Apple SD Gothic Neo", sans-serif;
+  font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", sans-serif;
   letter-spacing: -0.02em;
-  color: var(--text-primary);
+  color: var(--on-surface);
 }
 
 /* Custom premium text selection */
@@ -202,7 +248,35 @@ summary::-webkit-details-marker {
   display: none;
 }
 
-/* Glassmorphism helpers revised to Apple card styles */
+/* Stitch typography & spacing utility helpers */
+.text-display-lg, .font-display-lg { font-size: 36px; line-height: 48px; letter-spacing: -0.03em; }
+.text-headline-lg, .font-headline-lg { font-size: 28px; line-height: 38px; letter-spacing: -0.025em; }
+.text-headline-md, .font-headline-md { font-size: 22px; line-height: 32px; letter-spacing: -0.02em; }
+.text-headline-sm, .font-headline-sm { font-size: 18px; line-height: 26px; letter-spacing: -0.015em; }
+.text-title-md, .font-title-md { font-size: 16px; line-height: 24px; letter-spacing: -0.01em; }
+.text-body-lg, .font-body-lg { font-size: 16px; line-height: 26px; letter-spacing: -0.01em; }
+.text-body-md, .font-body-md { font-size: 14px; line-height: 22px; letter-spacing: -0.005em; }
+.text-label-md, .font-label-md { font-size: 13px; line-height: 18px; letter-spacing: 0; }
+.text-label-sm, .font-label-sm { font-size: 11px; line-height: 16px; letter-spacing: 0.02em; }
+
+.p-space-xl { padding: 2rem; }
+.p-space-lg { padding: 1.5rem; }
+.p-space-md { padding: 1rem; }
+.p-space-sm { padding: 0.5rem; }
+.py-space-xl { padding-top: 2rem; padding-bottom: 2rem; }
+.py-space-lg { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+.px-gutter { padding-left: 1.5rem; padding-right: 1.5rem; }
+.mb-space-xl { margin-bottom: 2rem; }
+.mb-space-lg { margin-bottom: 1.5rem; }
+.mb-space-md { margin-bottom: 1rem; }
+.mb-space-sm { margin-bottom: 0.5rem; }
+.gap-space-xl { gap: 2rem; }
+.gap-space-lg { gap: 1.5rem; }
+.gap-space-md { gap: 1rem; }
+.gap-space-sm { gap: 0.5rem; }
+.gap-space-xs { gap: 0.25rem; }
+
+/* Glassmorphism helpers revised to Apple / Stitch Fintech card styles */
 .glass-panel {
   background: var(--bg-card);
   backdrop-filter: blur(20px);

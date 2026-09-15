@@ -1,6 +1,6 @@
 /// <reference types="wicg-file-system-access" />
 import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import JSZip from "jszip";
 
 import type {
@@ -58,6 +58,7 @@ const t = {
 
 @customElement("batcher-app")
 export class BatcherApp extends LitElement {
+  @property({ type: Boolean, attribute: "hide-header" }) hideHeader = false;
   @state() private activeTab: ActiveTabType = "svg";
   @state() private currentLang: "ko" | "en" = (() => {
     const saved = localStorage.getItem("batcher-lang");
@@ -171,6 +172,13 @@ export class BatcherApp extends LitElement {
   }
 
   private updateStaticElements(lang: "ko" | "en") {
+    document.documentElement.setAttribute("data-current-lang", lang);
+    document.documentElement.lang = lang;
+    if (document.body) {
+      document.body.setAttribute("data-current-lang", lang);
+    }
+    localStorage.setItem("batcher-lang", lang);
+
     const faqKo = document.getElementById("faq-ko");
     const faqEn = document.getElementById("faq-en");
     const footerKo = document.getElementById("footer-ko");
@@ -178,33 +186,50 @@ export class BatcherApp extends LitElement {
     const featuresSummaryKo = document.getElementById("features-summary-ko");
     const featuresSummaryEn = document.getElementById("features-summary-en");
 
-    if (faqKo && faqEn && footerKo && footerEn) {
-      if (lang === "ko") {
-        faqKo.classList.remove("hidden");
-        faqEn.classList.add("hidden");
-        footerKo.classList.remove("hidden");
-        footerEn.classList.add("hidden");
-        if (featuresSummaryKo) featuresSummaryKo.classList.remove("hidden");
-        if (featuresSummaryEn) featuresSummaryEn.classList.add("hidden");
-      } else {
-        faqKo.classList.add("hidden");
-        faqEn.classList.remove("hidden");
-        footerKo.classList.add("hidden");
-        footerEn.classList.remove("hidden");
-        if (featuresSummaryKo) featuresSummaryKo.classList.add("hidden");
-        if (featuresSummaryEn) featuresSummaryEn.classList.remove("hidden");
-      }
+    if (lang === "ko") {
+      faqKo?.classList.remove("hidden");
+      faqEn?.classList.add("hidden");
+      footerKo?.classList.remove("hidden");
+      footerEn?.classList.add("hidden");
+      featuresSummaryKo?.classList.remove("hidden");
+      featuresSummaryEn?.classList.add("hidden");
+    } else {
+      faqKo?.classList.add("hidden");
+      faqEn?.classList.remove("hidden");
+      footerKo?.classList.add("hidden");
+      footerEn?.classList.remove("hidden");
+      featuresSummaryKo?.classList.add("hidden");
+      featuresSummaryEn?.classList.remove("hidden");
     }
   }
 
+  private handleExternalLangChange = (e: Event) => {
+    const customEvent = e as CustomEvent<"ko" | "en">;
+    if (customEvent.detail && (customEvent.detail === "ko" || customEvent.detail === "en")) {
+      if (this.currentLang !== customEvent.detail) {
+        this.handleLangChange(customEvent.detail);
+      }
+    }
+  };
+
+  private handleExternalOpenSupport = () => {
+    this.showAlert(
+      "",
+      "support",
+      this.currentLang === "ko" ? "개발자 응원하기" : "Support Developer",
+    );
+  };
+
   private handleLangChange(lang: "ko" | "en") {
     this.currentLang = lang;
-    localStorage.setItem("batcher-lang", lang);
     this.updateStaticElements(lang);
   }
 
   override connectedCallback() {
     super.connectedCallback();
+    window.addEventListener("change-lang", this.handleExternalLangChange);
+    window.addEventListener("open-support", this.handleExternalOpenSupport);
+
     const savedLang = localStorage.getItem("batcher-lang");
     if (savedLang === "en" || savedLang === "ko") {
       this.currentLang = savedLang as "ko" | "en";
@@ -269,6 +294,12 @@ export class BatcherApp extends LitElement {
     if (savedAudioDelete) {
       this.audioDeleteOriginal = savedAudioDelete === "true";
     }
+  }
+
+  override disconnectedCallback() {
+    window.removeEventListener("change-lang", this.handleExternalLangChange);
+    window.removeEventListener("open-support", this.handleExternalOpenSupport);
+    super.disconnectedCallback();
   }
 
   override firstUpdated() {
@@ -1669,62 +1700,66 @@ export class BatcherApp extends LitElement {
         : "";
 
     return html`
-      <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col min-h-screen pb-32">
+      <div class="max-w-7xl mx-auto px-4 ${this.hideHeader ? "pt-2 pb-24" : "py-8 min-h-screen pb-32"} flex flex-col">
         <!-- Header -->
-        <app-header
-          .lang="${this.currentLang}"
-          @change-lang="${(e: CustomEvent<"ko" | "en">) => this.handleLangChange(e.detail)}"
-          @open-support="${() => {
-            this.showAlert(
-              "",
-              "support",
-              this.currentLang === "ko" ? "개발자 응원하기" : "Support Developer",
-            );
-          }}"
-        ></app-header>
+        ${this.hideHeader
+          ? ""
+          : html`
+              <app-header
+                .lang="${this.currentLang}"
+                @change-lang="${(e: CustomEvent<"ko" | "en">) => this.handleLangChange(e.detail)}"
+                @open-support="${() => {
+                  this.showAlert(
+                    "",
+                    "support",
+                    this.currentLang === "ko" ? "개발자 응원하기" : "Support Developer",
+                  );
+                }}"
+              ></app-header>
+            `}
 
-        <!-- Tabs Navigation -->
+        <!-- Tabs Navigation (Stitch Fintech Pill Style) -->
         <div
-          class="flex items-center gap-2 p-1.5 bg-slate-900/40 border border-white/5 rounded-2xl w-full max-w-3xl mx-auto mb-8 shadow-inner backdrop-blur-md overflow-x-auto"
+          class="flex items-center gap-1.5 p-1.5 bg-surface-container-low border border-outline-variant/30 rounded-2xl w-full max-w-2xl mx-auto mb-8 shadow-xs overflow-x-auto"
         >
           <button
             @click="${() => this.handleTabChange("svg")}"
             ?disabled="${this.isConverting || this.isResourceScanning || this.isResourceExecuting}"
-            class="flex-1 py-3 px-4 rounded-xl text-xs font-bold font-sans whitespace-nowrap transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isSvg
-              ? "bg-indigo-600 text-white shadow-[0_0_15px_rgba(99,102,241,0.3)]"
-              : "text-slate-400 hover:text-slate-200"}"
+            class="flex-1 py-2.5 px-4 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isSvg
+              ? "bg-primary text-white shadow-sm"
+              : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"}"
           >
-            <i class="fa-solid fa-file-image shrink-0"></i>
+            <span class="material-symbols-outlined text-[18px]">view_in_ar</span>
             <span class="whitespace-nowrap">${locales[this.currentLang].tabs.svg}</span>
           </button>
           <button
             @click="${() => this.handleTabChange("audio")}"
             ?disabled="${this.isConverting || this.isResourceScanning || this.isResourceExecuting}"
-            class="flex-1 py-3 px-4 rounded-xl text-xs font-bold font-sans whitespace-nowrap transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isAudio
-              ? "bg-purple-600 text-white shadow-[0_0_15px_rgba(168,85,247,0.3)]"
-              : "text-slate-400 hover:text-slate-200"}"
+            class="flex-1 py-2.5 px-4 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isAudio
+              ? "bg-primary text-white shadow-sm"
+              : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"}"
           >
-            <i class="fa-solid fa-music shrink-0"></i>
+            <span class="material-symbols-outlined text-[18px]">headphones</span>
             <span class="whitespace-nowrap">${locales[this.currentLang].tabs.audio}</span>
           </button>
           <button
             @click="${() => this.handleTabChange("rename")}"
             ?disabled="${this.isConverting || this.isResourceScanning || this.isResourceExecuting}"
-            class="flex-1 py-3 px-4 rounded-xl text-xs font-bold font-sans whitespace-nowrap transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isRename
-              ? "bg-pink-600 text-white shadow-[0_0_15px_rgba(236,72,153,0.3)]"
-              : "text-slate-400 hover:text-slate-200"}"
+            class="flex-1 py-2.5 px-4 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isRename
+              ? "bg-primary text-white shadow-sm"
+              : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"}"
           >
-            <i class="fa-solid fa-file-signature shrink-0"></i>
+            <span class="material-symbols-outlined text-[18px]">edit_calendar</span>
             <span class="whitespace-nowrap">${locales[this.currentLang].tabs.rename}</span>
           </button>
           <button
             @click="${() => this.handleTabChange("resource")}"
             ?disabled="${this.isConverting || this.isResourceScanning || this.isResourceExecuting}"
-            class="flex-1 py-3 px-4 rounded-xl text-xs font-bold font-sans whitespace-nowrap transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isResource
-              ? "bg-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)]"
-              : "text-slate-400 hover:text-slate-200"}"
+            class="flex-1 py-2.5 px-4 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isResource
+              ? "bg-primary text-white shadow-sm"
+              : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"}"
           >
-            <i class="fa-solid fa-broom shrink-0"></i>
+            <span class="material-symbols-outlined text-[18px]">cleaning_services</span>
             <span class="whitespace-nowrap">${locales[this.currentLang].tabs.resource}</span>
           </button>
         </div>
@@ -1884,27 +1919,6 @@ export class BatcherApp extends LitElement {
 
           <!-- Right Real-Time Display & Logger Panel (cols-7) -->
           <div class="lg:col-span-7 space-y-6 flex flex-col">
-            <!-- AdSense Top Banner Slot -->
-            <div
-              class="p-3 bg-slate-900/40 border border-slate-800/40 rounded-2xl flex flex-col items-center justify-center min-h-22.5 relative overflow-hidden group"
-            >
-              <div
-                class="absolute inset-0 bg-linear-to-r from-indigo-500/5 via-purple-500/5 to-pink-500/5 opacity-50"
-              ></div>
-              <div
-                class="text-[10px] text-slate-500 font-semibold mb-1 uppercase tracking-wider select-none relative z-10"
-              >
-                Advertisement
-              </div>
-              <div
-                class="w-full flex items-center justify-center relative z-10 text-xs text-slate-400 font-sans italic text-center"
-              >
-                ${this.currentLang === "ko"
-                  ? "여기에 구글 애드센스 광고가 노출됩니다."
-                  : "Google AdSense Responsive Ad Placement"}
-              </div>
-            </div>
-
             <!-- Main Right Card (File List Queue OR Scan Results Card) -->
             ${isResource
               ? html`
@@ -1939,27 +1953,6 @@ export class BatcherApp extends LitElement {
                   ></file-queue>
                 `}
 
-            <!-- AdSense Middle Slot -->
-            <div
-              class="p-3 bg-slate-900/40 border border-slate-800/40 rounded-2xl flex flex-col items-center justify-center min-h-22.5 relative overflow-hidden group"
-            >
-              <div
-                class="absolute inset-0 bg-linear-to-r from-emerald-500/5 via-indigo-500/5 to-purple-500/5 opacity-50"
-              ></div>
-              <div
-                class="text-[10px] text-slate-500 font-semibold mb-1 uppercase tracking-wider select-none relative z-10"
-              >
-                Advertisement
-              </div>
-              <div
-                class="w-full flex items-center justify-center relative z-10 text-xs text-slate-400 font-sans italic text-center"
-              >
-                ${this.currentLang === "ko"
-                  ? "여기에 구글 애드센스 광고가 노출됩니다."
-                  : "Google AdSense Responsive Ad Placement"}
-              </div>
-            </div>
-
             <!-- Logs Console -->
             <log-console
               .lang="${this.currentLang}"
@@ -1970,42 +1963,43 @@ export class BatcherApp extends LitElement {
         </div>
       </div>
 
-      <!-- Floating Bottom Glass Action Bar -->
-      <div
-        class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl bg-[rgba(255,255,255,0.75)] dark:bg-[rgba(15,23,42,0.65)] backdrop-blur-[13px] backdrop-saturate-183 border border-[rgba(255,255,255,0.35)] dark:border-white/10 py-4.5 px-6 z-40 rounded-3xl shadow-[0px_8px_32px_rgba(31,38,135,0.25)] dark:shadow-[0px_15px_50px_rgba(0,0,0,0.6)] transition-all duration-300 hover:border-[rgba(255,255,255,0.5)] dark:hover:border-white/15"
+      <!-- Stitch Fintech Floating Action Pod -->
+      <aside
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-4xl bg-surface-container-lowest/95 backdrop-blur-xl border border-outline-variant/30 py-3 px-6 z-40 rounded-full shadow-[0_16px_40px_rgba(0,0,0,0.12)] transition-all duration-300"
+        id="floating-action-pod"
       >
         <!-- Progress bar along the top inner edge -->
         ${this.isConverting || this.isResourceScanning || this.conversionProgress > 0
           ? html`
               <div
-                class="absolute top-0 left-6 right-6 h-1 bg-slate-950/20 dark:bg-white/10 rounded-full overflow-hidden"
+                class="absolute top-0 left-8 right-8 h-1 bg-surface-container-high rounded-full overflow-hidden"
               >
                 <div
-                  class="progress-bar-inner h-full bg-linear-to-r from-emerald-500 via-teal-500 to-indigo-500 transition-all duration-300 shadow-[0_0_8px_rgba(16,185,129,0.6)]"
+                  class="progress-bar-inner h-full bg-primary transition-all duration-300 shadow-sm"
                 ></div>
               </div>
             `
           : ""}
 
-        <div class="w-full flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="w-full flex flex-col md:flex-row items-center justify-between gap-3">
           <!-- Left side: dynamic info vs progress info -->
           ${this.isConverting || this.conversionProgress > 0
             ? html`
                 <div
-                  class="flex flex-wrap items-center gap-3 text-xs text-slate-300 font-sans font-bold"
+                  class="flex flex-wrap items-center gap-3 text-xs text-on-surface font-bold"
                 >
                   <div class="flex items-center gap-2">
                     ${this.isConverting
                       ? html`
                           <span class="relative flex h-2.5 w-2.5">
                             <span
-                              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"
+                              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"
                             ></span>
                             <span
-                              class="relative inline-flex rounded-full h-2.5 w-2.5 bg-indigo-500"
+                              class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"
                             ></span>
                           </span>
-                          <span class="text-slate-100 font-bold tracking-wide"
+                          <span class="text-on-surface font-bold tracking-wide"
                             >${isRename
                               ? this.currentLang === "ko"
                                 ? "변경 진행 중..."
@@ -2015,9 +2009,9 @@ export class BatcherApp extends LitElement {
                         `
                       : html`
                           <span
-                            class="inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"
+                            class="inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 shadow-sm"
                           ></span>
-                          <span class="text-emerald-600 font-bold tracking-wide"
+                          <span class="text-emerald-600 dark:text-emerald-400 font-bold tracking-wide"
                             >${isRename
                               ? this.currentLang === "ko"
                                 ? "변경 완료!"
@@ -2026,17 +2020,17 @@ export class BatcherApp extends LitElement {
                           >
                         `}
                   </div>
-                  <span class="text-black/10 dark:text-white/10">|</span>
+                  <span class="text-outline-variant">|</span>
                   <span>
                     ${activeT.progress}
-                    <strong class="text-indigo-600 dark:text-indigo-400 font-mono text-xs"
+                    <strong class="text-primary font-mono text-xs"
                       >${this.conversionProgress}%</strong
                     >
                   </span>
-                  <span class="text-black/10 dark:text-white/10 hidden sm:inline">|</span>
+                  <span class="text-outline-variant hidden sm:inline">|</span>
                   <span class="hidden sm:inline">
                     ${activeT.doneCount}
-                    <strong class="text-emerald-600 dark:text-emerald-400 font-mono"
+                    <strong class="text-primary font-mono"
                       >${this.currentConversionIndex}</strong
                     >
                     / ${currentFiles.filter((f) => f.selected).length}
@@ -2045,17 +2039,17 @@ export class BatcherApp extends LitElement {
               `
             : html`
                 <div
-                  class="flex flex-wrap items-center gap-4 text-xs text-slate-300 font-bold font-sans"
+                  class="flex flex-wrap items-center gap-3 text-xs text-on-surface font-semibold"
                 >
                   <div class="flex items-center gap-2">
                     <span
-                      class="w-2 h-2 rounded-full ${isResource
+                      class="w-2.5 h-2.5 rounded-full ${isResource
                         ? this.resourceDirHandle || this.resourceFiles.length > 0
-                          ? "bg-emerald-400 animate-ping"
-                          : "bg-slate-700"
+                          ? "bg-primary animate-ping"
+                          : "bg-outline-variant"
                         : selectedFilesCount > 0
-                          ? "bg-indigo-400 animate-ping"
-                          : "bg-slate-300 dark:bg-slate-700"}"
+                          ? "bg-primary animate-ping"
+                          : "bg-outline-variant"}"
                     ></span>
                     <span>
                       ${isResource
@@ -2063,7 +2057,7 @@ export class BatcherApp extends LitElement {
                           ? "대상 파일"
                           : "Target Files"
                         : activeT.waitingFiles}
-                      <strong class="text-slate-100 font-extrabold">
+                      <strong class="text-on-surface font-bold">
                         ${isResource
                           ? this.resourceFiles.length > 0
                             ? `${this.resourceFiles.length}개`
@@ -2074,7 +2068,7 @@ export class BatcherApp extends LitElement {
                       </strong>
                       ${!isResource
                         ? html`
-                            <span class="text-slate-500 dark:text-slate-500 font-normal">
+                            <span class="text-on-surface-variant font-normal">
                               / ${currentFiles.length}${this.currentLang === "ko" ? "개" : ""}
                             </span>
                           `
@@ -2084,18 +2078,18 @@ export class BatcherApp extends LitElement {
 
                   ${isSvg
                     ? html`
-                        <span class="text-black/10 dark:text-white/10 hidden md:inline">|</span>
+                        <span class="text-outline-variant hidden md:inline">|</span>
                         <span>
                           ${activeT.exportFormat}
                           <strong
-                            class="text-indigo-600 dark:text-indigo-400 uppercase font-extrabold"
+                            class="text-primary uppercase font-bold"
                             >${this.exportFormat}</strong
                           >
                         </span>
-                        <span class="text-black/10 dark:text-white/10 hidden md:inline">|</span>
+                        <span class="text-outline-variant hidden md:inline">|</span>
                         <span>
                           ${activeT.applyScale}
-                          <strong class="text-slate-100 font-mono font-extrabold"
+                          <strong class="text-on-surface font-mono font-bold"
                             >${this.selectedScale}x</strong
                           >
                         </span>
@@ -2103,21 +2097,21 @@ export class BatcherApp extends LitElement {
                       `
                     : isAudio
                       ? html`
-                          <span class="text-black/10 dark:text-white/10 hidden md:inline">|</span>
+                          <span class="text-outline-variant hidden md:inline">|</span>
                           <span>
                             ${activeT.applyBitrate}
                             <strong
-                              class="text-purple-600 dark:text-purple-400 uppercase font-extrabold"
+                              class="text-primary uppercase font-bold"
                               >${this.audioBitrate} kbps</strong
                             >
                           </span>
                         `
                       : isResource
                         ? html`
-                            <span class="text-black/10 dark:text-white/10 hidden md:inline">|</span>
+                            <span class="text-outline-variant hidden md:inline">|</span>
                             <span>
                               ${this.currentLang === "ko" ? "모드" : "Mode"}:
-                              <strong class="text-emerald-400 uppercase font-extrabold"
+                              <strong class="text-primary uppercase font-bold"
                                 >${this.currentLang === "ko"
                                   ? "미사용 파일 정리"
                                   : "Unused Files Cleaner"}</strong
@@ -2125,11 +2119,11 @@ export class BatcherApp extends LitElement {
                             </span>
                           `
                         : html`
-                            <span class="text-black/10 dark:text-white/10 hidden md:inline">|</span>
+                            <span class="text-outline-variant hidden md:inline">|</span>
                             <span>
                               ${this.currentLang === "ko" ? "모드" : "Mode"}:
                               <strong
-                                class="text-pink-600 dark:text-pink-400 uppercase font-extrabold"
+                                class="text-primary uppercase font-bold"
                                 >${this.currentLang === "ko"
                                   ? "파일 일괄 변경"
                                   : "Batch Rename"}</strong
@@ -2139,15 +2133,15 @@ export class BatcherApp extends LitElement {
                 </div>
               `}
 
-          <div class="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end">
+          <div class="flex items-center gap-2 w-full md:w-auto shrink-0 justify-end">
             ${currentFiles.length > 0 && !isResource
               ? html`
                   <button
                     @click="${this.resetAll}"
                     ?disabled="${this.isConverting}"
-                    class="flex-1 md:flex-initial w-full md:w-auto px-6 py-3 border border-black/15 dark:border-white/10 bg-black/4 dark:bg-white/4 hover:bg-black/4 dark:hover:bg-white/4 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 hover:text-slate-100 rounded-xl text-xs transition-all flex items-center justify-center gap-2 font-sans cursor-pointer active:scale-95"
+                    class="px-4 py-2 bg-surface-container-low hover:bg-surface-container border border-outline-variant/30 disabled:opacity-30 disabled:cursor-not-allowed text-on-surface-variant hover:text-on-surface rounded-full text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
                   >
-                    <i class="fa-solid fa-rotate-left text-xs"></i>
+                    <span class="material-symbols-outlined text-[15px]">rotate_left</span>
                     <span>${this.currentLang === "ko" ? "초기화" : "Reset"}</span>
                   </button>
                 `
@@ -2158,11 +2152,29 @@ export class BatcherApp extends LitElement {
                     @click="${this.handleStartResourceScan}"
                     ?disabled="${this.isResourceScanning ||
                     (!this.resourceDirHandle && this.resourceFiles.length === 0)}"
-                    class="flex-1 md:flex-initial w-full md:w-auto px-8 py-3 bg-linear-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:via-teal-500 hover:to-cyan-500 disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold text-sm tracking-wide rounded-xl border border-white/20 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shrink-0"
+                    class="px-6 py-2.5 bg-primary hover:bg-primary/90 disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold text-xs tracking-wide rounded-full shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
                   >
                     ${this.isResourceScanning
                       ? html`
-                          <i class="fa-solid fa-spinner fa-spin text-xs"></i>
+                          <svg
+                            class="animate-spin h-3.5 w-3.5 text-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              class="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              stroke-width="4"
+                            ></circle>
+                            <path
+                              class="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
                           <span
                             >${this.currentLang === "ko"
                               ? "파일 검사 중..."
@@ -2170,7 +2182,7 @@ export class BatcherApp extends LitElement {
                           >
                         `
                       : html`
-                          <i class="fa-solid fa-magnifying-glass-chart text-xs"></i>
+                          <span class="material-symbols-outlined text-[16px]">manage_search</span>
                           <span
                             >${this.resourceScanResult
                               ? this.currentLang === "ko"
@@ -2187,16 +2199,12 @@ export class BatcherApp extends LitElement {
                   <button
                     @click="${this.startConversion}"
                     ?disabled="${this.isConverting || selectedFilesCount === 0}"
-                    class="flex-1 md:flex-initial w-full md:w-auto px-8 py-3 bg-linear-to-r ${isSvg
-                      ? "from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500"
-                      : isAudio
-                        ? "from-purple-600 via-fuchsia-600 to-pink-600 hover:from-purple-500 hover:via-fuchsia-500 hover:to-pink-500"
-                        : "from-pink-600 via-rose-600 to-red-600 hover:from-pink-500 hover:via-rose-500 hover:to-red-500"} disabled:bg-none disabled:bg-black/5 dark:disabled:bg-white/5 disabled:text-black/30 dark:disabled:text-white/30 disabled:border-black/5 dark:disabled:border-white/5 disabled:cursor-not-allowed disabled:shadow-none hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] active:scale-[0.97] text-white font-bold text-sm tracking-wide rounded-xl border border-white/20 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shrink-0"
+                    class="px-6 py-2.5 bg-primary hover:bg-primary/90 disabled:bg-surface-container-high disabled:text-outline disabled:cursor-not-allowed text-white font-bold text-xs tracking-wide rounded-full shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
                   >
                     ${this.isConverting
                       ? html`
                           <svg
-                            class="animate-spin h-4 w-4 text-white"
+                            class="animate-spin h-3.5 w-3.5 text-white"
                             fill="none"
                             viewBox="0 0 24 24"
                           >
@@ -2223,7 +2231,7 @@ export class BatcherApp extends LitElement {
                           >
                         `
                       : html`
-                          <i class="fa-solid fa-play text-[10px]"></i>
+                          <span class="material-symbols-outlined text-[16px]">play_arrow</span>
                           <span
                             >${isRename
                               ? this.currentLang === "ko"
@@ -2236,7 +2244,7 @@ export class BatcherApp extends LitElement {
                 `}
           </div>
         </div>
-      </div>
+      </aside>
 
       <!-- Alert Modal Overlay -->
       <alert-modal

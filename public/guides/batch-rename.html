@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>대량 파일 이름 일괄 변경 및 스마트 리네이밍 실무 가이드 - Batcher Tools</title>
-  <meta name="description" content="수백 개의 파일명을 규칙에 따라 1초 만에 일괄 정리하세요. 문자열 치환, 접두/접미사, 일련번호 부여, 정규식 활용법과 실행 취소(Undo) 완벽 가이드." />
-  <meta name="keywords" content="파일 이름 일괄 변경 가이드, 대량 파일명 바꾸기, 파일 일련번호 매기기, 정규식 파일 리네이밍, Batch Renamer 실무" />
+  <title>대량 파일 이름 일괄 변경(Batch Rename) 완벽 가이드: CLI 대비 웹 도구의 장점 및 실무 정규식 10선 - Batcher Tools</title>
+  <meta name="description" content="수백 개의 파일명을 안전하고 빠르게 일괄 정리하는 완벽 기술 가이드입니다. PowerShell/파이썬 스크립트 대비 웹 기반 파일 처리의 메모리 보안 비교, 실무 정규식(Regex) 10선, macOS-Windows 한글 자소 분리(NFD/NFC) 해결법을 다룹니다." />
+  <meta name="keywords" content="파일 이름 일괄 변경, Batch Rename 가이드, 대량 파일명 바꾸기, 정규식 파일 리네이밍, PowerShell 파일명 변경 비교, 한글 자소 분리 NFD NFC 해결, 파일명 일괄 정리 팁" />
   
   <link rel="canonical" href="https://batchertools.com/guides/batch-rename.html" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -21,13 +21,13 @@
   
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6294524233833258" crossorigin="anonymous"></script>
 
-  <!-- Structured Data: Article, BreadcrumbList -->
+  <!-- Structured Data: TechArticle, BreadcrumbList -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "대량 파일 이름 일괄 변경 및 스마트 리네이밍 실무 가이드",
-      "description": "수백 개의 파일명을 규칙에 따라 1초 만에 일괄 정리하는 문자열 치환, 일련번호 부여, 정규식 활용법 가이드",
+      "@type": "TechArticle",
+      "headline": "대량 파일 이름 일괄 변경(Batch Rename) 완벽 가이드: CLI 대비 웹 도구의 장점 및 실무 정규식 10선",
+      "description": "수백 개의 파일명을 규칙에 따라 안전하게 일괄 정리하는 기술 아티클. CLI 스크립트 대비 메모리 보안 비교, 실무 정규식 10선, macOS NFD/NFC 한글 자소 분리 해결법 수록",
       "author": {
         "@type": "Organization",
         "name": "Batcher Tools"
@@ -41,7 +41,7 @@
         }
       },
       "datePublished": "2026-08-01",
-      "dateModified": "2026-08-24",
+      "dateModified": "2026-09-14",
       "mainEntityOfPage": "https://batchertools.com/guides/batch-rename.html"
     }
   </script>
@@ -65,7 +65,7 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "파일 이름 일괄 변경 가이드",
+          "name": "대량 파일 이름 일괄 변경 완벽 가이드",
           "item": "https://batchertools.com/guides/batch-rename.html"
         }
       ]
@@ -78,31 +78,47 @@
       margin: 0; padding: 0;
       background-color: #020617; color: #cbd5e1;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      line-height: 1.8;
+      line-height: 1.85;
     }
     h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; color: #ffffff; font-weight: 700; }
-    .container { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+    .container { max-width: 920px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
     .header { border-bottom: 1px solid #1e293b; padding-bottom: 2rem; margin-bottom: 2.5rem; display: flex; flex-direction: column; gap: 1rem; }
     .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; color: #ec4899; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; }
     .back-btn:hover { color: #f472b6; }
     .category-badge { display: inline-block; padding: 0.25rem 0.75rem; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 9999px; color: #f472b6; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
-    h1 { font-size: 2.25rem; margin: 0.5rem 0; line-height: 1.3; background: linear-gradient(to right, #ffffff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    h1 { font-size: 2.15rem; margin: 0.5rem 0; line-height: 1.35; background: linear-gradient(to right, #ffffff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     .meta { font-size: 0.875rem; color: #64748b; display: flex; gap: 1.25rem; flex-wrap: wrap; }
     .card { background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1.25rem; padding: 2.5rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
-    h2 { font-size: 1.45rem; margin-top: 2.5rem; margin-bottom: 1rem; border-left: 4px solid #ec4899; padding-left: 0.85rem; color: #f8fafc; }
-    h3 { font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.75rem; color: #e2e8f0; }
-    p, li { font-size: 0.95rem; margin-bottom: 1rem; color: #cbd5e1; }
+    h2 { font-size: 1.5rem; margin-top: 2.75rem; margin-bottom: 1.15rem; border-left: 4px solid #ec4899; padding-left: 0.85rem; color: #f8fafc; }
+    h3 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.85rem; color: #e2e8f0; }
+    p, li { font-size: 0.96rem; margin-bottom: 1.1rem; color: #cbd5e1; }
     ul, ol { margin-top: 0.5rem; margin-bottom: 1.5rem; padding-left: 1.5rem; }
-    li { margin-bottom: 0.5rem; }
+    li { margin-bottom: 0.55rem; }
     strong { color: #f1f5f9; font-weight: 600; }
-    .highlight-box { background: rgba(236, 72, 153, 0.08); border: 1px solid rgba(236, 72, 153, 0.2); border-radius: 0.875rem; padding: 1.25rem 1.5rem; margin: 1.75rem 0; }
-    .highlight-box p { margin: 0; color: #fbcfe8; font-weight: 500; font-size: 0.92rem; }
+    code { font-family: 'Fira Code', monospace; background: rgba(30, 41, 59, 0.8); color: #f472b6; padding: 0.2rem 0.45rem; border-radius: 0.375rem; font-size: 0.875rem; }
+    
+    .table-container { width: 100%; overflow-x: auto; margin: 1.75rem 0 2.25rem; border: 1px solid #1e293b; border-radius: 0.875rem; background: rgba(15, 23, 42, 0.6); }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; min-width: 620px; }
+    th, td { padding: 0.85rem 1rem; border-bottom: 1px solid #1e293b; }
+    th { background: rgba(30, 41, 59, 0.8); color: #f8fafc; font-weight: 700; white-space: nowrap; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(30, 41, 59, 0.3); }
+
+    .highlight-box { background: rgba(236, 72, 153, 0.08); border: 1px solid rgba(236, 72, 153, 0.25); border-radius: 0.875rem; padding: 1.35rem 1.6rem; margin: 1.75rem 0; }
+    .highlight-box p { margin: 0; color: #fbcfe8; font-weight: 500; font-size: 0.94rem; }
+    
+    .callout-box { background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 0.875rem; padding: 1.5rem 1.75rem; margin: 2rem 0; }
+    .callout-title { font-weight: 700; color: #a5b4fc; font-size: 1.05rem; display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem; }
+    .callout-box p { color: #c7d2fe; font-size: 0.92rem; margin-bottom: 0.75rem; }
+    .callout-box p:last-child { margin-bottom: 0; }
+
     .tip-box { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 0.875rem; padding: 1.25rem 1.5rem; margin: 1.75rem 0; }
     .tip-box p { margin: 0; color: #6ee7b7; font-weight: 500; font-size: 0.92rem; }
-    .tool-cta { background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(99, 102, 241, 0.15)); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 1rem; padding: 1.75rem; margin: 2.5rem 0; text-align: center; }
-    .tool-cta h3 { margin-top: 0; font-size: 1.25rem; }
-    .tool-cta a { display: inline-flex; align-items: center; gap: 0.5rem; background: #ec4899; color: #ffffff; padding: 0.75rem 1.5rem; border-radius: 0.75rem; font-weight: 700; text-decoration: none; margin-top: 1rem; transition: background 0.2s; font-size: 0.9rem; }
-    .tool-cta a:hover { background: #db2777; }
+
+    .tool-cta { background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(99, 102, 241, 0.15)); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 1rem; padding: 2rem; margin: 2.75rem 0; text-align: center; }
+    .tool-cta h3 { margin-top: 0; font-size: 1.35rem; }
+    .tool-cta a { display: inline-flex; align-items: center; gap: 0.5rem; background: #ec4899; color: #ffffff; padding: 0.85rem 1.75rem; border-radius: 0.75rem; font-weight: 700; text-decoration: none; margin-top: 1rem; transition: all 0.2s; font-size: 0.95rem; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3); }
+    .tool-cta a:hover { background: #db2777; transform: translateY(-2px); }
     footer { text-align: center; margin-top: 4rem; font-size: 0.85rem; color: #475569; border-top: 1px solid #1e293b; padding-top: 2rem; }
   </style>
 </head>
@@ -117,57 +133,214 @@
         </a>
         <span class="category-badge">파일 관리 & 자동화</span>
       </div>
-      <h1>대량 파일 이름 일괄 변경 및 스마트 리네이밍 실무 가이드</h1>
+      <h1>대량 파일 이름 일괄 변경(Batch Rename) 완벽 가이드</h1>
       <div class="meta">
-        <span><i class="fa-regular fa-calendar text-pink-400"></i> 최종 갱신: 2026년 8월 24일</span>
-        <span><i class="fa-regular fa-clock text-pink-400"></i> 읽는 시간: 약 6분</span>
-        <span><i class="fa-solid fa-signature text-pink-400"></i> 대상: 크리에이터, 개발자, 사무 직군</span>
+        <span><i class="fa-regular fa-calendar text-pink-400"></i> 최종 갱신: 2026년 9월 14일</span>
+        <span><i class="fa-regular fa-clock text-pink-400"></i> 읽는 시간: 약 10분</span>
+        <span><i class="fa-solid fa-signature text-pink-400"></i> 대상: 크리에이터, 소프트웨어 엔지니어, 데이터 관리자</span>
       </div>
     </div>
 
     <article class="card">
-      <p>프로젝트를 진행하다 보면 스마트폰 카메라에서 촬영된 사진 파일(<code>IMG_20260803_001.JPG</code>), 메신저로 다운로드한 문서(<code>보고서(1)_최종(진짜).docx</code>), 다운로드 폴더에 쌓인 미디어 에셋 등 수백 개의 파일명을 일정한 규칙으로 정리해야 할 때가 많습니다. 하나하나 <code>F2</code> 키를 눌러 이름을 바꾸는 작업은 엄청난 시간 낭비이자 실수를 유발합니다.</p>
+      <p>현대 디지털 업무 환경에서 수백 개에서 수천 개에 달하는 파일 리소스를 다루는 일은 일상적입니다. 스마트폰이나 DSLR 카메라에서 촬영된 원시 사진 파일(<code>IMG_20260901_001.JPG</code>), 메신저나 이메일로 전달받은 업무 문서(<code>기획서(1)_수정_최종(진짜).docx</code>), 디자인 프로젝트에서 추출된 불규칙한 그래픽 에셋까지, 파일명이 체계적으로 정렬되어 있지 않으면 협업과 파일 검색에 막대한 비효율이 발생합니다.</p>
 
-      <div class="highlight-box">
-        <p><i class="fa-solid fa-wand-magic-sparkles"></i> <strong>생산성 혁신:</strong> 배처 툴(Batcher Tools)의 대량 파일 리네이머를 사용하면 수백 개의 파일에 접두사/접미사 붙이기, 괄호 제거, 일련번호 부여(001, 002...), 정규식 치환을 브라우저에서 1초 만에 안전하게 끝낼 수 있습니다.</p>
+      <p>과거에는 이러한 문제를 해결하기 위해 윈도우 탐색기에서 <code>F2</code> 키를 눌러 하나씩 바꾸거나, 파이썬(Python) 스크립트 혹은 윈도우 파워쉘(PowerShell) 명령어를 직접 작성해야 했습니다. 하지만 스크립트 작성 방식은 오타 하나로 원본 파일명이 영구적으로 유실될 수 있는 위험을 안고 있습니다. 본 가이드에서는 <strong>명령줄(CLI) 및 파이썬 대비 웹 브라우저 기반 파일 리네이밍의 보안 메커니즘, 실무 정규표현식 10선, 그리고 macOS-Windows 간 한글 자소 분리(NFD/NFC) 해결법</strong>을 완벽히 정리합니다.</p>
+
+      <h2>1. 파일 처리 방식 심층 비교: CLI/파이썬 vs 웹 기반 리네이머</h2>
+      <p>운영체제 명령어(PowerShell, Bash)나 파이썬 스크립트를 통한 대량 파일명 변경은 강력하지만, 실행 즉시 파일 시스템에 직접 덮어쓰기 때문에 '되돌리기(Undo)'가 불가능하며 비전공자가 다루기 어렵습니다. 반면 최신 WICG File System Access API 기반의 웹 리네이머는 브라우저 보안 샌드박스 내부에서 안전한 시각적 검증을 거친 후 사용자의 승인을 얻어 변경을 적용합니다.</p>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>비교 항목</th>
+              <th>Windows PowerShell (CLI)</th>
+              <th>Python 스크립트 (CLI)</th>
+              <th>Batcher Tools (웹 GUI)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>설치 및 환경 준비</strong></td>
+              <td>기본 내장 (단, 실행 정책 ExecutionPolicy 변경 필요)</td>
+              <td>Python 인터프리터 및 가상환경 설치 필요</td>
+              <td><strong>설치 불필요 (크롬/엣지 브라우저에서 즉시 실행)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>실시간 시각적 미리보기</strong></td>
+              <td>불가 (실행 전 결과를 눈으로 확인할 수 없음)</td>
+              <td>별도 print 로직 직접 작성하지 않으면 불가</td>
+              <td><strong>완벽 지원 (표에 원본과 변경 후 이름이 실시간 대조)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>실행 취소 (Undo / Reset)</strong></td>
+              <td>불가 (되돌리기 스크립트를 미리 짜두지 않으면 복구 불가)</td>
+              <td>별도 로그 및 역연산 로직을 직접 구현해야 함</td>
+              <td><strong>원클릭 Undo 및 원본 초기화(Reset) 완벽 지원</strong></td>
+            </tr>
+            <tr>
+              <td><strong>메모리 및 시스템 보안</strong></td>
+              <td>스크립트 오타 시 시스템 핵심 파일 손상 위험 존재</td>
+              <td>os.rename 실행 시 악성코드나 경로 이탈 위험</td>
+              <td><strong>W3C 브라우저 샌드박스 격리 (사용자 승인 폴더만 접근)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>정규식(Regex) 활용성</strong></td>
+              <td>PowerShell 고유의 `-replace` 연산자 문법 학습 필요</td>
+              <td>`re` 모듈 임포트 및 정규식 코드 작성 필요</td>
+              <td><strong>입력 폼에 패턴 입력 시 즉각 반응 및 오류 자동 방지</strong></td>
+            </tr>
+            <tr>
+              <td><strong>다중 OS 호환성</strong></td>
+              <td>Windows 전용 (macOS/Linux는 문법 상이)</td>
+              <td>OS별 경로 구분자(`os.path` 또는 `pathlib`) 처리 필요</td>
+              <td><strong>Windows, macOS, Linux 브라우저 어디서나 100% 동일</strong></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <h2>1. 필수 리네이밍 규칙 5가지 활용법</h2>
-      
-      <h3>1) 날짜 및 프로젝트 접두사(Prefix) 일괄 추가</h3>
-      <p>파일명 맨 앞에 <code>2026-08_Report_</code> 또는 <code>[Project-A]_</code>와 같은 접두사를 일괄 부여하면 탐색기에서 생성 날짜 및 프로젝트 단위로 자동 정렬되어 관리가 수월해집니다.</p>
+      <h2>2. 실무에서 바로 복사해 쓰는 정규표현식(Regex) 실전 예제 10선</h2>
+      <p>배처 툴의 <strong>'문자열 치환'</strong> 모드에서 <strong>정규식 옵션</strong>을 켜면, 캡처 그룹(<code>$1</code>, <code>$2</code>)과 메타 문자를 조합하여 아무리 복잡한 규칙의 파일명도 클릭 한 번으로 손쉽게 재구성할 수 있습니다. 디자이너와 엔지니어가 실무에서 가장 자주 사용하는 10가지 검증된 패턴입니다.</p>
 
-      <h3>2) 괄호 및 불필요한 태그 일괄 제거</h3>
-      <p>인터넷에서 다운로드할 때 자동으로 붙는 <code>(1)</code>, <code>[HD]</code>, <code>{temp}</code> 등의 기호를 클릭 한 번으로 제거할 수 있습니다.</p>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>정규식 검색 패턴</th>
+              <th>치환 문자열</th>
+              <th>검색 대상 예시</th>
+              <th>변경 후 결과</th>
+              <th>실무 활용 설명</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><code>^([a-zA-Z]+)_(\d{4})(\d{2})(\d{2})</code></td>
+              <td><code>$2-$3-$4_$1</code></td>
+              <td><code>report_20260914.pdf</code></td>
+              <td><code>2026-09-14_report.pdf</code></td>
+              <td>문서명 뒤에 붙은 날짜를 맨 앞으로 이동하고 하이픈을 삽입하여 탐색기 시간순 정렬</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><code>\s+</code></td>
+              <td><code>_</code></td>
+              <td><code>my final design v1.png</code></td>
+              <td><code>my_final_design_v1.png</code></td>
+              <td>웹 서버 및 리눅스 시스템에서 URL 인코딩 에러(<code>%20</code>)를 유발하는 공백을 언더스코어로 통일</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><code>\((.*?)\)</code></td>
+              <td><code>[$1]</code></td>
+              <td><code>icon(active).svg</code></td>
+              <td><code>icon[active].svg</code></td>
+              <td>비표준 소괄호 태그를 대괄호 규격으로 일괄 치환하여 디자인 에셋 관리 통일</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><code>_+(?=\.)</code></td>
+              <td><code>(빈 칸)</code></td>
+              <td><code>banner_ad___.jpg</code></td>
+              <td><code>banner_ad.jpg</code></td>
+              <td>텍스트 치환 과정에서 확장자 바로 앞에 중복으로 남은 불필요한 언더스코어 말끔히 제거</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><code>^IMG_\d{4}\.</code></td>
+              <td><code>Photo_</code></td>
+              <td><code>IMG_4921.jpg</code></td>
+              <td><code>Photo_4921.jpg</code></td>
+              <td>스마트폰 및 디지털 카메라가 자동으로 부여한 무의미한 기본 접두사를 고유 프로젝트명으로 교체</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><code>[\s_]*[vV](\d+)\.(\d+)</code></td>
+              <td><code>_v$1.$2</code></td>
+              <td><code>app V 2.1.zip</code></td>
+              <td><code>app_v2.1.zip</code></td>
+              <td>제각각 작성된 버전 표기(공백, 대문자 V)를 정형화된 시맨틱 버전(<code>_v2.1</code>)으로 규격화</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td><code>[^\w\-\.가-힣]</code></td>
+              <td><code>_</code></td>
+              <td><code>기획서#1!@.docx</code></td>
+              <td><code>기획서_1__.docx</code></td>
+              <td>OS 간 전송 시 깨지거나 명령줄에서 에러를 일으키는 특수문자나 이모지를 안전한 기호로 정제</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td><code>(?<=_)(draft|temp|copy)(?=_)</code></td>
+              <td><code>(빈 칸)</code></td>
+              <td><code>logo_draft_v1.png</code></td>
+              <td><code>logo__v1.png</code></td>
+              <td>작업 도중 파일명 중간에 임시로 삽입되었던 작업 상태 태그를 완성본 단계에서 일괄 삭제</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td><code>_([0-9]{3,4}x[0-9]{3,4})</code></td>
+              <td><code>@$1</code></td>
+              <td><code>hero_1920x1080.png</code></td>
+              <td><code>hero@1920x1080.png</code></td>
+              <td>에셋 해상도 수치 구분자를 모바일 및 반응형 웹 표준 앳(<code>@</code>) 구분자로 전환</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td><code>^_+|_+$</code></td>
+              <td><code>(빈 칸)</code></td>
+              <td><code>_header_image_.png</code></td>
+              <td><code>header_image.png</code></td>
+              <td>문자열 삭제 후 파일명의 맨 앞이나 맨 뒤 끝부분에 고립되어 남은 언더스코어 일괄 정리</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-      <h3>3) 일련번호 부여 (Auto Numbering with Zero Padding)</h3>
-      <p>순서가 중요한 강의 녹음 파일이나 이미지 컷에 <code>Scene_001.png</code>, <code>Scene_002.png</code>처럼 자릿수(Zero-padding)를 맞춘 일련번호를 자동으로 매길 수 있습니다.</p>
+      <!-- macOS vs Windows Hangul Jaso Decomposition Callout Box -->
+      <div class="callout-box">
+        <div class="callout-title">
+          <i class="fa-brands fa-apple text-lg"></i>
+          <span>macOS와 Windows 간 한글 자소 분리(NFD vs NFC) 현상과 완전 해결법</span>
+        </div>
+        <p><strong>발생 원인: 유니코드 정규화 표준의 차이</strong><br>
+        맥(macOS)의 APFS/HFS+ 파일 시스템은 한글 파일명을 저장할 때 초성, 중성, 종성을 낱 글자 단위로 분리하여 기록하는 <strong>NFD(Normalization Form Decomposition)</strong> 방식을 기본 사용합니다. 반면 윈도우(Windows)의 NTFS 파일 시스템은 하나의 완성된 글자로 결합하여 저장하는 <strong>NFC(Normalization Form Canonical Composition)</strong> 방식을 사용합니다.</p>
+        <p><strong>실무에서 발생하는 치명적 문제:</strong><br>
+        맥 사용자가 작성한 파일을 윈도우 PC로 가져오면 파일명이 <code>ㅂㅗㄱㅅㅏ.png</code> 형태로 자소가 완전히 분리되어 깨져 보입니다. 이 상태의 파일은 윈도우 탐색기에서 한글 검색이 되지 않으며, 웹 서버나 데이터베이스에 업로드할 때 문자열 인코딩 불일치로 심각한 404 오류나 링크 깨짐을 유발합니다.</p>
+        <p><strong>배처 툴의 자동 정규화 해결책:</strong><br>
+        자바스크립트 표준 API인 <code>String.prototype.normalize('NFC')</code>를 기반으로 작동하는 배처 툴은, 맥에서 생성된 자소 분리 파일을 브라우저로 드래그 앤 드롭하는 즉시 내부 엔진이 자동으로 감지하여 완벽한 완성형 한글(NFC)로 자동 재조합합니다. 복잡한 파이썬 스크립트나 터미널 명령어 없이 원클릭으로 수천 개의 자소 분리 파일을 정상 한글명으로 복구할 수 있습니다.</p>
+      </div>
 
-      <h3>4) 확장자 일괄 소문자화 및 정리</h3>
-      <p>윈도우와 맥에서 혼용되는 <code>.JPEG</code>, <code>.PNG</code> 등의 대문자 확장자를 웹 표준 규격인 소문자 <code>.jpg</code>, <code>.png</code>로 일괄 통일할 수 있습니다.</p>
-
-      <h2>2. 실수 방지를 위한 3단계 안전장치</h2>
-      <p>수백 개의 파일 이름을 일괄 변경할 때 가장 큰 두려움은 '잘못된 규칙을 적용해 원본 파일명이 엉망이 되는 것'입니다. 배처 툴은 다음의 3단계 안전장치를 제공합니다:</p>
+      <h2>3. 실수 없는 대량 리네이밍을 위한 3단계 안전 워크플로우</h2>
+      <p>대량 파일명 가공 시 가장 중요한 것은 작업자의 실수를 방어하는 복구 매커니즘입니다. 배처 툴은 작업 도중 발생할 수 있는 휴먼 에러를 완벽하게 차단하기 위해 다음 3단계 안전장치를 제공합니다.</p>
 
       <ol>
-        <li><strong>실시간 프리뷰(Live Preview):</strong> 규칙을 추가하거나 수정할 때마다 테이블의 '변경될 이름' 열에 결과가 즉시 미리 표시됩니다.</li>
-        <li><strong>실행 취소(Undo):</strong> 잘못된 규칙을 적용했다면 상단의 Undo 버튼으로 직전 상태로 즉시 되돌릴 수 있습니다.</li>
-        <li><strong>초기화(Reset):</strong> 언제든지 처음 폴더를 로드했던 순수 원본 파일명 상태로 완벽히 복원할 수 있습니다.</li>
+        <li><strong>실시간 인라인 프리뷰(Live Preview):</strong> 치환 규칙, 접두사, 일련번호 규칙을 타이핑하는 순간, 우측 대기열 테이블의 '변경될 이름' 열에 변경 결과가 1ms 단위로 즉시 렌더링됩니다. 실제 디스크에 쓰기 전에 결과를 눈으로 100% 검증할 수 있습니다.</li>
+        <li><strong>무제한 실행 취소(Undo):</strong> 잘못된 정규식 패턴이나 잘못된 번호 규칙을 실수로 적용했더라도, 상단의 <code>Undo</code> 버튼을 클릭하면 직전 상태의 파일명으로 즉각 롤백됩니다.</li>
+        <li><strong>초기화(Reset):</strong> 복잡한 규칙을 여러 번 중첩 적용하다가 처음 상태로 돌아가고 싶을 때, <code>Reset</code> 버튼 한 번으로 폴더를 처음 불러왔던 무결한 원본 상태로 즉시 복원합니다.</li>
       </ol>
 
+      <div class="tip-box">
+        <p><i class="fa-solid fa-lightbulb"></i> <strong>전문가 팁:</strong> 대량의 파일을 변경하기 전에 특정 파일만 선별하고 싶다면 상단의 '확장자 필터'에 <code>.png, .jpg</code>를 입력해 보세요. 하위 폴더 내의 무관한 시스템 파일은 제외하고 원하는 미디어만 안전하게 골라낼 수 있습니다.</p>
+      </div>
+
       <div class="tool-cta">
-        <h3>수백 개의 파일명을 지금 바로 일괄 정리해 보세요</h3>
-        <p style="margin-bottom: 0.5rem; font-size: 0.875rem; color: #cbd5e1;">프로그램 설치 없이 최신 웹 브라우저에서 100% 무료로 작동합니다.</p>
+        <h3>수백 개의 파일명을 지금 바로 브라우저에서 안전하게 정리해 보세요</h3>
+        <p style="margin-bottom: 0.5rem; font-size: 0.875rem; color: #cbd5e1;">프로그램 설치 없이 100% 로컬 브라우저 보안 환경에서 무료로 작동합니다.</p>
         <a href="/batch-rename.html">
-          <i class="fa-solid fa-play"></i> 대량 파일 리네이머 바로가기
+          <i class="fa-solid fa-play"></i> 대량 파일 리네이머 도구 열기
         </a>
       </div>
 
-      <h2>관련 추천 가이드</h2>
+      <h2>관련 추천 기술 가이드</h2>
       <ul>
-        <li><a href="/guides/regex-rename-guide.html" style="color: #f472b6; text-decoration: none; font-weight: 600;">정규표현식(Regex) 파일 리네이밍 실전 가이드</a></li>
-        <li><a href="/guides/os-batch-rename-cli-vs-web.html" style="color: #f472b6; text-decoration: none; font-weight: 600;">Windows PowerShell vs macOS vs 웹 리네이머 비교</a></li>
-        <li><a href="/guides/regex-advanced-pattern-guide.html" style="color: #f472b6; text-decoration: none; font-weight: 600;">실무에서 즉시 활용하는 정규식 치환 패턴 15선</a></li>
+        <li><a href="/guides/regex-rename-guide.html" style="color: #f472b6; text-decoration: none; font-weight: 600;">정규표현식(Regex) 파일 리네이밍 기초 및 캡처 그룹 활용 가이드</a></li>
+        <li><a href="/guides/os-batch-rename-cli-vs-web.html" style="color: #f472b6; text-decoration: none; font-weight: 600;">Windows PowerShell vs macOS 터미널 vs 웹 브라우저 리네이머 심층 비교</a></li>
+        <li><a href="/guides/regex-advanced-pattern-guide.html" style="color: #f472b6; text-decoration: none; font-weight: 600;">실무에서 즉시 복사해 쓰는 고급 정규식(Regex) 파일 리네이밍 15선</a></li>
+        <li><a href="/guides/bulk-file-organization-for-creators.html" style="color: #f472b6; text-decoration: none; font-weight: 600;">크리에이터와 개발자를 위한 대용량 프로젝트 파일 정리 및 네이밍 규칙</a></li>
       </ul>
     </article>
 
