@@ -220,6 +220,30 @@ export class BatcherApp extends LitElement {
     );
   };
 
+  private handleHashChange = () => {
+    const hash = window.location.hash.toLowerCase();
+    if (hash === "#svg") {
+      this.handleTabChange("svg");
+    } else if (hash === "#audio") {
+      this.handleTabChange("audio");
+    } else if (hash === "#rename") {
+      this.handleTabChange("rename");
+    } else if (hash === "#cleaner" || hash === "#resource") {
+      this.handleTabChange("resource");
+    }
+  };
+
+  private handleExternalTabChange = (e: Event) => {
+    const customEvent = e as CustomEvent<ActiveTabType>;
+    if (customEvent.detail && ["svg", "audio", "rename", "resource"].includes(customEvent.detail)) {
+      this.handleTabChange(customEvent.detail);
+    }
+  };
+
+  public setTab(tab: ActiveTabType) {
+    this.handleTabChange(tab);
+  }
+
   private handleLangChange(lang: "ko" | "en") {
     this.currentLang = lang;
     this.updateStaticElements(lang);
@@ -229,6 +253,8 @@ export class BatcherApp extends LitElement {
     super.connectedCallback();
     window.addEventListener("change-lang", this.handleExternalLangChange);
     window.addEventListener("open-support", this.handleExternalOpenSupport);
+    window.addEventListener("hashchange", this.handleHashChange);
+    window.addEventListener("change-tab", this.handleExternalTabChange);
 
     const savedLang = localStorage.getItem("batcher-lang");
     if (savedLang === "en" || savedLang === "ko") {
@@ -299,6 +325,8 @@ export class BatcherApp extends LitElement {
   override disconnectedCallback() {
     window.removeEventListener("change-lang", this.handleExternalLangChange);
     window.removeEventListener("open-support", this.handleExternalOpenSupport);
+    window.removeEventListener("hashchange", this.handleHashChange);
+    window.removeEventListener("change-tab", this.handleExternalTabChange);
     super.disconnectedCallback();
   }
 
@@ -1718,7 +1746,7 @@ export class BatcherApp extends LitElement {
               ></app-header>
             `}
 
-        <!-- Tabs Navigation (Stitch Fintech Pill Style) -->
+        <!-- Tabs Navigation (Modern Pill Style) -->
         <div
           class="flex items-center gap-1.5 p-1.5 bg-surface-container-low border border-outline-variant/30 rounded-2xl w-full max-w-2xl mx-auto mb-8 shadow-xs overflow-x-auto"
         >
@@ -1963,7 +1991,7 @@ export class BatcherApp extends LitElement {
         </div>
       </div>
 
-      <!-- Stitch Fintech Floating Action Pod -->
+      <!-- Modern Floating Action Pod -->
       <aside
         class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-4xl bg-surface-container-lowest/95 backdrop-blur-xl border border-outline-variant/30 py-3 px-6 z-40 rounded-full shadow-[0_16px_40px_rgba(0,0,0,0.12)] transition-all duration-300"
         id="floating-action-pod"

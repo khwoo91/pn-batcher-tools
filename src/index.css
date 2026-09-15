@@ -4,7 +4,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 @import "@fortawesome/fontawesome-free/css/all.css";
 
-/* Stitch Fintech / Banking Minimalist Theme Variables */
+/* Batcher Modern Clean Theme Variables */
 :root {
   --surface: #f8f9fb;
   --surface-container-lowest: #ffffff;
@@ -276,7 +276,7 @@ summary::-webkit-details-marker {
 .gap-space-sm { gap: 0.5rem; }
 .gap-space-xs { gap: 0.25rem; }
 
-/* Glassmorphism helpers revised to Apple / Stitch Fintech card styles */
+/* Glassmorphism helpers revised to modern clean card styles */
 .glass-panel {
   background: var(--bg-card);
   backdrop-filter: blur(20px);

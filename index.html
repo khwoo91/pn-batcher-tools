@@ -173,149 +173,48 @@
   <main class="w-full relative z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
       
-      <!-- Main Global Navigation Header (Top Stitch Fintech Header) -->
+      <!-- Main Global Navigation Header -->
       <app-header id="global-header"></app-header>
 
-      <!-- 1. Hero & Quick Start Card (토스형 메인 송금/계좌 카드 콘셉트) -->
-      <section class="w-full mb-8">
-        <div class="bg-surface-container-lowest rounded-3xl p-6 sm:p-8 shadow-xs border border-outline-variant/20 relative overflow-hidden">
-          <div class="absolute -right-20 -top-20 w-72 h-72 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
-
-          <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-6">
-            <div class="space-y-2 max-w-2xl">
-              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold">
-                <span class="material-symbols-outlined text-[16px]">bolt</span>
-                <span data-lang="ko">스마트 파일 자동 감지</span>
-                <span data-lang="en">Smart File Auto-Detection</span>
-              </div>
-              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface leading-snug" data-lang="ko">
-                어떤 파일이든 끌어다 놓으세요.<br/>
-                <span class="text-primary">배처가 알아서 정리해 드려요.</span>
-              </h1>
-              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface leading-snug" data-lang="en">
-                Drag and drop any files.<br/>
-                <span class="text-primary">Batcher organizes everything for you.</span>
-              </h1>
-              <p class="text-sm text-on-surface-variant leading-relaxed" data-lang="ko">
-                SVG 이미지 선명화부터 오디오 압축, 수백 개 파일 이름 일괄 변경까지 단 1초 만에 실행됩니다.
-              </p>
-              <p class="text-sm text-on-surface-variant leading-relaxed" data-lang="en">
-                From crisp SVG vector rasterization to audio encoding and bulk file renaming in 1 second.
-              </p>
-            </div>
-            <!-- Try Sample Fast Action Button -->
-            <div class="flex items-center gap-2 w-full lg:w-auto">
-              <button class="h-11 px-5 rounded-2xl bg-surface-container-low hover:bg-surface-container text-on-surface text-sm font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer border border-outline-variant/25" id="sample-trigger-btn" type="button">
-                <span class="material-symbols-outlined text-primary text-[20px]">play_circle</span>
-                <span data-lang="ko">3초 만에 샘플로 체험하기</span>
-                <span data-lang="en">Try with 3-sec sample</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Main Drag & Drop Zone (Fintech Minimal Card Interior) -->
-          <div class="w-full rounded-2xl bg-surface-container-low/70 hover:bg-surface-container-low p-6 sm:p-8 transition-all cursor-pointer group text-center flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/40 hover:border-primary/60" id="hero-dropzone">
-            <input class="hidden" id="hero-file-input" multiple="" type="file" />
-            <div class="w-14 h-14 rounded-2xl bg-primary text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform mb-3">
-              <span class="material-symbols-outlined text-[28px]">folder_open</span>
-            </div>
-            <div class="text-base font-bold text-on-surface mb-1" data-lang="ko">
-              컴퓨터의 파일이나 폴더를 여기에 놓아주세요
-            </div>
-            <div class="text-base font-bold text-on-surface mb-1" data-lang="en">
-              Drop your files or folders here
-            </div>
-            <p class="text-xs text-on-surface-variant mb-4" data-lang="ko">
-              SVG, WAV, MP3, PNG, 문서 등 여러 개를 한꺼번에 올려도 멈춤 없이 작동합니다
-            </p>
-            <p class="text-xs text-on-surface-variant mb-4" data-lang="en">
-              Process multiple SVGs, audio tracks, and images smoothly with zero lag
-            </p>
-            <!-- Quick Tags -->
-            <div class="flex flex-wrap items-center justify-center gap-2">
-              <span class="px-3 py-1 rounded-full bg-surface-container-lowest text-on-surface-variant text-xs font-medium shadow-xs border border-outline-variant/20">
-                <span data-lang="ko">• 아이콘·일러스트 (SVG)</span>
-                <span data-lang="en">• Icons & Vectors (SVG)</span>
-              </span>
-              <span class="px-3 py-1 rounded-full bg-surface-container-lowest text-on-surface-variant text-xs font-medium shadow-xs border border-outline-variant/20">
-                <span data-lang="ko">• 음성·녹음본 (WAV)</span>
-                <span data-lang="en">• Audio & Recordings (WAV)</span>
-              </span>
-              <span class="px-3 py-1 rounded-full bg-surface-container-lowest text-on-surface-variant text-xs font-medium shadow-xs border border-outline-variant/20">
-                <span data-lang="ko">• 수백 개 사진·자료 파일 일괄 리네임</span>
-                <span data-lang="en">• Bulk File Renaming</span>
-              </span>
-            </div>
-          </div>
-
-          <!-- Quick Interactive Detection Drawer -->
-          <div class="hidden mt-4 pt-4 border-t border-outline-variant/20" id="interactive-preview-panel">
-            <div class="flex items-center justify-between gap-2 pb-3">
-              <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
-                <span class="text-sm font-bold text-on-surface">샘플 대기열 3건 준비됨</span>
-                <span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[11px] font-bold">준비 완료</span>
-              </div>
-              <button class="text-xs text-on-surface-variant hover:text-error transition-colors flex items-center gap-1 cursor-pointer" id="clear-preview-btn" type="button">
-                <span class="material-symbols-outlined text-[16px]">delete_sweep</span>
-                <span>목록 닫기</span>
-              </button>
-            </div>
-            <div class="space-y-2">
-              <div class="flex items-center justify-between p-3 rounded-2xl bg-surface-container-low border border-outline-variant/20">
-                <div class="flex items-center gap-3 min-w-0">
-                  <span class="material-symbols-outlined text-primary text-[24px]">category</span>
-                  <div class="truncate">
-                    <div class="text-sm font-bold text-on-surface truncate">app_icon_core.svg</div>
-                    <div class="text-xs text-on-surface-variant">추천: 2.0x (@2x 레티나) PNG 선명 변환</div>
-                  </div>
-                </div>
-                <a class="px-3.5 py-1.5 rounded-xl bg-primary hover:bg-primary/90 text-white text-xs font-bold shrink-0 transition-colors" href="/svg-to-png.html">
-                  바로 변환
-                </a>
-              </div>
-              <div class="flex items-center justify-between p-3 rounded-2xl bg-surface-container-low border border-outline-variant/20">
-                <div class="flex items-center gap-3 min-w-0">
-                  <span class="material-symbols-outlined text-primary text-[24px]">graphic_eq</span>
-                  <div class="truncate">
-                    <div class="text-sm font-bold text-on-surface truncate">interview_recording_master.wav</div>
-                    <div class="text-xs text-on-surface-variant">추천: 192kbps 고음질 압축 (용량 88% 절감)</div>
-                  </div>
-                </div>
-                <a class="px-3.5 py-1.5 rounded-xl bg-primary hover:bg-primary/90 text-white text-xs font-bold shrink-0 transition-colors" href="/wav-to-mp3.html">
-                  바로 변환
-                </a>
-              </div>
-              <div class="flex items-center justify-between p-3 rounded-2xl bg-surface-container-low border border-outline-variant/20">
-                <div class="flex items-center gap-3 min-w-0">
-                  <span class="material-symbols-outlined text-primary text-[24px]">drive_file_rename_outline</span>
-                  <div class="truncate">
-                    <div class="text-sm font-bold text-on-surface truncate">2026-08-03_IMG_draft_01.jpg 외 24개</div>
-                    <div class="text-xs text-on-surface-variant">추천: 날짜 형식 통일 및 일련번호 부여</div>
-                  </div>
-                </div>
-                <a class="px-3.5 py-1.5 rounded-xl bg-primary hover:bg-primary/90 text-white text-xs font-bold shrink-0 transition-colors" href="/batch-rename.html">
-                  이름 정리
-                </a>
-              </div>
-            </div>
-          </div>
+      <!-- 1. Hero Introduction (Instant Local Processing First) -->
+      <section class="text-center max-w-3xl mx-auto pt-2 pb-6 px-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold mb-4 shadow-2xs">
+          <span class="material-symbols-outlined text-[16px]">verified_user</span>
+          <span data-lang="ko">100% 브라우저 로컬 안전 처리 · 서버 전송 0%</span>
+          <span data-lang="en">100% In-Browser Local Safe · Zero Server Upload</span>
         </div>
+        <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-on-surface leading-tight mb-3" data-lang="ko">
+          초고속 브라우저 로컬 <span class="text-primary">파일 일괄 변환기</span>
+        </h1>
+        <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-on-surface leading-tight mb-3" data-lang="en">
+          Instant In-Browser <span class="text-primary">Batch File Processor</span>
+        </h1>
+        <p class="text-sm text-on-surface-variant max-w-xl mx-auto leading-relaxed" data-lang="ko">
+          SVG 고해상도 변환, 오디오 추출 및 인코딩, 수백 개 파일명 일괄 변경까지 프로그램 설치나 서버 업로드 없이 브라우저에서 바로 변환하세요.
+        </p>
+        <p class="text-sm text-on-surface-variant max-w-xl mx-auto leading-relaxed" data-lang="en">
+          Crisp SVG rasterization, audio encoding, and bulk file renaming executed 100% inside your browser with complete privacy.
+        </p>
       </section>
+    </div>
 
-      <!-- 2. 자주 찾는 3대 핵심 작업 카드 (3-Column Banking Action Hub) -->
-      <section class="w-full mb-10">
+    <!-- 2. Main In-Browser Workspace (Lit Component - Immediate Conversion UX) -->
+    <batcher-app id="main-workspace" hide-header class="block relative z-20"></batcher-app>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <!-- 3. 자주 찾는 3대 핵심 작업 프리셋 (Key Workflows & Presets) -->
+      <section class="w-full my-8">
         <div class="flex items-center justify-between mb-4">
           <div>
-            <h2 class="text-xl sm:text-2xl font-bold text-on-surface" data-lang="ko">자주 찾는 3대 도구</h2>
-            <h2 class="text-xl sm:text-2xl font-bold text-on-surface" data-lang="en">Top 3 Most Used Tools</h2>
-            <p class="text-xs text-on-surface-variant mt-0.5" data-lang="ko">매일 가장 많이 쓰이는 필수 일괄 처리 작업을 빠르게 선택하세요.</p>
-            <p class="text-xs text-on-surface-variant mt-0.5" data-lang="en">Choose essential batch processing workflows with a single tap.</p>
+            <h2 class="text-xl sm:text-2xl font-bold text-on-surface" data-lang="ko">자주 찾는 3대 작업 프리셋</h2>
+            <h2 class="text-xl sm:text-2xl font-bold text-on-surface" data-lang="en">Top 3 Batch Processing Workflows</h2>
+            <p class="text-xs text-on-surface-variant mt-0.5" data-lang="ko">클릭 한 번으로 상단 변환 탭을 전환하고 프리셋을 적용하세요.</p>
+            <p class="text-xs text-on-surface-variant mt-0.5" data-lang="en">Switch tabs and apply preset configurations with a single tap.</p>
           </div>
           <span class="hidden sm:inline-flex items-center gap-1 text-xs text-primary font-bold">
             <span class="material-symbols-outlined text-[16px]">touch_app</span>
-            <span data-lang="ko">원클릭 프리셋</span>
-            <span data-lang="en">One-click presets</span>
+            <span data-lang="ko">원클릭 탭 전환</span>
+            <span data-lang="en">One-click tab switch</span>
           </span>
         </div>
 
@@ -351,18 +250,24 @@
                   <span data-lang="en">Scale Presets</span>
                 </div>
                 <div class="grid grid-cols-4 gap-1" id="svg-chips">
-                  <button class="svg-chip active py-1.5 rounded-xl text-center text-xs bg-surface-container-lowest text-primary font-bold shadow-xs cursor-pointer transition-all" type="button">1.0x</button>
-                  <button class="svg-chip py-1.5 rounded-xl text-center text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-all" type="button">1.5x</button>
-                  <button class="svg-chip py-1.5 rounded-xl text-center text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-all" type="button">2.0x</button>
-                  <button class="svg-chip py-1.5 rounded-xl text-center text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-all" type="button">3.0x</button>
+                  <button class="svg-chip active py-1.5 rounded-xl text-center text-xs bg-surface-container-lowest text-primary font-bold shadow-xs cursor-pointer transition-all" data-scale="1" type="button">1.0x</button>
+                  <button class="svg-chip py-1.5 rounded-xl text-center text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-all" data-scale="1.5" type="button">1.5x</button>
+                  <button class="svg-chip py-1.5 rounded-xl text-center text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-all" data-scale="2" type="button">2.0x</button>
+                  <button class="svg-chip py-1.5 rounded-xl text-center text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-all" data-scale="3" type="button">3.0x</button>
                 </div>
               </div>
             </div>
-            <a class="w-full h-11 rounded-2xl bg-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-primary/90 transition-all shadow-xs" href="/svg-to-png.html">
-              <span data-lang="ko">SVG 변환 시작하기</span>
-              <span data-lang="en">Start SVG Conversion</span>
-              <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-            </a>
+            <div class="space-y-2">
+              <button class="w-full h-11 rounded-2xl bg-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-primary/90 transition-all shadow-xs cursor-pointer quick-tab-btn" data-target-tab="svg" type="button">
+                <span data-lang="ko">SVG 변환 탭 바로가기</span>
+                <span data-lang="en">Go to SVG Converter</span>
+                <span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+              </button>
+              <a class="block text-center text-[11px] text-on-surface-variant hover:text-primary transition-colors" href="/svg-to-png.html">
+                <span data-lang="ko">전용 상세 페이지 보기 →</span>
+                <span data-lang="en">View Dedicated Page →</span>
+              </a>
+            </div>
           </div>
 
           <!-- Card 2: Bulk File Renamer -->
@@ -407,11 +312,17 @@
                 </div>
               </div>
             </div>
-            <a class="w-full h-11 rounded-2xl bg-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-primary/90 transition-all shadow-xs" href="/batch-rename.html">
-              <span data-lang="ko">대량 이름 바꾸기 시작</span>
-              <span data-lang="en">Start Batch Rename</span>
-              <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-            </a>
+            <div class="space-y-2">
+              <button class="w-full h-11 rounded-2xl bg-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-primary/90 transition-all shadow-xs cursor-pointer quick-tab-btn" data-target-tab="rename" type="button">
+                <span data-lang="ko">파일명 변경 탭 바로가기</span>
+                <span data-lang="en">Go to Batch Rename</span>
+                <span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+              </button>
+              <a class="block text-center text-[11px] text-on-surface-variant hover:text-primary transition-colors" href="/batch-rename.html">
+                <span data-lang="ko">전용 상세 페이지 보기 →</span>
+                <span data-lang="en">View Dedicated Page →</span>
+              </a>
+            </div>
           </div>
 
           <!-- Card 3: Audio Converter (WAV -> MP3) -->
@@ -445,29 +356,104 @@
                   <span data-lang="en">Bitrate Presets</span>
                 </div>
                 <div class="grid grid-cols-3 gap-1" id="audio-chips">
-                  <button class="audio-chip py-1.5 rounded-xl text-center text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-all" type="button">128k</button>
-                  <button class="audio-chip active py-1.5 rounded-xl text-center text-xs bg-surface-container-lowest text-primary font-bold shadow-xs cursor-pointer transition-all" type="button">
+                  <button class="audio-chip py-1.5 rounded-xl text-center text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-all" data-bitrate="128" type="button">128k</button>
+                  <button class="audio-chip active py-1.5 rounded-xl text-center text-xs bg-surface-container-lowest text-primary font-bold shadow-xs cursor-pointer transition-all" data-bitrate="192" type="button">
                     <span data-lang="ko">192k (표준)</span>
                     <span data-lang="en">192k (Std)</span>
                   </button>
-                  <button class="audio-chip py-1.5 rounded-xl text-center text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-all" type="button">320k</button>
+                  <button class="audio-chip py-1.5 rounded-xl text-center text-xs text-on-surface-variant hover:text-on-surface cursor-pointer transition-all" data-bitrate="320" type="button">320k</button>
                 </div>
               </div>
             </div>
-            <a class="w-full h-11 rounded-2xl bg-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-primary/90 transition-all shadow-xs" href="/wav-to-mp3.html">
-              <span data-lang="ko">오디오 변환 시작하기</span>
-              <span data-lang="en">Start Audio Encoding</span>
-              <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-            </a>
+            <div class="space-y-2">
+              <button class="w-full h-11 rounded-2xl bg-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-primary/90 transition-all shadow-xs cursor-pointer quick-tab-btn" data-target-tab="audio" type="button">
+                <span data-lang="ko">오디오 변환 탭 바로가기</span>
+                <span data-lang="en">Go to Audio Converter</span>
+                <span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+              </button>
+              <a class="block text-center text-[11px] text-on-surface-variant hover:text-primary transition-colors" href="/wav-to-mp3.html">
+                <span data-lang="ko">전용 상세 페이지 보기 →</span>
+                <span data-lang="en">View Dedicated Page →</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
-    </div>
 
-    <!-- Main In-Browser Workspace (Lit Component) -->
-    <batcher-app id="main-workspace" hide-header class="block relative z-20"></batcher-app>
+      <!-- 4. 100% 브라우저 로컬 처리의 3대 핵심 장점 (Why Client-Side Local?) -->
+      <section class="w-full my-12">
+        <div class="mb-6">
+          <h2 class="text-xl sm:text-2xl font-bold text-on-surface" data-lang="ko">100% 브라우저 로컬 처리의 3대 핵심 이점</h2>
+          <h2 class="text-xl sm:text-2xl font-bold text-on-surface" data-lang="en">3 Key Advantages of 100% Local In-Browser Processing</h2>
+          <p class="text-xs text-on-surface-variant mt-0.5" data-lang="ko">외부 클라우드 서버로 파일을 업로드하지 않아 완벽한 보안과 초고속 처리를 보장합니다.</p>
+          <p class="text-xs text-on-surface-variant mt-0.5" data-lang="en">Files never leave your device, ensuring complete privacy, zero upload lag, and native hardware performance.</p>
+        </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div class="bg-surface-container-lowest rounded-3xl p-6 border border-outline-variant/20 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4 text-xl">
+                <span class="material-symbols-outlined text-[26px]">shield</span>
+              </div>
+              <h3 class="text-base font-bold text-on-surface mb-2" data-lang="ko">서버 전송 0% 프라이버시 보호</h3>
+              <h3 class="text-base font-bold text-on-surface mb-2" data-lang="en">Zero Server Upload & Privacy</h3>
+              <p class="text-xs text-on-surface-variant leading-relaxed" data-lang="ko">
+                사내 기밀 디자인, 미공개 소스코드, 개인 녹음본이 외부 서버에 절대 전송되지 않습니다. 모든 파일은 브라우저 샌드박스 메모리 안에서만 가공 후 즉시 파기됩니다.
+              </p>
+              <p class="text-xs text-on-surface-variant leading-relaxed" data-lang="en">
+                Proprietary graphics, voice recordings, and documents are never uploaded to any cloud. All computation happens exclusively inside your local browser memory.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-outline-variant/15 flex items-center gap-1.5 text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">
+              <span class="material-symbols-outlined text-[16px]">check_circle</span>
+              <span data-lang="ko">기업·기관 안심 사용</span>
+              <span data-lang="en">Enterprise Safe</span>
+            </div>
+          </div>
+
+          <div class="bg-surface-container-lowest rounded-3xl p-6 border border-outline-variant/20 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-4 text-xl">
+                <span class="material-symbols-outlined text-[26px]">speed</span>
+              </div>
+              <h3 class="text-base font-bold text-on-surface mb-2" data-lang="ko">용량·개수 무제한 초고속 처리</h3>
+              <h3 class="text-base font-bold text-on-surface mb-2" data-lang="en">Unlimited Bulk & Zero Queue</h3>
+              <p class="text-xs text-on-surface-variant leading-relaxed" data-lang="ko">
+                서버 트래픽 대기열이나 일일 무료 변환 용량 제한이 전혀 없습니다. 수백 개의 대용량 파일도 내 컴퓨터의 CPU/GPU 자원을 풀가동하여 1초 만에 일괄 처리합니다.
+              </p>
+              <p class="text-xs text-on-surface-variant leading-relaxed" data-lang="en">
+                No server queues or daily file quotas. Process hundreds of high-res assets simultaneously powered directly by your multi-core CPU.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-outline-variant/15 flex items-center gap-1.5 text-[11px] text-primary font-bold">
+              <span class="material-symbols-outlined text-[16px]">check_circle</span>
+              <span data-lang="ko">100% 무료 무제한</span>
+              <span data-lang="en">100% Free & Unlimited</span>
+            </div>
+          </div>
+
+          <div class="bg-surface-container-lowest rounded-3xl p-6 border border-outline-variant/20 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4 text-xl">
+                <span class="material-symbols-outlined text-[26px]">memory</span>
+              </div>
+              <h3 class="text-base font-bold text-on-surface mb-2" data-lang="ko">WebAssembly &amp; 디스크 가속</h3>
+              <h3 class="text-base font-bold text-on-surface mb-2" data-lang="en">WebAssembly & Disk Direct</h3>
+              <p class="text-xs text-on-surface-variant leading-relaxed" data-lang="ko">
+                WICG File System Access API 및 멀티스레드 Web Workers 기술을 활용하여, 별도의 소프트웨어 설치 없이도 네이티브 프로그램 수준의 안정성을 제공합니다.
+              </p>
+              <p class="text-xs text-on-surface-variant leading-relaxed" data-lang="en">
+                Engineered with modern WebAssembly and multi-threaded Web Workers to achieve native C/C++ level execution speed right in modern browsers.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-outline-variant/15 flex items-center gap-1.5 text-[11px] text-indigo-600 dark:text-indigo-400 font-bold">
+              <span class="material-symbols-outlined text-[16px]">check_circle</span>
+              <span data-lang="ko">설치 없는 웹 표준 기술</span>
+              <span data-lang="en">Pure Web Standard</span>
+            </div>
+          </div>
+        </div>
+      </section>
       <!-- 3. 더 많은 작업 도구 (확장성을 고려한 모듈형 그리드 섹션) -->
       <section class="w-full my-12">
         <div class="flex items-center justify-between mb-5">
@@ -800,7 +786,7 @@
     </div>
   </main>
 
-  <!-- Fintech Security Footer (KO) -->
+  <!-- Privacy & Security Footer (KO) -->
   <footer id="footer-ko" data-lang="ko" class="w-full bg-surface-container-low border-t border-outline-variant/20 mt-12 pb-24 relative z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       <div class="flex flex-col md:flex-row md:items-start justify-between gap-8 mb-8">
@@ -809,7 +795,7 @@
             <div class="w-6 h-6 rounded-lg bg-primary flex items-center justify-center">
               <span class="material-symbols-outlined text-white text-[14px]">lock</span>
             </div>
-            <span class="text-sm font-bold text-on-surface">배처 금융권 수준 로컬 안심 보안</span>
+            <span class="text-sm font-bold text-on-surface">100% 브라우저 로컬 데이터 보안</span>
           </div>
           <p class="text-xs text-on-surface-variant leading-relaxed">
             업로드하신 모든 그래픽, 음원, 문서는 외부 서버로 전송되지 않고 사용자의 기기 브라우저(WebAssembly &amp; Web Workers) 안에서 100% 즉시 처리 후 파기됩니다.
@@ -840,7 +826,7 @@
         </div>
       </div>
       <div class="pt-6 border-t border-outline-variant/20 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div class="text-[11px] text-on-surface-variant">© 2026 Batcher. 금융권 감성의 안심 로컬 생산성 플랫폼. All rights reserved.</div>
+        <div class="text-[11px] text-on-surface-variant">© 2026 Batcher. 서버 전송 없는 100% 브라우저 로컬 파일 변환 도구. All rights reserved.</div>
         <div class="flex items-center gap-2 text-[11px] text-on-surface-variant">
           <span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
           <span>온디바이스 가속 활성화됨</span>
@@ -849,7 +835,7 @@
     </div>
   </footer>
 
-  <!-- Fintech Security Footer (EN) -->
+  <!-- Privacy & Security Footer (EN) -->
   <footer id="footer-en" data-lang="en" class="hidden w-full bg-surface-container-low border-t border-outline-variant/20 mt-12 pb-24 relative z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       <div class="flex flex-col md:flex-row md:items-start justify-between gap-8 mb-8">
@@ -858,7 +844,7 @@
             <div class="w-6 h-6 rounded-lg bg-primary flex items-center justify-center">
               <span class="material-symbols-outlined text-white text-[14px]">lock</span>
             </div>
-            <span class="text-sm font-bold text-on-surface">Batcher Bank-Grade Local Security</span>
+            <span class="text-sm font-bold text-on-surface">100% Client-Side Private Local Security</span>
           </div>
           <p class="text-xs text-on-surface-variant leading-relaxed">
             All graphics, audio, and documents remain strictly confidential within your browser sandbox (WebAssembly &amp; Web Workers) with zero external server upload.
@@ -889,7 +875,7 @@
         </div>
       </div>
       <div class="pt-6 border-t border-outline-variant/20 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div class="text-[11px] text-on-surface-variant">© 2026 Batcher. Bank-Grade Private Local Productivity Platform. All rights reserved.</div>
+        <div class="text-[11px] text-on-surface-variant">© 2026 Batcher. 100% Private Client-Side Batch Processing Platform. All rights reserved.</div>
         <div class="flex items-center gap-2 text-[11px] text-on-surface-variant">
           <span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
           <span>On-Device Acceleration Active</span>
@@ -898,57 +884,27 @@
     </div>
   </footer>
 
-  <!-- Interactive Scripts for Chips, Sample Trigger, and FAQ Accordion -->
+  <!-- Interactive Scripts for Quick Tab Switching, Chips, and FAQ Accordion -->
   <script>
     if (location.hostname.includes('svgbatcher.com')) {
       location.href = 'https://batchertools.com' + location.pathname + location.search;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      // 1. Sample Trigger Demo State
-      const sampleTriggerBtn = document.getElementById('sample-trigger-btn');
-      const heroDropzone = document.getElementById('hero-dropzone');
-      const fileInput = document.getElementById('hero-file-input');
-      const previewPanel = document.getElementById('interactive-preview-panel');
-      const clearBtn = document.getElementById('clear-preview-btn');
-
-      if (sampleTriggerBtn && previewPanel) {
-        sampleTriggerBtn.addEventListener('click', () => {
-          previewPanel.classList.remove('hidden');
-          previewPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      // 1. Quick Tab Switcher and Smooth Scroller
+      const workspace = document.getElementById('main-workspace');
+      const quickTabButtons = document.querySelectorAll('.quick-tab-btn');
+      quickTabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetTab = btn.getAttribute('data-target-tab');
+          if (targetTab) {
+            window.dispatchEvent(new CustomEvent('change-tab', { detail: targetTab }));
+            if (workspace) {
+              workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
         });
-      }
-
-      if (heroDropzone && fileInput && previewPanel) {
-        heroDropzone.addEventListener('click', () => {
-          fileInput.click();
-        });
-
-        fileInput.addEventListener('change', () => {
-          previewPanel.classList.remove('hidden');
-        });
-
-        heroDropzone.addEventListener('dragover', (e) => {
-          e.preventDefault();
-          heroDropzone.classList.add('border-primary', 'bg-primary/5');
-        });
-
-        heroDropzone.addEventListener('dragleave', () => {
-          heroDropzone.classList.remove('border-primary', 'bg-primary/5');
-        });
-
-        heroDropzone.addEventListener('drop', (e) => {
-          e.preventDefault();
-          heroDropzone.classList.remove('border-primary', 'bg-primary/5');
-          previewPanel.classList.remove('hidden');
-        });
-      }
-
-      if (clearBtn && previewPanel) {
-        clearBtn.addEventListener('click', () => {
-          previewPanel.classList.add('hidden');
-        });
-      }
+      });
 
       // 2. Interactive Quick Filter Chips
       function setupChips(containerId) {
@@ -963,6 +919,14 @@
             });
             btn.classList.add('active', 'bg-surface-container-lowest', 'text-primary', 'font-bold', 'shadow-xs');
             btn.classList.remove('text-on-surface-variant');
+
+            const scale = btn.getAttribute('data-scale');
+            const bitrate = btn.getAttribute('data-bitrate');
+            if (scale) {
+              window.dispatchEvent(new CustomEvent('change-tab', { detail: 'svg' }));
+            } else if (bitrate) {
+              window.dispatchEvent(new CustomEvent('change-tab', { detail: 'audio' }));
+            }
           });
         });
       }

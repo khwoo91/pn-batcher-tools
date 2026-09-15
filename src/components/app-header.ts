@@ -119,7 +119,7 @@ export class AppHeader extends LitElement {
   }
 
   protected override render() {
-    const desc = this.lang === "ko" ? "금융권 수준 안심 로컬 파일 변환 툴" : "100% Safe Local File Processor";
+    const desc = this.lang === "ko" ? "100% 브라우저 로컬 안전 파일 변환기" : "100% Safe Local File Processor";
 
     return html`
       <header
@@ -132,7 +132,7 @@ export class AppHeader extends LitElement {
               <div
                 class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-primary flex items-center justify-center shadow-md shadow-primary/25 group-hover:scale-95 transition-transform shrink-0"
               >
-                <span class="material-symbols-outlined text-white text-[22px] sm:text-[24px]">account_balance_wallet</span>
+                <span class="material-symbols-outlined text-white text-[22px] sm:text-[24px]">layers</span>
               </div>
               <div class="flex flex-col">
                 <div class="font-title-md text-title-md text-on-surface tracking-tight font-extrabold flex items-center gap-1 whitespace-nowrap">
