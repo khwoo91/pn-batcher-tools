@@ -14,7 +14,9 @@ export class AppHeader extends LitElement {
   private handleDocumentClick = (e: MouseEvent) => {
     const path = e.composedPath();
     const isClickInside = path.some(
-      (el) => el instanceof HTMLElement && el.classList.contains("custom-dropdown-container"),
+      (el) =>
+        el instanceof HTMLElement &&
+        el.classList.contains("custom-dropdown-container"),
     );
     if (!isClickInside && this.dropdownOpen) {
       this.dropdownOpen = false;
@@ -23,7 +25,10 @@ export class AppHeader extends LitElement {
 
   private handleExternalLangChange = (e: Event) => {
     const customEvent = e as CustomEvent<"ko" | "en">;
-    if (customEvent.detail && (customEvent.detail === "ko" || customEvent.detail === "en")) {
+    if (
+      customEvent.detail &&
+      (customEvent.detail === "ko" || customEvent.detail === "en")
+    ) {
       if (this.lang !== customEvent.detail) {
         this.lang = customEvent.detail;
       }
@@ -40,7 +45,8 @@ export class AppHeader extends LitElement {
     if (savedLang === "en" || savedLang === "ko") {
       this.lang = savedLang as "ko" | "en";
     } else {
-      const docLang = document.documentElement.getAttribute("data-current-lang");
+      const docLang =
+        document.documentElement.getAttribute("data-current-lang");
       if (docLang === "en" || docLang === "ko") {
         this.lang = docLang as "ko" | "en";
       }
@@ -128,14 +134,21 @@ export class AppHeader extends LitElement {
         >
           <!-- Logo & Trust Badge -->
           <div class="flex items-center gap-3 sm:gap-4 shrink-0">
-            <a href="/" class="flex items-center gap-2.5 group select-none shrink-0">
+            <a
+              href="/"
+              class="flex items-center gap-2.5 group select-none shrink-0"
+            >
               <div
                 class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/25 group-hover:scale-95 transition-transform shrink-0"
               >
-                <span class="material-symbols-outlined text-white text-[20px]">layers</span>
+                <span class="material-symbols-outlined text-white text-[20px]"
+                  >layers</span
+                >
               </div>
               <div class="flex items-baseline gap-1.5">
-                <span class="font-title-md text-[17px] font-bold tracking-tight text-on-surface">
+                <span
+                  class="font-title-md text-[17px] font-bold tracking-tight text-on-surface"
+                >
                   배처 <span class="text-primary font-bold">Batcher</span>
                 </span>
               </div>
@@ -144,9 +157,15 @@ export class AppHeader extends LitElement {
             <div
               class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low text-on-surface-variant border border-surface-container whitespace-nowrap shrink-0"
             >
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
-              <span class="text-xs font-medium text-on-surface-variant whitespace-nowrap">
-                ${this.lang === "ko" ? "100% 온디바이스 로컬 처리" : "100% On-Device Local"}
+              <span
+                class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"
+              ></span>
+              <span
+                class="text-xs font-medium text-on-surface-variant whitespace-nowrap"
+              >
+                ${this.lang === "ko"
+                  ? "100% 웹 기반 로컬 처리"
+                  : "100% Web-Based Local"}
               </span>
             </div>
           </div>
@@ -157,10 +176,10 @@ export class AppHeader extends LitElement {
             <nav
               class="hidden md:flex items-center gap-4 text-xs font-semibold text-on-surface-variant shrink-0"
             >
-              <a href="#features" class="hover:text-primary transition-colors whitespace-nowrap">
-                ${this.lang === "ko" ? "보안 특징" : "Security"}
-              </a>
-              <a href="#faq" class="hover:text-primary transition-colors whitespace-nowrap">
+              <a
+                href="#faq"
+                class="hover:text-primary transition-colors whitespace-nowrap"
+              >
                 ${this.lang === "ko" ? "자주 묻는 질문" : "FAQ"}
               </a>
               <a
@@ -197,7 +216,9 @@ export class AppHeader extends LitElement {
             </button>
 
             <!-- Language Selector Dropdown -->
-            <div class="relative inline-block text-left custom-dropdown-container shrink-0">
+            <div
+              class="relative inline-block text-left custom-dropdown-container shrink-0"
+            >
               <button
                 type="button"
                 @click="${(e: MouseEvent) => {
@@ -208,7 +229,8 @@ export class AppHeader extends LitElement {
                 aria-haspopup="true"
                 aria-expanded="${this.dropdownOpen}"
               >
-                <span class="material-symbols-outlined text-[16px] text-on-surface-variant shrink-0"
+                <span
+                  class="material-symbols-outlined text-[16px] text-on-surface-variant shrink-0"
                   >language</span
                 >
                 <span class="font-bold whitespace-nowrap"
@@ -239,7 +261,8 @@ export class AppHeader extends LitElement {
                       >
                         <span>한국어</span>
                         ${this.lang === "ko"
-                          ? html`<span class="material-symbols-outlined text-[16px] text-primary"
+                          ? html`<span
+                              class="material-symbols-outlined text-[16px] text-primary"
                               >check</span
                             >`
                           : ""}
@@ -254,7 +277,8 @@ export class AppHeader extends LitElement {
                       >
                         <span>English</span>
                         ${this.lang === "en"
-                          ? html`<span class="material-symbols-outlined text-[16px] text-primary"
+                          ? html`<span
+                              class="material-symbols-outlined text-[16px] text-primary"
                               >check</span
                             >`
                           : ""}
