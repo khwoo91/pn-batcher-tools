@@ -24,21 +24,21 @@ export class LogConsole extends LitElement {
         : "Execution history and status will be displayed here.";
 
     return html`
-      <div class="glass-panel rounded-3xl p-6 shadow-xl flex flex-col min-h-50 max-h-70">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
+      <div class="bg-surface-container-lowest rounded-2xl border border-surface-container-high shadow-xs p-5 sm:p-6 flex flex-col min-h-36 max-h-60">
+        <div class="flex items-center justify-between border-b border-surface-container pb-3 mb-3">
           <div class="flex items-center gap-3">
-            <i class="fa-solid fa-terminal text-brand-primary text-xs"></i>
-            <span class="text-sm font-bold text-slate-100 tracking-wide font-sans">${title}</span>
+            <span class="material-symbols-outlined text-primary text-base">terminal</span>
+            <span class="text-sm font-bold text-on-surface tracking-wide font-sans">${title}</span>
             <!-- Window Control Dots -->
             <div class="flex gap-1.5 mr-1 shrink-0">
-              <span class="w-2.5 h-2.5 rounded-full bg-rose-500/50"></span>
-              <span class="w-2.5 h-2.5 rounded-full bg-amber-500/50"></span>
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/50"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
             </div>
           </div>
           <button
             @click="${this.handleClearLogs}"
-            class="text-xs text-slate-500 hover:text-indigo-400 transition-colors uppercase tracking-widest font-sans font-bold cursor-pointer"
+            class="text-xs text-on-surface-variant hover:text-primary transition-colors uppercase tracking-wider font-sans font-bold cursor-pointer"
           >
             ${clearBtnText}
           </button>
@@ -48,7 +48,7 @@ export class LogConsole extends LitElement {
           ${this.conversionLogs.length === 0
             ? html`
                 <div
-                  class="h-30 flex items-center justify-center text-slate-600 font-sans tracking-wide"
+                  class="h-24 flex items-center justify-center text-on-surface-variant/70 font-sans tracking-wide"
                 >
                   ${emptyText}
                 </div>
@@ -56,15 +56,15 @@ export class LogConsole extends LitElement {
             : this.conversionLogs.map(
                 (log) =>
                   html` <div class="flex items-start gap-2">
-                    <span class="text-slate-600 shrink-0 font-sans">${log.timestamp}</span>
+                    <span class="text-outline shrink-0 font-sans">${log.timestamp}</span>
                     <span
-                      class="font-bold ${log.type === "success"
-                        ? "text-success-text"
+                      class="font-medium ${log.type === "success"
+                        ? "text-emerald-600 dark:text-emerald-400 font-bold"
                         : log.type === "error"
-                          ? "text-warning-text"
+                          ? "text-rose-600 dark:text-rose-400 font-bold"
                           : log.type === "warning"
-                            ? "text-amber-text"
-                            : "text-slate-200"}"
+                            ? "text-amber-600 dark:text-amber-400 font-bold"
+                            : "text-on-surface"}"
                       >${log.text}</span
                     >
                   </div>`,

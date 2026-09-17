@@ -76,7 +76,7 @@ export class CleanerResultsView extends LitElement {
           class="bg-slate-900/80 backdrop-blur-md border border-slate-800 rounded-2xl p-12 text-center shadow-xl"
         >
           <div
-            class="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-4 shadow-inner"
+            class="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center mx-auto mb-4 shadow-inner"
           >
             <i class="fa-solid fa-magnifying-glass-chart text-2xl"></i>
           </div>
@@ -111,7 +111,7 @@ export class CleanerResultsView extends LitElement {
         >
           <div class="flex items-center space-x-3">
             <div
-              class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shadow-inner"
+              class="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shadow-inner"
             >
               <i class="fa-solid fa-square-poll-vertical text-xl"></i>
             </div>
@@ -134,13 +134,13 @@ export class CleanerResultsView extends LitElement {
             @click="${() => (this.activeSubTab = "unused")}"
             class="px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all cursor-pointer ${this
               .activeSubTab === "unused"
-              ? "bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.15)]"
+              ? "bg-primary/15 border border-primary/30 text-primary shadow-[0_0_15px_rgba(59,130,246,0.15)]"
               : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent"}"
           >
             <i class="fa-solid fa-trash-can"></i>
             <span>${isKo ? "사용하지 않는 파일" : "Unused Files"}</span>
             <span
-              class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/30"
+              class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-primary/20 text-primary border border-primary/30"
             >
               ${this.unusedItems.length}
             </span>
@@ -183,7 +183,7 @@ export class CleanerResultsView extends LitElement {
                         this.unusedItems.every((i) => i.selected)}"
                         @change="${(e: Event) =>
                           this.toggleSelectAllUnused((e.target as HTMLInputElement).checked)}"
-                        class="w-4 h-4 text-emerald-500 rounded border-slate-700 bg-slate-900 focus:ring-emerald-500"
+                        class="w-4 h-4 text-primary rounded border-slate-700 bg-slate-900 focus:ring-primary accent-primary cursor-pointer"
                       />
                       <span>${isKo ? "전체 선택 / 해제" : "Select All / Deselect All"}</span>
                     </label>
@@ -197,7 +197,7 @@ export class CleanerResultsView extends LitElement {
                   ${this.unusedItems.length === 0
                     ? html`
                         <div class="text-center py-12 text-slate-400">
-                          <i class="fa-solid fa-circle-check text-4xl text-emerald-400 mb-3"></i>
+                          <i class="fa-solid fa-circle-check text-4xl text-primary mb-3"></i>
                           <p class="text-sm font-bold text-slate-200">
                             ${isKo
                               ? "사용하지 않는 방치된 파일이 없습니다!"
@@ -234,11 +234,11 @@ export class CleanerResultsView extends LitElement {
                                         type="checkbox"
                                         .checked="${item.selected}"
                                         @change="${() => this.toggleUnusedItem(item.id)}"
-                                        class="w-4 h-4 text-emerald-500 rounded border-slate-700 bg-slate-900 focus:ring-emerald-500"
+                                        class="w-4 h-4 text-primary rounded border-slate-700 bg-slate-900 focus:ring-primary accent-primary cursor-pointer"
                                       />
                                     </td>
                                     <td
-                                      class="p-3.5 font-mono font-bold text-emerald-700 dark:text-emerald-400 break-all select-all"
+                                      class="p-3.5 font-mono font-bold text-primary break-all select-all"
                                     >
                                       ${item.relativePath}
                                     </td>
@@ -272,7 +272,7 @@ export class CleanerResultsView extends LitElement {
                         this.brokenItems.every((i) => i.selected)}"
                         @change="${(e: Event) =>
                           this.toggleSelectAllBroken((e.target as HTMLInputElement).checked)}"
-                        class="w-4 h-4 text-emerald-500 rounded border-slate-700 bg-slate-900 focus:ring-emerald-500"
+                        class="w-4 h-4 text-primary rounded border-slate-700 bg-slate-900 focus:ring-primary accent-primary cursor-pointer"
                       />
                       <span>${isKo ? "전체 선택 / 해제" : "Select All / Deselect All"}</span>
                     </label>
@@ -286,7 +286,7 @@ export class CleanerResultsView extends LitElement {
                   ${this.brokenItems.length === 0
                     ? html`
                         <div class="text-center py-12 text-slate-400">
-                          <i class="fa-solid fa-link text-4xl text-emerald-400 mb-3"></i>
+                          <i class="fa-solid fa-link text-4xl text-primary mb-3"></i>
                           <p class="text-sm font-bold text-slate-200">
                             ${isKo
                               ? "잘못 연결된 링크나 파일 경로가 없습니다!"
@@ -325,7 +325,7 @@ export class CleanerResultsView extends LitElement {
                                         type="checkbox"
                                         .checked="${item.selected ?? true}"
                                         @change="${() => this.toggleBrokenItem(item.id)}"
-                                        class="w-4 h-4 text-emerald-500 rounded border-slate-700 bg-slate-900 focus:ring-emerald-500"
+                                        class="w-4 h-4 text-primary rounded border-slate-700 bg-slate-900 focus:ring-primary accent-primary cursor-pointer"
                                       />
                                     </td>
                                     <!-- Separated Column 1: Source File Path ONLY -->
@@ -344,7 +344,7 @@ export class CleanerResultsView extends LitElement {
                                     </td>
                                     <!-- Column 3: Code Snippet -->
                                     <td
-                                      class="p-3.5 font-mono text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-slate-950/60 dark:bg-slate-950 rounded-lg border border-slate-800/90 break-all select-all"
+                                      class="p-3.5 font-mono text-xs font-semibold text-primary bg-slate-950/60 dark:bg-slate-950 rounded-lg border border-slate-800/90 break-all select-all"
                                     >
                                       ${item.snippet}
                                     </td>
@@ -379,7 +379,7 @@ export class CleanerResultsView extends LitElement {
             ?disabled="${this.isExecuting ||
             (selectedUnusedCount === 0 && selectedBrokenCount === 0)}"
             @click="${this.handleExecute}"
-            class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold rounded-xl shadow-lg shadow-emerald-600/25 transition-all flex items-center space-x-2 cursor-pointer"
+            class="px-6 py-2.5 bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold rounded-xl shadow-lg shadow-primary/25 transition-all flex items-center space-x-2 cursor-pointer"
           >
             <i class="fa-solid ${this.isExecuting ? "fa-spinner fa-spin" : "fa-broom"}"></i>
             <span>

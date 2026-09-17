@@ -144,7 +144,7 @@
   </div>
 
   <!-- Lit Component Container (Active Tab: Rename) -->
-  <batcher-app class="block min-h-screen relative z-20"></batcher-app>
+  <batcher-app class="block min-h-screen relative z-30"></batcher-app>
 
   <!-- Deep Content & SEO Article Section for Bulk File Renamer -->
   <main class="max-w-5xl mx-auto px-6 pt-12 pb-24 relative z-10 font-sans">
@@ -367,26 +367,62 @@
   </main>
 
   <!-- Global Footer -->
-  <footer class="bg-slate-950 border-t border-slate-800 py-8 text-left text-xs text-slate-500 pb-36 relative z-10">
-    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div>
-        <p>&copy; 2026 Batcher Tools. All rights reserved.</p>
-        <p class="text-slate-600 mt-1">모든 파일명 일괄 변경은 사용자의 웹 브라우저 메모리 안에서 100% 로컬로 안전하게 처리됩니다.</p>
+  <footer class="w-full border-t border-surface-container bg-surface-container-lowest dark:bg-slate-950 py-12 pb-36 relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="flex flex-col lg:flex-row justify-between gap-10 lg:gap-16">
+        <!-- Left: Security Statement -->
+        <div class="space-y-3 max-w-md">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/70 text-primary flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[18px]">verified_user</span>
+            </div>
+            <span class="text-sm sm:text-base font-bold text-on-surface">100% 브라우저 로컬 데이터 보안</span>
+          </div>
+          <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+            업로드하신 모든 그래픽, 음원, 문서는 외부 서버로 전송되지 않고 사용자의 기기 브라우저(WebAssembly &amp; Web Workers) 안에서 100% 즉시 처리 후 폐기됩니다.
+          </p>
+        </div>
+
+        <!-- Right: 3 Navigation Columns -->
+        <div class="flex flex-wrap sm:flex-nowrap gap-10 sm:gap-14 text-xs sm:text-sm">
+          <!-- Col 1: Tools -->
+          <div class="flex flex-col gap-2.5">
+            <span class="font-bold text-on-surface mb-1">도구 바로가기</span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/svg-to-png.html">SVG 변환기</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/wav-to-mp3.html">오디오 변환기</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/batch-rename.html">대량 이름 바꾸기</a>
+          </div>
+
+          <!-- Col 2: Security & About -->
+          <div class="flex flex-col gap-2.5">
+            <span class="font-bold text-on-surface mb-1">보안 및 안내</span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/serverless-local-conversion.html">데이터 무전송 증명</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/about.html">소개</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/index.html">사용 가이드</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/contact.html">문의하기</a>
+          </div>
+
+          <!-- Col 3: Policy & Donate -->
+          <div class="flex flex-col gap-2.5">
+            <span class="font-bold text-on-surface mb-1">정책</span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/privacy.html">개인정보처리방침</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/terms.html">서비스 이용약관</a>
+            <a class="text-amber-600 dark:text-amber-400 hover:underline inline-flex items-center gap-1 font-bold" href="https://buymeacoffee.com/playNolang" target="_blank" rel="noopener noreferrer">
+              <span>☕</span> 커피 후원
+            </a>
+          </div>
+        </div>
       </div>
-      <div class="flex items-center gap-4 text-slate-400 font-medium flex-wrap">
-        <a href="/about.html" class="hover:text-indigo-400 transition-colors">소개</a>
-        <span class="text-slate-800">|</span>
-        <a href="/guides/index.html" class="hover:text-indigo-400 transition-colors">사용 가이드</a>
-        <span class="text-slate-800">|</span>
-        <a href="/contact.html" class="hover:text-indigo-400 transition-colors">문의하기</a>
-        <span class="text-slate-800">|</span>
-        <a href="/privacy.html" class="hover:text-indigo-400 transition-colors">개인정보처리방침</a>
-        <span class="text-slate-800">|</span>
-        <a href="/terms.html" class="hover:text-indigo-400 transition-colors">이용약관</a>
-        <span class="text-slate-800">|</span>
-        <a href="https://buymeacoffee.com/playNolang" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 transition-colors inline-flex items-center gap-1 font-semibold">
-          <span>☕</span> 커피 후원
-        </a>
+
+      <!-- Bottom Bar -->
+      <div class="pt-8 mt-10 border-t border-surface-container flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-on-surface-variant">
+        <div>
+          <span>© 2026 Batcher. 서버 전송 없는 100% 브라우저 로컬 파일 변환 도구. All rights reserved.</span>
+        </div>
+        <div class="flex items-center gap-2 font-medium">
+          <span class="w-2 h-2 rounded-full bg-primary inline-block animate-pulse"></span>
+          <span>온디바이스 가속 엔진 가동 중</span>
+        </div>
       </div>
     </div>
   </footer>

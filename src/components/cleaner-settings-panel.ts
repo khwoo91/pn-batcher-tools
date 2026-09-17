@@ -40,9 +40,7 @@ export class CleanerSettingsPanel extends LitElement {
     if (details.dataset.transitioning === "true") return;
 
     const storageKey =
-      key === "settings"
-        ? "pn-batcher-cleaner-settings-open"
-        : "pn-batcher-cleaner-options-open";
+      key === "settings" ? "pn-batcher-cleaner-settings-open" : "pn-batcher-cleaner-options-open";
 
     if (details.open) {
       details.dataset.transitioning = "true";

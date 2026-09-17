@@ -138,9 +138,9 @@ export class FolderTreeView extends LitElement {
       <div class="select-none font-sans">
         <div
           @click="${(e: Event) => this.handleNodeClick(node, e)}"
-          class="flex items-center justify-between py-1.5 px-2.5 rounded-lg text-xs transition-colors cursor-pointer hover:bg-slate-800/50 dark:hover:bg-slate-800/60 ${isSelected
-            ? "bg-emerald-500/15 border border-emerald-500/40 text-emerald-800 dark:text-emerald-300 font-bold shadow-xs"
-            : "text-slate-200 dark:text-slate-200"}"
+          class="flex items-center justify-between py-1.5 px-2.5 rounded-lg text-xs transition-colors cursor-pointer hover:bg-surface-container/60 ${isSelected
+            ? "bg-primary/10 border border-primary/40 text-primary font-bold shadow-xs"
+            : "text-on-surface"}"
           style="padding-left: ${Math.max(8, level * 18 + 8)}px;"
         >
           <div class="flex items-center space-x-2 truncate min-w-0 flex-1 mr-2">
@@ -148,7 +148,7 @@ export class FolderTreeView extends LitElement {
               ? html`
                   <button
                     @click="${(e: Event) => this.handleNodeClick(node, e)}"
-                    class="w-4 h-4 flex items-center justify-center text-slate-400 hover:text-slate-200 transition-transform ${isExpanded
+                    class="w-4 h-4 flex items-center justify-center text-outline hover:text-on-surface transition-transform ${isExpanded
                       ? "rotate-90 text-amber-500 dark:text-amber-400"
                       : ""}"
                   >
@@ -159,7 +159,7 @@ export class FolderTreeView extends LitElement {
 
             <i
               class="fa-solid ${isSelected
-                ? "fa-crosshairs text-emerald-600 dark:text-emerald-400"
+                ? "fa-crosshairs text-primary"
                 : isExpanded
                   ? "fa-folder-open text-amber-500 dark:text-amber-400"
                   : "fa-folder text-amber-500/80 dark:text-amber-400/80"} text-xs shrink-0"
@@ -170,8 +170,8 @@ export class FolderTreeView extends LitElement {
           <div class="flex items-center space-x-1.5 shrink-0 ml-auto">
             <span
               class="text-[10px] px-2 py-0.5 rounded-full ${isSelected
-                ? "bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-bold border border-emerald-500/30"
-                : "bg-slate-800/90 text-slate-400"} font-mono"
+                ? "bg-primary/15 text-primary font-bold border border-primary/30"
+                : "bg-surface-container-high text-on-surface-variant"} font-mono"
             >
               ${node.fileCount}${this.lang === "ko" ? "개" : " files"}
             </span>
@@ -180,7 +180,7 @@ export class FolderTreeView extends LitElement {
 
         ${hasChildren && isExpanded
           ? html`
-              <div class="border-l border-slate-800/60 dark:border-slate-800/80 ml-3.5 my-0.5">
+              <div class="border-l border-surface-container-high ml-3.5 my-0.5">
                 ${node.children.map((child) => this.renderNode(child, level + 1))}
               </div>
             `
@@ -192,8 +192,8 @@ export class FolderTreeView extends LitElement {
   override render() {
     if (this.isLoadingTree) {
       return html`
-        <div class="w-full p-4 bg-slate-950/80 border border-slate-800 rounded-xl text-center text-xs text-slate-400 font-sans">
-          <i class="fa-solid fa-spinner fa-spin text-emerald-400 mr-2"></i>
+        <div class="w-full p-4 bg-surface-container-low border border-surface-container rounded-xl text-center text-xs text-on-surface-variant font-sans">
+          <i class="fa-solid fa-spinner fa-spin text-primary mr-2"></i>
           <span>${this.lang === "ko" ? "하위 폴더 구조 탐색 중..." : "Exploring subfolder structure..."}</span>
         </div>
       `;
@@ -204,16 +204,16 @@ export class FolderTreeView extends LitElement {
 
     return html`
       <div
-        class="w-full p-4 bg-slate-950/60 dark:bg-slate-950/80 border border-slate-800/80 rounded-xl text-left font-sans shadow-inner"
+        class="w-full p-4 bg-surface-container-low border border-surface-container rounded-xl text-left font-sans shadow-2xs"
       >
         <div
-          class="text-xs font-bold text-slate-200 mb-3 flex items-center justify-between pb-2.5 border-b border-slate-800/80"
+          class="text-xs font-bold text-on-surface mb-3 flex items-center justify-between pb-2.5 border-b border-surface-container"
         >
-          <span class="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+          <span class="flex items-center gap-1.5 text-primary">
             <i class="fa-solid fa-folder-tree text-xs"></i>
             <span class="font-bold text-sm">${this.lang === "ko" ? "폴더 구조 탐색기" : "Folder Structure Explorer"}</span>
           </span>
-          <span class="text-[11px] text-slate-400 font-normal">
+          <span class="text-[11px] text-on-surface-variant font-normal">
             ${this.lang === "ko" ? "클릭하여 정리 대상 폴더 선택" : "Click to select target folder"}
           </span>
         </div>
@@ -223,7 +223,7 @@ export class FolderTreeView extends LitElement {
         </div>
 
         <div
-          class="mt-3 pt-2.5 border-t border-slate-800/80 text-[11px] text-amber-600 dark:text-amber-300/90 flex items-center space-x-2"
+          class="mt-3 pt-2.5 border-t border-surface-container text-[11px] text-amber-600 dark:text-amber-400 flex items-center space-x-2"
         >
           <i class="fa-solid fa-lightbulb text-amber-500 dark:text-amber-400 shrink-0 text-xs"></i>
           <span>

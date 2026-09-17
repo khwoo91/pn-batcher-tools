@@ -119,64 +119,53 @@ export class AppHeader extends LitElement {
   }
 
   protected override render() {
-    const desc = this.lang === "ko" ? "100% 브라우저 로컬 안전 파일 변환기" : "100% Safe Local File Processor";
-
     return html`
       <header
-        class="relative z-50 w-full bg-surface-container-lowest/90 backdrop-blur-xl rounded-3xl p-4 sm:px-6 shadow-sm border border-outline-variant/20 mb-8 transition-all"
+        class="sticky top-0 left-0 right-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-md border-b border-surface-container shadow-2xs transition-all"
       >
-        <div class="flex items-center justify-between gap-4 w-full">
+        <div
+          class="h-16 max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4 w-full"
+        >
           <!-- Logo & Trust Badge -->
           <div class="flex items-center gap-3 sm:gap-4 shrink-0">
-            <a href="/" class="flex items-center gap-2.5 sm:gap-3 group select-none shrink-0">
+            <a href="/" class="flex items-center gap-2.5 group select-none shrink-0">
               <div
-                class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-primary flex items-center justify-center shadow-md shadow-primary/25 group-hover:scale-95 transition-transform shrink-0"
+                class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/25 group-hover:scale-95 transition-transform shrink-0"
               >
-                <span class="material-symbols-outlined text-white text-[22px] sm:text-[24px]">layers</span>
+                <span class="material-symbols-outlined text-white text-[20px]">layers</span>
               </div>
-              <div class="flex flex-col">
-                <div class="font-title-md text-title-md text-on-surface tracking-tight font-extrabold flex items-center gap-1 whitespace-nowrap">
-                  배처 <span class="text-primary font-black">Batcher</span>
-                </div>
-                <p class="text-[11px] text-on-surface-variant font-medium whitespace-nowrap">${desc}</p>
+              <div class="flex items-baseline gap-1.5">
+                <span class="font-title-md text-[17px] font-bold tracking-tight text-on-surface">
+                  배처 <span class="text-primary font-bold">Batcher</span>
+                </span>
               </div>
             </a>
 
             <div
-              class="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-low border border-outline-variant/25 whitespace-nowrap shrink-0"
+              class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low text-on-surface-variant border border-surface-container whitespace-nowrap shrink-0"
             >
-              <span class="material-symbols-outlined text-primary text-[16px] shrink-0">verified_user</span>
-              <span class="text-xs text-on-surface-variant font-medium whitespace-nowrap">
-                ${this.lang === "ko" ? "100% 브라우저 로컬 안전 처리" : "100% Browser Local Safe"}
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+              <span class="text-xs font-medium text-on-surface-variant whitespace-nowrap">
+                ${this.lang === "ko" ? "100% 온디바이스 로컬 처리" : "100% On-Device Local"}
               </span>
             </div>
           </div>
 
           <!-- Navigation & Quick Actions -->
-          <div class="flex items-center gap-2 sm:gap-3 justify-end shrink-0">
+          <div class="flex items-center gap-2 sm:gap-3.5 justify-end shrink-0">
             <!-- Nav Links -->
-            <nav class="hidden lg:flex items-center gap-1 text-xs font-semibold text-on-surface-variant shrink-0">
-              <a
-                href="/svg-to-png.html"
-                class="hover:text-primary hover:bg-surface-container-low px-2 sm:px-2.5 py-1.5 rounded-xl transition-colors whitespace-nowrap"
-              >
-                ${this.lang === "ko" ? "SVG 변환기" : "SVG Converter"}
+            <nav
+              class="hidden md:flex items-center gap-4 text-xs font-semibold text-on-surface-variant shrink-0"
+            >
+              <a href="#features" class="hover:text-primary transition-colors whitespace-nowrap">
+                ${this.lang === "ko" ? "보안 특징" : "Security"}
               </a>
-              <a
-                href="/wav-to-mp3.html"
-                class="hover:text-primary hover:bg-surface-container-low px-2 sm:px-2.5 py-1.5 rounded-xl transition-colors whitespace-nowrap"
-              >
-                ${this.lang === "ko" ? "오디오 변환기" : "Audio Converter"}
-              </a>
-              <a
-                href="/batch-rename.html"
-                class="hover:text-primary hover:bg-surface-container-low px-2 sm:px-2.5 py-1.5 rounded-xl transition-colors whitespace-nowrap"
-              >
-                ${this.lang === "ko" ? "대량 이름 바꾸기" : "Batch Rename"}
+              <a href="#faq" class="hover:text-primary transition-colors whitespace-nowrap">
+                ${this.lang === "ko" ? "자주 묻는 질문" : "FAQ"}
               </a>
               <a
                 href="/guides/index.html"
-                class="hover:text-primary hover:bg-surface-container-low px-2 sm:px-2.5 py-1.5 rounded-xl transition-colors whitespace-nowrap"
+                class="hover:text-primary transition-colors whitespace-nowrap"
               >
                 ${this.lang === "ko" ? "가이드" : "Guides"}
               </a>
@@ -186,10 +175,14 @@ export class AppHeader extends LitElement {
             <button
               @click="${this.handleSupportClick}"
               class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/25 text-xs font-bold transition-all shadow-xs active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
-              title="${this.lang === "ko" ? "따뜻한 커피 한 잔으로 개발자를 응원해주세요! ☕" : "Support the developer! ☕"}"
+              title="${this.lang === "ko"
+                ? "따뜻한 커피 한 잔으로 개발자를 응원해주세요! ☕"
+                : "Support the developer! ☕"}"
             >
               <span class="text-xs">☕</span>
-              <span class="hidden sm:inline whitespace-nowrap">${this.lang === "ko" ? "응원하기" : "Support"}</span>
+              <span class="hidden sm:inline whitespace-nowrap"
+                >${this.lang === "ko" ? "응원하기" : "Support"}</span
+              >
             </button>
 
             <!-- Theme Toggle Switch -->
@@ -215,41 +208,55 @@ export class AppHeader extends LitElement {
                 aria-haspopup="true"
                 aria-expanded="${this.dropdownOpen}"
               >
-                <span class="material-symbols-outlined text-[16px] text-on-surface-variant shrink-0">language</span>
-                <span class="font-bold whitespace-nowrap">${this.lang === "ko" ? "한국어" : "English"}</span>
+                <span class="material-symbols-outlined text-[16px] text-on-surface-variant shrink-0"
+                  >language</span
+                >
+                <span class="font-bold whitespace-nowrap"
+                  >${this.lang === "ko" ? "한국어" : "English"}</span
+                >
                 <span
-                  class="material-symbols-outlined text-[16px] text-on-surface-variant transition-transform duration-200 shrink-0 ${this.dropdownOpen ? "rotate-180" : ""}"
-                >expand_more</span>
+                  class="material-symbols-outlined text-[16px] text-on-surface-variant transition-transform duration-200 shrink-0 ${this
+                    .dropdownOpen
+                    ? "rotate-180"
+                    : ""}"
+                  >expand_more</span
+                >
               </button>
 
               <!-- Dropdown Menu -->
               ${this.dropdownOpen
                 ? html`
                     <div
-                      class="absolute right-0 mt-2 w-32 bg-surface-container-lowest border border-outline-variant/30 rounded-2xl shadow-xl z-50 py-1 focus:outline-none animate-fade-in overflow-hidden"
+                      class="absolute right-0 mt-2 w-32 bg-surface-container-lowest border border-outline-variant/30 rounded-2xl shadow-xl z-50 focus:outline-none animate-fade-in overflow-hidden"
                     >
                       <button
                         type="button"
                         @click="${() => this.selectLanguage("ko")}"
-                        class="w-full px-3.5 py-2 text-xs font-semibold transition-colors flex items-center justify-between cursor-pointer ${this.lang === "ko"
+                        class="w-full px-3.5 py-2.5 text-xs font-semibold transition-colors flex items-center justify-between cursor-pointer ${this
+                          .lang === "ko"
                           ? "text-primary bg-primary/10 font-bold"
                           : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"}"
                       >
                         <span>한국어</span>
                         ${this.lang === "ko"
-                          ? html`<span class="material-symbols-outlined text-[16px] text-primary">check</span>`
+                          ? html`<span class="material-symbols-outlined text-[16px] text-primary"
+                              >check</span
+                            >`
                           : ""}
                       </button>
                       <button
                         type="button"
                         @click="${() => this.selectLanguage("en")}"
-                        class="w-full px-3.5 py-2 text-xs font-semibold transition-colors flex items-center justify-between cursor-pointer ${this.lang === "en"
+                        class="w-full px-3.5 py-2.5 text-xs font-semibold transition-colors flex items-center justify-between cursor-pointer ${this
+                          .lang === "en"
                           ? "text-primary bg-primary/10 font-bold"
                           : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"}"
                       >
                         <span>English</span>
                         ${this.lang === "en"
-                          ? html`<span class="material-symbols-outlined text-[16px] text-primary">check</span>`
+                          ? html`<span class="material-symbols-outlined text-[16px] text-primary"
+                              >check</span
+                            >`
                           : ""}
                       </button>
                     </div>
