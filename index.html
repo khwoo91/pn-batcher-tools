@@ -11,8 +11,7 @@
 
   <link rel="canonical" href="https://batchertools.com/" />
   <link rel="alternate" hreflang="x-default" href="https://batchertools.com/" />
-  <link rel="alternate" hreflang="en" href="https://batchertools.com/" />
-  <link rel="alternate" hreflang="ko" href="https://batchertools.com/ko" />
+  <link rel="alternate" hreflang="ko" href="https://batchertools.com/" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -31,8 +30,7 @@
   <meta property="og:image" content="https://batchertools.com/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:locale" content="en_US" />
-  <meta property="og:locale:alternate" content="ko_KR" />
+  <meta property="og:locale" content="ko_KR" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="배처 툴(Batcher Tools) | 쉽고 빠른 파일 이름 일괄 변경 및 포맷 변환" />
@@ -145,28 +143,6 @@
   }
   </script>
 
-  <!-- Client-side Language Switching Control via data-lang -->
-  <style>
-    html[data-current-lang="ko"] [data-lang="en"],
-    body[data-current-lang="ko"] [data-lang="en"] {
-      display: none !important;
-    }
-    html[data-current-lang="en"] [data-lang="ko"],
-    body[data-current-lang="en"] [data-lang="ko"] {
-      display: none !important;
-    }
-  </style>
-  <script>
-    (function() {
-      try {
-        var savedLang = localStorage.getItem('batcher-lang');
-        var lang = (savedLang === 'en' || savedLang === 'ko') ? savedLang : ((navigator.language && navigator.language.toLowerCase().startsWith('ko')) ? 'ko' : 'en');
-        document.documentElement.setAttribute('data-current-lang', lang);
-        document.documentElement.lang = lang;
-      } catch (e) {}
-    })();
-  </script>
-
   <link rel="stylesheet" href="./src/index.css" />
   <script type="module" src="/src/components/app-header.ts"></script>
   <script type="module" src="/src/batcher-app.ts"></script>
@@ -179,38 +155,38 @@
     <div class="absolute top-1/3 left-1/4 w-120 h-120 bg-primary/3 rounded-full blur-[140px]"></div>
   </div>
 
-  <!-- Main Global Navigation Header (Directly at top of body, seamless flush layout) -->
+  <!-- Main Global Navigation Header -->
   <app-header id="global-header"></app-header>
 
-  <!-- Main Workspace Container (max-w-7xl matching header) -->
+  <!-- Main Workspace Container -->
   <main class="w-full max-w-7xl mx-auto px-4 sm:px-6 pt-4 pb-36 relative z-30">
-    <!-- 1. Minimal Hero (Stitch Design) -->
+    <!-- 1. Minimal Hero -->
     <section class="text-center space-y-3 max-w-5xl mx-auto py-10 px-4">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold tracking-wide mb-2">
+        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+        <span>100% 브라우저 메모리 로컬 처리 &middot; 서버 전송 0 Bytes</span>
+      </div>
       <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-on-surface tracking-tight leading-tight">
-        <span data-lang="ko">초고속 웹 기반 <span class="text-primary font-black">파일 일괄 변환기</span></span>
-        <span data-lang="en">Lightning-Fast Web-Based <span class="text-primary font-black">Batch Converter</span></span>
+        초고속 웹 기반 <span class="text-primary font-black">파일 일괄 변환 및 리네이머</span>
       </h1>
       <p class="text-sm sm:text-base md:text-lg text-on-surface-variant font-medium leading-relaxed max-w-3xl mx-auto">
-        <span data-lang="ko">수백 개 파일명 일괄 변경, 오디오 추출 및 인코딩, SVG 고해상도 변환까지<br class="hidden sm:inline" /> 프로그램 설치나 서버 업로드 없이 브라우저에서 바로 변환하세요.</span>
-        <span data-lang="en">High-resolution SVG rasterization, audio extraction & encoding, and<br class="hidden sm:inline" />bulk renaming with zero installation or server upload directly in your browser.</span>
+        수백 개의 파일명 일괄 변경, 오디오 포맷 인코딩, SVG 고해상도 래스터화까지<br class="hidden sm:inline" />
+        소프트웨어 설치나 외부 서버 업로드 없이 웹 브라우저 안에서 즉시 처리하세요.
       </p>
     </section>
 
     <!-- 2. Central Minimal Utility Workspace (Lit Component) -->
     <batcher-app id="main-workspace" hide-header class="block relative z-30"></batcher-app>
 
-    <!-- 3. 더 많은 작업 도구 (Capture 1 Top) -->
+    <!-- 3. 더 많은 작업 도구 -->
     <section class="w-full my-12" id="more-tools">
       <div class="flex items-center justify-between mb-2">
         <div>
-          <h2 class="text-xl sm:text-2xl font-bold text-on-surface tracking-tight" data-lang="ko">더 많은 작업 도구</h2>
-          <h2 class="text-xl sm:text-2xl font-bold text-on-surface tracking-tight" data-lang="en">More Productivity Tools</h2>
-          <p class="text-xs sm:text-sm text-on-surface-variant mt-1" data-lang="ko">디자이너와 크리에이터의 반복 작업을 없애주는 추가 유틸리티입니다.</p>
-          <p class="text-xs sm:text-sm text-on-surface-variant mt-1" data-lang="en">Extra utilities eliminating repetitive tasks for designers &amp; creators.</p>
+          <h2 class="text-xl sm:text-2xl font-bold text-on-surface tracking-tight">더 많은 생산성 작업 도구</h2>
+          <p class="text-xs sm:text-sm text-on-surface-variant mt-1">디자이너와 크리에이터의 반복 작업을 완전히 없애주는 스마트 유틸리티입니다.</p>
         </div>
         <a class="text-xs sm:text-sm text-primary font-bold hover:underline flex items-center gap-1 shrink-0" href="/guides/index.html">
-          <span data-lang="ko">전체 보기</span>
-          <span data-lang="en">View All</span>
+          <span>전체 가이드 보기</span>
           <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
         </a>
       </div>
@@ -222,102 +198,298 @@
             <div class="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-primary flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
               <span class="material-symbols-outlined text-[22px]">auto_fix_high</span>
             </div>
-            <h3 class="text-sm sm:text-base font-bold text-on-surface mb-2" data-lang="ko">이미지 포맷 일괄 변환</h3>
-            <h3 class="text-sm sm:text-base font-bold text-on-surface mb-2" data-lang="en">Batch Image Conversion</h3>
-            <p class="text-xs text-on-surface-variant leading-relaxed" data-lang="ko">
-              PNG, JPG, WebP 형식을 클릭 한 번으로 통일하여 내보냅니다.
-            </p>
-            <p class="text-xs text-on-surface-variant leading-relaxed" data-lang="en">
-              Unify and export PNG, JPG, and WebP formats with a single click.
+            <h3 class="text-sm sm:text-base font-bold text-on-surface mb-2">SVG &amp; 이미지 포맷 일괄 변환</h3>
+            <p class="text-xs text-on-surface-variant leading-relaxed">
+              벡터 SVG 파일을 1.0x부터 3.0x(@3x) 레티나 해상도 PNG/JPG 비트맵으로 무손실 일괄 추출합니다.
             </p>
           </div>
           <button type="button" class="text-xs sm:text-sm font-semibold text-primary hover:underline flex items-center gap-0.5 mt-5 text-left cursor-pointer quick-tab-btn" data-target-tab="svg">
-            <span data-lang="ko">사용하기</span>
-            <span data-lang="en">Use Tool</span>
+            <span>SVG 변환기 열기</span>
             <span class="material-symbols-outlined text-[16px]">chevron_right</span>
           </button>
         </div>
 
-        <!-- Card 2: 중복 파일 탐지 정리기 -->
+        <!-- Card 2: 대량 파일명 일괄 변경 -->
         <div class="bg-surface-container-lowest dark:bg-slate-900/90 rounded-2xl p-6 border border-surface-container dark:border-slate-800 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
           <div>
-            <div class="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-primary flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
-              <span class="material-symbols-outlined text-[22px]">sync</span>
+            <div class="w-11 h-11 rounded-xl bg-pink-50 dark:bg-pink-950/60 text-pink-600 dark:text-pink-400 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
+              <span class="material-symbols-outlined text-[22px]">drive_file_rename_outline</span>
             </div>
-            <h3 class="text-sm sm:text-base font-bold text-on-surface mb-2" data-lang="ko">중복 파일 탐지 정리기</h3>
-            <h3 class="text-sm sm:text-base font-bold text-on-surface mb-2" data-lang="en">Duplicate File Cleaner</h3>
-            <p class="text-xs text-on-surface-variant leading-relaxed" data-lang="ko">
-              내용이 동일한 복제 사진과 소리 파일을 찾아 디스크 용량을 확보합니다.
-            </p>
-            <p class="text-xs text-on-surface-variant leading-relaxed" data-lang="en">
-              Detect duplicate photos and audio files to free up disk space.
+            <h3 class="text-sm sm:text-base font-bold text-on-surface mb-2">대량 파일명 일괄 변경 (Batch Rename)</h3>
+            <p class="text-xs text-on-surface-variant leading-relaxed">
+              문자열 치환, 정규식(Regex), 일련번호 매기기, 날짜 포맷팅 및 실시간 프리뷰를 지원합니다.
             </p>
           </div>
-          <button type="button" class="text-xs sm:text-sm font-semibold text-primary hover:underline flex items-center gap-0.5 mt-5 text-left cursor-pointer quick-tab-btn" data-target-tab="resource">
-            <span data-lang="ko">사용하기</span>
-            <span data-lang="en">Use Tool</span>
+          <button type="button" class="text-xs sm:text-sm font-semibold text-pink-600 dark:text-pink-400 hover:underline flex items-center gap-0.5 mt-5 text-left cursor-pointer quick-tab-btn" data-target-tab="rename">
+            <span>리네이머 열기</span>
             <span class="material-symbols-outlined text-[16px]">chevron_right</span>
           </button>
         </div>
 
-        <!-- Card 3: 텍스트 및 메타데이터 추출 -->
+        <!-- Card 3: WAV MP3 오디오 변환 -->
         <div class="bg-surface-container-lowest dark:bg-slate-900/90 rounded-2xl p-6 border border-surface-container dark:border-slate-800 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
           <div>
-            <div class="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-primary flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
-              <span class="material-symbols-outlined text-[22px]">description</span>
+            <div class="w-11 h-11 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
+              <span class="material-symbols-outlined text-[22px]">music_note</span>
             </div>
-            <h3 class="text-sm sm:text-base font-bold text-on-surface mb-2" data-lang="ko">텍스트 및 메타데이터 추출</h3>
-            <h3 class="text-sm sm:text-base font-bold text-on-surface mb-2" data-lang="en">Text &amp; Metadata Extraction</h3>
-            <p class="text-xs text-on-surface-variant leading-relaxed" data-lang="ko">
-              이미지 EXIF 정보 삭제 및 파일 목록 엑셀(CSV) 내보내기 기능.
-            </p>
-            <p class="text-xs text-on-surface-variant leading-relaxed" data-lang="en">
-              Strip EXIF metadata and export file lists directly to Excel (CSV).
+            <h3 class="text-sm sm:text-base font-bold text-on-surface mb-2">WAV &rarr; MP3 초고속 오디오 인코더</h3>
+            <p class="text-xs text-on-surface-variant leading-relaxed">
+              128kbps부터 320kbps까지 맞춤 비트레이트로 대용량 무압축 오디오를 최대 90% 용량으로 압축합니다.
             </p>
           </div>
-          <button type="button" class="text-xs sm:text-sm font-semibold text-primary hover:underline flex items-center gap-0.5 mt-5 text-left cursor-pointer quick-tab-btn" data-target-tab="rename">
-            <span data-lang="ko">사용하기</span>
-            <span data-lang="en">Use Tool</span>
+          <button type="button" class="text-xs sm:text-sm font-semibold text-purple-600 dark:text-purple-400 hover:underline flex items-center gap-0.5 mt-5 text-left cursor-pointer quick-tab-btn" data-target-tab="audio">
+            <span>오디오 변환기 열기</span>
             <span class="material-symbols-outlined text-[16px]">chevron_right</span>
           </button>
         </div>
 
-        <!-- Card 4: 새로운 도구 제안하기 -->
+        <!-- Card 4: 중복 파일 및 리소스 정리기 -->
         <div class="bg-surface-container-lowest dark:bg-slate-900/90 rounded-2xl p-6 border border-surface-container dark:border-slate-800 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
           <div>
-            <div class="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-primary flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
-              <span class="material-symbols-outlined text-[22px]">add</span>
+            <div class="w-11 h-11 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
+              <span class="material-symbols-outlined text-[22px]">cleaning_services</span>
             </div>
-            <h3 class="text-sm sm:text-base font-bold text-on-surface mb-2" data-lang="ko">새로운 도구 제안하기</h3>
-            <h3 class="text-sm sm:text-base font-bold text-on-surface mb-2" data-lang="en">Suggest a New Tool</h3>
-            <p class="text-xs text-on-surface-variant leading-relaxed" data-lang="ko">
-              필요한 파일 일괄 처리 작업이 있나요? 개발팀에 의견을 보내주세요.
-            </p>
-            <p class="text-xs text-on-surface-variant leading-relaxed" data-lang="en">
-              Have an idea for a batch workflow? Let our dev team know.
+            <h3 class="text-sm sm:text-base font-bold text-on-surface mb-2">중복 파일 및 미사용 리소스 정리</h3>
+            <p class="text-xs text-on-surface-variant leading-relaxed">
+              프로젝트 폴더 내 사용되지 않는 복제 파일과 손상된 경로를 스캔하여 디스크 용량을 최적화합니다.
             </p>
           </div>
-          <a href="mailto:support@batchertools.com?subject=도구%20제안" class="text-xs sm:text-sm font-semibold text-primary hover:underline flex items-center gap-1 mt-5">
-            <span data-lang="ko">의견 남기기</span>
-            <span data-lang="en">Send Feedback</span>
-            <span class="material-symbols-outlined text-[16px]">send</span>
-          </a>
+          <button type="button" class="text-xs sm:text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-0.5 mt-5 text-left cursor-pointer quick-tab-btn" data-target-tab="resource">
+            <span>정리기 실행</span>
+            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+          </button>
         </div>
       </div>
     </section>
 
-    <!-- 4. 인기 사용 가이드 & 팁 (Capture 1 Bottom) -->
-    <section class="w-full my-12" id="guides">
+    <!-- [NEW SECTION 1] 벤치마크 비교표: 서버 전송 방식 vs Batcher Tools 로컬 처리 -->
+    <section class="w-full my-16">
+      <div class="bg-surface-container-lowest dark:bg-slate-900/90 rounded-3xl p-6 sm:p-10 border border-surface-container dark:border-slate-800 shadow-xs">
+        <div class="max-w-3xl mb-8">
+          <span class="text-xs sm:text-sm font-extrabold text-primary tracking-wider uppercase mb-1.5 block">Performance &amp; Security Benchmark</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight mb-3">
+            기존 클라우드 변환기 vs 배처 툴(Batcher Tools) 심층 비교
+          </h2>
+          <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+            대부분의 웹 변환기는 사용자의 파일을 타사 서버로 업로드하여 대기열에서 처리합니다. 배처 툴은 최신 웹 표준 기술(WICG File System Access &amp; Web Workers)을 통해 기기 내부 CPU/RAM에서 100% 즉시 처리합니다.
+          </p>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="border-b border-surface-container dark:border-slate-800 text-on-surface font-bold bg-surface-container-low/50 dark:bg-slate-800/40">
+                <th class="py-3.5 px-4 rounded-tl-xl">비교 항목</th>
+                <th class="py-3.5 px-4 text-on-surface-variant">일반 클라우드 변환 서비스</th>
+                <th class="py-3.5 px-4 text-primary font-extrabold rounded-tr-xl">배처 툴 (Batcher Tools)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-surface-container dark:divide-slate-800/60 text-on-surface-variant">
+              <tr>
+                <td class="py-3.5 px-4 font-bold text-on-surface">100개 파일 처리 소요 시간</td>
+                <td class="py-3.5 px-4 text-red-500 dark:text-red-400">약 1분 ~ 3분 (업로드/다운로드 병목)</td>
+                <td class="py-3.5 px-4 text-emerald-600 dark:text-emerald-400 font-bold">1초 ~ 3초 (로컬 메모리 즉시 가공)</td>
+              </tr>
+              <tr>
+                <td class="py-3.5 px-4 font-bold text-on-surface">외부 네트워크 데이터 전송량</td>
+                <td class="py-3.5 px-4">파일 원본 크기 전체 (수백 MB 소모)</td>
+                <td class="py-3.5 px-4 text-emerald-600 dark:text-emerald-400 font-bold">0 Bytes (완전한 오프라인 가능)</td>
+              </tr>
+              <tr>
+                <td class="py-3.5 px-4 font-bold text-on-surface">기업 기밀 및 개인정보 보안</td>
+                <td class="py-3.5 px-4 text-amber-600 dark:text-amber-400">외부 서버 보관 및 데이터 유출 위험 상존</td>
+                <td class="py-3.5 px-4 text-emerald-600 dark:text-emerald-400 font-bold">100% 원천 차단 (PC 샌드박스 내부 구동)</td>
+              </tr>
+              <tr>
+                <td class="py-3.5 px-4 font-bold text-on-surface">1회 처리 파일 개수/용량 제한</td>
+                <td class="py-3.5 px-4">무료 기준 10~50MB 또는 일일 횟수 제한</td>
+                <td class="py-3.5 px-4 text-emerald-600 dark:text-emerald-400 font-bold">무제한 (기기 RAM 사양이 허용하는 전량)</td>
+              </tr>
+              <tr>
+                <td class="py-3.5 px-4 font-bold text-on-surface">작업 실수 시 복구 (Undo)</td>
+                <td class="py-3.5 px-4">불가 (다운로드 후 수동 수정 필요)</td>
+                <td class="py-3.5 px-4 text-emerald-600 dark:text-emerald-400 font-bold">실시간 미리보기 &amp; 무제한 Undo/Reset</td>
+              </tr>
+              <tr>
+                <td class="py-3.5 px-4 font-bold text-on-surface">비용 및 유료 플랜 유도</td>
+                <td class="py-3.5 px-4">대량 변환 시 월간 구독료 부과</td>
+                <td class="py-3.5 px-4 text-emerald-600 dark:text-emerald-400 font-bold">영구 100% 무료 (오픈 웹 유틸리티)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- [NEW SECTION 2] 기술 아키텍처 다이어그램 & 보안 원리 -->
+    <section class="w-full my-16">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+        <div class="bg-surface-container-lowest dark:bg-slate-900/90 rounded-3xl p-6 sm:p-10 border border-surface-container dark:border-slate-800 shadow-xs flex flex-col justify-between">
+          <div>
+            <span class="text-xs sm:text-sm font-extrabold text-primary tracking-wider uppercase mb-1.5 block">Client-Side Architecture</span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-on-surface tracking-tight mb-4">
+              어떻게 서버 없이 브라우저에서 모든 처리가 가능할까요?
+            </h2>
+            <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed mb-4">
+              배처 툴은 최신 웹 플랫폼의 3대 핵심 API를 결합하여 데스크톱 네이티브 소프트웨어 수준의 성능을 구현했습니다:
+            </p>
+            <ul class="space-y-3 text-xs sm:text-sm text-on-surface-variant">
+              <li class="flex items-start gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">1</span>
+                <div>
+                  <strong class="text-on-surface">WICG File System Access API:</strong>
+                  브라우저가 사용자가 지정한 디렉터리의 핸들을 획득하여, 가공된 파일을 로컬 폴더에 직접 고속으로 기록합니다.
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">2</span>
+                <div>
+                  <strong class="text-on-surface">Multi-Thread Web Workers:</strong>
+                  대용량 오디오 인코딩 및 이미지 렌더링 작업을 별도의 백그라운드 스레드에서 병렬 분산 처리하여 화면 멈춤 없이 부드럽게 구동됩니다.
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">3</span>
+                <div>
+                  <strong class="text-on-surface">WebAssembly &amp; HTML5 Canvas:</strong>
+                  C/C++ 기반 코덱 알고리즘을 브라우저 바이트코드로 직접 컴파일하여 초고속 연산 처리를 실현합니다.
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-6 pt-5 border-t border-surface-container dark:border-slate-800 flex items-center justify-between">
+            <span class="text-xs text-on-surface-variant">네트워크 탭을 열어 직접 0 Bytes 패킷 전송을 확인해 보세요.</span>
+            <a href="/guides/serverless-local-conversion.html" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+              기술 백서 읽기 <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-lowest dark:bg-slate-900/90 rounded-3xl p-6 sm:p-10 border border-surface-container dark:border-slate-800 shadow-xs flex flex-col justify-center">
+          <div class="bg-surface-container-low dark:bg-slate-950 p-6 rounded-2xl border border-surface-container dark:border-slate-800 space-y-4 font-mono text-xs">
+            <div class="flex items-center justify-between pb-3 border-b border-surface-container dark:border-slate-800 text-on-surface font-bold">
+              <span class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                Local Security Sandbox Pipeline
+              </span>
+              <span class="text-emerald-500 font-bold">Status: Isolated</span>
+            </div>
+            <div class="space-y-2 text-on-surface-variant">
+              <div class="p-2.5 rounded bg-surface-container-lowest dark:bg-slate-900 border border-surface-container dark:border-slate-800 flex items-center justify-between">
+                <span>[1] User Local Storage</span>
+                <span class="text-primary">&rarr; File Handle Read</span>
+              </div>
+              <div class="p-2.5 rounded bg-surface-container-lowest dark:bg-slate-900 border border-surface-container dark:border-slate-800 flex items-center justify-between">
+                <span>[2] Browser Memory Sandbox</span>
+                <span class="text-emerald-400">RAM Allocation Only</span>
+              </div>
+              <div class="p-2.5 rounded bg-surface-container-lowest dark:bg-slate-900 border border-surface-container dark:border-slate-800 flex items-center justify-between">
+                <span>[3] Parallel Web Workers</span>
+                <span class="text-purple-400">Vector Raster &amp; LameJS</span>
+              </div>
+              <div class="p-2.5 rounded bg-surface-container-lowest dark:bg-slate-900 border border-surface-container dark:border-slate-800 flex items-center justify-between">
+                <span>[4] Target Directory Output</span>
+                <span class="text-primary">&rarr; Direct Disk Write</span>
+              </div>
+            </div>
+            <div class="text-[11px] text-emerald-500 text-center pt-2 font-sans font-semibold">
+              &check; 외부 서버 네트워크 통신(HTTP POST/FETCH) 요청 0건 보장
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- [NEW SECTION 3] 실무 크리에이터 & 개발자를 위한 6대 핵심 활용 시나리오 -->
+    <section class="w-full my-16">
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="text-xs sm:text-sm font-extrabold text-primary tracking-wider uppercase mb-1.5 block">Professional Workflows</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight mb-3">
+          현업 크리에이터와 개발자가 배처 툴을 활용하는 6가지 방법
+        </h2>
+        <p class="text-xs sm:text-sm text-on-surface-variant">
+          매일 반복되는 파일 관리 시간을 최대 90% 이상 단축시키는 실무 모범 사례입니다.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Scenario 1 -->
+        <div class="p-6 rounded-2xl bg-surface-container-lowest dark:bg-slate-900/90 border border-surface-container dark:border-slate-800 hover:border-primary/40 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-primary flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-[20px]">devices</span>
+          </div>
+          <h3 class="text-base font-bold text-on-surface mb-2">1. 모바일 앱 다중 해상도 에셋 추출</h3>
+          <p class="text-xs text-on-surface-variant leading-relaxed">
+            Figma나 Sketch에서 디자인한 SVG 아이콘을 iOS Retina(@2x, @3x) 및 Android 밀도별(hdpi, xhdpi, xxhdpi) PNG 파일로 한 번에 규격화하여 익스포트합니다.
+          </p>
+        </div>
+
+        <!-- Scenario 2 -->
+        <div class="p-6 rounded-2xl bg-surface-container-lowest dark:bg-slate-900/90 border border-surface-container dark:border-slate-800 hover:border-primary/40 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-pink-50 dark:bg-pink-950/60 text-pink-500 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-[20px]">find_replace</span>
+          </div>
+          <h3 class="text-base font-bold text-on-surface mb-2">2. 복잡한 파일명 정규식 일괄 치환</h3>
+          <p class="text-xs text-on-surface-variant leading-relaxed">
+            날짜 포맷 순서 재배열(YYYY-MM-DD &rarr; YYYYMMDD), 대괄호 태그 제거, 공백을 하이픈으로 통일하는 등 정규표현식 캡처 그룹을 활용해 수백 개 파일명을 1초 만에 정리합니다.
+          </p>
+        </div>
+
+        <!-- Scenario 3 -->
+        <div class="p-6 rounded-2xl bg-surface-container-lowest dark:bg-slate-900/90 border border-surface-container dark:border-slate-800 hover:border-primary/40 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-500 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-[20px]">podcasts</span>
+          </div>
+          <h3 class="text-base font-bold text-on-surface mb-2">3. 유튜브 &middot; 팟캐스트 오디오 용량 압축</h3>
+          <p class="text-xs text-on-surface-variant leading-relaxed">
+            마이크로 녹음된 수 기가바이트 단위의 무압축 WAV 음원을 192kbps 또는 320kbps MP3로 일괄 인코딩하여 음질 손실 없이 파일 용량을 90% 절감합니다.
+          </p>
+        </div>
+
+        <!-- Scenario 4 -->
+        <div class="p-6 rounded-2xl bg-surface-container-lowest dark:bg-slate-900/90 border border-surface-container dark:border-slate-800 hover:border-primary/40 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-500 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-[20px]">photo_camera</span>
+          </div>
+          <h3 class="text-base font-bold text-on-surface mb-2">4. 사진 촬영본 일련번호 및 날짜 라벨링</h3>
+          <p class="text-xs text-on-surface-variant leading-relaxed">
+            DSLR 카메라에서 추출한 임의의 사진 파일(`DSC_001.JPG`)에 프로젝트 접두사와 날짜를 부여하고, `001, 002...` 패딩 일련번호를 자동으로 매겨 보관합니다.
+          </p>
+        </div>
+
+        <!-- Scenario 5 -->
+        <div class="p-6 rounded-2xl bg-surface-container-lowest dark:bg-slate-900/90 border border-surface-container dark:border-slate-800 hover:border-primary/40 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-500 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-[20px]">sports_esports</span>
+          </div>
+          <h3 class="text-base font-bold text-on-surface mb-2">5. 게임 개발 사운드 효과음(SFX) 규격 통일</h3>
+          <p class="text-xs text-on-surface-variant leading-relaxed">
+            유니티나 언리얼 엔진에 들어갈 수백 개의 WAV 사운드 에셋에 `sfx_player_jump_01`과 같이 명확한 명명 규칙을 일괄 적용하고 필요 시 포맷을 통일합니다.
+          </p>
+        </div>
+
+        <!-- Scenario 6 -->
+        <div class="p-6 rounded-2xl bg-surface-container-lowest dark:bg-slate-900/90 border border-surface-container dark:border-slate-800 hover:border-primary/40 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-500 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-[20px]">folder_special</span>
+          </div>
+          <h3 class="text-base font-bold text-on-surface mb-2">6. 문서 아카이빙 및 확장자 소문자 표준화</h3>
+          <p class="text-xs text-on-surface-variant leading-relaxed">
+            운영체제마다 제각각인 대문자 확장자(`.JPEG`, `.PNG`, `.MP3`)를 웹 표준 소문자로 통일하고, 스캔된 영수증과 계약서 파일명을 프로젝트별로 아카이빙합니다.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 인기 사용 가이드 & 팁 -->
+    <section class="w-full my-16" id="guides">
       <div class="flex items-center justify-between mb-2">
         <div>
-          <h2 class="text-xl sm:text-2xl font-bold text-on-surface tracking-tight" data-lang="ko">인기 사용 가이드 &amp; 팁</h2>
-          <h2 class="text-xl sm:text-2xl font-bold text-on-surface tracking-tight" data-lang="en">Featured Guides &amp; Tips</h2>
-          <p class="text-xs sm:text-sm text-on-surface-variant mt-1" data-lang="ko">작업 속도를 10배 높여주는 실무자 핵심 가이드입니다.</p>
-          <p class="text-xs sm:text-sm text-on-surface-variant mt-1" data-lang="en">Core practitioner guides that multiply your workflow speed 10x.</p>
+          <h2 class="text-xl sm:text-2xl font-bold text-on-surface tracking-tight">인기 사용 가이드 &amp; 테크 블로그</h2>
+          <p class="text-xs sm:text-sm text-on-surface-variant mt-1">파일 변환 및 리네이밍 작업 효율을 극대화하는 실무자 심층 가이드입니다.</p>
         </div>
         <a class="text-xs sm:text-sm text-primary font-bold hover:underline flex items-center gap-1 shrink-0" href="/guides/index.html">
-          <span data-lang="ko">전체 가이드 보기</span>
-          <span data-lang="en">View All Guides</span>
+          <span>전체 19편 가이드 보기</span>
           <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
         </a>
       </div>
@@ -327,22 +499,15 @@
         <a class="bg-surface-container-lowest dark:bg-slate-900/90 rounded-2xl p-6 border border-surface-container dark:border-slate-800 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group" href="/guides/svg-to-png.html">
           <div>
             <span class="text-xs font-bold text-primary mb-1.5 block tracking-wide">Guide 01</span>
-            <h3 class="text-sm sm:text-base font-bold text-on-surface group-hover:text-primary transition-colors leading-snug mb-2" data-lang="ko">
+            <h3 class="text-sm sm:text-base font-bold text-on-surface group-hover:text-primary transition-colors leading-snug mb-2">
               SVG 고화질 변환 및 레티나 배율 가이드
             </h3>
-            <h3 class="text-sm sm:text-base font-bold text-on-surface group-hover:text-primary transition-colors leading-snug mb-2" data-lang="en">
-              SVG High-Res Rasterization &amp; Retina Scale Guide
-            </h3>
-            <p class="text-xs text-on-surface-variant leading-relaxed mb-6" data-lang="ko">
-              1.0x, 2.0x(@2x), 3.0x(@3x) 해상도별 이미지 에셋을 깨짐 없이 일괄 내보내는 방법과 접미사 설정 요령.
-            </p>
-            <p class="text-xs text-on-surface-variant leading-relaxed mb-6" data-lang="en">
-              Techniques to export crisp multi-resolution assets for 1.0x, @2x, and @3x displays with suffix setup.
+            <p class="text-xs text-on-surface-variant leading-relaxed mb-6">
+              1.0x, 2.0x(@2x), 3.0x(@3x) 해상도별 이미지 에셋을 왜곡과 깨짐 없이 일괄 내보내는 방법과 접미사 설정 요령.
             </p>
           </div>
           <span class="text-xs sm:text-sm text-primary font-semibold flex items-center gap-1 mt-auto">
-            <span data-lang="ko">자세히 읽기</span>
-            <span data-lang="en">Read More</span>
+            <span>자세히 읽기</span>
             <span class="material-symbols-outlined text-[16px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
           </span>
         </a>
@@ -351,22 +516,15 @@
         <a class="bg-surface-container-lowest dark:bg-slate-900/90 rounded-2xl p-6 border border-surface-container dark:border-slate-800 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group" href="/guides/wav-to-mp3.html">
           <div>
             <span class="text-xs font-bold text-primary mb-1.5 block tracking-wide">Guide 02</span>
-            <h3 class="text-sm sm:text-base font-bold text-on-surface group-hover:text-primary transition-colors leading-snug mb-2" data-lang="ko">
+            <h3 class="text-sm sm:text-base font-bold text-on-surface group-hover:text-primary transition-colors leading-snug mb-2">
               WAV MP3 오디오 변환 및 비트레이트 설정법
             </h3>
-            <h3 class="text-sm sm:text-base font-bold text-on-surface group-hover:text-primary transition-colors leading-snug mb-2" data-lang="en">
-              WAV to MP3 Audio Encoding &amp; Bitrate Optimization
-            </h3>
-            <p class="text-xs text-on-surface-variant leading-relaxed mb-6" data-lang="ko">
-              128kbps부터 320kbps까지 음질 손실을 최소화하며 파일 용량을 90% 압축하는 오디오 인코딩 팁.
-            </p>
-            <p class="text-xs text-on-surface-variant leading-relaxed mb-6" data-lang="en">
-              Audio encoding best practices compressing file sizes by up to 90% with minimal fidelity loss.
+            <p class="text-xs text-on-surface-variant leading-relaxed mb-6">
+              128kbps부터 320kbps까지 음질 손실을 최소화하며 파일 용량을 최대 90% 압축하는 오디오 인코딩 팁.
             </p>
           </div>
           <span class="text-xs sm:text-sm text-primary font-semibold flex items-center gap-1 mt-auto">
-            <span data-lang="ko">자세히 읽기</span>
-            <span data-lang="en">Read More</span>
+            <span>자세히 읽기</span>
             <span class="material-symbols-outlined text-[16px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
           </span>
         </a>
@@ -375,22 +533,15 @@
         <a class="bg-surface-container-lowest dark:bg-slate-900/90 rounded-2xl p-6 border border-surface-container dark:border-slate-800 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group" href="/guides/batch-rename.html">
           <div>
             <span class="text-xs font-bold text-primary mb-1.5 block tracking-wide">Guide 03</span>
-            <h3 class="text-sm sm:text-base font-bold text-on-surface group-hover:text-primary transition-colors leading-snug mb-2" data-lang="ko">
+            <h3 class="text-sm sm:text-base font-bold text-on-surface group-hover:text-primary transition-colors leading-snug mb-2">
               대량 파일 이름 변경 및 정규식 치환 활용
             </h3>
-            <h3 class="text-sm sm:text-base font-bold text-on-surface group-hover:text-primary transition-colors leading-snug mb-2" data-lang="en">
-              Batch File Renaming &amp; Regex Substitution
-            </h3>
-            <p class="text-xs text-on-surface-variant leading-relaxed mb-6" data-lang="ko">
+            <p class="text-xs text-on-surface-variant leading-relaxed mb-6">
               문자열 검색/바꾸기, 날짜 치환, 괄호/특수문자 정규식 제거로 수백 개 파일명을 한 번에 정리하기.
-            </p>
-            <p class="text-xs text-on-surface-variant leading-relaxed mb-6" data-lang="en">
-              Clean and organize hundreds of files at once using search-and-replace, date stamps, and regex rules.
             </p>
           </div>
           <span class="text-xs sm:text-sm text-primary font-semibold flex items-center gap-1 mt-auto">
-            <span data-lang="ko">자세히 읽기</span>
-            <span data-lang="en">Read More</span>
+            <span>자세히 읽기</span>
             <span class="material-symbols-outlined text-[16px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
           </span>
         </a>
@@ -399,40 +550,31 @@
         <a class="bg-surface-container-lowest dark:bg-slate-900/90 rounded-2xl p-6 border border-surface-container dark:border-slate-800 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group" href="/guides/serverless-local-conversion.html">
           <div>
             <span class="text-xs font-bold text-primary mb-1.5 block tracking-wide">Guide 04</span>
-            <h3 class="text-sm sm:text-base font-bold text-on-surface group-hover:text-primary transition-colors leading-snug mb-2" data-lang="ko">
+            <h3 class="text-sm sm:text-base font-bold text-on-surface group-hover:text-primary transition-colors leading-snug mb-2">
               100% 브라우저 로컬 데이터 처리 보안 원리
             </h3>
-            <h3 class="text-sm sm:text-base font-bold text-on-surface group-hover:text-primary transition-colors leading-snug mb-2" data-lang="en">
-              100% In-Browser Local Memory Security Architecture
-            </h3>
-            <p class="text-xs text-on-surface-variant leading-relaxed mb-6" data-lang="ko">
+            <p class="text-xs text-on-surface-variant leading-relaxed mb-6">
               서버 전송 없이 사용자의 PC 메모리(WICG File System Access &amp; Web Workers) 안에서 구동되는 프라이버시 보호 구조.
-            </p>
-            <p class="text-xs text-on-surface-variant leading-relaxed mb-6" data-lang="en">
-              Privacy-first architecture operating within client memory via WICG File System Access &amp; Web Workers.
             </p>
           </div>
           <span class="text-xs sm:text-sm text-primary font-semibold flex items-center gap-1 mt-auto">
-            <span data-lang="ko">자세히 읽기</span>
-            <span data-lang="en">Read More</span>
+            <span>자세히 읽기</span>
             <span class="material-symbols-outlined text-[16px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
           </span>
         </a>
       </div>
     </section>
 
-    <!-- 5. 자주 묻는 질문 (Capture 2 FAQ Card) -->
-    <section class="w-full my-12" id="faq">
+    <!-- 5. 자주 묻는 질문 (Technical FAQ) -->
+    <section class="w-full my-16" id="faq">
       <div class="bg-surface-container-lowest dark:bg-slate-900/90 rounded-3xl p-6 sm:p-10 border border-surface-container dark:border-slate-800 shadow-xs">
         <div class="mb-8">
           <span class="text-xs sm:text-sm font-extrabold text-primary tracking-wider uppercase mb-2 block">FAQ</span>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight mb-2">
-            <span data-lang="ko">자주 묻는 질문</span>
-            <span data-lang="en">Frequently Asked Questions</span>
+            자주 묻는 질문 (FAQ)
           </h2>
           <p class="text-xs sm:text-sm text-on-surface-variant">
-            <span data-lang="ko">배치의 기술적 원리와 안전성에 대해 명쾌하게 답변해 드립니다.</span>
-            <span data-lang="en">Clear answers about Batcher's technology, security, and usage.</span>
+            배처 툴의 기술적 구동 방식, 보안성 및 안전장치에 대해 명쾌하게 답변해 드립니다.
           </p>
         </div>
 
@@ -440,65 +582,66 @@
           <!-- FAQ 1 -->
           <div class="faq-item rounded-2xl bg-surface-container-low/70 dark:bg-slate-800/60 overflow-hidden transition-all">
             <button class="faq-toggle w-full px-5 py-4.5 sm:px-6 sm:py-5 text-left flex items-center justify-between gap-4 text-xs sm:text-sm font-bold text-on-surface cursor-pointer select-none" type="button">
-              <span data-lang="ko">배처 툴(Batcher Tools)은 어떤 도구이며 주요 특징은 무엇인가요?</span>
-              <span data-lang="en">What is Batcher Tools and what are its core features?</span>
+              <span>배처 툴(Batcher Tools)은 어떤 도구이며 주요 특징은 무엇인가요?</span>
               <span class="material-symbols-outlined text-outline text-[20px] transition-transform duration-200 shrink-0">expand_more</span>
             </button>
             <div class="faq-content hidden px-5 pb-5 sm:px-6 sm:pb-6 text-xs sm:text-sm text-on-surface-variant leading-relaxed border-t border-surface-container dark:border-slate-700/50 pt-3.5">
-              <p data-lang="ko">배처 툴(Batcher Tools)은 대용량 SVG 벡터 이미지 변환(PNG/JPG), WAV/MP3 오디오 변환, 대량의 파일 이름 일괄 변경(Batch Rename) 기능을 웹 브라우저 내에서 쉽고 빠르게 처리해 주는 스마트 로컬 유틸리티 도구입니다. 프로그램 설치나 외부 서버 업로드 없이 100% 사용자의 PC 브라우저 로컬 메모리 안에서만 작동하여 완벽한 개인정보 보안과 압도적인 처리 속도를 제공합니다.</p>
-              <p data-lang="en">Batcher Tools is a lightning-fast browser utility designed for batch SVG rasterization, WAV-to-MP3 encoding, and bulk file renaming. Everything runs 100% locally inside your client-side browser memory via WebAssembly and Web Workers, ensuring total privacy with zero server uploads.</p>
+              <p>배처 툴(Batcher Tools)은 대용량 SVG 벡터 이미지 변환(PNG/JPG), WAV/MP3 오디오 변환, 대량의 파일 이름 일괄 변경(Batch Rename) 기능을 웹 브라우저 내에서 쉽고 빠르게 처리해 주는 스마트 로컬 유틸리티 도구입니다. 프로그램 설치나 외부 서버 업로드 없이 100% 사용자의 PC 브라우저 로컬 메모리 안에서만 작동하여 완벽한 개인정보 보안과 압도적인 처리 속도를 제공합니다.</p>
             </div>
           </div>
 
           <!-- FAQ 2 -->
           <div class="faq-item rounded-2xl bg-surface-container-low/70 dark:bg-slate-800/60 overflow-hidden transition-all">
             <button class="faq-toggle w-full px-5 py-4.5 sm:px-6 sm:py-5 text-left flex items-center justify-between gap-4 text-xs sm:text-sm font-bold text-on-surface cursor-pointer select-none" type="button">
-              <span data-lang="ko">SVG를 PNG로 바꿀 때 왜 배율(1.5x, 2.0x, 3.0x) 설정이 중요한가요?</span>
-              <span data-lang="en">Why is scale multiplier (1.5x, 2.0x, 3.0x) important when converting SVG to PNG?</span>
+              <span>SVG를 PNG로 바꿀 때 왜 배율(1.5x, 2.0x, 3.0x) 설정이 중요한가요?</span>
               <span class="material-symbols-outlined text-outline text-[20px] transition-transform duration-200 shrink-0">expand_more</span>
             </button>
             <div class="faq-content hidden px-5 pb-5 sm:px-6 sm:pb-6 text-xs sm:text-sm text-on-surface-variant leading-relaxed border-t border-surface-container dark:border-slate-700/50 pt-3.5">
-              <p data-lang="ko">SVG 벡터 이미지는 수학적 곡선으로 표현되어 확대해도 깨지지 않지만, 모바일 앱(iOS Retina @2x, @3x, Android mdpi/xhdpi/xxhdpi)이나 웹사이트에 적용할 때는 픽셀 기반의 비트맵 포맷(PNG/JPG)으로 래스터화(Rasterization)해야 합니다. 1.0x, 1.5x, 2.0x(@2x), 3.0x(@3x) 등 디바이스 해상도에 맞춘 배율 설정으로 변환해야 선명하고 왜곡 없는 고품질 그래픽 에셋을 얻을 수 있습니다.</p>
-              <p data-lang="en">While SVGs scale infinitely via math curves, mobile and web applications require fixed raster bitmap assets (PNG/JPG) to render efficiently. Selecting exact scale factors like 1.0x, 2.0x (@2x), and 3.0x (@3x) guarantees pixel-crisp graphics on modern Retina and high-DPI displays without blurriness.</p>
+              <p>SVG 벡터 이미지는 수학적 곡선으로 표현되어 확대해도 깨지지 않지만, 모바일 앱(iOS Retina @2x, @3x, Android mdpi/xhdpi/xxhdpi)이나 웹사이트에 적용할 때는 픽셀 기반의 비트맵 포맷(PNG/JPG)으로 래스터화(Rasterization)해야 합니다. 1.0x, 1.5x, 2.0x(@2x), 3.0x(@3x) 등 디바이스 해상도에 맞춘 배율 설정으로 변환해야 선명하고 왜곡 없는 고품질 그래픽 에셋을 얻을 수 있습니다.</p>
             </div>
           </div>
 
           <!-- FAQ 3 -->
           <div class="faq-item rounded-2xl bg-surface-container-low/70 dark:bg-slate-800/60 overflow-hidden transition-all">
             <button class="faq-toggle w-full px-5 py-4.5 sm:px-6 sm:py-5 text-left flex items-center justify-between gap-4 text-xs sm:text-sm font-bold text-on-surface cursor-pointer select-none" type="button">
-              <span data-lang="ko">서버 업로드 없이 내 컴퓨터 안에서만 처리되는 게 왜 더 안전한가요?</span>
-              <span data-lang="en">Why is in-browser local processing safer than uploading to a server?</span>
+              <span>서버 업로드 없이 내 컴퓨터 안에서만 처리되는 게 왜 더 안전한가요?</span>
               <span class="material-symbols-outlined text-outline text-[20px] transition-transform duration-200 shrink-0">expand_more</span>
             </button>
             <div class="faq-content hidden px-5 pb-5 sm:px-6 sm:pb-6 text-xs sm:text-sm text-on-surface-variant leading-relaxed border-t border-surface-container dark:border-slate-700/50 pt-3.5">
-              <p data-lang="ko">배처 툴은 최신 WICG File System Access API, WebAssembly, Web Workers 기술을 활용하여 모든 파일 읽기, 인코딩, 변환 및 저장 작업을 100% 사용자의 PC/웹 브라우저 내부(Client-Side)에서 처리합니다. 업로드하신 그래픽, 음원, 문서 파일이 네트워크를 통해 외부 서버로 단 1바이트도 전송되지 않으므로 기밀 유출이나 데이터 도난 위험이 원천적으로 차단됩니다.</p>
-              <p data-lang="en">By utilizing WebAssembly and the WICG File System Access API, all processing takes place locally inside your browser sandbox. Your proprietary designs, unreleased audio, and confidential documents never travel across the internet, completely eliminating data leak vulnerabilities.</p>
+              <p>배처 툴은 최신 WICG File System Access API, WebAssembly, Web Workers 기술을 활용하여 모든 파일 읽기, 인코딩, 변환 및 저장 작업을 100% 사용자의 PC/웹 브라우저 내부(Client-Side)에서 처리합니다. 업로드하신 그래픽, 음원, 문서 파일이 네트워크를 통해 외부 서버로 단 1바이트도 전송되지 않으므로 기밀 유출이나 데이터 도난 위험이 원천적으로 차단됩니다.</p>
             </div>
           </div>
 
           <!-- FAQ 4 -->
           <div class="faq-item rounded-2xl bg-surface-container-low/70 dark:bg-slate-800/60 overflow-hidden transition-all">
             <button class="faq-toggle w-full px-5 py-4.5 sm:px-6 sm:py-5 text-left flex items-center justify-between gap-4 text-xs sm:text-sm font-bold text-on-surface cursor-pointer select-none" type="button">
-              <span data-lang="ko">수백 개 파일 이름을 바꿀 때 실수하면 되돌릴 수 있나요? (안전장치)</span>
-              <span data-lang="en">Can I undo rename changes if I make a mistake on hundreds of files?</span>
+              <span>수백 개 파일 이름을 바꿀 때 실수하면 되돌릴 수 있나요? (안전장치)</span>
               <span class="material-symbols-outlined text-outline text-[20px] transition-transform duration-200 shrink-0">expand_more</span>
             </button>
             <div class="faq-content hidden px-5 pb-5 sm:px-6 sm:pb-6 text-xs sm:text-sm text-on-surface-variant leading-relaxed border-t border-surface-container dark:border-slate-700/50 pt-3.5">
-              <p data-lang="ko">네, 안전장치가 철저하게 마련되어 있습니다. 파일명을 실제로 변경하기 전에 '변경될 이름' 열에서 실시간 미리보기를 통해 결과를 먼저 검증할 수 있으며, 규칙 적용 중 실수가 발생하더라도 상단의 '실행 취소(Undo)' 버튼이나 '초기화(Reset)' 버튼을 눌러 원본 파일명 상태로 즉시 되돌릴 수 있습니다.</p>
-              <p data-lang="en">Yes, full safety controls are built-in. Batcher calculates a real-time virtual preview in the table before executing any disk operations. You can also click 'Undo' or 'Reset' at any moment to revert to the initial filename state safely.</p>
+              <p>네, 안전장치가 철저하게 마련되어 있습니다. 파일명을 실제로 변경하기 전에 '변경될 이름' 열에서 실시간 미리보기를 통해 결과를 먼저 검증할 수 있으며, 규칙 적용 중 실수가 발생하더라도 상단의 '실행 취소(Undo)' 버튼이나 '초기화(Reset)' 버튼을 눌러 원본 파일명 상태로 즉시 되돌릴 수 있습니다.</p>
             </div>
           </div>
 
           <!-- FAQ 5 -->
           <div class="faq-item rounded-2xl bg-surface-container-low/70 dark:bg-slate-800/60 overflow-hidden transition-all">
             <button class="faq-toggle w-full px-5 py-4.5 sm:px-6 sm:py-5 text-left flex items-center justify-between gap-4 text-xs sm:text-sm font-bold text-on-surface cursor-pointer select-none" type="button">
-              <span data-lang="ko">변환된 파일의 상업적 이용 및 라이선스 정책은 어떻게 되나요?</span>
-              <span data-lang="en">What is the commercial license policy for converted files?</span>
+              <span>지원하는 브라우저는 무엇이며 별도 설치가 필요한가요?</span>
               <span class="material-symbols-outlined text-outline text-[20px] transition-transform duration-200 shrink-0">expand_more</span>
             </button>
             <div class="faq-content hidden px-5 pb-5 sm:px-6 sm:pb-6 text-xs sm:text-sm text-on-surface-variant leading-relaxed border-t border-surface-container dark:border-slate-700/50 pt-3.5">
-              <p data-lang="ko">변환 및 가공된 모든 결과물의 소유권과 저작권은 전적으로 사용자 본인에게 있습니다. 배처 툴을 통해 처리된 파일은 상업용 웹사이트, 상용 소프트웨어, 모바일 앱, 유튜브 및 광고 디자인 등 어떠한 비즈니스 목적에도 제약 없이 100% 무료로 평생 자유롭게 활용하실 수 있습니다.</p>
-              <p data-lang="en">You retain 100% ownership and copyright over all output files generated. You are completely free to use your processed assets for commercial products, client engagements, enterprise software, and monetization with zero royalty fees.</p>
+              <p>Google Chrome, Microsoft Edge, Opera, Whale 등 현대 Chromium 기반 브라우저 및 Safari, Firefox를 완벽 지원합니다. 확장 프로그램이나 별도의 실행 파일(.exe, .dmg) 설치 없이 웹 브라우저 접속 즉시 100% 무료로 사용할 수 있습니다.</p>
+            </div>
+          </div>
+
+          <!-- FAQ 6 -->
+          <div class="faq-item rounded-2xl bg-surface-container-low/70 dark:bg-slate-800/60 overflow-hidden transition-all">
+            <button class="faq-toggle w-full px-5 py-4.5 sm:px-6 sm:py-5 text-left flex items-center justify-between gap-4 text-xs sm:text-sm font-bold text-on-surface cursor-pointer select-none" type="button">
+              <span>변환된 파일의 상업적 이용 및 라이선스 정책은 어떻게 되나요?</span>
+              <span class="material-symbols-outlined text-outline text-[20px] transition-transform duration-200 shrink-0">expand_more</span>
+            </button>
+            <div class="faq-content hidden px-5 pb-5 sm:px-6 sm:pb-6 text-xs sm:text-sm text-on-surface-variant leading-relaxed border-t border-surface-container dark:border-slate-700/50 pt-3.5">
+              <p>변환 및 가공된 모든 결과물의 소유권과 저작권은 전적으로 사용자 본인에게 있습니다. 배처 툴을 통해 처리된 파일은 상업용 웹사이트, 상용 소프트웨어, 모바일 앱, 유튜브 및 광고 디자인 등 어떠한 비즈니스 목적에도 제약 없이 100% 무료로 평생 자유롭게 활용하실 수 있습니다.</p>
             </div>
           </div>
         </div>
@@ -506,7 +649,7 @@
     </section>
   </main>
 
-  <!-- Clean Modern Footer (Capture 3 match) -->
+  <!-- Clean Modern Footer -->
   <footer class="w-full border-t border-surface-container bg-surface-container-lowest dark:bg-slate-950 py-12 pb-36 relative z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
       <div class="flex flex-col lg:flex-row justify-between gap-10 lg:gap-16">
@@ -517,13 +660,11 @@
               <span class="material-symbols-outlined text-[18px]">verified_user</span>
             </div>
             <span class="text-sm sm:text-base font-bold text-on-surface">
-              <span data-lang="ko">100% 웹 기반 로컬 처리</span>
-              <span data-lang="en">100% Web-Based Local Processing</span>
+              100% 웹 기반 로컬 처리 (Local Processing)
             </span>
           </div>
           <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-            <span data-lang="ko">업로드하신 모든 그래픽, 음원, 문서는 외부 서버로 전송되지 않고 사용자의 기기 브라우저(WebAssembly &amp; Web Workers) 안에서 즉시 처리 후 폐기됩니다.</span>
-            <span data-lang="en">All uploaded graphics, audio, and documents are processed entirely within your browser memory (WebAssembly &amp; Web Workers) with zero external server upload and immediate disposal.</span>
+            업로드하신 모든 그래픽, 음원, 문서는 외부 서버로 전송되지 않고 사용자의 기기 브라우저(WebAssembly &amp; Web Workers) 안에서 즉시 처리 후 폐기됩니다.
           </p>
         </div>
 
@@ -531,66 +672,47 @@
         <div class="flex flex-wrap sm:flex-nowrap gap-10 sm:gap-14 text-xs sm:text-sm">
           <!-- Col 1: Tools -->
           <div class="flex flex-col gap-2.5">
-            <span class="font-bold text-on-surface mb-1">
-              <span data-lang="ko">도구 바로가기</span>
-              <span data-lang="en">Tools</span>
-            </span>
+            <span class="font-bold text-on-surface mb-1">도구 바로가기</span>
             <a class="text-on-surface-variant hover:text-primary transition-colors" href="/svg-to-png.html">
-              <span data-lang="ko">SVG 변환기</span>
-              <span data-lang="en">SVG Converter</span>
+              SVG PNG 변환기
             </a>
             <a class="text-on-surface-variant hover:text-primary transition-colors" href="/wav-to-mp3.html">
-              <span data-lang="ko">오디오 변환기</span>
-              <span data-lang="en">Audio Converter</span>
+              WAV MP3 오디오 변환기
             </a>
             <a class="text-on-surface-variant hover:text-primary transition-colors" href="/batch-rename.html">
-              <span data-lang="ko">대량 이름 바꾸기</span>
-              <span data-lang="en">Batch Renamer</span>
+              대량 파일 이름 바꾸기
             </a>
           </div>
 
           <!-- Col 2: Security & About -->
           <div class="flex flex-col gap-2.5">
-            <span class="font-bold text-on-surface mb-1">
-              <span data-lang="ko">보안 및 안내</span>
-              <span data-lang="en">Security &amp; About</span>
-            </span>
+            <span class="font-bold text-on-surface mb-1">보안 및 안내</span>
             <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/serverless-local-conversion.html">
-              <span data-lang="ko">데이터 무전송 증명</span>
-              <span data-lang="en">Zero-Upload Proof</span>
+              데이터 무전송 기술 증명
             </a>
             <a class="text-on-surface-variant hover:text-primary transition-colors" href="/about.html">
-              <span data-lang="ko">소개</span>
-              <span data-lang="en">About</span>
+              서비스 소개 (About)
             </a>
             <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/index.html">
-              <span data-lang="ko">사용 가이드</span>
-              <span data-lang="en">Guides</span>
+              사용 가이드 허브 (19편)
             </a>
             <a class="text-on-surface-variant hover:text-primary transition-colors" href="/contact.html">
-              <span data-lang="ko">문의하기</span>
-              <span data-lang="en">Contact</span>
+              문의 및 피드백
             </a>
           </div>
 
           <!-- Col 3: Policy & Donate -->
           <div class="flex flex-col gap-2.5">
-            <span class="font-bold text-on-surface mb-1">
-              <span data-lang="ko">정책</span>
-              <span data-lang="en">Policy</span>
-            </span>
+            <span class="font-bold text-on-surface mb-1">운영 정책</span>
             <a class="text-on-surface-variant hover:text-primary transition-colors" href="/privacy.html">
-              <span data-lang="ko">개인정보처리방침</span>
-              <span data-lang="en">Privacy Policy</span>
+              개인정보처리방침
             </a>
             <a class="text-on-surface-variant hover:text-primary transition-colors" href="/terms.html">
-              <span data-lang="ko">서비스 이용약관</span>
-              <span data-lang="en">Terms of Service</span>
+              서비스 이용약관
             </a>
             <a class="text-amber-600 dark:text-amber-400 hover:underline inline-flex items-center gap-1 font-bold" href="https://buymeacoffee.com/playNolang" target="_blank" rel="noopener noreferrer">
               <span>☕</span>
-              <span data-lang="ko">커피 후원</span>
-              <span data-lang="en">Donate</span>
+              <span>개발자 후원하기</span>
             </a>
           </div>
         </div>
@@ -599,13 +721,11 @@
       <!-- Bottom Bar -->
       <div class="pt-8 mt-10 border-t border-surface-container flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-on-surface-variant">
         <div>
-          <span data-lang="ko">© 2026 Batcher. 웹 기반 일괄 변환 및 이름변경 도구. All rights reserved.</span>
-          <span data-lang="en">© 2026 Batcher. Web-Based Local Batch Processing Tools. All rights reserved.</span>
+          <span>&copy; 2026 Batcher Tools. 웹 기반 로컬 일괄 변환 및 파일 관리 도구. All rights reserved.</span>
         </div>
         <div class="flex items-center gap-2 font-medium">
           <span class="w-2 h-2 rounded-full bg-primary inline-block animate-pulse"></span>
-          <span data-lang="ko">웹 기반 로컬 처리 엔진 가동 중</span>
-          <span data-lang="en">Web-Based Local Processing Engine Active</span>
+          <span>Web-Based Local Engine Active</span>
         </div>
       </div>
     </div>

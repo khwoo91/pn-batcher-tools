@@ -215,34 +215,78 @@
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
           <i class="fa-solid fa-chart-simple text-purple-400 text-lg"></i>
-          2. 목적에 맞는 최적의 오디오 비트레이트(Bitrate) 선택 가이드
+          2. 목적에 맞는 최적의 오디오 비트레이트(Bitrate) 마스터 가이드
         </h2>
-        <p class="mb-4">
-          비트레이트는 오디오 1초당 처리되는 데이터 비트 수(kbps, kilobits per second)를 의미합니다. 비트레이트가 높을수록 음원 디테일과 고주파수 대역이 풍부하게 보존되지만 파일 용량이 증가합니다.
+        <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+          비트레이트(Bitrate)는 오디오 1초당 할당되는 데이터 전송률(kbps)입니다. 음원 목적과 플랫폼 요구사항에 맞는 권장 사양을 선택하세요:
         </p>
         
+        <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950/60 p-1 mb-6">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-slate-800 text-slate-200 bg-slate-900/60 font-semibold">
+                <th class="py-3 px-4">비트레이트</th>
+                <th class="py-3 px-4">주파수 상한선 (Cutoff)</th>
+                <th class="py-3 px-4 text-purple-400 font-mono">1분당 예상 용량</th>
+                <th class="py-3 px-4">압축률 (vs WAV)</th>
+                <th class="py-3 px-4">최적 권장 시나리오</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/60 text-slate-400">
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-purple-400">128 kbps</td>
+                <td class="py-2.5 px-4 font-mono text-slate-300">~ 16 kHz</td>
+                <td class="py-2.5 px-4 font-mono text-emerald-400 font-bold">약 0.95 MB</td>
+                <td class="py-2.5 px-4 text-emerald-400">~ 90% 용량 절감</td>
+                <td class="py-2.5 px-4 text-slate-300">음성 녹음, 강의 인터뷰, 팟캐스트, 오디오북</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-purple-400">192 kbps (추천)</td>
+                <td class="py-2.5 px-4 font-mono text-slate-300">~ 18 kHz</td>
+                <td class="py-2.5 px-4 font-mono text-emerald-400 font-bold">약 1.44 MB</td>
+                <td class="py-2.5 px-4 text-emerald-400">~ 85% 용량 절감</td>
+                <td class="py-2.5 px-4 text-slate-300">웹 BGM, 모바일 음악 스트리밍, 게임 사운드 에셋</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-purple-400">256 kbps</td>
+                <td class="py-2.5 px-4 font-mono text-slate-300">~ 19.5 kHz</td>
+                <td class="py-2.5 px-4 font-mono text-emerald-400 font-bold">약 1.92 MB</td>
+                <td class="py-2.5 px-4 text-emerald-400">~ 80% 용량 절감</td>
+                <td class="py-2.5 px-4 text-slate-300">유튜브 고화질 영상 배경음악, 광고 및 방송 음향</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-purple-400">320 kbps (최고음질)</td>
+                <td class="py-2.5 px-4 font-mono text-slate-300">~ 20 kHz (인간 가청한계 전대역)</td>
+                <td class="py-2.5 px-4 font-mono text-emerald-400 font-bold">약 2.40 MB</td>
+                <td class="py-2.5 px-4 text-emerald-400">~ 75% 용량 절감</td>
+                <td class="py-2.5 px-4 text-slate-300">음원 정식 출시, 고해상도 헤드폰 마스터링, 상업용 보관</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs mb-4">
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
             <strong class="text-purple-400 block text-sm mb-1">128 kbps (음성 녹음 & 팟캐스트)</strong>
-            <p class="text-slate-400 mb-2">음성 주파수 대역(300Hz ~ 3.4kHz)을 명료하게 전달하면서 용량을 극도로 절약합니다.</p>
+            <p class="text-slate-400 mb-2">인간 목소리 주파수 대역(300Hz ~ 3.4kHz)을 선명하게 유지하면서 모바일 네트워크 스트리밍 대역폭을 극소화합니다.</p>
             <span class="text-[11px] text-slate-500">권장 용도: 강의 녹음, 인터뷰, 음성 메모, 오디오북</span>
           </div>
 
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
             <strong class="text-purple-400 block text-sm mb-1">192 kbps (웹 표준 & 스트리밍 균형)</strong>
-            <p class="text-slate-400 mb-2">파일 크기와 사운드 퀄리티 사이의 가장 이상적인 골든 밸런스를 제공합니다.</p>
+            <p class="text-slate-400 mb-2">대부분의 일반 청취 환경에서 원음(WAV)과 구분하기 어려운 음질을 유지하며 파일 크기를 1/7 수준으로 축소합니다.</p>
             <span class="text-[11px] text-slate-500">권장 용도: 웹 사이트 BGM, 일반 모바일 음악 감상, 게임 효과음</span>
           </div>
 
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
             <strong class="text-purple-400 block text-sm mb-1">256 kbps (고화질 영상 BGM)</strong>
-            <p class="text-slate-400 mb-2">복잡한 악기 구성과 공간감이 강조된 음원도 깨짐 없이 풍부하게 재현합니다.</p>
+            <p class="text-slate-400 mb-2">복잡한 오케스트라 사운드나 공간감이 강조된 음향에서도 고주파 잔향이 뭉개지지 않고 선명하게 재현됩니다.</p>
             <span class="text-[11px] text-slate-500">권장 용도: 유튜브 고화질 영상 배경음악, 광고 사운드 트랙</span>
           </div>
 
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
             <strong class="text-purple-400 block text-sm mb-1">320 kbps (최고 음질 & 마스터링 보관)</strong>
-            <p class="text-slate-400 mb-2">MP3 표준 규격에서 지원하는 최고 해상도로 최대 20kHz 가청 대역을 유지합니다.</p>
+            <p class="text-slate-400 mb-2">MP3 표준 규격에서 지원하는 최고 해상도로 20kHz 가청 한계 전 영역을 유지하여 스튜디오 마스터링급 사운드를 보존합니다.</p>
             <span class="text-[11px] text-slate-500">권장 용도: 음원 정식 출시, 고성능 헤드폰 감상, 상업용 음악 아카이빙</span>
           </div>
         </div>
@@ -251,7 +295,7 @@
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
           <i class="fa-solid fa-microchip text-purple-400 text-lg"></i>
-          3. Web Audio API 및 LameJS 기반 멀티스레드 로컬 인코딩
+          3. Web Audio API 및 LameJS 기반 멀티스레드 로컬 인코딩 원리
         </h2>
         <p class="mb-3">
           배처 툴은 최신 표준 <strong>HTML5 Web Audio API</strong>의 `AudioContext.decodeAudioData()` 메소드를 사용하여 브라우저에서 직접 WAV의 PCM 바이너리 데이터를 고속으로 디코딩합니다. 이후 세계적으로 검증된 고성능 오픈소스 MP3 인코더인 <strong>LameJS</strong> 엔진을 통해 순수한 32비트 부동소수점 오디오 채널 데이터를 실시간 MP3 프레임으로 인코딩합니다.
@@ -282,6 +326,48 @@
             <strong class="text-slate-200 block mb-1 text-sm">인코딩 및 저장</strong>
             <p class="text-slate-400">'변환 시작'을 누르면 즉시 초고속 로컬 인코딩이 진행되며 완료 즉시 다운로드됩니다.</p>
           </div>
+        </div>
+      </div>
+
+      <!-- 추천 관련 기술 가이드 4선 -->
+      <div class="border-t border-slate-800/80 pt-8">
+        <h2 class="text-xl font-bold text-slate-100 mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-book-bookmark text-purple-400 text-base"></i>
+          함께 읽으면 좋은 추천 오디오 엔지니어링 가이드
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <a href="/guides/audio-bitrate.html" class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-purple-500/40 transition-all flex flex-col justify-between">
+            <div>
+              <span class="text-purple-400 font-bold block mb-1">오디오 가이드</span>
+              <strong class="text-slate-200 block mb-1">WAV to MP3 오디오 변환 시 비트레이트 최적화 팁</strong>
+              <p class="text-slate-400 text-[11px] leading-relaxed">128kbps부터 320kbps까지 주파수 대역폭과 압축 손실률 정밀 분석.</p>
+            </div>
+            <span class="text-purple-400 mt-2 font-semibold flex items-center gap-1">가이드 읽기 &rarr;</span>
+          </a>
+          <a href="/guides/audio-lossless-flac-wav-vs-mp3.html" class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-purple-500/40 transition-all flex flex-col justify-between">
+            <div>
+              <span class="text-purple-400 font-bold block mb-1">음향 기술</span>
+              <strong class="text-slate-200 block mb-1">무손실 WAV vs 손실 MP3 음향 구조와 심리음향학 해설</strong>
+              <p class="text-slate-400 text-[11px] leading-relaxed">인간 청각의 마스킹 효과와 1/10 용량 압축의 과학적 원리.</p>
+            </div>
+            <span class="text-purple-400 mt-2 font-semibold flex items-center gap-1">가이드 읽기 &rarr;</span>
+          </a>
+          <a href="/guides/web-worker-audio-encoding.html" class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-purple-500/40 transition-all flex flex-col justify-between">
+            <div>
+              <span class="text-purple-400 font-bold block mb-1">엔지니어링 백서</span>
+              <strong class="text-slate-200 block mb-1">Web Workers를 활용한 무중단 브라우저 오디오 인코딩</strong>
+              <p class="text-slate-400 text-[11px] leading-relaxed">UI 스레드 멈춤 없이 백그라운드 병렬 멀티스레드로 음원을 인코딩하는 기술.</p>
+            </div>
+            <span class="text-purple-400 mt-2 font-semibold flex items-center gap-1">가이드 읽기 &rarr;</span>
+          </a>
+          <a href="/guides/audio-tag-timestamp-extraction-guide.html" class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-purple-500/40 transition-all flex flex-col justify-between">
+            <div>
+              <span class="text-purple-400 font-bold block mb-1">실무 활용</span>
+              <strong class="text-slate-200 block mb-1">오디오 타임스탬프 추출 및 유튜브 챕터 자동 생성법</strong>
+              <p class="text-slate-400 text-[11px] leading-relaxed">대량 음원 메타데이터 파싱과 팟캐스트 구간 클립 분할 노하우.</p>
+            </div>
+            <span class="text-purple-400 mt-2 font-semibold flex items-center gap-1">가이드 읽기 &rarr;</span>
+          </a>
         </div>
       </div>
     </article>
