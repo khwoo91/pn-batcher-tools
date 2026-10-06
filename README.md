@@ -57,17 +57,13 @@ pn-batcher-tools/
 │   ├── about.html / contact.html  # 서비스 소개 및 문의
 │   ├── privacy.html / terms.html  # 개인정보처리방침 및 이용약관
 │   └── guides/                    # 포괄적인 기술 사용 가이드 문서 19종
+├── legacy/                        # 초기 모듈형 패널 컴포넌트 아카이브
 └── src/
     ├── batcher-app.ts             # 메인 워크스페이스 오케스트레이션 컴포넌트 (<batcher-app>)
     ├── index.css                  # Tailwind v4, 커스텀 테마 토큰 및 디자인 유틸리티
     ├── components/                # UI 프레젠테이션 서브컴포넌트 (Lit 기반)
     │   ├── app-header.ts          # 상단 글로벌 내비게이션 및 다크모드/언어 전환
-    │   ├── settings-panel.ts      # SVG 변환 옵션 제어 패널
-    │   ├── audio-settings-panel.ts# 오디오 인코딩 및 비트레이트 제어 패널
-    │   ├── renamer-settings-panel.ts # 파일 이름 변경 규칙 제어 패널
-    │   ├── cleaner-settings-panel.ts # 리소스 스캐너 설정 패널
     │   ├── cleaner-results-view.ts   # 리소스 분석 결과 및 정리 뷰
-    │   ├── file-queue.ts          # 드래그 앤 드롭 파일 대기열 및 실시간 상태 모니터
     │   ├── folder-tree-view.ts    # 폴더 구조 트리 탐색기
     │   ├── audio-timestamp-modal.ts  # SMIL/JSON 타임스탬프 모달 다이얼로그
     │   ├── alert-modal.ts         # 공용 알림/확인 모달 레이어

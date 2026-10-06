@@ -17,6 +17,13 @@ export default defineConfig({
         wavToMp3: resolve(__dirname, 'wav-to-mp3.html'),
         batchRename: resolve(__dirname, 'batch-rename.html'),
       },
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+        },
+      },
     },
   },
 });

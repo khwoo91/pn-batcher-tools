@@ -44,12 +44,7 @@ import {
 } from "./utils/sample-generator";
 
 import "./components/app-header";
-import "./components/settings-panel";
-import "./components/audio-settings-panel";
-import "./components/renamer-settings-panel";
-import "./components/cleaner-settings-panel";
 import "./components/cleaner-results-view";
-import "./components/file-queue";
 import "./components/log-console";
 import "./components/alert-modal";
 import "./components/audio-timestamp-modal";
