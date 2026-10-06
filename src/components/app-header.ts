@@ -51,6 +51,8 @@ export class AppHeader extends LitElement {
         this.lang = docLang as "ko" | "en";
       }
     }
+    document.documentElement.setAttribute("data-current-lang", this.lang);
+    document.documentElement.lang = this.lang;
 
     // Initialize theme before first render to prevent double-update warning
     // Default to light unless user explicitly chose dark
@@ -85,6 +87,11 @@ export class AppHeader extends LitElement {
       localStorage.setItem("batcher-theme", "light");
     }
   }
+
+  private toggleLanguage = () => {
+    const nextLang = this.lang === "ko" ? "en" : "ko";
+    this.selectLanguage(nextLang);
+  };
 
   private selectLanguage(lang: "ko" | "en") {
     this.dropdownOpen = false;
@@ -215,78 +222,25 @@ export class AppHeader extends LitElement {
               </span>
             </button>
 
-            <!-- Language Selector Dropdown -->
-            <div
-              class="relative inline-block text-left custom-dropdown-container shrink-0"
+            <!-- Language Toggle Button (KO/EN) -->
+            <button
+              type="button"
+              @click="${this.toggleLanguage}"
+              class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container-low hover:bg-surface-container border border-outline-variant/30 text-on-surface rounded-xl text-xs cursor-pointer focus:outline-none transition-all shadow-xs select-none whitespace-nowrap active:scale-95 shrink-0"
+              title="${this.lang === "ko"
+                ? "영문으로 전환 (Switch to English)"
+                : "한국어로 전환 (Switch to Korean)"}"
             >
-              <button
-                type="button"
-                @click="${(e: MouseEvent) => {
-                  e.stopPropagation();
-                  this.dropdownOpen = !this.dropdownOpen;
-                }}"
-                class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container-low hover:bg-surface-container border border-outline-variant/30 text-on-surface rounded-xl text-xs cursor-pointer focus:outline-none transition-all font-semibold shadow-xs select-none whitespace-nowrap"
-                aria-haspopup="true"
-                aria-expanded="${this.dropdownOpen}"
+              <span
+                class="material-symbols-outlined text-[17px] text-on-surface-variant shrink-0"
+                >language</span
               >
-                <span
-                  class="material-symbols-outlined text-[16px] text-on-surface-variant shrink-0"
-                  >language</span
-                >
-                <span class="font-bold whitespace-nowrap"
-                  >${this.lang === "ko" ? "한국어" : "English"}</span
-                >
-                <span
-                  class="material-symbols-outlined text-[16px] text-on-surface-variant transition-transform duration-200 shrink-0 ${this
-                    .dropdownOpen
-                    ? "rotate-180"
-                    : ""}"
-                  >expand_more</span
-                >
-              </button>
-
-              <!-- Dropdown Menu -->
-              ${this.dropdownOpen
-                ? html`
-                    <div
-                      class="absolute right-0 mt-2 w-32 bg-surface-container-lowest border border-outline-variant/30 rounded-2xl shadow-xl z-50 focus:outline-none animate-fade-in overflow-hidden"
-                    >
-                      <button
-                        type="button"
-                        @click="${() => this.selectLanguage("ko")}"
-                        class="w-full px-3.5 py-2.5 text-xs font-semibold transition-colors flex items-center justify-between cursor-pointer ${this
-                          .lang === "ko"
-                          ? "text-primary bg-primary/10 font-bold"
-                          : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"}"
-                      >
-                        <span>한국어</span>
-                        ${this.lang === "ko"
-                          ? html`<span
-                              class="material-symbols-outlined text-[16px] text-primary"
-                              >check</span
-                            >`
-                          : ""}
-                      </button>
-                      <button
-                        type="button"
-                        @click="${() => this.selectLanguage("en")}"
-                        class="w-full px-3.5 py-2.5 text-xs font-semibold transition-colors flex items-center justify-between cursor-pointer ${this
-                          .lang === "en"
-                          ? "text-primary bg-primary/10 font-bold"
-                          : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"}"
-                      >
-                        <span>English</span>
-                        ${this.lang === "en"
-                          ? html`<span
-                              class="material-symbols-outlined text-[16px] text-primary"
-                              >check</span
-                            >`
-                          : ""}
-                      </button>
-                    </div>
-                  `
-                : ""}
-            </div>
+              <span class="font-bold tracking-tight">
+                <span class="${this.lang === "ko" ? "text-primary font-black" : "text-on-surface-variant font-medium"}">KO</span>
+                <span class="text-outline-variant/60 mx-0.5">/</span>
+                <span class="${this.lang === "en" ? "text-primary font-black" : "text-on-surface-variant font-medium"}">EN</span>
+              </span>
+            </button>
           </div>
         </div>
       </header>

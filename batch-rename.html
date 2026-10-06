@@ -134,6 +134,18 @@
   </script>
 
   <link rel="stylesheet" href="./src/index.css" />
+  <script>
+    (function() {
+      const savedLang = localStorage.getItem('batcher-lang') || 'ko';
+      document.documentElement.setAttribute('data-current-lang', savedLang);
+      document.documentElement.lang = savedLang;
+    })();
+  </script>
+  <style>
+    html[data-current-lang="en"] [data-lang="ko"] { display: none !important; }
+    html[data-current-lang="ko"] [data-lang="en"],
+    html:not([data-current-lang="en"]) [data-lang="en"] { display: none !important; }
+  </style>
   <script type="module" src="/src/batcher-app.ts"></script>
 </head>
 
@@ -152,14 +164,17 @@
     <!-- Hero Introduction -->
     <header class="text-center mb-16">
       <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-400 text-xs font-semibold uppercase tracking-wider mb-4">
-        <i class="fa-solid fa-signature"></i>
-        <span>Smart Batch File Renamer</span>
+        <span class="material-symbols-outlined text-[16px]">drive_file_rename_outline</span>
+        <span data-lang="ko">스마트 대량 파일 이름 변경 도구</span>
+        <span data-lang="en">Smart Batch File Renamer</span>
       </div>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-100 tracking-tight mb-4">
-        대량 파일 이름 일괄 변경 및 정규식 리네이머
+        <span data-lang="ko">대량 파일 이름 일괄 정리 & 스마트 리네이머</span>
+        <span data-lang="en">Bulk File Renamer & Smart Asset Organizer</span>
       </h1>
       <p class="text-slate-400 text-base max-w-2xl mx-auto leading-relaxed">
-        복잡한 프로그램 설치 없이 웹 브라우저에서 수백 개의 파일명을 한 번에 정리하세요. 문자열 바꾸기, 일련번호 매기기, 정규식 치환, 실시간 프리뷰와 실행 취소(Undo)를 완벽 지원합니다.
+        <span data-lang="ko">복잡한 프로그램 설치 없이 웹 브라우저에서 수백 개의 파일명을 한 번에 정리하세요. 스마트폰 사진 순서 번호 매기기, 피그마 아이콘 에셋 정리, 불필요한 괄호 제거, 실시간 미리보기와 원클릭 되돌리기(Undo)를 완벽 지원합니다.</span>
+        <span data-lang="en">Clean up hundreds of filenames right in your browser without software installation. Perfect for renumbering smartphone photos, organizing Figma assets, removing messy tags, with live preview and instant undo.</span>
       </p>
     </header>
 
@@ -167,171 +182,264 @@
     <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
       <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
         <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 mb-4 text-xl">
-          <i class="fa-solid fa-code"></i>
+          <span class="material-symbols-outlined">find_replace</span>
         </div>
-        <h2 class="text-lg font-bold text-slate-100 mb-2">정규식(Regex) 고급 치환</h2>
+        <h2 class="text-lg font-bold text-slate-100 mb-2">
+          <span data-lang="ko">손쉬운 검색 & 단어 바꾸기</span>
+          <span data-lang="en">Easy Search & Replace</span>
+        </h2>
         <p class="text-xs text-slate-400 leading-relaxed">
-          날짜 포맷 순서 재정렬, 특수문자 제거, 태그 추출 등 정규표현식 캡처 그룹을 활용하여 고난도 패턴을 손쉽게 치환합니다.
+          <span data-lang="ko">반복되는 오타나 지저분한 특수문자, 괄호를 한 번에 찾아 바꾸고 날짜나 버전 태그도 손쉽게 정돈할 수 있습니다.</span>
+          <span data-lang="en">Instantly find and replace typos, messy brackets, or special characters. Easily arrange date prefixes and version tags.</span>
         </p>
       </div>
 
       <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
         <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4 text-xl">
-          <i class="fa-solid fa-eye"></i>
+          <span class="material-symbols-outlined">visibility</span>
         </div>
-        <h2 class="text-lg font-bold text-slate-100 mb-2">실시간 시각적 미리보기</h2>
+        <h2 class="text-lg font-bold text-slate-100 mb-2">
+          <span data-lang="ko">실시간 시각적 미리보기</span>
+          <span data-lang="en">Instant Visual Live Preview</span>
+        </h2>
         <p class="text-xs text-slate-400 leading-relaxed">
-          규칙을 추가하거나 수정할 때마다 테이블에 변경 결과가 즉시 반영되어 실수 없이 안전하게 검토할 수 있습니다.
+          <span data-lang="ko">규칙을 입력할 때마다 '바뀔 이름'을 표에서 즉시 눈으로 확인하여 소중한 파일명이 실수로 손상될 위험이 없습니다.</span>
+          <span data-lang="en">See transformed filenames update in real time in the table as you type. Never worry about unintended accidental mistakes.</span>
         </p>
       </div>
 
       <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
         <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-xl">
-          <i class="fa-solid fa-rotate-left"></i>
+          <span class="material-symbols-outlined">undo</span>
         </div>
-        <h2 class="text-lg font-bold text-slate-100 mb-2">다단계 Undo & Reset 지원</h2>
+        <h2 class="text-lg font-bold text-slate-100 mb-2">
+          <span data-lang="ko">언제든 되돌리는 3단계 안전장치</span>
+          <span data-lang="en">Multi-step Undo & Safety</span>
+        </h2>
         <p class="text-xs text-slate-400 leading-relaxed">
-          규칙 적용이 잘못되었더라도 실행 취소(Undo)로 직전 상태로 복원하거나 원클릭으로 초기 원본 이름으로 되돌립니다.
+          <span data-lang="ko">규칙을 잘못 입력했어도 '실행 취소(Undo)'로 직전 상태로 복원하고, '초기화(Reset)'로 언제든 원래 이름으로 되돌립니다.</span>
+          <span data-lang="en">Mistake made? One-click Undo reverts the last step, or hit Reset anytime to restore original filenames instantly.</span>
         </p>
       </div>
     </section>
 
-    <!-- In-Depth Technical Content Section -->
+    <!-- In-Depth Helpful Content Section -->
     <article class="glass-panel p-8 sm:p-12 rounded-3xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md mb-16 space-y-10 text-slate-300 text-sm leading-relaxed">
       
       <div>
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
-          <i class="fa-solid fa-folder-tree text-pink-400 text-lg"></i>
-          1. 디지털 자산 관리(DAM)에서 체계적인 파일 네이밍의 중요성
+          <span class="material-symbols-outlined text-pink-400 text-2xl">folder_managed</span>
+          <span data-lang="ko">1. 일상 업무와 디자인 작업에서 파일 이름 정리가 필수적인 이유</span>
+          <span data-lang="en">1. Why Clean Filenames Matter for Designers & Everyday Work</span>
         </h2>
         <p class="mb-3">
-          디자이너, 영상 편집자, 사진작가 및 소프트웨어 개발자가 다루는 프로젝트 리소스는 수백에서 수천 개에 달합니다. `IMG_0492.JPG`, `무제_최종_진짜최종.png`, `audio_sample (1).wav`와 같이 불규칙하고 임의적인 파일 이름은 다음과 같은 심각한 생산성 저하를 유발합니다:
+          <span data-lang="ko">디자이너, 마케터, 영상 크리에이터, 일반 사무직이 다루는 작업 파일은 매일 수십 개에서 수백 개에 달합니다. <code class="text-pink-300">IMG_0492.JPG</code>, <code class="text-pink-300">최종_진짜최종(1).png</code>, <code class="text-pink-300">녹음파일_2026_복사본.wav</code>처럼 불규칙한 파일 이름은 다음과 같은 불편을 낳습니다:</span>
+          <span data-lang="en">Designers, creators, marketers, and professionals handle dozens to hundreds of files daily. Inconsistent names like <code class="text-pink-300">IMG_0492.JPG</code>, <code class="text-pink-300">Final_RealFinal(1).png</code>, or <code class="text-pink-300">Recording_Copy.wav</code> cause serious headaches:</span>
         </p>
         <ul class="list-disc pl-5 space-y-1.5 text-xs text-slate-400 mb-3">
-          <li><strong>검색 효율성 저하:</strong> 필요한 특정 날짜나 버전의 리소스를 찾기 위해 불필요한 시간을 낭비하게 됩니다.</li>
-          <li><strong>빌드 및 협업 오류:</strong> 공백(Space)이나 한글 특수문자가 포함된 파일명은 웹 서버 호스팅이나 CI/CD 배포 파이프라인에서 깨짐 현상을 일으킵니다.</li>
-          <li><strong>버전 관리 혼선:</strong> 명확한 일련번호와 접두사/접미사 규칙이 없으면 최신 파일과 구버전 파일이 덮어쓰여 데이터 유실로 이어질 수 있습니다.</li>
+          <li>
+            <strong class="text-slate-200" data-lang="ko">필요한 파일 찾기 시간 낭비:</strong>
+            <strong class="text-slate-200" data-lang="en">Wasted Time Searching:</strong>
+            <span data-lang="ko"> 필요한 특정 날짜나 프로젝트 버전의 파일을 찾느라 폴더 안을 끝없이 뒤적이게 됩니다.</span>
+            <span data-lang="en"> Endless scrolling to find a specific date or project version among unorganized names.</span>
+          </li>
+          <li>
+            <strong class="text-slate-200" data-lang="ko">웹 업로드 및 협업 시 링크 깨짐:</strong>
+            <strong class="text-slate-200" data-lang="en">Broken Links & Web Errors:</strong>
+            <span data-lang="ko"> 파일명에 불필요한 공백이나 특수문자, 괄호가 들어가면 웹사이트에 올릴 때 이미지가 엑스박스로 뜨거나 링크가 깨질 수 있습니다.</span>
+            <span data-lang="en"> Spaces and special characters often cause broken image links or hosting errors when uploaded to the web.</span>
+          </li>
+          <li>
+            <strong class="text-slate-200" data-lang="ko">실수로 인한 파일 덮어쓰기:</strong>
+            <strong class="text-slate-200" data-lang="en">Accidental Overwrites:</strong>
+            <span data-lang="ko"> 명확한 일련번호(001, 002)나 날짜 태그가 없으면 새 파일과 예전 파일이 섞여 소중한 원본이 덮어쓰여질 수 있습니다.</span>
+            <span data-lang="en"> Without clear sequential numbers (001, 002) or date stamps, old files can be accidentally overwritten.</span>
+          </li>
         </ul>
         <p>
-          배처 툴의 일괄 리네이머는 대용량 파일의 네이밍 규칙을 표준화하여 작업 흐름을 정돈하고 업무 생산성을 극대화합니다.
+          <span data-lang="ko">배처 툴의 일괄 리네이머는 수백 개의 파일명을 규칙에 맞춰 1초 만에 깔끔하게 통일하여 작업 능률을 획기적으로 높여줍니다.</span>
+          <span data-lang="en">Batcher Tools bulk renamer standardizes hundreds of filenames in one second, keeping your workspace neat and productive.</span>
         </p>
       </div>
 
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
-          <i class="fa-solid fa-wand-magic-sparkles text-pink-400 text-lg"></i>
-          2. 배처 툴이 지원하는 8대 핵심 리네이밍 규칙 모드
+          <span class="material-symbols-outlined text-pink-400 text-2xl">auto_fix_high</span>
+          <span data-lang="ko">2. 누구나 바로 쓰는 6가지 핵심 리네이밍 규칙</span>
+          <span data-lang="en">2. Six Essential Renaming Rules Anyone Can Use</span>
         </h2>
         
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <strong class="text-pink-400 block text-sm mb-1">1. 문자열 치환 (Replace)</strong>
-            <p class="text-slate-400">특정 단어나 패턴을 찾아 새로운 단어로 일괄 교체합니다. (대소문자 구분 및 정규식 모드 지원)</p>
+            <strong class="text-pink-400 block text-sm mb-1">
+              <span data-lang="ko">1. 글자 바꾸기 (Find & Replace)</span>
+              <span data-lang="en">1. Text Replace</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">특정 단어나 오타를 찾아 새 단어로 일괄 교체합니다. 대소문자 구분 및 정규식 옵션도 지원합니다.</span>
+              <span data-lang="en">Find specific words or typos and replace them in bulk across all selected files.</span>
+            </p>
           </div>
 
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <strong class="text-pink-400 block text-sm mb-1">2. 접두사 / 접미사 추가</strong>
-            <p class="text-slate-400">파일명의 맨 앞이나 맨 뒤(확장자 앞)에 프로젝트명, 날짜(`2026-08_`), 버전(`_v1.0`) 등을 추가합니다.</p>
+            <strong class="text-pink-400 block text-sm mb-1">
+              <span data-lang="ko">2. 앞/뒤 텍스트 덧붙이기 (Prefix / Suffix)</span>
+              <span data-lang="en">2. Add Prefix / Suffix</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">파일명 맨 앞에 날짜(<code class="text-pink-300">2026-10_</code>)를 붙이거나 맨 뒤에 버전(<code class="text-pink-300">_v1.0</code>)을 손쉽게 붙입니다.</span>
+              <span data-lang="en">Add a project tag or date (<code class="text-pink-300">2026-10_</code>) at the start or a version tag (<code class="text-pink-300">_v1.0</code>) at the end.</span>
+            </p>
           </div>
 
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <strong class="text-pink-400 block text-sm mb-1">3. 자릿수 기준 글자 삭제</strong>
-            <p class="text-slate-400">앞에서 N글자 또는 뒤에서 N글자, 또는 특정 위치 범위의 불필요한 문자열을 정밀하게 잘라냅니다.</p>
+            <strong class="text-pink-400 block text-sm mb-1">
+              <span data-lang="ko">3. 글자 자르기 (Trim Characters)</span>
+              <span data-lang="en">3. Cut & Trim Characters</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">앞에서 N글자, 뒤에서 N글자처럼 불필요하게 긴 카메라 접두어나 임의의 코드를 깔끔하게 잘라냅니다.</span>
+              <span data-lang="en">Trim unnecessary prefixes or characters from the start or end of filenames with precision.</span>
+            </p>
           </div>
 
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <strong class="text-pink-400 block text-sm mb-1">4. 괄호 및 특수문자 제거</strong>
-            <p class="text-slate-400">소괄호 `()`, 대괄호 `[]`, 중괄호 `{}` 안의 텍스트를 원클릭으로 깔끔하게 소거합니다.</p>
+            <strong class="text-pink-400 block text-sm mb-1">
+              <span data-lang="ko">4. 괄호 & 군더더기 기호 지우기</span>
+              <span data-lang="en">4. Remove Brackets & Tags</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">파일 복사 시 생기는 <code class="text-pink-300">(1)</code>, <code class="text-pink-300">[HD]</code>, <code class="text-pink-300">{최종}</code> 같은 지저분한 괄호 안 텍스트를 원클릭으로 지웁니다.</span>
+              <span data-lang="en">Clean up copy tags like <code class="text-pink-300">(1)</code>, brackets <code class="text-pink-300">[HD]</code>, and unwanted symbols with one click.</span>
+            </p>
           </div>
 
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <strong class="text-pink-400 block text-sm mb-1">5. 일련번호 부여 (Auto Numbering)</strong>
-            <p class="text-slate-400">시작 번호와 자릿수 패딩(`001`, `002`...)을 지정하여 정렬 순서대로 순차적인 번호를 부여합니다.</p>
+            <strong class="text-pink-400 block text-sm mb-1">
+              <span data-lang="ko">5. 번호 순서대로 매기기 (Auto Numbering)</span>
+              <span data-lang="en">5. Sequential Numbering</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">시작 번호와 자릿수(<code class="text-pink-300">001, 002...</code>)를 지정하여 사진이나 에셋 순서대로 번호를 매깁니다.</span>
+              <span data-lang="en">Assign clean zero-padded numbers (<code class="text-pink-300">001, 002...</code>) to sort photos and assets in perfect order.</span>
+            </p>
           </div>
 
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <strong class="text-pink-400 block text-sm mb-1">6. 확장자 일괄 변경 / 소문자화</strong>
-            <p class="text-slate-400">대문자로 된 확장자(`.JPEG`, `.PNG`)를 표준 소문자로 통일하거나 포맷 확장자를 일괄 재지정합니다.</p>
+            <strong class="text-pink-400 block text-sm mb-1">
+              <span data-lang="ko">6. 확장자 통일 & 대소문자 정리</span>
+              <span data-lang="en">6. Standardize Extensions</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">대문자로 된 <code class="text-pink-300">.JPEG</code>, <code class="text-pink-300">.PNG</code>를 표준 소문자로 통일하거나 안전하게 포맷을 바꿉니다.</span>
+              <span data-lang="en">Unify uppercase extensions like <code class="text-pink-300">.JPEG</code> to lowercase <code class="text-pink-300">.jpg</code> cleanly.</span>
+            </p>
           </div>
         </div>
       </div>
 
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
-          <i class="fa-solid fa-table-list text-pink-400 text-lg"></i>
-          3. 실무 필수 정규표현식(Regex) 파일 리네이밍 치트시트 10선
+          <span class="material-symbols-outlined text-pink-400 text-2xl">table_chart</span>
+          <span data-lang="ko">3. 실무에서 바로 써먹는 리네이밍 실전 패턴 10선</span>
+          <span data-lang="en">3. 10 Practical Renaming Recipes for Everyday Workflow</span>
         </h2>
         <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-          배처 툴의 정규식 모드에서 검색 패턴과 치환 패턴을 입력하여 고난도 파일명 규칙을 즉시 적용할 수 있습니다:
+          <span data-lang="ko">복잡한 규칙 설정도 아래 예시를 참고하면 누구나 손쉽게 원하는 대로 파일명을 다듬을 수 있습니다:</span>
+          <span data-lang="en">Follow these practical patterns to easily clean up your photo archives and project assets:</span>
         </p>
 
         <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950/60 p-1">
           <table class="w-full text-left border-collapse text-xs">
             <thead>
               <tr class="border-b border-slate-800 text-slate-200 bg-slate-900/60 font-semibold">
-                <th class="py-3 px-4">용도 및 시나리오</th>
-                <th class="py-3 px-4 text-emerald-400 font-mono">검색 패턴 (Regex)</th>
-                <th class="py-3 px-4 text-indigo-400 font-mono">치환 값 (Replace)</th>
-                <th class="py-3 px-4">예시 결과</th>
+                <th class="py-3 px-4">
+                  <span data-lang="ko">정리 목적 및 상황</span>
+                  <span data-lang="en">Scenario &amp; Purpose</span>
+                </th>
+                <th class="py-3 px-4 text-emerald-400 font-mono">
+                  <span data-lang="ko">찾을 패턴 (규칙)</span>
+                  <span data-lang="en">Find Pattern</span>
+                </th>
+                <th class="py-3 px-4 text-indigo-400 font-mono">
+                  <span data-lang="ko">바꿀 내용 (입력값)</span>
+                  <span data-lang="en">Replace Value</span>
+                </th>
+                <th class="py-3 px-4">
+                  <span data-lang="ko">결과 예시</span>
+                  <span data-lang="en">Example Result</span>
+                </th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-800/60 text-slate-400">
               <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">날짜 하이픈 제거 (YYYY-MM-DD &rarr; YYYYMMDD)</td>
+                <td class="py-2.5 px-4 font-medium text-slate-300">
+                  <span data-lang="ko">날짜 하이픈 없애기 (2026-10-06 &rarr; 20261006)</span>
+                  <span data-lang="en">Remove date hyphens</span>
+                </td>
                 <td class="py-2.5 px-4 font-mono text-emerald-400">(\d{4})-(\d{2})-(\d{2})</td>
                 <td class="py-2.5 px-4 font-mono text-indigo-400">$1$2$3</td>
-                <td class="py-2.5 px-4 text-slate-300">2026-10-02_log &rarr; 20261002_log</td>
+                <td class="py-2.5 px-4 text-slate-300">2026-10-06_note &rarr; 20261006_note</td>
               </tr>
               <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">날짜 순서 역전 (DD-MM-YYYY &rarr; YYYY-MM-DD)</td>
-                <td class="py-2.5 px-4 font-mono text-emerald-400">(\d{2})-(\d{2})-(\d{4})</td>
-                <td class="py-2.5 px-4 font-mono text-indigo-400">$3-$2-$1</td>
-                <td class="py-2.5 px-4 text-slate-300">02-10-2026 &rarr; 2026-10-02</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">대괄호 태그 및 공백 일괄 삭제</td>
-                <td class="py-2.5 px-4 font-mono text-emerald-400">\[.*?\]\s*</td>
-                <td class="py-2.5 px-4 font-mono text-indigo-400">(빈 칸)</td>
-                <td class="py-2.5 px-4 text-slate-300">[HD] video.mp4 &rarr; video.mp4</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">소괄호 안 텍스트 삭제</td>
-                <td class="py-2.5 px-4 font-mono text-emerald-400">\s*\(.*?\)</td>
-                <td class="py-2.5 px-4 font-mono text-indigo-400">(빈 칸)</td>
+                <td class="py-2.5 px-4 font-medium text-slate-300">
+                  <span data-lang="ko">복사본 괄호 숫자 지우기</span>
+                  <span data-lang="en">Remove copy brackets like (1)</span>
+                </td>
+                <td class="py-2.5 px-4 font-mono text-emerald-400">\s*\(\d+\)</td>
+                <td class="py-2.5 px-4 font-mono text-indigo-400"><span data-lang="ko">(빈 칸)</span><span data-lang="en">(Empty)</span></td>
                 <td class="py-2.5 px-4 text-slate-300">photo (1).jpg &rarr; photo.jpg</td>
               </tr>
               <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">공백을 언더스코어(_)로 통일</td>
-                <td class="py-2.5 px-4 font-mono text-emerald-400">\s+</td>
-                <td class="py-2.5 px-4 font-mono text-indigo-400">_</td>
-                <td class="py-2.5 px-4 text-slate-300">my new file &rarr; my_new_file</td>
+                <td class="py-2.5 px-4 font-medium text-slate-300">
+                  <span data-lang="ko">대괄호 태그 지우기 ([HD], [최종])</span>
+                  <span data-lang="en">Remove square bracket tags</span>
+                </td>
+                <td class="py-2.5 px-4 font-mono text-emerald-400">\[.*?\]\s*</td>
+                <td class="py-2.5 px-4 font-mono text-indigo-400"><span data-lang="ko">(빈 칸)</span><span data-lang="en">(Empty)</span></td>
+                <td class="py-2.5 px-4 text-slate-300">[HD] video.mp4 &rarr; video.mp4</td>
               </tr>
               <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">연속된 특수문자/하이픈 정리</td>
-                <td class="py-2.5 px-4 font-mono text-emerald-400">[-_\s]+</td>
+                <td class="py-2.5 px-4 font-medium text-slate-300">
+                  <span data-lang="ko">공백을 언더스코어(_)로 바꾸기</span>
+                  <span data-lang="en">Replace spaces with underscore</span>
+                </td>
+                <td class="py-2.5 px-4 font-mono text-emerald-400">\s+</td>
+                <td class="py-2.5 px-4 font-mono text-indigo-400">_</td>
+                <td class="py-2.5 px-4 text-slate-300">my trip photo &rarr; my_trip_photo</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-medium text-slate-300">
+                  <span data-lang="ko">스마트폰 카메라 기본 접두어 통일</span>
+                  <span data-lang="en">Replace camera prefix</span>
+                </td>
+                <td class="py-2.5 px-4 font-mono text-emerald-400">^IMG_</td>
+                <td class="py-2.5 px-4 font-mono text-indigo-400">Photo_2026_</td>
+                <td class="py-2.5 px-4 text-slate-300">IMG_4821.jpg &rarr; Photo_2026_4821.jpg</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-medium text-slate-300">
+                  <span data-lang="ko">중복 하이픈이나 기호 하나로 정리</span>
+                  <span data-lang="en">Clean repeated hyphens</span>
+                </td>
+                <td class="py-2.5 px-4 font-mono text-emerald-400">[-_]+</td>
                 <td class="py-2.5 px-4 font-mono text-indigo-400">-</td>
                 <td class="py-2.5 px-4 text-slate-300">asset---test__01 &rarr; asset-test-01</td>
               </tr>
               <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">파일명 맨 앞 숫자 및 기호 제거</td>
-                <td class="py-2.5 px-4 font-mono text-emerald-400">^\d+[-_.]*</td>
-                <td class="py-2.5 px-4 font-mono text-indigo-400">(빈 칸)</td>
-                <td class="py-2.5 px-4 text-slate-300">01_track.mp3 &rarr; track.mp3</td>
+                <td class="py-2.5 px-4 font-medium text-slate-300">
+                  <span data-lang="ko">맨 앞 트랙 번호나 기호 떼기</span>
+                  <span data-lang="en">Remove leading numbers</span>
+                </td>
+                <td class="py-2.5 px-4 font-mono text-emerald-400">^\d+[-_.\s]*</td>
+                <td class="py-2.5 px-4 font-mono text-indigo-400"><span data-lang="ko">(빈 칸)</span><span data-lang="en">(Empty)</span></td>
+                <td class="py-2.5 px-4 text-slate-300">01_intro_sound.mp3 &rarr; intro_sound.mp3</td>
               </tr>
               <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">특정 접두사 일괄 치환</td>
-                <td class="py-2.5 px-4 font-mono text-emerald-400">^IMG_</td>
-                <td class="py-2.5 px-4 font-mono text-indigo-400">PHOTO_2026_</td>
-                <td class="py-2.5 px-4 text-slate-300">IMG_9823 &rarr; PHOTO_2026_9823</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">버전 태그 추출 및 정렬</td>
-                <td class="py-2.5 px-4 font-mono text-emerald-400">(.*?)_v(\d+)</td>
-                <td class="py-2.5 px-4 font-mono text-indigo-400">v$2_$1</td>
-                <td class="py-2.5 px-4 text-slate-300">build_v2 &rarr; v2_build</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">단어 사이 카멜케이스를 케밥케이스로</td>
+                <td class="py-2.5 px-4 font-medium text-slate-300">
+                  <span data-lang="ko">피그마 내보내기 대문자 카멜케이스 정리</span>
+                  <span data-lang="en">Convert CamelCase to dash</span>
+                </td>
                 <td class="py-2.5 px-4 font-mono text-emerald-400">([a-z])([A-Z])</td>
                 <td class="py-2.5 px-4 font-mono text-indigo-400">$1-$2</td>
                 <td class="py-2.5 px-4 text-slate-300">userProfileIcon &rarr; user-Profile-Icon</td>
@@ -343,18 +451,23 @@
 
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
-          <i class="fa-solid fa-code-compare text-pink-400 text-lg"></i>
-          4. OS별 기본 리네이밍 방식 vs 배처 툴(Batcher Tools) 심층 비교
+          <span class="material-symbols-outlined text-pink-400 text-2xl">compare_arrows</span>
+          <span data-lang="ko">4. 윈도우/맥 기본 리네이밍 vs 배처 툴(Batcher Tools) 비교</span>
+          <span data-lang="en">4. OS Built-in Rename vs Batcher Tools Comparison</span>
         </h2>
         <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-          Windows 탐색기나 macOS Finder에서도 파일 이름을 바꿀 수 있지만, 실무에서는 안전장치와 다단계 치환 기능의 부재로 인해 한계에 부딪힙니다:
+          <span data-lang="ko">Windows 탐색기나 Mac Finder에서도 기본 파일명 변경이 가능하지만, 실무에서 실수 방지와 세부 규칙 적용에 큰 차이가 있습니다:</span>
+          <span data-lang="en">While Windows Explorer and macOS Finder offer basic renaming, Batcher Tools delivers essential safety and precision:</span>
         </p>
 
         <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950/60 p-1">
           <table class="w-full text-left border-collapse text-xs">
             <thead>
               <tr class="border-b border-slate-800 text-slate-200 bg-slate-900/60 font-semibold">
-                <th class="py-3 px-4">비교 기준</th>
+                <th class="py-3 px-4">
+                  <span data-lang="ko">기능 비교 항목</span>
+                  <span data-lang="en">Comparison Criteria</span>
+                </th>
                 <th class="py-3 px-4 text-slate-400">Windows 탐색기 (F2)</th>
                 <th class="py-3 px-4 text-slate-400">macOS Finder</th>
                 <th class="py-3 px-4 text-pink-400 font-bold">배처 툴 (Batcher Tools)</th>
@@ -362,34 +475,40 @@
             </thead>
             <tbody class="divide-y divide-slate-800/60 text-slate-400">
               <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">실시간 변경 미리보기</td>
-                <td class="py-2.5 px-4 text-red-400">&cross; 지원 안 함 (즉시 디스크 반영)</td>
-                <td class="py-2.5 px-4 text-amber-400">&Delta; 단순 예시 1건만 표시</td>
-                <td class="py-2.5 px-4 text-emerald-400 font-bold">&check; 전체 파일 실시간 테이블 가상 렌더링</td>
+                <td class="py-2.5 px-4 font-medium text-slate-300">
+                  <span data-lang="ko">전체 파일 실시간 미리보기</span>
+                  <span data-lang="en">Full Live Preview Table</span>
+                </td>
+                <td class="py-2.5 px-4 text-red-400">&cross; <span data-lang="ko">지원 안 함 (즉시 파일 변경)</span><span data-lang="en">No preview (applied instantly)</span></td>
+                <td class="py-2.5 px-4 text-amber-400">&Delta; <span data-lang="ko">단 1개 파일만 단순 예시 표시</span><span data-lang="en">1 sample file only</span></td>
+                <td class="py-2.5 px-4 text-emerald-400 font-bold">&check; <span data-lang="ko">전체 파일의 변경 후 이름을 실시간 표로 확인</span><span data-lang="en">Full real-time table preview</span></td>
               </tr>
               <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">정규표현식(Regex) 치환</td>
-                <td class="py-2.5 px-4 text-red-400">&cross; 지원 안 함</td>
-                <td class="py-2.5 px-4 text-red-400">&cross; 지원 안 함</td>
-                <td class="py-2.5 px-4 text-emerald-400 font-bold">&check; 캡처 그룹($1, $2) 및 고급 패턴 완벽 지원</td>
+                <td class="py-2.5 px-4 font-medium text-slate-300">
+                  <span data-lang="ko">실수 시 실행 취소 (Undo / Reset)</span>
+                  <span data-lang="en">Mistake Recovery (Undo / Reset)</span>
+                </td>
+                <td class="py-2.5 px-4 text-red-400">&cross; <span data-lang="ko">Ctrl+Z 실패 잦음, 순서 꼬임</span><span data-lang="en">Unreliable Ctrl+Z</span></td>
+                <td class="py-2.5 px-4 text-amber-400">&Delta; <span data-lang="ko">1단계만 제한적 지원</span><span data-lang="en">1 step undo only</span></td>
+                <td class="py-2.5 px-4 text-emerald-400 font-bold">&check; <span data-lang="ko">단계별 실행 취소 및 원본 원클릭 초기화</span><span data-lang="en">Multi-step Undo &amp; 1-click Reset</span></td>
               </tr>
               <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">실수 시 실행 취소 (Undo)</td>
-                <td class="py-2.5 px-4 text-red-400">&cross; Ctrl+Z 오작동/누락 잦음</td>
-                <td class="py-2.5 px-4 text-amber-400">&Delta; 1단계만 제한적 지원</td>
-                <td class="py-2.5 px-4 text-emerald-400 font-bold">&check; 무제한 단계별 Undo 및 원본 초기화(Reset)</td>
+                <td class="py-2.5 px-4 font-medium text-slate-300">
+                  <span data-lang="ko">확장자 안전 보호</span>
+                  <span data-lang="en">Extension Protection</span>
+                </td>
+                <td class="py-2.5 px-4 text-red-400">&cross; <span data-lang="ko">실수로 확장자가 지워질 위험 있음</span><span data-lang="en">Can break extensions accidentally</span></td>
+                <td class="py-2.5 px-4 text-amber-400">&Delta; <span data-lang="ko">확장자 숨김 시에만 보호</span><span data-lang="en">Protected only if hidden</span></td>
+                <td class="py-2.5 px-4 text-emerald-400 font-bold">&check; <span data-lang="ko">파일명과 확장자 자동 분리로 안전 보호</span><span data-lang="en">Auto-separated &amp; fully protected</span></td>
               </tr>
               <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">확장자 안전 보호</td>
-                <td class="py-2.5 px-4 text-red-400">&cross; 실수로 확장자 손상 위험</td>
-                <td class="py-2.5 px-4 text-amber-400">&Delta; 확장자 숨김 시에만 보호</td>
-                <td class="py-2.5 px-4 text-emerald-400 font-bold">&check; 파일명과 확장자 분리 처리로 완벽 보호</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">사용 플랫폼</td>
+                <td class="py-2.5 px-4 font-medium text-slate-300">
+                  <span data-lang="ko">이용 환경</span>
+                  <span data-lang="en">Platform</span>
+                </td>
                 <td class="py-2.5 px-4">Windows 전용</td>
                 <td class="py-2.5 px-4">macOS 전용</td>
-                <td class="py-2.5 px-4 text-emerald-400 font-bold">&check; 웹 브라우저만 있으면 모든 OS 공통 사용</td>
+                <td class="py-2.5 px-4 text-emerald-400 font-bold">&check; <span data-lang="ko">웹 브라우저만 있으면 모든 OS 공통 사용</span><span data-lang="en">Works on any OS via browser</span></td>
               </tr>
             </tbody>
           </table>
@@ -398,24 +517,43 @@
 
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
-          <i class="fa-solid fa-list-check text-pink-400 text-lg"></i>
-          5. 3단계 파일 리네이밍 실무 가이드
+          <span class="material-symbols-outlined text-pink-400 text-2xl">checklist</span>
+          <span data-lang="ko">5. 3단계 초간단 파일 리네이밍 가이드</span>
+          <span data-lang="en">5. 3-Step Simple Renaming Guide</span>
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
           <div class="p-4 rounded-xl bg-slate-950/40 border border-slate-800">
             <span class="text-pink-400 font-extrabold text-sm block mb-1">STEP 01</span>
-            <strong class="text-slate-200 block mb-1 text-sm">대상 파일 로드</strong>
-            <p class="text-slate-400">이름을 변경할 파일들을 끌어다 놓거나 '폴더 선택'으로 대상 디렉터리를 브라우저에 마운트합니다.</p>
+            <strong class="text-slate-200 block mb-1 text-sm">
+              <span data-lang="ko">파일 또는 폴더 불러오기</span>
+              <span data-lang="en">Load Files or Folder</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">이름을 바꿀 파일들을 브라우저 화면으로 끌어다 놓거나 '폴더 선택' 버튼을 클릭합니다.</span>
+              <span data-lang="en">Drag and drop files into the browser or click 'Select Folder' to load them directly.</span>
+            </p>
           </div>
           <div class="p-4 rounded-xl bg-slate-950/40 border border-slate-800">
             <span class="text-pink-400 font-extrabold text-sm block mb-1">STEP 02</span>
-            <strong class="text-slate-200 block mb-1 text-sm">규칙 설정 & 실시간 검증</strong>
-            <p class="text-slate-400">치환, 정규식, 일련번호 규칙을 추가하고 우측 테이블에서 가상 렌더링된 변경 결과를 눈으로 확인합니다.</p>
+            <strong class="text-slate-200 block mb-1 text-sm">
+              <span data-lang="ko">규칙 설정 & 미리보기 확인</span>
+              <span data-lang="en">Set Rules &amp; Preview</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">단어 바꾸기, 번호 매기기 등 원하는 규칙을 지정하고 실시간 표에서 바뀔 이름을 눈으로 확인합니다.</span>
+              <span data-lang="en">Choose replace, numbering, or tag rules and inspect the preview table to verify results.</span>
+            </p>
           </div>
           <div class="p-4 rounded-xl bg-slate-950/40 border border-slate-800">
             <span class="text-pink-400 font-extrabold text-sm block mb-1">STEP 03</span>
-            <strong class="text-slate-200 block mb-1 text-sm">원클릭 일괄 적용</strong>
-            <p class="text-slate-400">'이름 변경 적용'을 누르면 WICG File System API를 통해 로컬 파일명이 1초 만에 안전하게 업데이트됩니다.</p>
+            <strong class="text-slate-200 block mb-1 text-sm">
+              <span data-lang="ko">원클릭 일괄 적용</span>
+              <span data-lang="en">Apply with One Click</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">'이름 변경 적용' 버튼을 누르면 내 컴퓨터 폴더의 파일명이 1초 만에 안전하게 업데이트됩니다.</span>
+              <span data-lang="en">Click 'Apply Rename' to update file names on your local drive safely in just 1 second.</span>
+            </p>
           </div>
         </div>
       </div>
@@ -423,41 +561,90 @@
       <!-- 추천 관련 기술 가이드 4선 -->
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-xl font-bold text-slate-100 mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-book-bookmark text-pink-400 text-base"></i>
-          함께 읽으면 좋은 추천 기술 가이드
+          <span class="material-symbols-outlined text-pink-400 text-xl">auto_stories</span>
+          <span data-lang="ko">함께 읽으면 좋은 추천 실무 가이드</span>
+          <span data-lang="en">Recommended Practical Guides</span>
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           <a href="/guides/regex-rename-guide.html" class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-pink-500/40 transition-all flex flex-col justify-between">
             <div>
-              <span class="text-pink-400 font-bold block mb-1">심층 가이드</span>
-              <strong class="text-slate-200 block mb-1">정규표현식(Regex)을 이용한 대량 파일명 치환 완벽 가이드</strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">캡처 그룹, 문자 클래스, 수량자 활용법과 파일명 정리 실전 예제 모음.</p>
+              <span class="text-pink-400 font-bold block mb-1">
+                <span data-lang="ko">실무 가이드</span>
+                <span data-lang="en">Practical Guide</span>
+              </span>
+              <strong class="text-slate-200 block mb-1">
+                <span data-lang="ko">원하는 규칙대로 착착! 대량 파일명 치환 가이드</span>
+                <span data-lang="en">Bulk Filename Replacement &amp; Pattern Guide</span>
+              </strong>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                <span data-lang="ko">날짜 형식 통일, 불필요한 번호 떼어내기 등 실생활 파일 정리 실전 예제 모음.</span>
+                <span data-lang="en">Standardizing date formats, cleaning unwanted tags, and everyday file organization recipes.</span>
+              </p>
             </div>
-            <span class="text-pink-400 mt-2 font-semibold flex items-center gap-1">가이드 읽기 &rarr;</span>
+            <span class="text-pink-400 mt-2 font-semibold flex items-center gap-1">
+              <span data-lang="ko">가이드 읽기 &rarr;</span>
+              <span data-lang="en">Read Guide &rarr;</span>
+            </span>
           </a>
           <a href="/guides/os-batch-rename-cli-vs-web.html" class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-pink-500/40 transition-all flex flex-col justify-between">
             <div>
-              <span class="text-pink-400 font-bold block mb-1">비교 분석</span>
-              <strong class="text-slate-200 block mb-1">Windows PowerShell vs Mac 터미널 vs 웹 리네이머 비교</strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">명령줄 스크립트 작성 부담 없이 GUI로 안전하게 파일명을 가공하는 방법.</p>
+              <span class="text-pink-400 font-bold block mb-1">
+                <span data-lang="ko">비교 분석</span>
+                <span data-lang="en">Comparison</span>
+              </span>
+              <strong class="text-slate-200 block mb-1">
+                <span data-lang="ko">윈도우 &middot; 맥 기본 파일명 변경 vs 웹 리네이머 비교</span>
+                <span data-lang="en">Windows &amp; Mac Built-in Rename vs Web Renamer</span>
+              </strong>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                <span data-lang="ko">복잡한 명령어 입력 없이 웹 화면에서 안전하게 파일명을 가공하는 방법.</span>
+                <span data-lang="en">How to safely transform filenames visually without complex command-line scripts.</span>
+              </p>
             </div>
-            <span class="text-pink-400 mt-2 font-semibold flex items-center gap-1">가이드 읽기 &rarr;</span>
+            <span class="text-pink-400 mt-2 font-semibold flex items-center gap-1">
+              <span data-lang="ko">가이드 읽기 &rarr;</span>
+              <span data-lang="en">Read Guide &rarr;</span>
+            </span>
           </a>
           <a href="/guides/bulk-file-organization-for-creators.html" class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-pink-500/40 transition-all flex flex-col justify-between">
             <div>
-              <span class="text-pink-400 font-bold block mb-1">크리에이터 워크플로우</span>
-              <strong class="text-slate-200 block mb-1">디자이너와 영상 크리에이터를 위한 대량 파일 정리 노하우</strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">버전 관리 혼선 방지와 프로젝트 리소스 폴더 구조화 팁.</p>
+              <span class="text-pink-400 font-bold block mb-1">
+                <span data-lang="ko">크리에이터 팁</span>
+                <span data-lang="en">Creator Workflow</span>
+              </span>
+              <strong class="text-slate-200 block mb-1">
+                <span data-lang="ko">디자이너와 영상 크리에이터를 위한 대량 파일 정리 노하우</span>
+                <span data-lang="en">File Organization Tips for Designers &amp; Video Creators</span>
+              </strong>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                <span data-lang="ko">버전 꼬임 방지와 프로젝트 리소스 폴더를 깔끔하게 정돈하는 비결.</span>
+                <span data-lang="en">Preventing version confusion and structuring project assets clearly.</span>
+              </p>
             </div>
-            <span class="text-pink-400 mt-2 font-semibold flex items-center gap-1">가이드 읽기 &rarr;</span>
+            <span class="text-pink-400 mt-2 font-semibold flex items-center gap-1">
+              <span data-lang="ko">가이드 읽기 &rarr;</span>
+              <span data-lang="en">Read Guide &rarr;</span>
+            </span>
           </a>
           <a href="/guides/browser-file-system-access-api.html" class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-pink-500/40 transition-all flex flex-col justify-between">
             <div>
-              <span class="text-pink-400 font-bold block mb-1">웹 기술 백서</span>
-              <strong class="text-slate-200 block mb-1">WICG File System Access API의 브라우저 로컬 저장 원리</strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">서버 전송 없이 로컬 디렉터리에 파일을 안전하게 직접 쓰는 기술 아키텍처.</p>
+              <span class="text-pink-400 font-bold block mb-1">
+                <span data-lang="ko">안전 원리</span>
+                <span data-lang="en">Security Principles</span>
+              </span>
+              <strong class="text-slate-200 block mb-1">
+                <span data-lang="ko">내 컴퓨터 폴더에서 바로 바뀌는 안전한 로컬 저장 원리</span>
+                <span data-lang="en">How Local In-Browser Processing Keeps Files Safe</span>
+              </strong>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                <span data-lang="ko">인터넷 서버로 전송하지 않고 내 PC 안에서만 안전하게 파일명을 바꾸는 기술.</span>
+                <span data-lang="en">How files are renamed entirely inside your local device without cloud transfers.</span>
+              </p>
             </div>
-            <span class="text-pink-400 mt-2 font-semibold flex items-center gap-1">가이드 읽기 &rarr;</span>
+            <span class="text-pink-400 mt-2 font-semibold flex items-center gap-1">
+              <span data-lang="ko">가이드 읽기 &rarr;</span>
+              <span data-lang="en">Read Guide &rarr;</span>
+            </span>
           </a>
         </div>
       </div>
@@ -466,46 +653,63 @@
     <!-- FAQ Accordion Section -->
     <section class="max-w-3xl mx-auto mb-20">
       <h2 class="text-2xl font-extrabold text-slate-100 mb-3 text-center tracking-tight">
-        자주 묻는 질문 (FAQ)
+        <span data-lang="ko">자주 묻는 질문 (FAQ)</span>
+        <span data-lang="en">Frequently Asked Questions (FAQ)</span>
       </h2>
       <p class="text-slate-400 text-xs text-center mb-8">
-        파일 이름 일괄 변경과 안전장치에 관한 질문들을 확인해 보세요.
+        <span data-lang="ko">파일 이름 일괄 변경과 안전장치에 관한 질문들을 확인해 보세요.</span>
+        <span data-lang="en">Common questions about bulk renaming and safety measures.</span>
       </p>
 
       <div class="border-t border-b border-slate-800 divide-y divide-slate-800">
         <details class="group" open>
           <summary class="text-base font-semibold text-slate-100 py-5 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-pink-400 transition-colors">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-question text-pink-400 text-sm"></i> 변경 버튼을 누르기 전까지는 원본 파일이 유지되나요?
+              <span class="material-symbols-outlined text-pink-400 text-lg">help</span>
+              <span data-lang="ko">적용 버튼을 누르기 전까지는 실제 파일 이름이 바뀌지 않나요?</span>
+              <span data-lang="en">Are files untouched until I click the final Apply button?</span>
             </span>
-            <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+            <span class="material-symbols-outlined text-slate-500 text-base transition-transform duration-200 group-open:rotate-180">expand_more</span>
           </summary>
           <div class="px-1 pb-5 text-slate-300 text-xs leading-relaxed">
-            <p>네, 규칙을 추가하거나 수정하는 동안에는 브라우저 메모리 상에서 가상으로만 계산되어 '변경될 이름' 열에 미리보기로 표시됩니다. 하단의 초록색 '이름 변경 적용' 버튼을 최종 클릭해야만 실제 로컬 디스크의 파일명이 업데이트됩니다.</p>
+            <p>
+              <span data-lang="ko">네, 맞습니다! 규칙을 설정하고 수정하는 동안에는 브라우저 화면의 '바뀔 이름' 표에 미리보기로만 가상 표시됩니다. 하단의 초록색 '이름 변경 적용' 버튼을 직접 클릭해야만 실제 내 컴퓨터의 파일명이 업데이트됩니다.</span>
+              <span data-lang="en">Yes, absolutely! While you add or tweak rules, filenames are only previewed virtually in the table. Your actual files on your drive are only updated when you click the green 'Apply Rename' button.</span>
+            </p>
           </div>
         </details>
 
         <details class="group">
           <summary class="text-base font-semibold text-slate-100 py-5 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-pink-400 transition-colors">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-question text-pink-400 text-sm"></i> 실수로 원치 않는 규칙을 적용했을 때 되돌릴 수 있나요?
+              <span class="material-symbols-outlined text-pink-400 text-lg">help</span>
+              <span data-lang="ko">실수로 규칙을 잘못 적용했을 때 되돌릴 수 있나요?</span>
+              <span data-lang="en">Can I undo if I make an accidental renaming mistake?</span>
             </span>
-            <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+            <span class="material-symbols-outlined text-slate-500 text-base transition-transform duration-200 group-open:rotate-180">expand_more</span>
           </summary>
           <div class="px-1 pb-5 text-slate-300 text-xs leading-relaxed">
-            <p>상단의 'Undo (실행 취소)' 버튼을 누르면 직전 규칙 적용 상태로 즉시 되돌릴 수 있으며, 여러 규칙이 복잡하게 얽힌 경우 'Reset (초기화)' 버튼을 눌러 처음 로드했던 원본 파일명 상태로 즉시 복원할 수 있습니다.</p>
+            <p>
+              <span data-lang="ko">네! 상단의 '실행 취소(Undo)' 버튼을 누르면 직전 규칙 적용 상태로 즉시 되돌릴 수 있습니다. 또한 규칙이 복잡하게 꼬였을 때는 '초기화(Reset)' 버튼으로 처음 불러왔던 원래 이름 상태로 언제든 복원할 수 있습니다.</span>
+              <span data-lang="en">Yes! Click the 'Undo' button to revert the last action immediately. If rules get tangled, click 'Reset' anytime to restore files back to their original names.</span>
+            </p>
           </div>
         </details>
 
         <details class="group">
           <summary class="text-base font-semibold text-slate-100 py-5 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-pink-400 transition-colors">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-question text-pink-400 text-sm"></i> 상업적 업무 프로젝트나 회사 PC에서 사용해도 안전한가요?
+              <span class="material-symbols-outlined text-pink-400 text-lg">help</span>
+              <span data-lang="ko">회사 업무나 기밀 문서 파일에 사용해도 안전한가요?</span>
+              <span data-lang="en">Is it safe for company confidential files and commercial work?</span>
             </span>
-            <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+            <span class="material-symbols-outlined text-slate-500 text-base transition-transform duration-200 group-open:rotate-180">expand_more</span>
           </summary>
           <div class="px-1 pb-5 text-slate-300 text-xs leading-relaxed">
-            <p>배처 툴은 100% 클라이언트 사이드에서 작동하며 어떠한 서버 통신도 발생하지 않습니다. 회사 내부 기밀 문서나 고객 데이터가 외부로 유출될 위험이 전무하며, 상업적/개인적 용도 모두 완전 무료로 자유롭게 사용 가능합니다.</p>
+            <p>
+              <span data-lang="ko">100% 안전합니다. 배처 툴은 외부 서버로 단 1바이트의 파일 데이터나 파일명도 전송하지 않으며, 모든 처리가 사용자의 웹 브라우저 내부에서만 이루어집니다. 회사 기밀 파일이나 개인 사진도 유출 걱정 없이 상업적으로 무료 이용하실 수 있습니다.</span>
+              <span data-lang="en">100% safe. Batcher Tools transmits zero bytes to external servers. All operations happen exclusively inside your local browser sandbox. You can safely organize sensitive corporate documents and personal photos for free.</span>
+            </p>
           </div>
         </details>
       </div>
@@ -514,14 +718,25 @@
     <!-- Internal Linking Navigation -->
     <nav class="pt-8 border-t border-slate-800 flex flex-wrap items-center justify-between gap-4 text-xs">
       <a href="/" class="text-pink-400 hover:text-pink-300 font-bold flex items-center gap-1.5">
-        <i class="fa-solid fa-house"></i> 메인 홈으로 이동
+        <span class="material-symbols-outlined text-base">home</span>
+        <span data-lang="ko">메인 홈으로 이동</span>
+        <span data-lang="en">Back to Home</span>
       </a>
       <div class="flex items-center gap-4 text-slate-400">
-        <a href="/svg-to-png.html" class="hover:text-slate-200 transition-colors">SVG to PNG 변환기</a>
+        <a href="/svg-to-png.html" class="hover:text-slate-200 transition-colors">
+          <span data-lang="ko">SVG to PNG 변환기</span>
+          <span data-lang="en">SVG to PNG Converter</span>
+        </a>
         <span class="text-slate-800">|</span>
-        <a href="/wav-to-mp3.html" class="hover:text-slate-200 transition-colors">WAV to MP3 변환기</a>
+        <a href="/wav-to-mp3.html" class="hover:text-slate-200 transition-colors">
+          <span data-lang="ko">WAV to MP3 변환기</span>
+          <span data-lang="en">WAV to MP3 Converter</span>
+        </a>
         <span class="text-slate-800">|</span>
-        <a href="/guides/index.html" class="hover:text-slate-200 transition-colors">전체 가이드 허브</a>
+        <a href="/guides/index.html" class="hover:text-slate-200 transition-colors">
+          <span data-lang="ko">전체 가이드 허브</span>
+          <span data-lang="en">Guides Hub</span>
+        </a>
       </div>
     </nav>
 
@@ -537,10 +752,14 @@
             <div class="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/70 text-primary flex items-center justify-center shrink-0">
               <span class="material-symbols-outlined text-[18px]">verified_user</span>
             </div>
-            <span class="text-sm sm:text-base font-bold text-on-surface">100% 브라우저 로컬 데이터 보안</span>
+            <span class="text-sm sm:text-base font-bold text-on-surface">
+              <span data-lang="ko">100% 브라우저 로컬 데이터 보안</span>
+              <span data-lang="en">100% In-Browser Local Privacy</span>
+            </span>
           </div>
           <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-            업로드하신 모든 그래픽, 음원, 문서는 외부 서버로 전송되지 않고 사용자의 기기 브라우저(WebAssembly &amp; Web Workers) 안에서 100% 즉시 처리 후 폐기됩니다.
+            <span data-lang="ko">선택하신 모든 사진, 음원, 그래픽 파일은 외부 서버로 전송되지 않고 사용자의 기기 브라우저 안에서 100% 즉시 처리 후 안전하게 유지됩니다.</span>
+            <span data-lang="en">All your selected photos, audio, and graphic files are processed 100% locally within your device browser and are never sent to external servers.</span>
           </p>
         </div>
 
@@ -548,28 +767,66 @@
         <div class="flex flex-wrap sm:flex-nowrap gap-10 sm:gap-14 text-xs sm:text-sm">
           <!-- Col 1: Tools -->
           <div class="flex flex-col gap-2.5">
-            <span class="font-bold text-on-surface mb-1">도구 바로가기</span>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/svg-to-png.html">SVG 변환기</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/wav-to-mp3.html">오디오 변환기</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/batch-rename.html">대량 이름 바꾸기</a>
+            <span class="font-bold text-on-surface mb-1">
+              <span data-lang="ko">도구 바로가기</span>
+              <span data-lang="en">Tools</span>
+            </span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/svg-to-png.html">
+              <span data-lang="ko">SVG 변환기</span>
+              <span data-lang="en">SVG Converter</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/wav-to-mp3.html">
+              <span data-lang="ko">오디오 변환기</span>
+              <span data-lang="en">Audio Converter</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/batch-rename.html">
+              <span data-lang="ko">대량 이름 바꾸기</span>
+              <span data-lang="en">Batch Renamer</span>
+            </a>
           </div>
 
           <!-- Col 2: Security & About -->
           <div class="flex flex-col gap-2.5">
-            <span class="font-bold text-on-surface mb-1">보안 및 안내</span>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/serverless-local-conversion.html">데이터 무전송 증명</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/about.html">소개</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/index.html">사용 가이드</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/contact.html">문의하기</a>
+            <span class="font-bold text-on-surface mb-1">
+              <span data-lang="ko">보안 및 안내</span>
+              <span data-lang="en">Security &amp; Info</span>
+            </span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/serverless-local-conversion.html">
+              <span data-lang="ko">데이터 무전송 증명</span>
+              <span data-lang="en">Zero-Upload Proof</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/about.html">
+              <span data-lang="ko">소개</span>
+              <span data-lang="en">About</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/index.html">
+              <span data-lang="ko">사용 가이드</span>
+              <span data-lang="en">User Guides</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/contact.html">
+              <span data-lang="ko">문의하기</span>
+              <span data-lang="en">Contact</span>
+            </a>
           </div>
 
           <!-- Col 3: Policy & Donate -->
           <div class="flex flex-col gap-2.5">
-            <span class="font-bold text-on-surface mb-1">정책</span>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/privacy.html">개인정보처리방침</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/terms.html">서비스 이용약관</a>
+            <span class="font-bold text-on-surface mb-1">
+              <span data-lang="ko">정책</span>
+              <span data-lang="en">Legal</span>
+            </span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/privacy.html">
+              <span data-lang="ko">개인정보처리방침</span>
+              <span data-lang="en">Privacy Policy</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/terms.html">
+              <span data-lang="ko">서비스 이용약관</span>
+              <span data-lang="en">Terms of Service</span>
+            </a>
             <a class="text-amber-600 dark:text-amber-400 hover:underline inline-flex items-center gap-1 font-bold" href="https://buymeacoffee.com/playNolang" target="_blank" rel="noopener noreferrer">
-              <span>☕</span> 커피 후원
+              <span>☕</span>
+              <span data-lang="ko">커피 후원</span>
+              <span data-lang="en">Buy Me a Coffee</span>
             </a>
           </div>
         </div>
@@ -578,11 +835,14 @@
       <!-- Bottom Bar -->
       <div class="pt-8 mt-10 border-t border-surface-container flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-on-surface-variant">
         <div>
-          <span>© 2026 Batcher. 서버 전송 없는 100% 브라우저 로컬 파일 변환 도구. All rights reserved.</span>
+          <span>&copy; 2026 Batcher. </span>
+          <span data-lang="ko">서버 전송 없는 100% 브라우저 로컬 파일 변환 도구. All rights reserved.</span>
+          <span data-lang="en">Zero-Upload 100% In-Browser Local File Tools. All rights reserved.</span>
         </div>
         <div class="flex items-center gap-2 font-medium">
           <span class="w-2 h-2 rounded-full bg-primary inline-block animate-pulse"></span>
-          <span>온디바이스 가속 엔진 가동 중</span>
+          <span data-lang="ko">온디바이스 가속 엔진 가동 중</span>
+          <span data-lang="en">On-Device Fast Engine Active</span>
         </div>
       </div>
     </div>

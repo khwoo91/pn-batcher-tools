@@ -18,11 +18,23 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
   
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6294524233833258" crossorigin="anonymous"></script>
 
+  <script>
+    (function() {
+      const savedLang = localStorage.getItem('batcher-lang') || 'ko';
+      document.documentElement.setAttribute('data-current-lang', savedLang);
+      document.documentElement.lang = savedLang;
+    })();
+  </script>
   <style>
     :root { color-scheme: dark; }
+    html[data-current-lang="en"] [data-lang="ko"] { display: none !important; }
+    html[data-current-lang="ko"] [data-lang="en"],
+    html:not([data-current-lang="en"]) [data-lang="en"] { display: none !important; }
+
     body {
       margin: 0; padding: 0;
       background-color: #020617; color: #cbd5e1;
@@ -34,6 +46,12 @@
     .header { border-bottom: 1px solid #1e293b; padding-bottom: 2rem; margin-bottom: 2.5rem; display: flex; flex-direction: column; gap: 1rem; }
     .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; color: #818cf8; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; }
     .back-btn:hover { color: #a5b4fc; }
+    .lang-toggle-btn { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #e2e8f0; padding: 0.35rem 0.75rem; border-radius: 0.75rem; font-size: 0.75rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 700; transition: all 0.2s; user-select: none; }
+    .lang-toggle-btn:hover { background: rgba(255, 255, 255, 0.15); }
+    html[data-current-lang="ko"] .lang-label-ko { color: #818cf8; font-weight: 800; }
+    html[data-current-lang="ko"] .lang-label-en { opacity: 0.5; font-weight: 500; }
+    html[data-current-lang="en"] .lang-label-en { color: #818cf8; font-weight: 800; }
+    html[data-current-lang="en"] .lang-label-ko { opacity: 0.5; font-weight: 500; }
     h1 { font-size: 2.25rem; margin: 0.5rem 0; background: linear-gradient(to right, #ffffff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     .meta { font-size: 0.875rem; color: #64748b; }
     .card { background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1.25rem; padding: 2.5rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
@@ -54,52 +72,98 @@
     <div class="header">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <a href="/" class="back-btn">
-          <i class="fa-solid fa-arrow-left"></i>
-          <span>메인 홈으로 돌아가기</span>
+          <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+          <span data-lang="ko">메인 홈으로 돌아가기</span>
+          <span data-lang="en">Back to Home</span>
         </a>
+        <button id="langToggleBtn" class="lang-toggle-btn" onclick="togglePageLang()" title="언어 변경 (KO/EN)">
+          <span class="material-symbols-outlined text-[17px]">language</span>
+          <span><span class="lang-label-ko">KO</span>/<span class="lang-label-en">EN</span></span>
+        </button>
       </div>
-      <h1>문의하기 (Contact)</h1>
+      <h1>
+        <span data-lang="ko">문의하기 (Contact Us)</span>
+        <span data-lang="en">Contact Us</span>
+      </h1>
       <div class="meta">
-        <span>배처 툴 서비스에 관한 질문, 피드백, 제휴 문의</span>
+        <span data-lang="ko">배처 툴 서비스에 관한 질문, 피드백, 기능 제안 안내</span>
+        <span data-lang="en">Questions, feedback, and feature suggestions for Batcher Tools</span>
       </div>
     </div>
 
     <article class="card">
-      <p>배처 툴(Batcher Tools)을 이용해 주셔서 감사합니다. 서비스 이용 중 버그를 발견하셨거나 새로운 기능 추가를 제안하고 싶으신 경우, 언제든지 아래 공식 연락처를 통해 편하게 메시지를 보내주세요.</p>
+      <p>
+        <span data-lang="ko">배처 툴(Batcher Tools)을 이용해 주셔서 감사합니다. 서비스 이용 중 불편한 점을 겪으셨거나 새로운 기능 추가를 제안하고 싶으신 경우, 언제든지 아래 공식 연락처를 통해 편하게 메시지를 보내주세요.</span>
+        <span data-lang="en">Thank you for using Batcher Tools. If you encounter any bugs, have feature requests, or want to share feedback, please feel free to reach out to us at our official contact email below.</span>
+      </p>
 
       <div class="contact-box">
         <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.5rem; font-weight: 600; text-transform: uppercase;">Official Support Email</div>
         <a href="mailto:support@batchertools.com" class="contact-email">
-          <i class="fa-solid fa-envelope"></i> support@batchertools.com
+          <span class="material-symbols-outlined text-[20px]">mail</span> support@batchertools.com
         </a>
       </div>
 
       <div class="contact-box" style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25);">
-        <div style="font-size: 0.85rem; color: #fbbf24; margin-bottom: 0.5rem; font-weight: 600; text-transform: uppercase;">Support the Developer</div>
+        <div style="font-size: 0.85rem; color: #fbbf24; margin-bottom: 0.5rem; font-weight: 600; text-transform: uppercase;">Support the Project</div>
         <a href="https://buymeacoffee.com/playNolang" target="_blank" rel="noopener noreferrer" class="contact-email" style="color: #fbbf24;">
-          ☕ 커피 한 잔 후원하기 (Buy Me a Coffee)
+          ☕ <span data-lang="ko">커피 한 잔 후원하기 (Buy Me a Coffee)</span><span data-lang="en">Buy Me a Coffee</span>
         </a>
       </div>
 
-      <h2>자주 주시는 문의 유형</h2>
+      <h2>
+        <span data-lang="ko">자주 주시는 문의 유형</span>
+        <span data-lang="en">Common Topics</span>
+      </h2>
       <ul>
-        <li><strong>버그 리포트:</strong> 특정 브라우저(Safari, Firefox 등) 환경에서 발생하는 파일 변환 오류 또는 UI 깨짐 제보.</li>
-        <li><strong>기능 개선 제안:</strong> 새로운 오디오/이미지 포맷 지원 요청(WebP, AVIF, OGG 등)이나 추가적인 정규식 리네이밍 규칙 아이디어.</li>
-        <li><strong>라이선스 및 상업적 제휴:</strong> 오픈소스 기여 및 파트너십 관련 문의.</li>
+        <li>
+          <strong data-lang="ko">오류 및 문제 제보: </strong>
+          <strong data-lang="en">Bug Reports: </strong>
+          <span data-lang="ko">특정 브라우저나 디바이스 환경에서 파일 변환이 되지 않거나 화면이 어색하게 보이는 경우.</span>
+          <span data-lang="en">Issues with specific browsers, file conversion errors, or unexpected UI layouts.</span>
+        </li>
+        <li>
+          <strong data-lang="ko">기능 개선 및 새 규칙 제안: </strong>
+          <strong data-lang="en">Feature Requests: </strong>
+          <span data-lang="ko">추가로 필요한 이미지 포맷이나 유용한 파일 이름 변경 규칙 아이디어.</span>
+          <span data-lang="en">Ideas for new output formats, convenient renaming patterns, or workflow tools.</span>
+        </li>
+        <li>
+          <strong data-lang="ko">제휴 및 기타 문의: </strong>
+          <strong data-lang="en">Partnerships &amp; Feedback: </strong>
+          <span data-lang="ko">오픈 스마트 유틸리티 발전을 위한 다양한 제휴 및 협업 문의.</span>
+          <span data-lang="en">General inquiries, feedback, and open collaboration.</span>
+        </li>
       </ul>
-      <p>접수된 모든 피드백은 면밀히 검토되며 영업일 기준 1~2일 이내에 답변을 드리고 있습니다.</p>
+      <p>
+        <span data-lang="ko">보내주신 모든 피드백은 꼼꼼히 확인하고 있으며, 빠른 시일 내에 답변을 드리고 있습니다.</span>
+        <span data-lang="en">We review all incoming inquiries carefully and respond as quickly as possible.</span>
+      </p>
     </article>
 
     <footer>
-      <div>&copy; 2026 Batcher Tools. All rights reserved.</div>
+      <div>
+        <span>&copy; 2026 Batcher Tools. </span>
+        <span data-lang="ko">100% 브라우저 로컬 파일 도구. All rights reserved.</span>
+        <span data-lang="en">100% In-Browser Local File Tools. All rights reserved.</span>
+      </div>
       <div style="margin-top: 0.75rem;">
         <a href="https://buymeacoffee.com/playNolang" target="_blank" rel="noopener noreferrer" style="color: #f59e0b; text-decoration: none; font-weight: 600; font-size: 0.85rem;">
-          ☕ 커피 한 잔 후원하기
+          ☕ <span data-lang="ko">커피 한 잔 후원하기</span><span data-lang="en">Buy Me a Coffee</span>
         </a>
       </div>
     </footer>
   </div>
 
+  <script>
+    function togglePageLang() {
+      const current = document.documentElement.getAttribute('data-current-lang') || 'ko';
+      const next = current === 'ko' ? 'en' : 'ko';
+      document.documentElement.setAttribute('data-current-lang', next);
+      document.documentElement.lang = next;
+      localStorage.setItem('batcher-lang', next);
+    }
+  </script>
 </body>
 
 </html>

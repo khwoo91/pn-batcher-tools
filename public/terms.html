@@ -17,12 +17,23 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
   
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6294524233833258" crossorigin="anonymous"></script>
 
+  <script>
+    (function() {
+      const savedLang = localStorage.getItem('batcher-lang') || 'ko';
+      document.documentElement.setAttribute('data-current-lang', savedLang);
+      document.documentElement.lang = savedLang;
+    })();
+  </script>
   <style>
     :root { color-scheme: dark; }
+    html[data-current-lang="en"] [data-lang="ko"] { display: none !important; }
+    html[data-current-lang="ko"] [data-lang="en"],
+    html:not([data-current-lang="en"]) [data-lang="en"] { display: none !important; }
+
     body {
       margin: 0; padding: 0;
       background-color: #020617; color: #cbd5e1;
@@ -34,10 +45,16 @@
     .header { border-bottom: 1px solid #1e293b; padding-bottom: 2rem; margin-bottom: 2.5rem; display: flex; flex-direction: column; gap: 1rem; }
     .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; color: #818cf8; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; }
     .back-btn:hover { color: #a5b4fc; }
+    .lang-toggle-btn { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #e2e8f0; padding: 0.35rem 0.75rem; border-radius: 0.75rem; font-size: 0.75rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 700; transition: all 0.2s; user-select: none; }
+    .lang-toggle-btn:hover { background: rgba(255, 255, 255, 0.15); }
+    html[data-current-lang="ko"] .lang-label-ko { color: #818cf8; font-weight: 800; }
+    html[data-current-lang="ko"] .lang-label-en { opacity: 0.5; font-weight: 500; }
+    html[data-current-lang="en"] .lang-label-en { color: #818cf8; font-weight: 800; }
+    html[data-current-lang="en"] .lang-label-ko { opacity: 0.5; font-weight: 500; }
     h1 { font-size: 2.25rem; margin: 0.5rem 0; background: linear-gradient(to right, #ffffff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     .meta { font-size: 0.875rem; color: #64748b; }
     .card { background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1.25rem; padding: 2.5rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
-    h2 { font-size: 1.4rem; margin-top: 2rem; margin-bottom: 0.75rem; border-left: 4px solid #6366f1; padding-left: 0.85rem; color: #f8fafc; }
+    h2 { font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.75rem; border-left: 4px solid #6366f1; padding-left: 0.85rem; color: #f8fafc; }
     p, li { font-size: 0.95rem; margin-bottom: 1rem; color: #cbd5e1; }
     ul { margin-top: 0.5rem; margin-bottom: 1.5rem; padding-left: 1.5rem; }
     li { margin-bottom: 0.5rem; }
@@ -51,39 +68,100 @@
     <div class="header">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <a href="/" class="back-btn">
-          <i class="fa-solid fa-arrow-left"></i>
-          <span>메인 홈으로 돌아가기</span>
+          <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+          <span data-lang="ko">메인 홈으로 돌아가기</span>
+          <span data-lang="en">Back to Home</span>
         </a>
+        <button id="langToggleBtn" class="lang-toggle-btn" onclick="togglePageLang()" title="언어 변경 (KO/EN)">
+          <span class="material-symbols-outlined text-[17px]">language</span>
+          <span><span class="lang-label-ko">KO</span>/<span class="lang-label-en">EN</span></span>
+        </button>
       </div>
-      <h1>이용약관 (Terms of Service)</h1>
+      <h1>
+        <span data-lang="ko">서비스 이용약관</span>
+        <span data-lang="en">Terms of Service</span>
+      </h1>
       <div class="meta">
-        <span>시행일자: 2026년 8월 1일 | 최종 개정: 2026년 8월 24일</span>
+        <span data-lang="ko">시행일자: 2026년 8월 1일 | 최종 개정: 2026년 8월 24일</span>
+        <span data-lang="en">Effective: August 1, 2026 | Last Updated: August 24, 2026</span>
       </div>
     </div>
 
     <article class="card">
-      <p>본 약관은 배처 툴(Batcher Tools, 이하 '서비스')이 제공하는 모든 웹 기반 파일 변환 및 일괄 처리 도구의 이용 조건과 권리 관계를 규정합니다.</p>
+      <p>
+        <span data-lang="ko">본 약관은 배처 툴(Batcher Tools, 이하 '서비스')이 제공하는 웹 기반 이미지 변환, 오디오 인코딩 및 일괄 파일 관리 도구의 이용 조건과 권리 관계를 명시합니다.</span>
+        <span data-lang="en">These Terms of Service ("Terms") govern your use of the web-based image conversion, audio encoding, and batch file organization tools provided by Batcher Tools ("Service").</span>
+      </p>
 
-      <h2>1. 서비스의 무상 제공 및 상업적 이용 권리</h2>
-      <p>본 서비스는 모든 개인 및 기업 사용자에게 완전 무료로 제공됩니다. 본 서비스를 통해 변환, 압축, 인코딩 또는 이름 변경된 모든 결과물 파일의 저작권 및 소유권은 100% 사용자에게 귀속되며, 상업적/비상업적 목적으로 자유롭게 배포, 수정, 판매할 수 있습니다.</p>
+      <h2>
+        <span data-lang="ko">1. 무료 제공 및 100% 상업적 이용 권리</span>
+        <span data-lang="en">1. Free Usage & Full Commercial Rights</span>
+      </h2>
+      <p>
+        <span data-lang="ko">본 서비스는 개인, 프리랜서, 기업 등 모든 사용자에게 완전히 무료로 제공됩니다. 본 서비스를 통해 변환, 렌더링, 압축 또는 이름 변경된 모든 결과 파일의 <strong>지식재산권과 소유권은 100% 사용자에게 귀속</strong>되며, 상업적/비상업적 프로젝트에 출처 표기 없이 자유롭게 사용, 배포, 판매할 수 있습니다.</span>
+        <span data-lang="en">The Service is completely free for individual, freelance, and commercial use. <strong>All intellectual property rights and full ownership of output files processed, converted, or renamed using our tools belong 100% to you.</strong> You may freely use, publish, distribute, or sell the resulting assets for any commercial or non-commercial purpose without attribution.</span>
+      </p>
 
-      <h2>2. 면책 조항 (Disclaimer of Warranty)</h2>
-      <p>본 서비스는 최선을 다해 안전하고 정확하게 파일을 가공하도록 개발되었으나, 소프트웨어의 특성상 "있는 그대로(AS IS)" 제공됩니다. 사용자의 브라우저 오류, 메모리 부족 또는 파일 손상으로 인해 발생할 수 있는 데이터 손실에 대해 서비스 운영자는 법적 책임을 지지 않으므로, 대량 작업 전 원본 파일의 백업을 권장합니다.</p>
+      <h2>
+        <span data-lang="ko">2. 브라우저 로컬 구동 및 무저장 원칙</span>
+        <span data-lang="en">2. Zero-Upload Local Processing</span>
+      </h2>
+      <p>
+        <span data-lang="ko">배처 툴은 사용자의 작업 파일을 당사 서버로 전송하지 않습니다. 모든 프로세스는 사용자의 웹 브라우저 메모리 안에서만 로컬로 작동하므로, 기업 비밀 문서나 미공개 디자인 자산도 유출 걱정 없이 안전하게 다룰 수 있습니다.</span>
+        <span data-lang="en">Batcher Tools does not upload or transfer your source files to any remote server. All computations happen strictly within your local browser sandbox, ensuring full privacy and confidentiality for proprietary artwork and sensitive audio files.</span>
+      </p>
 
-      <h2>3. 지식재산권</h2>
-      <p>본 웹사이트의 UI 디자인, 로고, 소스 코드 및 기술 가이드 문서에 대한 저작권은 Batcher Tools에 있으며, 허가 없는 무단 복제 및 스크래핑을 금합니다.</p>
+      <h2>
+        <span data-lang="ko">3. 서비스 제공 형태 및 면책 조항 (Disclaimer of Warranty)</span>
+        <span data-lang="en">3. Disclaimer of Warranty</span>
+      </h2>
+      <p>
+        <span data-lang="ko">본 서비스는 높은 편의성과 안전성을 목표로 개발되었으나, 소프트웨어 기술의 특성상 "있는 그대로(AS IS)" 제공됩니다. 사용자의 브라우저 비정상 종료, 기기 메모리 한계 또는 원본 파일 손상으로 발생할 수 있는 데이터 손실에 대해 법적 책임을 지지 않으므로, 수천 개 단위의 대용량 작업 전에는 중요한 원본 파일의 백업을 권장합니다.</span>
+        <span data-lang="en">While we strive for seamless stability and reliability, the Service is provided on an "AS IS" and "AS AVAILABLE" basis. We are not liable for incidental data loss resulting from browser crashes, memory limits, or damaged source files. We encourage users to maintain backups of critical original assets before initiating large bulk transformations.</span>
+      </p>
+
+      <h2>
+        <span data-lang="ko">4. 지식재산권 보호</span>
+        <span data-lang="en">4. Intellectual Property of the Website</span>
+      </h2>
+      <p>
+        <span data-lang="ko">본 사이트의 브랜드 상표, 로고, 고유 인터페이스 디자인, 튜토리얼 기술 문서 및 서비스 소스 코드의 저작권은 Batcher Tools에 귀속되며, 무단 복제 및 상업적 도용을 금지합니다.</span>
+        <span data-lang="en">All branding, logos, proprietary user interface designs, tutorial guides, and source code of the Batcher Tools website remain the exclusive property of Batcher Tools. Unauthorized copying, mirroring, or scraping of site assets is prohibited.</span>
+      </p>
+
+      <h2>
+        <span data-lang="ko">5. 문의 및 피드백</span>
+        <span data-lang="en">5. Contact & Support</span>
+      </h2>
+      <p>
+        <span data-lang="ko">이용약관에 대한 문의 사항이나 제안 사항이 있으시면 <a href="mailto:support@batchertools.com" style="color: #818cf8; font-weight: 600;">support@batchertools.com</a>으로 편하게 문의해 주시기 바랍니다.</span>
+        <span data-lang="en">If you have any questions or inquiries regarding these Terms, please contact us at <a href="mailto:support@batchertools.com" style="color: #818cf8; font-weight: 600;">support@batchertools.com</a>.</span>
+      </p>
     </article>
 
     <footer>
-      <div>&copy; 2026 Batcher Tools. All rights reserved.</div>
+      <div>
+        <span>&copy; 2026 Batcher Tools. </span>
+        <span data-lang="ko">100% 브라우저 로컬 파일 도구. All rights reserved.</span>
+        <span data-lang="en">100% In-Browser Local File Tools. All rights reserved.</span>
+      </div>
       <div style="margin-top: 0.75rem;">
         <a href="https://buymeacoffee.com/playNolang" target="_blank" rel="noopener noreferrer" style="color: #f59e0b; text-decoration: none; font-weight: 600; font-size: 0.85rem;">
-          ☕ 커피 한 잔 후원하기
+          ☕ <span data-lang="ko">커피 한 잔 후원하기</span><span data-lang="en">Buy Me a Coffee</span>
         </a>
       </div>
     </footer>
   </div>
 
+  <script>
+    function togglePageLang() {
+      const current = document.documentElement.getAttribute('data-current-lang') || 'ko';
+      const next = current === 'ko' ? 'en' : 'ko';
+      document.documentElement.setAttribute('data-current-lang', next);
+      document.documentElement.lang = next;
+      localStorage.setItem('batcher-lang', next);
+    }
+  </script>
 </body>
 
 </html>

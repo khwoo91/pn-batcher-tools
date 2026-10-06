@@ -440,3 +440,12 @@ html.light .fixed.inset-0.pointer-events-none > div {
 .animate-scale-in {
   animation: scaleIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
+
+/* Global Language Visibility System */
+html[data-current-lang="en"] [data-lang="ko"] {
+  display: none !important;
+}
+html[data-current-lang="ko"] [data-lang="en"],
+html:not([data-current-lang="en"]) [data-lang="en"] {
+  display: none !important;
+}

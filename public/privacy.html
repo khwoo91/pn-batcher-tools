@@ -17,12 +17,23 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
   
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6294524233833258" crossorigin="anonymous"></script>
 
+  <script>
+    (function() {
+      const savedLang = localStorage.getItem('batcher-lang') || 'ko';
+      document.documentElement.setAttribute('data-current-lang', savedLang);
+      document.documentElement.lang = savedLang;
+    })();
+  </script>
   <style>
     :root { color-scheme: dark; }
+    html[data-current-lang="en"] [data-lang="ko"] { display: none !important; }
+    html[data-current-lang="ko"] [data-lang="en"],
+    html:not([data-current-lang="en"]) [data-lang="en"] { display: none !important; }
+
     body {
       margin: 0; padding: 0;
       background-color: #020617; color: #cbd5e1;
@@ -34,10 +45,16 @@
     .header { border-bottom: 1px solid #1e293b; padding-bottom: 2rem; margin-bottom: 2.5rem; display: flex; flex-direction: column; gap: 1rem; }
     .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; color: #818cf8; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; }
     .back-btn:hover { color: #a5b4fc; }
+    .lang-toggle-btn { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #e2e8f0; padding: 0.35rem 0.75rem; border-radius: 0.75rem; font-size: 0.75rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 700; transition: all 0.2s; user-select: none; }
+    .lang-toggle-btn:hover { background: rgba(255, 255, 255, 0.15); }
+    html[data-current-lang="ko"] .lang-label-ko { color: #818cf8; font-weight: 800; }
+    html[data-current-lang="ko"] .lang-label-en { opacity: 0.5; font-weight: 500; }
+    html[data-current-lang="en"] .lang-label-en { color: #818cf8; font-weight: 800; }
+    html[data-current-lang="en"] .lang-label-ko { opacity: 0.5; font-weight: 500; }
     h1 { font-size: 2.25rem; margin: 0.5rem 0; background: linear-gradient(to right, #ffffff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     .meta { font-size: 0.875rem; color: #64748b; }
     .card { background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1.25rem; padding: 2.5rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
-    h2 { font-size: 1.4rem; margin-top: 2rem; margin-bottom: 0.75rem; border-left: 4px solid #6366f1; padding-left: 0.85rem; color: #f8fafc; }
+    h2 { font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.75rem; border-left: 4px solid #6366f1; padding-left: 0.85rem; color: #f8fafc; }
     p, li { font-size: 0.95rem; margin-bottom: 1rem; color: #cbd5e1; }
     ul { margin-top: 0.5rem; margin-bottom: 1.5rem; padding-left: 1.5rem; }
     li { margin-bottom: 0.5rem; }
@@ -51,45 +68,100 @@
     <div class="header">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <a href="/" class="back-btn">
-          <i class="fa-solid fa-arrow-left"></i>
-          <span>메인 홈으로 돌아가기</span>
+          <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+          <span data-lang="ko">메인 홈으로 돌아가기</span>
+          <span data-lang="en">Back to Home</span>
         </a>
+        <button id="langToggleBtn" class="lang-toggle-btn" onclick="togglePageLang()" title="언어 변경 (KO/EN)">
+          <span class="material-symbols-outlined text-[17px]">language</span>
+          <span><span class="lang-label-ko">KO</span>/<span class="lang-label-en">EN</span></span>
+        </button>
       </div>
-      <h1>개인정보처리방침 (Privacy Policy)</h1>
+      <h1>
+        <span data-lang="ko">개인정보처리방침</span>
+        <span data-lang="en">Privacy Policy</span>
+      </h1>
       <div class="meta">
-        <span>시행일자: 2026년 8월 1일 | 최종 개정: 2026년 8월 24일</span>
+        <span data-lang="ko">시행일자: 2026년 8월 1일 | 최종 개정: 2026년 8월 24일</span>
+        <span data-lang="en">Effective: August 1, 2026 | Last Updated: August 24, 2026</span>
       </div>
     </div>
 
     <article class="card">
-      <p>배처 툴(Batcher Tools, 이하 '서비스')은 이용자의 개인정보 및 데이터 프라이버시를 매우 소중하게 생각하며, 관련 법령을 준수하기 위해 최선을 다하고 있습니다.</p>
+      <p>
+        <span data-lang="ko">배처 툴(Batcher Tools, 이하 '서비스')은 이용자의 개인정보 및 파일 프라이버시를 매우 소중하게 생각하며, 관련 법령을 철저히 준수합니다. 본 방침은 서비스 이용 시 사용자의 데이터가 어떻게 안전하게 보호되는지 안내합니다.</span>
+        <span data-lang="en">Batcher Tools ("we", "our", or "the Service") highly values user privacy and data security. This Privacy Policy outlines how your data is handled and protected when using our web-based utilities.</span>
+      </p>
 
-      <h2>1. 무저장 및 제로 업로드 원칙 (Zero-Upload Architecture)</h2>
-      <p>본 서비스는 클라이언트 사이드 웹 애플리케이션으로, 사용자가 변환하거나 이름을 변경하기 위해 선택한 어떠한 파일(SVG, WAV, MP3, 텍스트 등)도 당사의 원격 서버로 전송하지 않습니다. 모든 바이너리 디코딩, 인코딩, 리네이밍 작업은 사용자의 PC 웹 브라우저 메모리 내부에서만 100% 로컬로 처리됩니다.</p>
+      <h2>
+        <span data-lang="ko">1. 무저장 및 제로 업로드 원칙 (Zero-Upload Architecture)</span>
+        <span data-lang="en">1. Zero-Upload Architecture & Local Privacy</span>
+      </h2>
+      <p>
+        <span data-lang="ko">본 서비스는 100% 브라우저 기반 클라이언트 사이드 도구입니다. 사용자가 변환하거나 이름을 바꾸기 위해 불러온 <strong>어떠한 파일(SVG, PNG, WAV, MP3, 일반 문서 등)도 원격 서버나 외부 클라우드로 전송되거나 저장되지 않습니다.</strong> 모든 이미지 렌더링, 오디오 인코딩, 파일명 변경 연산은 사용자의 PC 또는 모바일 기기 메모리 내부에서만 로컬로 안전하게 실행됩니다.</span>
+        <span data-lang="en">Batcher Tools operates entirely within your browser client. <strong>None of your uploaded or processed files (SVG, PNG, WAV, MP3, documents, etc.) are ever sent to, stored on, or inspected by our servers or external clouds.</strong> All rasterization, audio encoding, and renaming routines take place strictly inside your device's memory.</span>
+      </p>
 
-      <h2>2. 수집하는 정보 및 이용 목적</h2>
-      <p>당사는 서비스 품질 개선 및 방문 통계 분석을 위해 Google Analytics와 같은 표준 웹 분석 도구를 사용할 수 있습니다. 이 과정에서 익명화된 브라우저 종류, 방문 페이지, 접속 시간 등의 통계 데이터가 수집될 수 있으나, 어떠한 개인 식별 정보나 로컬 파일 정보도 수집되지 않습니다.</p>
+      <h2>
+        <span data-lang="ko">2. 수집하는 정보 및 통계 분석</span>
+        <span data-lang="en">2. Information Collection & Analytics</span>
+      </h2>
+      <p>
+        <span data-lang="ko">서비스 품질 개선과 안정적인 서버 인프라 유지를 위해 Google Analytics 등의 표준 웹 분석 도구를 활용할 수 있습니다. 이때 수집되는 정보는 익명화된 브라우저 종류, 방문 페이지, 체류 시간, 대략적인 국가 정보 등 통계 목적의 메타데이터에 한정되며, 사용자의 개인 식별 정보나 작업 중인 파일 내용은 일절 수집되지 않습니다.</span>
+        <span data-lang="en">To improve site stability and analyze traffic patterns, we may use standard analytics tools such as Google Analytics. Any data collected is strictly anonymized (such as browser type, pages viewed, time on site, and approximate geographic region). We never collect personally identifiable information (PII) or any content from your local files.</span>
+      </p>
 
-      <h2>3. 쿠키(Cookie) 및 로컬 스토리지(LocalStorage) 사용</h2>
-      <p>당사는 사용자가 설정한 선호 언어(KO/EN), 다크/라이트 테마, 직전 선택한 비트레이트 및 배율 옵션을 브라우저에 저장하여 다음 방문 시 편리한 환경을 제공하기 위해 브라우저의 <code>LocalStorage</code>를 활용합니다. 이 데이터는 사용자 기기에만 보관됩니다.</p>
+      <h2>
+        <span data-lang="ko">3. 브라우저 로컬 스토리지(LocalStorage) 활용</span>
+        <span data-lang="en">3. LocalStorage & Cookies</span>
+      </h2>
+      <p>
+        <span data-lang="ko">사용자가 매번 새로 설정할 필요 없도록, 선택한 언어 모드(한국어/영어), 다크 테마 설정, 최근 사용한 변환 배율 및 음질 설정값을 사용자의 웹 브라우저 <code>LocalStorage</code>에만 저장합니다. 이 정보는 사용자 기기에만 보관되며 서비스 운영자에게 전송되지 않습니다.</span>
+        <span data-lang="en">To save your preferences across sessions, settings such as selected language (KO/EN), theme mode, and export preferences are stored locally in your browser's <code>LocalStorage</code>. This data never leaves your device and can be cleared at any time via your browser settings.</span>
+      </p>
 
-      <h2>4. 제3자 광고 서비스 (Google AdSense)</h2>
-      <p>본 서비스는 웹사이트 운영 지원을 위해 Google AdSense 광고를 게재할 수 있습니다. Google을 포함한 타사 공급업체는 쿠키를 사용하여 사용자의 이전 웹사이트 방문 기록을 바탕으로 맞춤형 광고를 제공할 수 있습니다. 사용자는 Google 광고 설정에서 맞춤 광고를 선택 해제할 수 있습니다.</p>
+      <h2>
+        <span data-lang="ko">4. 제3자 광고 서비스 (Google AdSense)</span>
+        <span data-lang="en">4. Third-Party Advertising (Google AdSense)</span>
+      </h2>
+      <p>
+        <span data-lang="ko">본 서비스는 무료 운영 지원을 위해 Google AdSense 광고를 게재할 수 있습니다. Google을 비롯한 제3자 광고 사업자는 쿠키(Cookie)를 활용하여 이용자의 이전 웹사이트 방문 기록을 바탕으로 관련성 높은 광고를 표시할 수 있습니다. 이용자는 Google 광고 설정 페이지에서 맞춤 광고 수신 여부를 직접 설정하고 해제할 수 있습니다.</span>
+        <span data-lang="en">This website may display advertisements served by Google AdSense to support ongoing free operation. Third-party vendors, including Google, may use cookies to serve ads based on prior visits. Users can opt out of personalized advertising by visiting Google Ads Settings.</span>
+      </p>
 
-      <h2>5. 문의처</h2>
-      <p>개인정보처리방침에 관한 질문이나 의견이 있으신 경우 <a href="mailto:support@batchertools.com" style="color: #818cf8; font-weight: 600;">support@batchertools.com</a>으로 연락해 주시기 바랍니다.</p>
+      <h2>
+        <span data-lang="ko">5. 문의처</span>
+        <span data-lang="en">5. Contact Information</span>
+      </h2>
+      <p>
+        <span data-lang="ko">개인정보 보호 정책이나 데이터 보안과 관련하여 문의 사항이나 의견이 있으신 경우 언제든지 <a href="mailto:support@batchertools.com" style="color: #818cf8; font-weight: 600;">support@batchertools.com</a>으로 편하게 연락해 주시기 바랍니다.</span>
+        <span data-lang="en">If you have any questions or feedback regarding this Privacy Policy, please feel free to reach out to us at <a href="mailto:support@batchertools.com" style="color: #818cf8; font-weight: 600;">support@batchertools.com</a>.</span>
+      </p>
     </article>
 
     <footer>
-      <div>&copy; 2026 Batcher Tools. All rights reserved.</div>
+      <div>
+        <span>&copy; 2026 Batcher Tools. </span>
+        <span data-lang="ko">100% 브라우저 로컬 파일 도구. All rights reserved.</span>
+        <span data-lang="en">100% In-Browser Local File Tools. All rights reserved.</span>
+      </div>
       <div style="margin-top: 0.75rem;">
         <a href="https://buymeacoffee.com/playNolang" target="_blank" rel="noopener noreferrer" style="color: #f59e0b; text-decoration: none; font-weight: 600; font-size: 0.85rem;">
-          ☕ 커피 한 잔 후원하기
+          ☕ <span data-lang="ko">커피 한 잔 후원하기</span><span data-lang="en">Buy Me a Coffee</span>
         </a>
       </div>
     </footer>
   </div>
 
+  <script>
+    function togglePageLang() {
+      const current = document.documentElement.getAttribute('data-current-lang') || 'ko';
+      const next = current === 'ko' ? 'en' : 'ko';
+      document.documentElement.setAttribute('data-current-lang', next);
+      document.documentElement.lang = next;
+      localStorage.setItem('batcher-lang', next);
+    }
+  </script>
 </body>
 
 </html>

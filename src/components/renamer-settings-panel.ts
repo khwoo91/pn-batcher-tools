@@ -476,7 +476,9 @@ export class RenamerSettingsPanel extends LitElement {
               type="text"
               .value="${this.extFilter}"
               @input="${this.handleExtFilterChange}"
-              placeholder="예: html, css, js (비워두면 전체)"
+              placeholder="${this.lang === "ko"
+                ? "예: html, css, js (비워두면 전체)"
+                : "e.g. html, css, js (leave empty for all)"}"
               class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-primary/50 transition-all font-sans"
               ?disabled="${this.isConverting}"
             />
@@ -886,7 +888,7 @@ export class RenamerSettingsPanel extends LitElement {
                                           type="number"
                                           id="remove-start"
                                           min="1"
-                                          placeholder="예: 3"
+                                          placeholder="${this.lang === "ko" ? "예: 3" : "e.g. 3"}"
                                           class="w-full bg-slate-950 border border-slate-850 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
                                         />
                                       </div>
@@ -898,7 +900,7 @@ export class RenamerSettingsPanel extends LitElement {
                                           type="number"
                                           id="remove-len"
                                           min="1"
-                                          placeholder="예: 2"
+                                          placeholder="${this.lang === "ko" ? "예: 2" : "e.g. 2"}"
                                           class="w-full bg-slate-950 border border-slate-850 focus:border-purple-primary focus:ring-1 focus:ring-purple-primary/20 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition-all font-sans"
                                         />
                                       </div>

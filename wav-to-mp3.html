@@ -134,6 +134,18 @@
   </script>
 
   <link rel="stylesheet" href="./src/index.css" />
+  <script>
+    (function() {
+      const savedLang = localStorage.getItem('batcher-lang') || 'ko';
+      document.documentElement.setAttribute('data-current-lang', savedLang);
+      document.documentElement.lang = savedLang;
+    })();
+  </script>
+  <style>
+    html[data-current-lang="en"] [data-lang="ko"] { display: none !important; }
+    html[data-current-lang="ko"] [data-lang="en"],
+    html:not([data-current-lang="en"]) [data-lang="en"] { display: none !important; }
+  </style>
   <script type="module" src="/src/batcher-app.ts"></script>
 </head>
 
@@ -152,14 +164,17 @@
     <!-- Hero Introduction -->
     <header class="text-center mb-16">
       <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-semibold uppercase tracking-wider mb-4">
-        <i class="fa-solid fa-music"></i>
-        <span>High-Fidelity Audio Encoder</span>
+        <span class="material-symbols-outlined text-[16px]">music_note</span>
+        <span data-lang="ko">고음질 오디오 압축 변환 도구</span>
+        <span data-lang="en">High-Fidelity Audio Converter</span>
       </div>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-100 tracking-tight mb-4">
-        대용량 WAV to MP3 초고속 일괄 오디오 변환기
+        <span data-lang="ko">대용량 WAV to MP3 초고속 오디오 일괄 변환기</span>
+        <span data-lang="en">Fast Bulk WAV to MP3 Audio Converter</span>
       </h1>
       <p class="text-slate-400 text-base max-w-2xl mx-auto leading-relaxed">
-        서버 업로드 없이 웹 브라우저 로컬 코덱으로 무압축 WAV 음원을 고품질 MP3로 즉시 압축 인코딩합니다. 팟캐스터, 영상 제작자, 사운드 엔지니어를 위한 맞춤 비트레이트 가이드입니다.
+        <span data-lang="ko">서버 업로드 없이 내 컴퓨터 브라우저 안에서 무겁고 큰 WAV 음원을 고품질 MP3로 즉시 압축 변환하세요. 팟캐스트, 스마트폰 음성 녹음, 유튜브 배경음악(BGM), 인터뷰 파일의 용량을 최대 90%까지 가볍게 줄여줍니다.</span>
+        <span data-lang="en">Compress heavy WAV audio files into high-quality MP3s right in your browser with zero server uploads. Shrink file sizes by up to 90% for podcasts, voice memos, YouTube BGM, and interviews.</span>
       </p>
     </header>
 
@@ -167,99 +182,139 @@
     <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
       <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
         <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-4 text-xl">
-          <i class="fa-solid fa-sliders"></i>
+          <span class="material-symbols-outlined">tune</span>
         </div>
-        <h2 class="text-lg font-bold text-slate-100 mb-2">128k ~ 320k 정밀 비트레이트</h2>
+        <h2 class="text-lg font-bold text-slate-100 mb-2">
+          <span data-lang="ko">목적별 맞춤 음질 (128k ~ 320k)</span>
+          <span data-lang="en">Tailored Bitrates (128k ~ 320k)</span>
+        </h2>
         <p class="text-xs text-slate-400 leading-relaxed">
-          용량 최소화부터 스튜디오급 320kbps 최고 음질까지 청취 환경과 배포 플랫폼에 꼭 맞는 비트레이트를 정밀 선택할 수 있습니다.
+          <span data-lang="ko">초경량 강의 녹음(128k)부터 깨끗한 영상 음악(256k), 스튜디오급 최고 음질(320k)까지 용도에 맞게 선택할 수 있습니다.</span>
+          <span data-lang="en">Choose from lightweight speech (128k), crisp video BGM (256k), or studio-grade master fidelity (320k).</span>
         </p>
       </div>
 
       <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
         <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4 text-xl">
-          <i class="fa-solid fa-shield-halved"></i>
+          <span class="material-symbols-outlined">lock</span>
         </div>
-        <h2 class="text-lg font-bold text-slate-100 mb-2">완벽한 음성 데이터 프라이버시</h2>
+        <h2 class="text-lg font-bold text-slate-100 mb-2">
+          <span data-lang="ko">음성 데이터 100% 비공개 보안</span>
+          <span data-lang="en">100% Private Voice Security</span>
+        </h2>
         <p class="text-xs text-slate-400 leading-relaxed">
-          타사 클라우드 업로드 방식과 달리 사용자 기기 내에서만 연산됩니다. 기밀 회의 녹음이나 미공개 트랙을 안전하게 변환하세요.
+          <span data-lang="ko">외부 인터넷 서버로 오디오를 올리지 않고 내 기기 안에서만 변환되어 민감한 회의 녹음이나 미공개 음원도 안심입니다.</span>
+          <span data-lang="en">Audio files never touch the cloud. Keep confidential interviews, meeting recordings, and unreleased music completely private.</span>
         </p>
       </div>
 
       <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
         <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-xl">
-          <i class="fa-solid fa-box-archive"></i>
+          <span class="material-symbols-outlined">folder_zip</span>
         </div>
-        <h2 class="text-lg font-bold text-slate-100 mb-2">90% 파일 용량 절감</h2>
+        <h2 class="text-lg font-bold text-slate-100 mb-2">
+          <span data-lang="ko">최대 90% 파일 용량 다이어트</span>
+          <span data-lang="en">Up to 90% Storage Diet</span>
+        </h2>
         <p class="text-xs text-slate-400 leading-relaxed">
-          수백 메가바이트의 무거운 WAV 음원을 음질 손실을 최소화하면서 1/10 수준의 가벼운 MP3로 압축하여 저장 공간을 절약합니다.
+          <span data-lang="ko">귀로 들었을 때 음질 차이가 거의 없으면서 파일 용량은 1/10 수준으로 쏙 줄여 디스크 용량을 넉넉하게 아껴줍니다.</span>
+          <span data-lang="en">Cut file size down to 1/10th with virtually indistinguishable listening quality, freeing up immense disk space.</span>
         </p>
       </div>
     </section>
 
-    <!-- In-Depth Technical Content Section -->
+    <!-- In-Depth Helpful Content Section -->
     <article class="glass-panel p-8 sm:p-12 rounded-3xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md mb-16 space-y-10 text-slate-300 text-sm leading-relaxed">
       
       <div>
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
-          <i class="fa-solid fa-headphones text-purple-400 text-lg"></i>
-          1. 무압축 WAV와 고효율 MP3 포맷의 기술적 구조 비교
+          <span class="material-symbols-outlined text-purple-400 text-2xl">headphones</span>
+          <span data-lang="ko">1. 무거운 WAV 원본 음원을 가벼운 MP3로 변환해야 하는 이유</span>
+          <span data-lang="en">1. Why You Need to Convert Heavy WAV to MP3</span>
         </h2>
         <p class="mb-3">
-          <strong>WAV(Waveform Audio File Format)</strong>는 마이크로소프트와 IBM이 공동 개발한 표준 오디오 파일 포맷으로, 아날로그 음성 신호를 디지털 펄스 부호 변조(Linear PCM) 방식으로 어떠한 손실이나 압축 없이 그대로 기록합니다. 따라서 스튜디오 레코딩과 음향 마스터링의 원본 보존에는 최상이지만, 1분 분량에 약 10MB, 1시간 분량에 600MB 이상의 방대한 디스크 공간과 대역폭을 요구합니다.
+          <span data-lang="ko"><strong>WAV 파일</strong>은 마이크나 녹음기에서 들어온 소리를 압축 없이 그대로 담는 포맷입니다. 음질은 매우 깨끗하지만, 단 1분 분량의 녹음 파일이 약 10MB, 1시간짜리 회의나 강의는 600MB가 넘을 정도로 용량이 거대합니다. 이 때문에 카카오톡이나 이메일로 전송하기 어렵고 하드디스크 용량을 빠르게 채웁니다.</span>
+          <span data-lang="en"><strong>WAV files</strong> capture raw, uncompressed sound. While pristine in quality, just 1 minute consumes 10MB, and a 1-hour interview can exceed 600MB. They are far too large to easily email, message, or store on mobile devices.</span>
         </p>
         <p class="mb-3">
-          반면 <strong>MP3(MPEG-1 Audio Layer III)</strong>는 인간의 귀가 감지하기 어려운 주파수 대역(마스킹 효과, 최소 가청 한계)을 제거하는 정교한 심리음향(Psychoacoustics) 손실 압축 알고리즘을 사용합니다. 이를 통해 원음 대비 약 80%~90%의 데이터 용량을 대폭 줄이면서도 일상적인 음악 감상이나 웹 배포 환경에서 원음과 차이를 느끼기 어려운 고품질 사운드를 제공합니다.
+          <span data-lang="ko">반면 <strong>MP3 포맷</strong>은 사람이 귀로 듣기 어려운 소리 정보만 영리하게 걸러내어 파일 크기를 약 80%~90% 줄여줍니다. 스마트폰, 자동차 내비게이션, 유튜브, 웹사이트 어디서나 가볍고 빠르게 재생할 수 있는 전 세계 표준 오디오 규격입니다.</span>
+          <span data-lang="en"><strong>MP3 format</strong> intelligently removes frequencies inaudible to human ears, slashing file sizes by 80% to 90%. It is the global audio standard playable everywhere from phones and web players to car audio.</span>
+        </p>
+        <p>
+          <span data-lang="ko">배처 툴은 무거운 WAV 음원 파일들을 고품질 MP3로 초고속 일괄 압축하여 보관과 공유를 훨씬 편리하게 만들어 줍니다.</span>
+          <span data-lang="en">Batcher Tools converts heavy WAV audio libraries into compact, high-quality MP3s in bulk for effortless sharing and archiving.</span>
         </p>
       </div>
 
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
-          <i class="fa-solid fa-chart-simple text-purple-400 text-lg"></i>
-          2. 목적에 맞는 최적의 오디오 비트레이트(Bitrate) 마스터 가이드
+          <span class="material-symbols-outlined text-purple-400 text-2xl">equalizer</span>
+          <span data-lang="ko">2. 내 작업에 딱 맞는 비트레이트(음질) 선택 가이드</span>
+          <span data-lang="en">2. Practical Bitrate Selection Guide for Your Needs</span>
         </h2>
         <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-          비트레이트(Bitrate)는 오디오 1초당 할당되는 데이터 전송률(kbps)입니다. 음원 목적과 플랫폼 요구사항에 맞는 권장 사양을 선택하세요:
+          <span data-lang="ko">비트레이트(Bitrate, kbps)는 숫자가 높을수록 음질이 풍부해지고 숫자가 낮을수록 파일 용량이 작아집니다. 상황에 맞춰 선택해 보세요:</span>
+          <span data-lang="en">Bitrate (kbps) determines fidelity and size. Higher means richer audio; lower means ultra-compact files. Pick the sweet spot for your project:</span>
         </p>
         
         <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950/60 p-1 mb-6">
           <table class="w-full text-left border-collapse text-xs">
             <thead>
               <tr class="border-b border-slate-800 text-slate-200 bg-slate-900/60 font-semibold">
-                <th class="py-3 px-4">비트레이트</th>
-                <th class="py-3 px-4">주파수 상한선 (Cutoff)</th>
-                <th class="py-3 px-4 text-purple-400 font-mono">1분당 예상 용량</th>
-                <th class="py-3 px-4">압축률 (vs WAV)</th>
-                <th class="py-3 px-4">최적 권장 시나리오</th>
+                <th class="py-3 px-4">
+                  <span data-lang="ko">비트레이트 설정</span>
+                  <span data-lang="en">Bitrate Setting</span>
+                </th>
+                <th class="py-3 px-4 text-purple-400 font-mono">
+                  <span data-lang="ko">1분당 파일 크기</span>
+                  <span data-lang="en">Size per Min</span>
+                </th>
+                <th class="py-3 px-4">
+                  <span data-lang="ko">용량 절감율</span>
+                  <span data-lang="en">Savings</span>
+                </th>
+                <th class="py-3 px-4">
+                  <span data-lang="ko">가장 추천하는 용도</span>
+                  <span data-lang="en">Recommended For</span>
+                </th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-800/60 text-slate-400">
               <tr>
-                <td class="py-2.5 px-4 font-bold text-purple-400">128 kbps</td>
-                <td class="py-2.5 px-4 font-mono text-slate-300">~ 16 kHz</td>
+                <td class="py-2.5 px-4 font-bold text-purple-400">128 kbps (<span data-lang="ko">초경량</span><span data-lang="en">Lightest</span>)</td>
                 <td class="py-2.5 px-4 font-mono text-emerald-400 font-bold">약 0.95 MB</td>
-                <td class="py-2.5 px-4 text-emerald-400">~ 90% 용량 절감</td>
-                <td class="py-2.5 px-4 text-slate-300">음성 녹음, 강의 인터뷰, 팟캐스트, 오디오북</td>
+                <td class="py-2.5 px-4 text-emerald-400">~ 90% <span data-lang="ko">다이어트</span><span data-lang="en">Reduction</span></td>
+                <td class="py-2.5 px-4 text-slate-300">
+                  <span data-lang="ko">강의 녹음, 회의 인터뷰, 팟캐스트 토크, 음성 메모</span>
+                  <span data-lang="en">Lectures, meeting voice notes, podcasts, interviews</span>
+                </td>
               </tr>
               <tr>
-                <td class="py-2.5 px-4 font-bold text-purple-400">192 kbps (추천)</td>
-                <td class="py-2.5 px-4 font-mono text-slate-300">~ 18 kHz</td>
+                <td class="py-2.5 px-4 font-bold text-purple-400">192 kbps (<span data-lang="ko">표준 추천</span><span data-lang="en">Recommended</span>)</td>
                 <td class="py-2.5 px-4 font-mono text-emerald-400 font-bold">약 1.44 MB</td>
-                <td class="py-2.5 px-4 text-emerald-400">~ 85% 용량 절감</td>
-                <td class="py-2.5 px-4 text-slate-300">웹 BGM, 모바일 음악 스트리밍, 게임 사운드 에셋</td>
+                <td class="py-2.5 px-4 text-emerald-400">~ 85% <span data-lang="ko">다이어트</span><span data-lang="en">Reduction</span></td>
+                <td class="py-2.5 px-4 text-slate-300">
+                  <span data-lang="ko">웹사이트 BGM, 스마트폰 음악 감상, 게임 사운드 효과음</span>
+                  <span data-lang="en">Web BGM, mobile listening, casual music, game sound effects</span>
+                </td>
               </tr>
               <tr>
-                <td class="py-2.5 px-4 font-bold text-purple-400">256 kbps</td>
-                <td class="py-2.5 px-4 font-mono text-slate-300">~ 19.5 kHz</td>
+                <td class="py-2.5 px-4 font-bold text-purple-400">256 kbps (<span data-lang="ko">고음질</span><span data-lang="en">High Quality</span>)</td>
                 <td class="py-2.5 px-4 font-mono text-emerald-400 font-bold">약 1.92 MB</td>
-                <td class="py-2.5 px-4 text-emerald-400">~ 80% 용량 절감</td>
-                <td class="py-2.5 px-4 text-slate-300">유튜브 고화질 영상 배경음악, 광고 및 방송 음향</td>
+                <td class="py-2.5 px-4 text-emerald-400">~ 80% <span data-lang="ko">다이어트</span><span data-lang="en">Reduction</span></td>
+                <td class="py-2.5 px-4 text-slate-300">
+                  <span data-lang="ko">유튜브 고화질 영상 배경음악, 광고 방송 사운드 트랙</span>
+                  <span data-lang="en">YouTube video background music, commercial soundtracks</span>
+                </td>
               </tr>
               <tr>
-                <td class="py-2.5 px-4 font-bold text-purple-400">320 kbps (최고음질)</td>
-                <td class="py-2.5 px-4 font-mono text-slate-300">~ 20 kHz (인간 가청한계 전대역)</td>
+                <td class="py-2.5 px-4 font-bold text-purple-400">320 kbps (<span data-lang="ko">최고 음질</span><span data-lang="en">Studio Master</span>)</td>
                 <td class="py-2.5 px-4 font-mono text-emerald-400 font-bold">약 2.40 MB</td>
-                <td class="py-2.5 px-4 text-emerald-400">~ 75% 용량 절감</td>
-                <td class="py-2.5 px-4 text-slate-300">음원 정식 출시, 고해상도 헤드폰 마스터링, 상업용 보관</td>
+                <td class="py-2.5 px-4 text-emerald-400">~ 75% <span data-lang="ko">다이어트</span><span data-lang="en">Reduction</span></td>
+                <td class="py-2.5 px-4 text-slate-300">
+                  <span data-lang="ko">음원 정식 유통 출시, 고급 헤드폰 음악 감상, 음향 마스터링</span>
+                  <span data-lang="en">Commercial music releases, audiophile listening, master archives</span>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -267,64 +322,106 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs mb-4">
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <strong class="text-purple-400 block text-sm mb-1">128 kbps (음성 녹음 & 팟캐스트)</strong>
-            <p class="text-slate-400 mb-2">인간 목소리 주파수 대역(300Hz ~ 3.4kHz)을 선명하게 유지하면서 모바일 네트워크 스트리밍 대역폭을 극소화합니다.</p>
-            <span class="text-[11px] text-slate-500">권장 용도: 강의 녹음, 인터뷰, 음성 메모, 오디오북</span>
+            <strong class="text-purple-400 block text-sm mb-1">
+              <span data-lang="ko">128 kbps: 목소리 녹음에 가장 알맞은 가벼운 크기</span>
+              <span data-lang="en">128 kbps: Ideal for Voice Recordings</span>
+            </strong>
+            <p class="text-slate-400 mb-2">
+              <span data-lang="ko">사람의 목소리 음역대를 깔끔하게 보존하면서 용량을 극도로 줄여주어 이메일 첨부나 메신저 공유에 최적입니다.</span>
+              <span data-lang="en">Preserves spoken voice clearly while keeping file size tiny, perfect for email attachments and messaging.</span>
+            </p>
           </div>
 
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <strong class="text-purple-400 block text-sm mb-1">192 kbps (웹 표준 & 스트리밍 균형)</strong>
-            <p class="text-slate-400 mb-2">대부분의 일반 청취 환경에서 원음(WAV)과 구분하기 어려운 음질을 유지하며 파일 크기를 1/7 수준으로 축소합니다.</p>
-            <span class="text-[11px] text-slate-500">권장 용도: 웹 사이트 BGM, 일반 모바일 음악 감상, 게임 효과음</span>
+            <strong class="text-purple-400 block text-sm mb-1">
+              <span data-lang="ko">192 kbps: 용량과 음질 모두 잡은 대중적 표준</span>
+              <span data-lang="en">192 kbps: The Everyday Balanced Standard</span>
+            </strong>
+            <p class="text-slate-400 mb-2">
+              <span data-lang="ko">이어폰이나 일반 스피커로 들었을 때 원음(WAV)과 구분하기 힘들 만큼 맑은 소리를 들려주면서 파일 크기도 가볍습니다.</span>
+              <span data-lang="en">Delivers clear sound nearly indistinguishable from raw WAV on standard speakers while remaining lightweight.</span>
+            </p>
           </div>
 
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <strong class="text-purple-400 block text-sm mb-1">256 kbps (고화질 영상 BGM)</strong>
-            <p class="text-slate-400 mb-2">복잡한 오케스트라 사운드나 공간감이 강조된 음향에서도 고주파 잔향이 뭉개지지 않고 선명하게 재현됩니다.</p>
-            <span class="text-[11px] text-slate-500">권장 용도: 유튜브 고화질 영상 배경음악, 광고 사운드 트랙</span>
+            <strong class="text-purple-400 block text-sm mb-1">
+              <span data-lang="ko">256 kbps: 영상 크리에이터를 위한 추천 설정</span>
+              <span data-lang="en">256 kbps: Recommended for Video Creators</span>
+            </strong>
+            <p class="text-slate-400 mb-2">
+              <span data-lang="ko">풍성한 배경음악과 악기 잔향이 뭉개지지 않고 선명하게 유지되어 유튜브 영상 편집에 가장 적합합니다.</span>
+              <span data-lang="en">Preserves rich background instrumentation and acoustic ambience without compression artifacts for video edits.</span>
+            </p>
           </div>
 
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <strong class="text-purple-400 block text-sm mb-1">320 kbps (최고 음질 & 마스터링 보관)</strong>
-            <p class="text-slate-400 mb-2">MP3 표준 규격에서 지원하는 최고 해상도로 20kHz 가청 한계 전 영역을 유지하여 스튜디오 마스터링급 사운드를 보존합니다.</p>
-            <span class="text-[11px] text-slate-500">권장 용도: 음원 정식 출시, 고성능 헤드폰 감상, 상업용 음악 아카이빙</span>
+            <strong class="text-purple-400 block text-sm mb-1">
+              <span data-lang="ko">320 kbps: 손실을 최소화한 스튜디오 최고 음질</span>
+              <span data-lang="en">320 kbps: Pristine Studio Quality</span>
+            </strong>
+            <p class="text-slate-400 mb-2">
+              <span data-lang="ko">MP3 규격이 낼 수 있는 최고 한계의 음질로, 상업용 음악 앨범 유통이나 고성능 헤드폰 감상에 권장합니다.</span>
+              <span data-lang="en">The maximum bitrate allowed in the MP3 standard, recommended for formal music distribution and audiophiles.</span>
+            </p>
           </div>
         </div>
       </div>
 
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
-          <i class="fa-solid fa-microchip text-purple-400 text-lg"></i>
-          3. Web Audio API 및 LameJS 기반 멀티스레드 로컬 인코딩 원리
+          <span class="material-symbols-outlined text-purple-400 text-2xl">security</span>
+          <span data-lang="ko">3. 인터넷 서버 업로드 없이 내 컴퓨터에서 바로 변환되는 안전 원리</span>
+          <span data-lang="en">3. Zero-Upload In-Browser Processing Safety</span>
         </h2>
         <p class="mb-3">
-          배처 툴은 최신 표준 <strong>HTML5 Web Audio API</strong>의 `AudioContext.decodeAudioData()` 메소드를 사용하여 브라우저에서 직접 WAV의 PCM 바이너리 데이터를 고속으로 디코딩합니다. 이후 세계적으로 검증된 고성능 오픈소스 MP3 인코더인 <strong>LameJS</strong> 엔진을 통해 순수한 32비트 부동소수점 오디오 채널 데이터를 실시간 MP3 프레임으로 인코딩합니다.
+          <span data-lang="ko">기존의 파일 변환 사이트들은 내 음원 파일을 인터넷 서버로 전송하여 변환합니다. 하지만 기업 회의 녹음이나 아직 발매되지 않은 개인 음원, 개인적인 통화 녹음 파일은 외부 서버에 올리면 심각한 유출 위험이 발생합니다.</span>
+          <span data-lang="en">Traditional converters upload your audio to third-party cloud servers, risking exposure of confidential business calls, private voice memos, or unreleased music tracks.</span>
         </p>
         <p>
-          이 모든 과정은 사용자의 웹 브라우저 메모리 안에서 단독 실행되므로 수백 개의 음원 파일을 변환하더라도 네트워크 트래픽이 전혀 발생하지 않으며, 서버 다운이나 트래픽 초과로 인한 변환 중단 걱정이 없습니다.
+          <span data-lang="ko">배처 툴은 최신 웹 브라우저 오디오 처리 기술을 사용하여 <strong>내 컴퓨터 메모리 안에서 단 1바이트의 외부 전송 없이 직접 인코딩</strong>합니다. 인터넷 연결을 끊어도 완벽하게 작동하며 파일 유출 위험이 원천 차단됩니다.</span>
+          <span data-lang="en">Batcher Tools uses client-side Web Audio technologies to encode files entirely inside your device memory with zero network transfers. It works seamlessly even offline with zero leak risks.</span>
         </p>
       </div>
 
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
-          <i class="fa-solid fa-list-check text-purple-400 text-lg"></i>
-          4. 3단계 대량 오디오 변환 방법
+          <span class="material-symbols-outlined text-purple-400 text-2xl">checklist</span>
+          <span data-lang="ko">4. 3단계 초간단 오디오 변환 방법</span>
+          <span data-lang="en">4. 3-Step Simple Audio Conversion Workflow</span>
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
           <div class="p-4 rounded-xl bg-slate-950/40 border border-slate-800">
             <span class="text-purple-400 font-extrabold text-sm block mb-1">STEP 01</span>
-            <strong class="text-slate-200 block mb-1 text-sm">WAV 파일 로드</strong>
-            <p class="text-slate-400">변환할 음원 파일들을 화면에 끌어다 놓거나 상단 '폴더 선택'으로 앨범 폴더를 지정합니다.</p>
+            <strong class="text-slate-200 block mb-1 text-sm">
+              <span data-lang="ko">WAV 파일 불러오기</span>
+              <span data-lang="en">Load WAV Files</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">변환할 음원 파일들을 화면으로 끌어다 놓거나 상단 '폴더 선택'으로 앨범 폴더를 지정합니다.</span>
+              <span data-lang="en">Drag &amp; drop audio tracks onto the screen or select an entire album folder.</span>
+            </p>
           </div>
           <div class="p-4 rounded-xl bg-slate-950/40 border border-slate-800">
             <span class="text-purple-400 font-extrabold text-sm block mb-1">STEP 02</span>
-            <strong class="text-slate-200 block mb-1 text-sm">비트레이트 설정</strong>
-            <p class="text-slate-400">목적에 맞게 128k, 192k, 256k, 320k 비트레이트 중 하나를 선택합니다.</p>
+            <strong class="text-slate-200 block mb-1 text-sm">
+              <span data-lang="ko">음질(비트레이트) 선택</span>
+              <span data-lang="en">Choose Bitrate</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">목적에 맞게 128k, 192k, 256k, 320k 중 원하는 품질을 클릭 한 번으로 선택합니다.</span>
+              <span data-lang="en">Select your preferred audio quality: 128k, 192k, 256k, or 320k with one click.</span>
+            </p>
           </div>
           <div class="p-4 rounded-xl bg-slate-950/40 border border-slate-800">
             <span class="text-purple-400 font-extrabold text-sm block mb-1">STEP 03</span>
-            <strong class="text-slate-200 block mb-1 text-sm">인코딩 및 저장</strong>
-            <p class="text-slate-400">'변환 시작'을 누르면 즉시 초고속 로컬 인코딩이 진행되며 완료 즉시 다운로드됩니다.</p>
+            <strong class="text-slate-200 block mb-1 text-sm">
+              <span data-lang="ko">변환 시작 & 저장</span>
+              <span data-lang="en">Convert &amp; Save</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">'변환 시작'을 누르면 즉시 초고속 로컬 변환이 진행되며 가벼워진 MP3를 다운로드합니다.</span>
+              <span data-lang="en">Click 'Start Conversion' to encode instantly and download your compact MP3 files.</span>
+            </p>
           </div>
         </div>
       </div>
@@ -332,41 +429,90 @@
       <!-- 추천 관련 기술 가이드 4선 -->
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-xl font-bold text-slate-100 mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-book-bookmark text-purple-400 text-base"></i>
-          함께 읽으면 좋은 추천 오디오 엔지니어링 가이드
+          <span class="material-symbols-outlined text-purple-400 text-xl">auto_stories</span>
+          <span data-lang="ko">함께 읽으면 좋은 추천 오디오 가이드</span>
+          <span data-lang="en">Recommended Audio Guides</span>
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           <a href="/guides/audio-bitrate.html" class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-purple-500/40 transition-all flex flex-col justify-between">
             <div>
-              <span class="text-purple-400 font-bold block mb-1">오디오 가이드</span>
-              <strong class="text-slate-200 block mb-1">WAV to MP3 오디오 변환 시 비트레이트 최적화 팁</strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">128kbps부터 320kbps까지 주파수 대역폭과 압축 손실률 정밀 분석.</p>
+              <span class="text-purple-400 font-bold block mb-1">
+                <span data-lang="ko">핵심 가이드</span>
+                <span data-lang="en">Key Guide</span>
+              </span>
+              <strong class="text-slate-200 block mb-1">
+                <span data-lang="ko">WAV to MP3 오디오 변환 시 비트레이트 최적화 팁</span>
+                <span data-lang="en">Bitrate Optimization Tips for WAV to MP3</span>
+              </strong>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                <span data-lang="ko">128kbps부터 320kbps까지 상황별 최적의 압축률 설정법.</span>
+                <span data-lang="en">Finding the sweet spot between file size and audio fidelity for every scenario.</span>
+              </p>
             </div>
-            <span class="text-purple-400 mt-2 font-semibold flex items-center gap-1">가이드 읽기 &rarr;</span>
+            <span class="text-purple-400 mt-2 font-semibold flex items-center gap-1">
+              <span data-lang="ko">가이드 읽기 &rarr;</span>
+              <span data-lang="en">Read Guide &rarr;</span>
+            </span>
           </a>
           <a href="/guides/audio-lossless-flac-wav-vs-mp3.html" class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-purple-500/40 transition-all flex flex-col justify-between">
             <div>
-              <span class="text-purple-400 font-bold block mb-1">음향 기술</span>
-              <strong class="text-slate-200 block mb-1">무손실 WAV vs 손실 MP3 음향 구조와 심리음향학 해설</strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">인간 청각의 마스킹 효과와 1/10 용량 압축의 과학적 원리.</p>
+              <span class="text-purple-400 font-bold block mb-1">
+                <span data-lang="ko">음향 상식</span>
+                <span data-lang="en">Audio Basics</span>
+              </span>
+              <strong class="text-slate-200 block mb-1">
+                <span data-lang="ko">무손실 WAV vs 압축 MP3 음질 차이 쉽게 알아보기</span>
+                <span data-lang="en">Uncompressed WAV vs Compressed MP3 Explained</span>
+              </strong>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                <span data-lang="ko">사람의 귀로 구분 가능한 차이와 스마트한 용량 다이어트 원리.</span>
+                <span data-lang="en">What the human ear actually hears and how MP3 achieves 90% size reduction.</span>
+              </p>
             </div>
-            <span class="text-purple-400 mt-2 font-semibold flex items-center gap-1">가이드 읽기 &rarr;</span>
+            <span class="text-purple-400 mt-2 font-semibold flex items-center gap-1">
+              <span data-lang="ko">가이드 읽기 &rarr;</span>
+              <span data-lang="en">Read Guide &rarr;</span>
+            </span>
           </a>
           <a href="/guides/web-worker-audio-encoding.html" class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-purple-500/40 transition-all flex flex-col justify-between">
             <div>
-              <span class="text-purple-400 font-bold block mb-1">엔지니어링 백서</span>
-              <strong class="text-slate-200 block mb-1">Web Workers를 활용한 무중단 브라우저 오디오 인코딩</strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">UI 스레드 멈춤 없이 백그라운드 병렬 멀티스레드로 음원을 인코딩하는 기술.</p>
+              <span class="text-purple-400 font-bold block mb-1">
+                <span data-lang="ko">기술 원리</span>
+                <span data-lang="en">Tech Insight</span>
+              </span>
+              <strong class="text-slate-200 block mb-1">
+                <span data-lang="ko">화면 멈춤 없는 무중단 브라우저 고속 오디오 변환</span>
+                <span data-lang="en">Lag-Free High-Speed In-Browser Audio Processing</span>
+              </strong>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                <span data-lang="ko">브라우저가 버벅거리지 않고 백그라운드에서 매끄럽게 음원을 처리하는 원리.</span>
+                <span data-lang="en">How background multi-threading encodes audio without freezing your UI.</span>
+              </p>
             </div>
-            <span class="text-purple-400 mt-2 font-semibold flex items-center gap-1">가이드 읽기 &rarr;</span>
+            <span class="text-purple-400 mt-2 font-semibold flex items-center gap-1">
+              <span data-lang="ko">가이드 읽기 &rarr;</span>
+              <span data-lang="en">Read Guide &rarr;</span>
+            </span>
           </a>
           <a href="/guides/audio-tag-timestamp-extraction-guide.html" class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-purple-500/40 transition-all flex flex-col justify-between">
             <div>
-              <span class="text-purple-400 font-bold block mb-1">실무 활용</span>
-              <strong class="text-slate-200 block mb-1">오디오 타임스탬프 추출 및 유튜브 챕터 자동 생성법</strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">대량 음원 메타데이터 파싱과 팟캐스트 구간 클립 분할 노하우.</p>
+              <span class="text-purple-400 font-bold block mb-1">
+                <span data-lang="ko">크리에이터 팁</span>
+                <span data-lang="en">Creator Tips</span>
+              </span>
+              <strong class="text-slate-200 block mb-1">
+                <span data-lang="ko">오디오 타임스탬프 추출 및 유튜브 챕터 자동 생성법</span>
+                <span data-lang="en">Audio Timestamp Extraction &amp; YouTube Chapters</span>
+              </strong>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                <span data-lang="ko">대량 음원 구간 분할과 팟캐스트 클립 정리 노하우.</span>
+                <span data-lang="en">Managing episode segments, timestamps, and podcast audio clips efficiently.</span>
+              </p>
             </div>
-            <span class="text-purple-400 mt-2 font-semibold flex items-center gap-1">가이드 읽기 &rarr;</span>
+            <span class="text-purple-400 mt-2 font-semibold flex items-center gap-1">
+              <span data-lang="ko">가이드 읽기 &rarr;</span>
+              <span data-lang="en">Read Guide &rarr;</span>
+            </span>
           </a>
         </div>
       </div>
@@ -375,46 +521,63 @@
     <!-- FAQ Accordion Section -->
     <section class="max-w-3xl mx-auto mb-20">
       <h2 class="text-2xl font-extrabold text-slate-100 mb-3 text-center tracking-tight">
-        자주 묻는 질문 (FAQ)
+        <span data-lang="ko">자주 묻는 질문 (FAQ)</span>
+        <span data-lang="en">Frequently Asked Questions (FAQ)</span>
       </h2>
       <p class="text-slate-400 text-xs text-center mb-8">
-        오디오 변환 및 비트레이트 설정에 관한 필수 질문들을 확인해 보세요.
+        <span data-lang="ko">오디오 변환 및 비트레이트 설정에 관한 질문들을 확인해 보세요.</span>
+        <span data-lang="en">Common questions about audio conversion and bitrate settings.</span>
       </p>
 
       <div class="border-t border-b border-slate-800 divide-y divide-slate-800">
         <details class="group" open>
           <summary class="text-base font-semibold text-slate-100 py-5 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-purple-400 transition-colors">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-question text-purple-400 text-sm"></i> 변환 시 오디오 스테레오(Stereo) 2채널이 유지되나요?
+              <span class="material-symbols-outlined text-purple-400 text-lg">help</span>
+              <span data-lang="ko">변환 시 좌우 입체음향(스테레오 2채널)이 그대로 유지되나요?</span>
+              <span data-lang="en">Is left/right stereo 2-channel sound preserved during conversion?</span>
             </span>
-            <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+            <span class="material-symbols-outlined text-slate-500 text-base transition-transform duration-200 group-open:rotate-180">expand_more</span>
           </summary>
           <div class="px-1 pb-5 text-slate-300 text-xs leading-relaxed">
-            <p>네, 배처 툴은 원본 WAV 파일의 좌(Left)/우(Right) 2채널 오디오 데이터를 완벽히 분리하여 디코딩한 뒤 고음질 스테레오 MP3 스트림으로 인코딩합니다. 모노(Mono) 음원의 경우에도 규격에 맞춰 정확하게 처리됩니다.</p>
+            <p>
+              <span data-lang="ko">네, 완벽히 유지됩니다! 원본 WAV 음원의 좌(Left) &middot; 우(Right) 2채널 오디오 데이터가 그대로 분리되어 고음질 스테레오 MP3 파일로 인코딩됩니다. 모노(1채널) 음원의 경우에도 원본 규격에 맞게 안전하게 처리됩니다.</span>
+              <span data-lang="en">Yes, perfectly preserved! The left and right audio channels from your source WAV are separated and encoded into a high-fidelity stereo MP3. Mono tracks are also handled accurately to their original specification.</span>
+            </p>
           </div>
         </details>
 
         <details class="group">
           <summary class="text-base font-semibold text-slate-100 py-5 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-purple-400 transition-colors">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-question text-purple-400 text-sm"></i> 변환 후 원본 WAV 파일을 자동으로 삭제할 수 있나요?
+              <span class="material-symbols-outlined text-purple-400 text-lg">help</span>
+              <span data-lang="ko">변환이 끝난 뒤 무거운 원본 WAV 파일을 자동으로 지울 수 있나요?</span>
+              <span data-lang="en">Can I automatically delete heavy original WAV files after conversion?</span>
             </span>
-            <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+            <span class="material-symbols-outlined text-slate-500 text-base transition-transform duration-200 group-open:rotate-180">expand_more</span>
           </summary>
           <div class="px-1 pb-5 text-slate-300 text-xs leading-relaxed">
-            <p>File System Access API를 지원하는 최신 브라우저(Chrome, Edge 등)에서 폴더를 선택한 경우, 설정 패널에서 '변환 완료 후 원본 파일 자동 삭제' 옵션을 활성화하면 디스크 공간을 실시간으로 확보하며 정리할 수 있습니다.</p>
+            <p>
+              <span data-lang="ko">네! Chrome, Edge 등 최신 브라우저에서 '폴더 선택'으로 작업 폴더를 불러온 경우, 설정 패널에서 '변환 완료 후 원본 파일 자동 삭제' 옵션을 켜두시면 변환 성공 즉시 무거운 원본이 정리되어 디스크 여유 공간이 실시간으로 늘어납니다.</span>
+              <span data-lang="en">Yes! When loading a folder in modern browsers (Chrome, Edge), enable the 'Auto-delete original files after conversion' option in the settings panel to clear bulky original WAVs immediately upon successful conversion.</span>
+            </p>
           </div>
         </details>
 
         <details class="group">
           <summary class="text-base font-semibold text-slate-100 py-5 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-purple-400 transition-colors">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-question text-purple-400 text-sm"></i> 상업적 앨범이나 게임 사운드 에셋 제작에 사용해도 되나요?
+              <span class="material-symbols-outlined text-purple-400 text-lg">help</span>
+              <span data-lang="ko">유튜브 수익 창출 영상이나 상업적 음원 제작에 사용해도 되나요?</span>
+              <span data-lang="en">Can I use converted audio for monetized YouTube videos &amp; commercial songs?</span>
             </span>
-            <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+            <span class="material-symbols-outlined text-slate-500 text-base transition-transform duration-200 group-open:rotate-180">expand_more</span>
           </summary>
           <div class="px-1 pb-5 text-slate-300 text-xs leading-relaxed">
-            <p>네, 배처 툴을 이용해 변환된 모든 오디오 파일에 대한 저작권과 상업적 권리는 100% 사용자에게 있습니다. 상업용 음원 발매, 유튜브 수익 창출 영상, 모바일 게임 BGM 등 어떠한 상업적 프로젝트에도 자유롭게 활용하실 수 있습니다.</p>
+            <p>
+              <span data-lang="ko">네, 전혀 제약이 없습니다! 배처 툴을 이용해 변환된 모든 오디오 파일의 권리는 100% 사용자에게 있습니다. 유튜브 수익 창출 영상, 광고 및 방송, 게임 효과음, 상업용 음악 음원 발매 등 모든 프로젝트에 완전 무료로 자유롭게 쓰실 수 있습니다.</span>
+              <span data-lang="en">Yes, completely free with zero limitations! All intellectual property and commercial rights belong 100% to you. You can freely use converted files in monetized videos, commercial releases, podcasts, and video games.</span>
+            </p>
           </div>
         </details>
       </div>
@@ -423,14 +586,25 @@
     <!-- Internal Linking Navigation -->
     <nav class="pt-8 border-t border-slate-800 flex flex-wrap items-center justify-between gap-4 text-xs">
       <a href="/" class="text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1.5">
-        <i class="fa-solid fa-house"></i> 메인 홈으로 이동
+        <span class="material-symbols-outlined text-base">home</span>
+        <span data-lang="ko">메인 홈으로 이동</span>
+        <span data-lang="en">Back to Home</span>
       </a>
       <div class="flex items-center gap-4 text-slate-400">
-        <a href="/svg-to-png.html" class="hover:text-slate-200 transition-colors">SVG to PNG 변환기</a>
+        <a href="/svg-to-png.html" class="hover:text-slate-200 transition-colors">
+          <span data-lang="ko">SVG to PNG 변환기</span>
+          <span data-lang="en">SVG to PNG Converter</span>
+        </a>
         <span class="text-slate-800">|</span>
-        <a href="/batch-rename.html" class="hover:text-slate-200 transition-colors">대량 파일명 일괄 변경</a>
+        <a href="/batch-rename.html" class="hover:text-slate-200 transition-colors">
+          <span data-lang="ko">대량 파일명 일괄 변경</span>
+          <span data-lang="en">Batch Renamer</span>
+        </a>
         <span class="text-slate-800">|</span>
-        <a href="/guides/index.html" class="hover:text-slate-200 transition-colors">전체 가이드 허브</a>
+        <a href="/guides/index.html" class="hover:text-slate-200 transition-colors">
+          <span data-lang="ko">전체 가이드 허브</span>
+          <span data-lang="en">Guides Hub</span>
+        </a>
       </div>
     </nav>
 
@@ -446,10 +620,14 @@
             <div class="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/70 text-primary flex items-center justify-center shrink-0">
               <span class="material-symbols-outlined text-[18px]">verified_user</span>
             </div>
-            <span class="text-sm sm:text-base font-bold text-on-surface">100% 브라우저 로컬 데이터 보안</span>
+            <span class="text-sm sm:text-base font-bold text-on-surface">
+              <span data-lang="ko">100% 브라우저 로컬 데이터 보안</span>
+              <span data-lang="en">100% In-Browser Local Privacy</span>
+            </span>
           </div>
           <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-            업로드하신 모든 그래픽, 음원, 문서는 외부 서버로 전송되지 않고 사용자의 기기 브라우저(WebAssembly &amp; Web Workers) 안에서 100% 즉시 처리 후 폐기됩니다.
+            <span data-lang="ko">선택하신 모든 사진, 음원, 그래픽 파일은 외부 서버로 전송되지 않고 사용자의 기기 브라우저 안에서 100% 즉시 처리 후 안전하게 유지됩니다.</span>
+            <span data-lang="en">All your selected photos, audio, and graphic files are processed 100% locally within your device browser and are never sent to external servers.</span>
           </p>
         </div>
 
@@ -457,28 +635,66 @@
         <div class="flex flex-wrap sm:flex-nowrap gap-10 sm:gap-14 text-xs sm:text-sm">
           <!-- Col 1: Tools -->
           <div class="flex flex-col gap-2.5">
-            <span class="font-bold text-on-surface mb-1">도구 바로가기</span>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/svg-to-png.html">SVG 변환기</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/wav-to-mp3.html">오디오 변환기</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/batch-rename.html">대량 이름 바꾸기</a>
+            <span class="font-bold text-on-surface mb-1">
+              <span data-lang="ko">도구 바로가기</span>
+              <span data-lang="en">Tools</span>
+            </span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/svg-to-png.html">
+              <span data-lang="ko">SVG 변환기</span>
+              <span data-lang="en">SVG Converter</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/wav-to-mp3.html">
+              <span data-lang="ko">오디오 변환기</span>
+              <span data-lang="en">Audio Converter</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/batch-rename.html">
+              <span data-lang="ko">대량 이름 바꾸기</span>
+              <span data-lang="en">Batch Renamer</span>
+            </a>
           </div>
 
           <!-- Col 2: Security & About -->
           <div class="flex flex-col gap-2.5">
-            <span class="font-bold text-on-surface mb-1">보안 및 안내</span>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/serverless-local-conversion.html">데이터 무전송 증명</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/about.html">소개</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/index.html">사용 가이드</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/contact.html">문의하기</a>
+            <span class="font-bold text-on-surface mb-1">
+              <span data-lang="ko">보안 및 안내</span>
+              <span data-lang="en">Security &amp; Info</span>
+            </span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/serverless-local-conversion.html">
+              <span data-lang="ko">데이터 무전송 증명</span>
+              <span data-lang="en">Zero-Upload Proof</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/about.html">
+              <span data-lang="ko">소개</span>
+              <span data-lang="en">About</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/index.html">
+              <span data-lang="ko">사용 가이드</span>
+              <span data-lang="en">User Guides</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/contact.html">
+              <span data-lang="ko">문의하기</span>
+              <span data-lang="en">Contact</span>
+            </a>
           </div>
 
           <!-- Col 3: Policy & Donate -->
           <div class="flex flex-col gap-2.5">
-            <span class="font-bold text-on-surface mb-1">정책</span>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/privacy.html">개인정보처리방침</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/terms.html">서비스 이용약관</a>
+            <span class="font-bold text-on-surface mb-1">
+              <span data-lang="ko">정책</span>
+              <span data-lang="en">Legal</span>
+            </span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/privacy.html">
+              <span data-lang="ko">개인정보처리방침</span>
+              <span data-lang="en">Privacy Policy</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/terms.html">
+              <span data-lang="ko">서비스 이용약관</span>
+              <span data-lang="en">Terms of Service</span>
+            </a>
             <a class="text-amber-600 dark:text-amber-400 hover:underline inline-flex items-center gap-1 font-bold" href="https://buymeacoffee.com/playNolang" target="_blank" rel="noopener noreferrer">
-              <span>☕</span> 커피 후원
+              <span>☕</span>
+              <span data-lang="ko">커피 후원</span>
+              <span data-lang="en">Buy Me a Coffee</span>
             </a>
           </div>
         </div>
@@ -487,11 +703,14 @@
       <!-- Bottom Bar -->
       <div class="pt-8 mt-10 border-t border-surface-container flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-on-surface-variant">
         <div>
-          <span>© 2026 Batcher. 서버 전송 없는 100% 브라우저 로컬 파일 변환 도구. All rights reserved.</span>
+          <span>&copy; 2026 Batcher. </span>
+          <span data-lang="ko">서버 전송 없는 100% 브라우저 로컬 파일 변환 도구. All rights reserved.</span>
+          <span data-lang="en">Zero-Upload 100% In-Browser Local File Tools. All rights reserved.</span>
         </div>
         <div class="flex items-center gap-2 font-medium">
           <span class="w-2 h-2 rounded-full bg-primary inline-block animate-pulse"></span>
-          <span>온디바이스 가속 엔진 가동 중</span>
+          <span data-lang="ko">온디바이스 가속 엔진 가동 중</span>
+          <span data-lang="en">On-Device Fast Engine Active</span>
         </div>
       </div>
     </div>

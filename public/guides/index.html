@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>사용 가이드 및 기술 아티클 허브 - Batcher Tools</title>
-  <meta name="description" content="SVG 벡터 변환, WAV/MP3 오디오 인코딩, 대량 파일 이름 일괄 변경, 정규식 활용법 및 브라우저 로컬 데이터 보안 기술 가이드 모음입니다." />
-  <meta name="keywords" content="Batcher Tools 사용 가이드, 파일 변환 가이드, SVG PNG 변환 팁, WAV MP3 인코딩 팁, 정규식 파일 리네이밍 팁" />
+  <title>사용 가이드 및 팁 모음 (User Guides) - Batcher Tools</title>
+  <meta name="description" content="SVG 이미지 변환, 고음질 오디오 인코딩, 대량 파일 이름 일괄 변경, 규칙 설정 팁 및 안전한 브라우저 로컬 데이터 처리 가이드 모음입니다." />
+  <meta name="keywords" content="Batcher Tools 사용 가이드, 파일 변환 가이드, SVG PNG 변환 팁, WAV MP3 인코딩 팁, 파일 이름 일괄 변경 팁" />
   
   <link rel="canonical" href="https://batchertools.com/guides/index.html" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -17,6 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6294524233833258" crossorigin="anonymous"></script>
@@ -26,8 +27,8 @@
     {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "name": "Batcher Tools 가이드 및 기술 블로그 허브",
-      "description": "대용량 파일 변환 및 리네이밍 워크플로우를 극대화하는 18편 이상의 심층 기술 가이드 모음",
+      "name": "Batcher Tools Guides & Practical Tutorials",
+      "description": "Collection of actionable guides for high-volume file conversion and smart renaming.",
       "url": "https://batchertools.com/guides/index.html"
     }
   </script>
@@ -39,21 +40,32 @@
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "홈",
+          "name": "Home",
           "item": "https://batchertools.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "사용 가이드",
+          "name": "Guides",
           "item": "https://batchertools.com/guides/index.html"
         }
       ]
     }
   </script>
 
+  <script>
+    (function() {
+      const savedLang = localStorage.getItem('batcher-lang') || 'ko';
+      document.documentElement.setAttribute('data-current-lang', savedLang);
+      document.documentElement.lang = savedLang;
+    })();
+  </script>
   <style>
     :root { color-scheme: dark; }
+    html[data-current-lang="en"] [data-lang="ko"] { display: none !important; }
+    html[data-current-lang="ko"] [data-lang="en"],
+    html:not([data-current-lang="en"]) [data-lang="en"] { display: none !important; }
+
     body {
       margin: 0; padding: 0;
       background-color: #020617; color: #cbd5e1;
@@ -65,11 +77,17 @@
     .header { border-bottom: 1px solid #1e293b; padding-bottom: 2rem; margin-bottom: 3rem; display: flex; flex-direction: column; gap: 1rem; }
     .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; color: #818cf8; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; }
     .back-btn:hover { color: #a5b4fc; }
-    h1 { font-size: 2.5rem; margin: 0.5rem 0; background: linear-gradient(to right, #ffffff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .lang-toggle-btn { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #e2e8f0; padding: 0.35rem 0.75rem; border-radius: 0.75rem; font-size: 0.75rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 700; transition: all 0.2s; user-select: none; }
+    .lang-toggle-btn:hover { background: rgba(255, 255, 255, 0.15); }
+    html[data-current-lang="ko"] .lang-label-ko { color: #818cf8; font-weight: 800; }
+    html[data-current-lang="ko"] .lang-label-en { opacity: 0.5; font-weight: 500; }
+    html[data-current-lang="en"] .lang-label-en { color: #818cf8; font-weight: 800; }
+    html[data-current-lang="en"] .lang-label-ko { opacity: 0.5; font-weight: 500; }
+    h1 { font-size: 2.25rem; margin: 0.5rem 0; background: linear-gradient(to right, #ffffff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     .meta { font-size: 0.95rem; color: #64748b; }
     
     .category-section { margin-bottom: 3.5rem; }
-    .category-title { font-size: 1.4rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem; border-bottom: 1px solid #1e293b; padding-bottom: 0.75rem; }
+    .category-title { font-size: 1.35rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem; border-bottom: 1px solid #1e293b; padding-bottom: 0.75rem; }
     
     .guide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem; }
     .guide-card {
@@ -100,71 +118,137 @@
     <div class="header">
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
         <a href="/" class="back-btn">
-          <i class="fa-solid fa-arrow-left"></i>
-          <span>메인 도구 화면으로 이동</span>
+          <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+          <span data-lang="ko">메인 도구 홈으로 이동</span>
+          <span data-lang="en">Back to Main Tools</span>
         </a>
-        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.82rem;">
-          <a href="/svg-to-png.html" style="color: #818cf8; text-decoration: none; padding: 0.35rem 0.75rem; background: rgba(99, 102, 241, 0.12); border-radius: 9999px; border: 1px solid rgba(99, 102, 241, 0.25);">SVG 변환기</a>
-          <a href="/wav-to-mp3.html" style="color: #c084fc; text-decoration: none; padding: 0.35rem 0.75rem; background: rgba(168, 85, 247, 0.12); border-radius: 9999px; border: 1px solid rgba(168, 85, 247, 0.25);">오디오 변환기</a>
-          <a href="/batch-rename.html" style="color: #f472b6; text-decoration: none; padding: 0.35rem 0.75rem; background: rgba(236, 72, 153, 0.12); border-radius: 9999px; border: 1px solid rgba(236, 72, 153, 0.25);">대량 리네이머</a>
-          <a href="/about.html" style="color: #94a3b8; text-decoration: none; padding: 0.35rem 0.75rem; background: rgba(255, 255, 255, 0.05); border-radius: 9999px;">소개</a>
+        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; font-size: 0.82rem;">
+            <a href="/svg-to-png.html" style="color: #818cf8; text-decoration: none; padding: 0.35rem 0.75rem; background: rgba(99, 102, 241, 0.12); border-radius: 9999px; border: 1px solid rgba(99, 102, 241, 0.25);">
+              <span data-lang="ko">SVG 변환기</span><span data-lang="en">SVG Converter</span>
+            </a>
+            <a href="/wav-to-mp3.html" style="color: #c084fc; text-decoration: none; padding: 0.35rem 0.75rem; background: rgba(168, 85, 247, 0.12); border-radius: 9999px; border: 1px solid rgba(168, 85, 247, 0.25);">
+              <span data-lang="ko">오디오 변환기</span><span data-lang="en">Audio Converter</span>
+            </a>
+            <a href="/batch-rename.html" style="color: #f472b6; text-decoration: none; padding: 0.35rem 0.75rem; background: rgba(236, 72, 153, 0.12); border-radius: 9999px; border: 1px solid rgba(236, 72, 153, 0.25);">
+              <span data-lang="ko">대량 리네이머</span><span data-lang="en">Batch Renamer</span>
+            </a>
+            <a href="/about.html" style="color: #94a3b8; text-decoration: none; padding: 0.35rem 0.75rem; background: rgba(255, 255, 255, 0.05); border-radius: 9999px;">
+              <span data-lang="ko">소개</span><span data-lang="en">About</span>
+            </a>
+          </div>
+          <button id="langToggleBtn" class="lang-toggle-btn" onclick="togglePageLang()" title="언어 변경 (KO/EN)">
+            <span class="material-symbols-outlined text-[17px]">language</span>
+            <span><span class="lang-label-ko">KO</span>/<span class="lang-label-en">EN</span></span>
+          </button>
         </div>
       </div>
-      <h1>사용 가이드 &amp; 기술 아티클 허브</h1>
+      <h1>
+        <span data-lang="ko">사용 가이드 &amp; 실무 팁 허브</span>
+        <span data-lang="en">User Guides &amp; Practical Tips Hub</span>
+      </h1>
       <div class="meta">
-        <span>파일 일괄 변환 및 스마트 리네이밍의 효율성을 극대화하는 전문가 노하우 및 18편 이상의 실무 기술 문서 모음입니다.</span>
+        <span data-lang="ko">디자이너, 크리에이터, 일반 사용자가 일상 업무에서 마주치는 대용량 변환과 파일 정리 고민을 시원하게 해결하는 실무 가이드 모음입니다.</span>
+        <span data-lang="en">Practical tutorials and tips for designers, creators, and professionals to streamline bulk conversion and batch file organization.</span>
       </div>
     </div>
 
     <!-- Category 1: SVG & 이미지 변환 -->
     <section class="category-section">
       <h2 class="category-title">
-        <i class="fa-solid fa-file-image text-indigo-400"></i> SVG 및 이미지 에셋 변환 가이드
+        <span class="material-symbols-outlined text-indigo-400">image</span>
+        <span data-lang="ko">SVG 및 이미지 에셋 변환 가이드</span>
+        <span data-lang="en">SVG &amp; Image Asset Conversion Guides</span>
       </h2>
       <div class="guide-grid">
         <a href="/guides/svg-to-png.html" class="guide-card">
           <div>
             <span class="guide-badge badge-indigo">SVG 변환</span>
-            <div class="guide-title">대량 SVG 파일 PNG/JPG 고화질 변환 및 레티나 배율 가이드</div>
-            <p class="guide-desc">1.0x, 1.5x, 2.0x(@2x), 3.0x(@3x) 다중 해상도 에셋을 손실 없이 일괄 추출하는 표준 워크플로우.</p>
+            <div class="guide-title">
+              <span data-lang="ko">대량 SVG 파일 PNG/JPG 고화질 변환 및 레티나 배율 가이드</span>
+              <span data-lang="en">Bulk SVG to High-Res PNG/JPG Export &amp; Retina Scaling Guide</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">1.0x, 1.5x, 2.0x(@2x), 3.0x(@3x) 다중 해상도 아이콘과 이미지를 깨짐 없이 선명하게 일괄 추출하는 표준 워크플로우.</span>
+              <span data-lang="en">Standard workflow for exporting 1x, 2x (@2x), and 3x (@3x) crisp graphics without pixelation or quality loss.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
 
         <a href="/guides/figma-illustrator-svg-export-troubleshooting.html" class="guide-card">
           <div>
             <span class="guide-badge badge-indigo">디자인 툴 팁</span>
-            <div class="guide-title">피그마/일러스트레이터 SVG 에셋 추출 시 흔한 오류와 해결법</div>
-            <p class="guide-desc">viewBox 누락, 폰트 아웃라인 미적용, 클리핑 마스크 왜곡 오류의 원인과 해결법.</p>
+            <div class="guide-title">
+              <span data-lang="ko">피그마/일러스트레이터 SVG 에셋 추출 시 흔한 오류와 해결법</span>
+              <span data-lang="en">Figma &amp; Illustrator SVG Export Troubleshooting</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">아이콘 잘림(viewBox 누락), 폰트 깨짐(Outline 미적용), 마스크 왜곡 원인과 3초 해결 노하우.</span>
+              <span data-lang="en">Fix common SVG bugs: clipped boundaries, missing font outlines, and distorted mask vectors in 3 seconds.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
 
         <a href="/guides/multi-resolution-asset-export.html" class="guide-card">
           <div>
             <span class="guide-badge badge-indigo">모바일 에셋</span>
-            <div class="guide-title">모바일 앱 다중 해상도 에셋 익스포트 워크플로우 가이드</div>
-            <p class="guide-desc">iOS Retina 및 Android DPI 규격에 맞춘 그래픽 에셋 일괄 추출 및 관리 전략.</p>
+            <div class="guide-title">
+              <span data-lang="ko">모바일 앱 다중 해상도 에셋 익스포트 워크플로우 가이드</span>
+              <span data-lang="en">Mobile Multi-Resolution Asset Export Workflow</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">iOS Retina 규격과 Android 다양한 해상도에 맞춘 그래픽 에셋 일괄 추출 및 관리 전략.</span>
+              <span data-lang="en">Comprehensive strategy for organizing graphic assets across iOS Retina densities and Android DPI standards.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
 
         <a href="/guides/retina-display-asset-management.html" class="guide-card">
           <div>
             <span class="guide-badge badge-indigo">디스플레이 표준</span>
-            <div class="guide-title">고해상도 레티나 디스플레이 대응 에셋 규격 및 관리 표준</div>
-            <p class="guide-desc">CSS 픽셀과 디바이스 물리 픽셀의 차이 및 @1x, @2x, @3x 네이밍 표준 규격.</p>
+            <div class="guide-title">
+              <span data-lang="ko">고해상도 레티나 디스플레이 대응 에셋 규격 및 관리 표준</span>
+              <span data-lang="en">High-Resolution Retina Display Asset Guidelines</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">화면 픽셀과 실제 해상도의 차이, 그리고 @1x, @2x, @3x 네이밍 규칙을 체계적으로 정리합니다.</span>
+              <span data-lang="en">Understand CSS pixels vs physical pixels, and maintain clean @1x, @2x, @3x asset naming standards.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
 
         <a href="/guides/svg-path-optimization-and-cleaner.html" class="guide-card">
           <div>
-            <span class="guide-badge badge-indigo">웹 성능 최적화</span>
-            <div class="guide-title">웹 성능 최적화를 위한 SVG 코드 압축 및 메타데이터 제거</div>
-            <p class="guide-desc">불필요한 XML 네임스페이스와 주석을 제거하고 패스 소수점을 줄여 70% 용량 감축.</p>
+            <span class="guide-badge badge-indigo">웹 최적화</span>
+            <div class="guide-title">
+              <span data-lang="ko">웹 성능 최적화를 위한 SVG 코드 압축 및 불필요한 메타데이터 제거</span>
+              <span data-lang="en">SVG Optimization &amp; Metadata Cleaning for Fast Web</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">디자인 프로그램이 남긴 불필요한 주석과 빈 태그를 덜어내어 로딩 속도를 최대 70% 단축하는 팁.</span>
+              <span data-lang="en">Strip unnecessary XML metadata and empty tags to reduce file size and accelerate web page speeds by up to 70%.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
       </div>
     </section>
@@ -172,154 +256,290 @@
     <!-- Category 2: 오디오 & 음원 인코딩 -->
     <section class="category-section">
       <h2 class="category-title">
-        <i class="fa-solid fa-music text-purple-400"></i> 오디오 및 음원 인코딩 가이드
+        <span class="material-symbols-outlined text-purple-400">headphones</span>
+        <span data-lang="ko">오디오 및 음원 변환 가이드</span>
+        <span data-lang="en">Audio Conversion &amp; Encoding Guides</span>
       </h2>
       <div class="guide-grid">
         <a href="/guides/wav-to-mp3.html" class="guide-card">
           <div>
             <span class="guide-badge badge-purple">오디오 변환</span>
-            <div class="guide-title">WAV MP3 오디오 대량 일괄 변환 및 비트레이트 설정 가이드</div>
-            <p class="guide-desc">대용량 무압축 WAV 음원을 128k~320kbps MP3로 압축 인코딩하는 실무 팁.</p>
+            <div class="guide-title">
+              <span data-lang="ko">WAV MP3 오디오 대량 일괄 변환 및 비트레이트 설정 가이드</span>
+              <span data-lang="en">Batch WAV to MP3 Conversion &amp; Bitrate Optimization</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">용량이 무거운 WAV 원본을 128k~320kbps MP3로 가볍게 다이어트하여 공유하기 편하게 만드는 노하우.</span>
+              <span data-lang="en">Compress heavy studio WAV recordings into lightweight 128k-320kbps MP3s while maintaining crystal clear fidelity.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
 
         <a href="/guides/audio-bitrate.html" class="guide-card">
           <div>
-            <span class="guide-badge badge-purple">음향 이론</span>
-            <div class="guide-title">오디오 비트레이트 완벽 가이드: 128k vs 192k vs 320k 음질 비교</div>
-            <p class="guide-desc">비트레이트 수치별 주파수 컷오프 스펙트럼과 파일 크기 계산 공식 총정리.</p>
+            <span class="guide-badge badge-purple">음질 팁</span>
+            <div class="guide-title">
+              <span data-lang="ko">오디오 비트레이트 완벽 가이드: 128k vs 192k vs 320k 음질 비교</span>
+              <span data-lang="en">Audio Bitrate Guide: 128k vs 192k vs 320k Comparison</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">목소리 녹음, 팟캐스트, 고음질 음악 감상 등 용도에 맞는 최적의 비트레이트 선택 기준.</span>
+              <span data-lang="en">How to pick the perfect audio bitrate for voice memos, podcasts, and high-fidelity music streaming.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
 
         <a href="/guides/audio-lossless-flac-wav-vs-mp3.html" class="guide-card">
           <div>
             <span class="guide-badge badge-purple">포맷 비교</span>
-            <div class="guide-title">무손실 음원(FLAC, WAV)과 MP3 손실 압축 원리 및 선택 기준</div>
-            <p class="guide-desc">비압축 원음, 가역 무손실, 손실 압축의 기술적 구조와 목적별 선택 가이드.</p>
+            <div class="guide-title">
+              <span data-lang="ko">무손실 음원(FLAC, WAV)과 MP3 손실 압축 원리 및 선택 기준</span>
+              <span data-lang="en">Lossless Audio (FLAC, WAV) vs MP3 Compression Guide</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">용량과 음질 사이에서 고민하는 크리에이터를 위한 포맷별 특징과 최적 추천 세팅.</span>
+              <span data-lang="en">Format tradeoffs between uncompressed masters and compressed listening files for content creators.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
 
         <a href="/guides/web-worker-audio-encoding.html" class="guide-card">
           <div>
-            <span class="guide-badge badge-purple">웹 기술</span>
-            <div class="guide-title">Web Worker와 LameJS를 활용한 브라우저 멀티스레드 오디오 인코딩</div>
-            <p class="guide-desc">UI 멈춤 없이 백그라운드 스레드에서 대량 음원을 고속 인코딩하는 웹 아키텍처.</p>
+            <span class="guide-badge badge-purple">안정성</span>
+            <div class="guide-title">
+              <span data-lang="ko">화면 멈춤 없이 수백 개 음원을 빠르게 변환하는 웹 브라우저 엔진 원리</span>
+              <span data-lang="en">Smooth Multi-File Audio Encoding Without Browser Freezes</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">백그라운드에서 조용히 일하는 고속 프로세싱 기술로 웹 브라우저가 버벅거리지 않는 비결.</span>
+              <span data-lang="en">How background multi-threading processes bulk audio queues smoothly without freezing browser tabs.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
 
         <a href="/guides/audio-tag-timestamp-extraction-guide.html" class="guide-card">
           <div>
-            <span class="guide-badge badge-purple">메타데이터</span>
-            <div class="guide-title">오디오 메타데이터 구조와 타임스탬프 기반 구간 분할 관리 가이드</div>
-            <p class="guide-desc">재생 시간(Duration)과 ID3 태그를 추출하여 유튜브 타임라인 및 클립 정리.</p>
+            <span class="guide-badge badge-purple">구간 분할</span>
+            <div class="guide-title">
+              <span data-lang="ko">오디오 길이 및 타임스탬프 기반 자동 챕터 정리 가이드</span>
+              <span data-lang="en">Audio Playback Duration &amp; Timestamp Chapter Organization</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">팟캐스트 챕터와 오디오북 낭독 구간을 손쉽게 정리하는 타임스탬프 추출 활용법.</span>
+              <span data-lang="en">Extract exact clip durations and timestamps for podcast chapters, audiobooks, and video editing.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
       </div>
     </section>
 
-    <!-- Category 3: 파일 관리 & 정규식 리네이밍 -->
+    <!-- Category 3: 파일 관리 & 스마트 리네이밍 -->
     <section class="category-section">
       <h2 class="category-title">
-        <i class="fa-solid fa-signature text-pink-400"></i> 파일 일괄 리네이밍 및 정규식 활용
+        <span class="material-symbols-outlined text-pink-400">edit_calendar</span>
+        <span data-lang="ko">파일 일괄 리네이밍 및 스마트 정리 가이드</span>
+        <span data-lang="en">Batch File Renaming &amp; Smart Organization Guides</span>
       </h2>
       <div class="guide-grid">
         <a href="/guides/batch-rename.html" class="guide-card">
           <div>
-            <span class="guide-badge badge-pink">파일 관리</span>
-            <div class="guide-title">대량 파일 이름 일괄 변경 및 스마트 리네이밍 실무 가이드</div>
-            <p class="guide-desc">문자열 치환, 접두/접미사, 일련번호 부여와 3단계 안전장치(Undo/Reset) 활용법.</p>
+            <span class="guide-badge badge-pink">파일 정리</span>
+            <div class="guide-title">
+              <span data-lang="ko">대량 파일 이름 일괄 변경 및 스마트 리네이밍 실무 가이드</span>
+              <span data-lang="en">Mastering Bulk File Renaming for Daily Productivity</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">단어 바꾸기, 앞뒤 접두사 붙이기, 순서 번호 매기기와 3단계 실수 방지 안전장치.</span>
+              <span data-lang="en">Replace keywords, append prefixes, add sequence counters, and undo mistakes with ease.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
 
         <a href="/guides/regex-rename-guide.html" class="guide-card">
           <div>
-            <span class="guide-badge badge-pink">정규식 입문</span>
-            <div class="guide-title">정규표현식(Regex)을 이용한 대량 파일 이름 일괄 변경 가이드</div>
-            <p class="guide-desc">캡처 그룹과 백레퍼런스($1, $2)를 활용하여 복잡한 패턴을 한 번에 정리하는 팁.</p>
+            <span class="guide-badge badge-pink">패턴 정리</span>
+            <div class="guide-title">
+              <span data-lang="ko">스마트 패턴을 이용한 대량 파일 이름 일괄 정리 입문</span>
+              <span data-lang="en">Pattern-Based Bulk File Name Cleaning for Everyone</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">스마트폰 사진 날짜 형식 바꾸기, 불필요한 다운로드 문자열 일괄 삭제 꿀팁.</span>
+              <span data-lang="en">Effortlessly reformat smartphone photo dates and remove cluttered download tags from file names.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
 
         <a href="/guides/regex-advanced-pattern-guide.html" class="guide-card">
           <div>
-            <span class="guide-badge badge-pink">정규식 치트시트</span>
-            <div class="guide-title">실무에서 바로 쓰는 고급 정규식(Regex) 파일 리네이밍 15선</div>
-            <p class="guide-desc">날짜 치환, 괄호/특수문자 제거, 버전 태그 정렬 등 복사해 쓰는 정규식 패턴 모음.</p>
+            <span class="guide-badge badge-pink">패턴 모음</span>
+            <div class="guide-title">
+              <span data-lang="ko">실무에서 바로 복사해 쓰는 스마트 파일 이름 정리 패턴 15선</span>
+              <span data-lang="en">15 Ready-to-Use File Renaming Patterns &amp; Formulas</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">괄호 안 내용 지우기, 숫자만 남기기, 버전 태그 통일 등 자주 쓰는 예시 모음.</span>
+              <span data-lang="en">Strip brackets, keep numbers only, normalize dates, and standardize project version tags.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
 
         <a href="/guides/os-batch-rename-cli-vs-web.html" class="guide-card">
           <div>
-            <span class="guide-badge badge-pink">CLI vs GUI</span>
-            <div class="guide-title">Windows PowerShell vs macOS 터미널 vs 웹 리네이머 비교</div>
-            <p class="guide-desc">명령줄 스크립트와 웹 GUI 도구의 구문, 편의성, 실행 취소 안전성 심층 비교.</p>
+            <span class="guide-badge badge-pink">도구 비교</span>
+            <div class="guide-title">
+              <span data-lang="ko">윈도우 탐색기 vs 맥 파인더 vs 웹 도구 리네이밍 장단점 비교</span>
+              <span data-lang="en">Windows vs macOS vs Web Batch Renaming Comparison</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">운영체제 기본 기능의 한계와 실시간 미리보기가 제공되는 웹 도구의 편리함 비교.</span>
+              <span data-lang="en">Compare built-in OS tools with modern web-based visual renamers featuring live previews.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
 
         <a href="/guides/bulk-file-organization-for-creators.html" class="guide-card">
           <div>
-            <span class="guide-badge badge-pink">디지털 자산 관리</span>
-            <div class="guide-title">크리에이터와 개발자를 위한 프로젝트 파일 정리 및 네이밍 규칙</div>
-            <p class="guide-desc">영상/디자인/사운드 리소스의 체계적 폴더 트리 분류 및 버전 관리 템플릿.</p>
+            <span class="guide-badge badge-pink">자산 관리</span>
+            <div class="guide-title">
+              <span data-lang="ko">크리에이터와 디자이너를 위한 깔끔한 프로젝트 폴더 정리 규칙</span>
+              <span data-lang="en">Project Asset Organization &amp; Naming Rules for Creators</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">디자인 시안, 촬영 컷, 사운드 리소스를 헷갈리지 않고 체계적으로 보관하는 팁.</span>
+              <span data-lang="en">Clean folder structure and versioning rules for raw video footage, graphic assets, and audio stems.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
       </div>
     </section>
 
-    <!-- Category 4: 웹 기술 & 로컬 보안 -->
+    <!-- Category 4: 프라이버시 & 로컬 보안 -->
     <section class="category-section">
       <h2 class="category-title">
-        <i class="fa-solid fa-shield-halved text-emerald-400"></i> 웹 기술 및 로컬 데이터 보안
+        <span class="material-symbols-outlined text-emerald-400">shield</span>
+        <span data-lang="ko">브라우저 로컬 데이터 보안 및 프라이버시</span>
+        <span data-lang="en">Browser Local Data Security &amp; Privacy</span>
       </h2>
       <div class="guide-grid">
         <a href="/guides/serverless-local-conversion.html" class="guide-card">
           <div>
             <span class="guide-badge badge-emerald">로컬 보안</span>
-            <div class="guide-title">100% 브라우저 로컬 데이터 처리와 보안 우수성</div>
-            <p class="guide-desc">서버 업로드 없는 제로 트러스트 클라이언트 사이드 변환의 아키텍처와 프라이버시 이점.</p>
+            <div class="guide-title">
+              <span data-lang="ko">100% 브라우저 로컬 처리: 파일이 서버로 업로드되지 않는 이유</span>
+              <span data-lang="en">100% In-Browser Local Processing: Zero Upload Explained</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">중요한 비즈니스 문서와 미공개 디자인을 외부 유출 없이 내 컴퓨터에서 안전하게 다루는 원리.</span>
+              <span data-lang="en">Why client-side in-browser processing keeps your confidential documents completely safe.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
 
         <a href="/guides/browser-file-system-access-api.html" class="guide-card">
           <div>
-            <span class="guide-badge badge-emerald">W3C 웹 표준</span>
-            <div class="guide-title">브라우저 File System Access API 동작 원리와 보안 아키텍처</div>
-            <p class="guide-desc">showDirectoryPicker()를 통한 로컬 폴더 직접 읽기/쓰기 권한 모델 심층 분석.</p>
+            <span class="guide-badge badge-emerald">최신 웹 기술</span>
+            <div class="guide-title">
+              <span data-lang="ko">압축 풀기 없이 내 컴퓨터 폴더에 바로 저장되는 편리한 기술</span>
+              <span data-lang="en">Direct Folder Saving Without Unzipping Explained</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">크롬/엣지 최신 브라우저에서 폴더를 직접 선택하고 바로 저장하는 스마트 파일 시스템 원리.</span>
+              <span data-lang="en">How modern Chromium browsers allow direct folder selection and instant saving without ZIP downloads.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
 
         <a href="/guides/client-side-tools.html" class="guide-card">
           <div>
-            <span class="guide-badge badge-emerald">웹 트렌드</span>
-            <div class="guide-title">클라이언트 사이드 웹 툴의 미래와 프라이버시 보호</div>
-            <p class="guide-desc">WebAssembly와 브라우저 API가 이끄는 차세대 서버리스 웹 애플리케이션의 가능성.</p>
+            <span class="guide-badge badge-emerald">스마트 유틸리티</span>
+            <div class="guide-title">
+              <span data-lang="ko">프로그램 설치 없는 차세대 웹 스마트 도구의 장점</span>
+              <span data-lang="en">Benefits of Next-Gen Install-Free Web Utilities</span>
+            </div>
+            <p class="guide-desc">
+              <span data-lang="ko">무거운 설치 프로그램 대신 가볍고 안전한 웹 기반 도구로 작업 속도를 3배 높이는 방법.</span>
+              <span data-lang="en">Boost your daily productivity 3x with modern, install-free web tools that respect your device and privacy.</span>
+            </p>
           </div>
-          <div class="guide-link">가이드 읽기 <i class="fa-solid fa-chevron-right text-[10px]"></i></div>
+          <div class="guide-link">
+            <span data-lang="ko">가이드 읽기</span><span data-lang="en">Read Guide</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </div>
         </a>
       </div>
     </section>
 
     <footer>
-      <div>&copy; 2026 Batcher Tools. All rights reserved.</div>
+      <div>
+        <span>&copy; 2026 Batcher Tools. </span>
+        <span data-lang="ko">100% 브라우저 로컬 파일 도구. All rights reserved.</span>
+        <span data-lang="en">100% In-Browser Local File Tools. All rights reserved.</span>
+      </div>
       <div style="margin-top: 0.75rem;">
         <a href="https://buymeacoffee.com/playNolang" target="_blank" rel="noopener noreferrer" style="color: #f59e0b; text-decoration: none; font-weight: 600; font-size: 0.85rem;">
-          ☕ 커피 한 잔 후원하기
+          ☕ <span data-lang="ko">커피 한 잔 후원하기</span><span data-lang="en">Buy Me a Coffee</span>
         </a>
       </div>
     </footer>
   </div>
 
+  <script>
+    function togglePageLang() {
+      const current = document.documentElement.getAttribute('data-current-lang') || 'ko';
+      const next = current === 'ko' ? 'en' : 'ko';
+      document.documentElement.setAttribute('data-current-lang', next);
+      document.documentElement.lang = next;
+      localStorage.setItem('batcher-lang', next);
+    }
+  </script>
 </body>
 
 </html>

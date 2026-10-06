@@ -134,6 +134,18 @@
   </script>
 
   <link rel="stylesheet" href="./src/index.css" />
+  <script>
+    (function() {
+      const savedLang = localStorage.getItem('batcher-lang') || 'ko';
+      document.documentElement.setAttribute('data-current-lang', savedLang);
+      document.documentElement.lang = savedLang;
+    })();
+  </script>
+  <style>
+    html[data-current-lang="en"] [data-lang="ko"] { display: none !important; }
+    html[data-current-lang="ko"] [data-lang="en"],
+    html:not([data-current-lang="en"]) [data-lang="en"] { display: none !important; }
+  </style>
   <script type="module" src="/src/batcher-app.ts"></script>
 </head>
 
@@ -152,14 +164,17 @@
     <!-- Hero Introduction -->
     <header class="text-center mb-16">
       <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold uppercase tracking-wider mb-4">
-        <i class="fa-solid fa-file-image"></i>
-        <span>High-Performance SVG Rasterizer</span>
+        <span class="material-symbols-outlined text-[16px]">image</span>
+        <span data-lang="ko">고화질 SVG 이미지 일괄 변환 도구</span>
+        <span data-lang="en">High-Quality SVG Image Converter</span>
       </div>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-100 tracking-tight mb-4">
-        대량 SVG 고화질 PNG & JPG 일괄 변환 가이드
+        <span data-lang="ko">대량 SVG 벡터 이미지 고화질 PNG & JPG 일괄 변환</span>
+        <span data-lang="en">Bulk SVG to Crisp PNG & JPG Batch Converter</span>
       </h1>
       <p class="text-slate-400 text-base max-w-2xl mx-auto leading-relaxed">
-        서버 업로드 없이 100% 브라우저 메모리 안에서 안전하게 구동되는 차세대 벡터 래스터라이저. 디자이너와 프론트엔드 개발자를 위한 다중 배율(@2x, @3x) 일괄 추출 가이드입니다.
+        <span data-lang="ko">서버 업로드 없이 내 컴퓨터 브라우저 안에서 안전하게 대량의 SVG 파일을 고화질 PNG/JPG로 즉시 변환하세요. 피그마(Figma) 아이콘 세트, 레티나 디스플레이용 다중 배율(@2x, @3x) 추출, 투명 배경 보존을 완벽 지원합니다.</span>
+        <span data-lang="en">Convert large batches of SVG vector files into crisp PNG & JPG images locally in your browser. Perfect for Figma icon sets, multi-density Retina assets (@2x, @3x), with transparent background preservation.</span>
       </p>
     </header>
 
@@ -167,152 +182,188 @@
     <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
       <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
         <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-xl">
-          <i class="fa-solid fa-layer-group"></i>
+          <span class="material-symbols-outlined">layers</span>
         </div>
-        <h2 class="text-lg font-bold text-slate-100 mb-2">다중 배율(@2x, @3x) 일괄 생성</h2>
+        <h2 class="text-lg font-bold text-slate-100 mb-2">
+          <span data-lang="ko">다중 배율(@2x, @3x) 동시 추출</span>
+          <span data-lang="en">Multi-Scale Export (@2x, @3x)</span>
+        </h2>
         <p class="text-xs text-slate-400 leading-relaxed">
-          클릭 한 번으로 1.0x 표준, 1.5x HDPI, 2.0x 레티나, 3.0x 고해상도 이미지 에셋을 동시에 일괄 추출하여 파일명 접미사까지 자동 완성합니다.
+          <span data-lang="ko">클릭 한 번으로 1.0x 기본 크기부터 2.0x, 3.0x 고해상도 스마트폰용 이미지까지 동시에 일괄 추출하고 접미사도 자동으로 붙여줍니다.</span>
+          <span data-lang="en">Export standard 1.0x, 2.0x Retina, and 3.0x high-res assets in one go with automatic filename suffixes.</span>
         </p>
       </div>
 
       <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
         <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4 text-xl">
-          <i class="fa-solid fa-shield-halved"></i>
+          <span class="material-symbols-outlined">shield</span>
         </div>
-        <h2 class="text-lg font-bold text-slate-100 mb-2">100% 제로 업로드 로컬 보안</h2>
+        <h2 class="text-lg font-bold text-slate-100 mb-2">
+          <span data-lang="ko">서버 전송 0바이트 안심 보안</span>
+          <span data-lang="en">100% Private Local Conversion</span>
+        </h2>
         <p class="text-xs text-slate-400 leading-relaxed">
-          외부 클라우드 서버로 단 1개의 파일도 전송하지 않습니다. HTML5 Canvas와 로컬 CPU 파워만 사용하여 기업 기밀 및 미공개 에셋을 완벽 보호합니다.
+          <span data-lang="ko">외부 서버로 이미지를 1바이트도 전송하지 않습니다. 내 컴퓨터 안에서만 변환되므로 미공개 디자인이나 회사 로고도 안전합니다.</span>
+          <span data-lang="en">Zero bytes sent to external servers. All rendering runs entirely on your local machine, keeping sensitive brand assets secure.</span>
         </p>
       </div>
 
       <div class="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md">
         <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-4 text-xl">
-          <i class="fa-solid fa-bolt"></i>
+          <span class="material-symbols-outlined">bolt</span>
         </div>
-        <h2 class="text-lg font-bold text-slate-100 mb-2">초고속 대용량 폴더 처리</h2>
+        <h2 class="text-lg font-bold text-slate-100 mb-2">
+          <span data-lang="ko">초고속 대용량 폴더 처리</span>
+          <span data-lang="en">Fast Bulk Folder Processing</span>
+        </h2>
         <p class="text-xs text-slate-400 leading-relaxed">
-          수백 개의 SVG 파일이 포함된 대규모 프로젝트 폴더를 통째로 로드하여 대기열에서 실시간 진행 상황을 확인하며 즉시 변환합니다.
+          <span data-lang="ko">수백 개의 SVG 아이콘이 담긴 폴더를 통째로 불러와 화면 멈춤 없이 쾌속으로 변환하고 즉시 다운로드할 수 있습니다.</span>
+          <span data-lang="en">Load entire folders containing hundreds of SVG icons and convert them smoothly with zero lag or browser freezes.</span>
         </p>
       </div>
     </section>
 
-    <!-- In-Depth Technical Content Section -->
+    <!-- In-Depth Helpful Content Section -->
     <article class="glass-panel p-8 sm:p-12 rounded-3xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md mb-16 space-y-10 text-slate-300 text-sm leading-relaxed">
       
       <div>
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
-          <i class="fa-solid fa-circle-info text-indigo-400 text-lg"></i>
-          1. SVG 벡터와 PNG/JPG 래스터 포맷의 기술적 차이와 변환 필요성
+          <span class="material-symbols-outlined text-indigo-400 text-2xl">info</span>
+          <span data-lang="ko">1. 피그마나 일러스트로 작업한 SVG를 PNG/JPG로 변환해야 하는 이유</span>
+          <span data-lang="en">1. Why Designers Need to Convert SVG to PNG &amp; JPG</span>
         </h2>
         <p class="mb-3">
-          <strong>SVG(Scalable Vector Graphics)</strong>는 W3C에서 제정한 XML 기반의 2차원 벡터 그래픽 표준 규격입니다. 점과 선, 베지어 곡선, 색상 좌표 등의 수학적 수식으로 도형을 정의하기 때문에 아무리 확대하거나 축소해도 픽셀이 깨지지 않는 무한 해상도를 자랑합니다.
+          <span data-lang="ko"><strong>SVG(Scalable Vector Graphics)</strong>는 아무리 확대해도 선과 모양이 깨지지 않아 디자이너들이 로고나 아이콘을 만들 때 가장 선호하는 벡터 규격입니다.</span>
+          <span data-lang="en"><strong>SVG</strong> is a vector format that never gets blurry when resized, making it the favorite choice for designers creating logos and icons in Figma or Illustrator.</span>
         </p>
         <p class="mb-3">
-          하지만 모바일 앱 환경(iOS의 `Assets.xcassets`, Android의 `res/drawable-xxhdpi`), 게임 엔진(Unity, Unreal), 메일 템플릿 및 소셜 미디어(OpenGraph 메타 이미지) 등 다양한 플랫폼에서는 벡터 수식을 실시간 렌더링하는 데 따른 연산 비용을 줄이기 위해 정적 비트맵 포맷인 <strong>PNG(Portable Network Graphics)</strong> 또는 <strong>JPG(JPEG)</strong>를 기본 규격으로 요구합니다.
+          <span data-lang="ko">하지만 스마트폰 앱(iPhone, Android), 파워포인트 슬라이드, 워드 문서, SNS 썸네일, 이메일 뉴스레터 등 많은 플랫폼에서는 SVG 파일을 그대로 넣으면 보이지 않거나 오류가 납니다. 이러한 환경에서는 어디서나 완벽하게 열리는 비트맵 이미지 포맷인 <strong>PNG(투명 배경 지원)</strong> 또는 <strong>JPG(가벼운 사진용)</strong>로 변환하여 사용하는 것이 표준입니다.</span>
+          <span data-lang="en">However, many platforms like mobile apps, PowerPoint slides, email newsletters, and social media previews do not render SVG properly. Converting to universal formats like <strong>PNG (for transparent graphics)</strong> or <strong>JPG (for photos and backgrounds)</strong> ensures flawless display everywhere.</span>
         </p>
         <p>
-          따라서 디자이너가 피그마(Figma)나 일러스트레이터(Illustrator)에서 작업한 고화질 원본 SVG 마스터 에셋을 실제 배포 및 빌드 파이프라인에 투입하기 위해서는 정확한 픽셀 단위로 래스터화(Rasterization)하는 변환 과정이 필수적입니다.
+          <span data-lang="ko">배처 툴은 디자이너가 작업한 깨끗한 벡터 그래픽을 1픽셀의 뭉개짐 없이 선명한 고화질 이미지 파일로 손쉽게 뽑아낼 수 있도록 돕습니다.</span>
+          <span data-lang="en">Batcher Tools helps you convert vector artwork into high-definition image assets without losing pixel sharpness.</span>
         </p>
       </div>
 
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
-          <i class="fa-solid fa-mobile-screen text-indigo-400 text-lg"></i>
-          2. 모바일 앱과 웹 환경을 위한 레티나 배율(@2x, @3x) 추출 전략
+          <span class="material-symbols-outlined text-indigo-400 text-2xl">devices</span>
+          <span data-lang="ko">2. 스마트폰과 고화질 모니터를 위한 레티나 배율(@2x, @3x) 쉽게 이해하기</span>
+          <span data-lang="en">2. Understanding Retina Densities (@2x, @3x) Made Simple</span>
         </h2>
         <p class="mb-3">
-          최신 스마트폰과 태블릿, 고해상도 노트북 디스플레이는 일반적인 96 DPI 모니터 대비 2배에서 3배 이상의 픽셀 밀도를 탑재하고 있습니다. 이러한 고밀도 디스플레이(레티나, Retina)에서 기본 1.0x 규격의 비트맵 이미지를 출력하면 화면 확대 렌더링 알고리즘에 의해 가장자리 경계면이 흐려지는 블러 현상이 발생합니다.
+          <span data-lang="ko">요즘 스마트폰(아이폰, 갤럭시)과 맥북, 최신 모니터는 화면에 픽셀이 아주 촘촘하게 박혀 있습니다. 만약 기본 크기(1.0x)로만 이미지를 만들어서 넣으면 화면이 이를 강제로 늘리면서 아이콘이 흐릿하게 번져 보입니다.</span>
+          <span data-lang="en">Modern smartphones and high-resolution laptops pack many more pixels into the same screen area. If you only use standard 1.0x images, screens stretch them artificially, causing blurry edges and soft icons.</span>
         </p>
         <div class="bg-slate-950/60 p-5 rounded-2xl border border-slate-800 mb-4">
-          <h3 class="text-slate-200 font-bold text-sm mb-2">플랫폼별 대표적인 해상도 배율 표준</h3>
+          <h3 class="text-slate-200 font-bold text-sm mb-2">
+            <span data-lang="ko">주요 배율 규격 정리</span>
+            <span data-lang="en">Standard Scale Multipliers</span>
+          </h3>
           <ul class="list-disc pl-5 space-y-1.5 text-xs text-slate-400">
-            <li><strong>1.0x (표준 밀도):</strong> 일반 웹 브라우저 표준 및 레거시 디스플레이 기본 에셋 (`icon.png`)</li>
-            <li><strong>1.5x (HDPI):</strong> 중저가형 모바일 디바이스 및 웹 태블릿 환경 대응 (`icon@1.5x.png`)</li>
-            <li><strong>2.0x (@2x, XHDPI):</strong> Apple Retina 디스플레이 및 표준 스마트폰 UI 에셋 (`icon@2x.png`)</li>
-            <li><strong>3.0x (@3x, XXHDPI):</strong> 초고해상도 플래그십 스마트폰 및 4K 고화질 그래픽 에셋 (`icon@3x.png`)</li>
+            <li>
+              <strong class="text-slate-200">1.0x (기본 크기):</strong>
+              <span data-lang="ko"> 일반 사무용 모니터와 구형 웹 브라우저 표준 크기 (<code class="text-indigo-300">icon.png</code>)</span>
+              <span data-lang="en"> Standard desktop monitors and web default (<code class="text-indigo-300">icon.png</code>)</span>
+            </li>
+            <li>
+              <strong class="text-slate-200">2.0x (@2x 배율):</strong>
+              <span data-lang="ko"> 아이폰 및 대부분의 최신 스마트폰 기본 권장 크기 (<code class="text-indigo-300">icon@2x.png</code>)</span>
+              <span data-lang="en"> Standard iPhone and modern smartphone UI screens (<code class="text-indigo-300">icon@2x.png</code>)</span>
+            </li>
+            <li>
+              <strong class="text-slate-200">3.0x (@3x 초고화질):</strong>
+              <span data-lang="ko"> 아이폰 프로 및 최신 플래그십 스마트폰, 4K 고화질 모니터용 (<code class="text-indigo-300">icon@3x.png</code>)</span>
+              <span data-lang="en"> iPhone Pro, flagship smartphones, and 4K displays (<code class="text-indigo-300">icon@3x.png</code>)</span>
+            </li>
           </ul>
         </div>
         <p>
-          배처 툴(Batcher Tools)은 사용자가 지정한 배율 설정에 맞추어 SVG 내부의 `viewBox`와 `width`/`height` 속성을 정밀하게 계산하고, HTML5 오프스크린 캔버스에 고품질 스케일링 필터를 적용하여 1픽셀의 왜곡도 없는 완벽한 고해상도 에셋을 대량으로 생성합니다.
+          <span data-lang="ko">배처 툴에서는 옵션만 선택하면 1.0x, 2.0x, 3.0x 이미지를 클릭 한 번에 동시에 만들어 주므로 번거롭게 하나씩 추출할 필요가 없습니다.</span>
+          <span data-lang="en">With Batcher Tools, simply check the multipliers you need to generate 1.0x, 2.0x, and 3.0x image packages in a single click.</span>
         </p>
       </div>
 
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
-          <i class="fa-solid fa-table text-indigo-400 text-lg"></i>
-          3. 모바일 &middot; 웹 플랫폼별 공식 에셋 배율 및 해상도 표준 규격표
+          <span class="material-symbols-outlined text-indigo-400 text-2xl">table_view</span>
+          <span data-lang="ko">3. 모바일 앱 &middot; 웹 플랫폼별 권장 해상도 표준표</span>
+          <span data-lang="en">3. Recommended Density Standards by Platform</span>
         </h2>
         <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-          앱 스토어 출시와 웹 서비스 최적화에 필요한 각 플랫폼별 표준 픽셀 밀도 규격입니다. 배처 툴에서 기준 크기(1.0x)를 기반으로 다중 배율을 한 번에 추출하세요:
+          <span data-lang="ko">앱 개발자에게 에셋을 전달하거나 웹사이트에 아이콘을 올릴 때 아래 기준을 참고하시면 좋습니다:</span>
+          <span data-lang="en">Use this reference when handing off image assets to developers or publishing online:</span>
         </p>
 
         <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950/60 p-1 mb-6">
           <table class="w-full text-left border-collapse text-xs">
             <thead>
               <tr class="border-b border-slate-800 text-slate-200 bg-slate-900/60 font-semibold">
-                <th class="py-3 px-4">대상 플랫폼</th>
-                <th class="py-3 px-4">밀도 규격 (Density)</th>
-                <th class="py-3 px-4 text-indigo-400 font-mono">배율 계수</th>
-                <th class="py-3 px-4">파일명 접미사 규칙</th>
-                <th class="py-3 px-4">권장 출력 포맷</th>
+                <th class="py-3 px-4">
+                  <span data-lang="ko">활용 플랫폼</span>
+                  <span data-lang="en">Platform</span>
+                </th>
+                <th class="py-3 px-4">
+                  <span data-lang="ko">해상도 명칭</span>
+                  <span data-lang="en">Density Name</span>
+                </th>
+                <th class="py-3 px-4 text-indigo-400 font-mono">
+                  <span data-lang="ko">배율</span>
+                  <span data-lang="en">Scale</span>
+                </th>
+                <th class="py-3 px-4">
+                  <span data-lang="ko">파일명 규칙</span>
+                  <span data-lang="en">Filename Rule</span>
+                </th>
+                <th class="py-3 px-4">
+                  <span data-lang="ko">권장 포맷</span>
+                  <span data-lang="en">Format</span>
+                </th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-800/60 text-slate-400">
               <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">Apple iOS / iPadOS</td>
-                <td class="py-2.5 px-4">Standard (비레티나)</td>
+                <td class="py-2.5 px-4 font-medium text-slate-300">Apple iOS (기본)</td>
+                <td class="py-2.5 px-4">Standard</td>
                 <td class="py-2.5 px-4 font-mono text-indigo-400">1.0x</td>
                 <td class="py-2.5 px-4 font-mono text-slate-300">icon.png</td>
-                <td class="py-2.5 px-4 text-emerald-400 font-medium">PNG (32비트 알파)</td>
+                <td class="py-2.5 px-4 text-emerald-400 font-medium">PNG (투명 배경)</td>
               </tr>
               <tr>
                 <td class="py-2.5 px-4 font-medium text-slate-300">Apple iOS (iPhone 표준)</td>
-                <td class="py-2.5 px-4">Retina Display</td>
+                <td class="py-2.5 px-4">Retina 2x</td>
                 <td class="py-2.5 px-4 font-mono text-indigo-400 font-bold">2.0x</td>
                 <td class="py-2.5 px-4 font-mono text-slate-300">icon@2x.png</td>
-                <td class="py-2.5 px-4 text-emerald-400 font-medium">PNG (32비트 알파)</td>
+                <td class="py-2.5 px-4 text-emerald-400 font-medium">PNG (투명 배경)</td>
               </tr>
               <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">Apple iOS (Pro / Plus)</td>
-                <td class="py-2.5 px-4">Super Retina HD</td>
+                <td class="py-2.5 px-4 font-medium text-slate-300">Apple iOS (iPhone Pro)</td>
+                <td class="py-2.5 px-4">Super Retina 3x</td>
                 <td class="py-2.5 px-4 font-mono text-indigo-400 font-bold">3.0x</td>
                 <td class="py-2.5 px-4 font-mono text-slate-300">icon@3x.png</td>
-                <td class="py-2.5 px-4 text-emerald-400 font-medium">PNG (32비트 알파)</td>
+                <td class="py-2.5 px-4 text-emerald-400 font-medium">PNG (투명 배경)</td>
               </tr>
               <tr>
                 <td class="py-2.5 px-4 font-medium text-slate-300">Google Android</td>
-                <td class="py-2.5 px-4">MDPI (기본 기준)</td>
-                <td class="py-2.5 px-4 font-mono text-indigo-400">1.0x</td>
+                <td class="py-2.5 px-4">MDPI / HDPI</td>
+                <td class="py-2.5 px-4 font-mono text-indigo-400">1.0x ~ 1.5x</td>
                 <td class="py-2.5 px-4 font-mono text-slate-300">drawable-mdpi/</td>
-                <td class="py-2.5 px-4 text-emerald-400 font-medium">PNG / WebP</td>
+                <td class="py-2.5 px-4 text-emerald-400 font-medium">PNG</td>
               </tr>
               <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">Google Android</td>
-                <td class="py-2.5 px-4">HDPI (고밀도)</td>
-                <td class="py-2.5 px-4 font-mono text-indigo-400">1.5x</td>
-                <td class="py-2.5 px-4 font-mono text-slate-300">drawable-hdpi/</td>
-                <td class="py-2.5 px-4 text-emerald-400 font-medium">PNG / WebP</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">Google Android</td>
-                <td class="py-2.5 px-4">XHDPI (초고밀도)</td>
-                <td class="py-2.5 px-4 font-mono text-indigo-400">2.0x</td>
-                <td class="py-2.5 px-4 font-mono text-slate-300">drawable-xhdpi/</td>
-                <td class="py-2.5 px-4 text-emerald-400 font-medium">PNG / WebP</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 px-4 font-medium text-slate-300">Google Android</td>
-                <td class="py-2.5 px-4">XXHDPI (초고해상도 플래그십)</td>
-                <td class="py-2.5 px-4 font-mono text-indigo-400">3.0x</td>
+                <td class="py-2.5 px-4 font-medium text-slate-300">Google Android (플래그십)</td>
+                <td class="py-2.5 px-4">XHDPI / XXHDPI</td>
+                <td class="py-2.5 px-4 font-mono text-indigo-400">2.0x ~ 3.0x</td>
                 <td class="py-2.5 px-4 font-mono text-slate-300">drawable-xxhdpi/</td>
-                <td class="py-2.5 px-4 text-emerald-400 font-medium">PNG / WebP</td>
+                <td class="py-2.5 px-4 text-emerald-400 font-medium">PNG</td>
               </tr>
               <tr>
                 <td class="py-2.5 px-4 font-medium text-slate-300">웹 파비콘 (Favicon)</td>
-                <td class="py-2.5 px-4">Browser Tab &amp; Touch Icon</td>
-                <td class="py-2.5 px-4 font-mono text-indigo-400">16px ~ 192px</td>
+                <td class="py-2.5 px-4">Browser Tab Icon</td>
+                <td class="py-2.5 px-4 font-mono text-indigo-400">32px / 48px</td>
                 <td class="py-2.5 px-4 font-mono text-slate-300">favicon-32x32.png</td>
-                <td class="py-2.5 px-4 text-emerald-400 font-medium">PNG (정사각형 규격)</td>
+                <td class="py-2.5 px-4 text-emerald-400 font-medium">PNG (정사각형)</td>
               </tr>
             </tbody>
           </table>
@@ -321,62 +372,99 @@
 
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
-          <i class="fa-solid fa-triangle-exclamation text-indigo-400 text-lg"></i>
-          4. SVG 래스터화 시 흔히 겪는 5대 오류와 해결 체크리스트
+          <span class="material-symbols-outlined text-indigo-400 text-2xl">help_outline</span>
+          <span data-lang="ko">4. 디자인 내보내기 시 자주 겪는 3가지 실수와 해결 팁</span>
+          <span data-lang="en">4. 3 Common Export Mistakes &amp; How to Prevent Them</span>
         </h2>
         <div class="space-y-3 text-xs">
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <strong class="text-indigo-400 block text-sm mb-1">1. 폰트(글꼴)가 기본 고딕체로 깨져서 렌더링되는 현상</strong>
-            <p class="text-slate-400">원인: SVG 내부에 사용된 커스텀 웹폰트가 로컬 브라우저 캔버스에 설치되어 있지 않음.<br />해결: Figma나 Illustrator에서 SVG를 내보내기 전에 텍스트 레이어를 <strong>Outline(윤곽선 패스) 변환</strong>하여 내보냅니다.</p>
+            <strong class="text-indigo-400 block text-sm mb-1">
+              <span data-lang="ko">1. 글꼴(폰트)이 기본 고딕체로 바뀌어 나오는 현상</span>
+              <span data-lang="en">1. Text Reverting to Default Fonts</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">원인: SVG 안에 들어있는 예쁜 폰트가 다른 컴퓨터나 브라우저에 깔려있지 않아서 생깁니다.<br />해결: 피그마나 일러스트레이터에서 내보내기 전, 글자 레이어를 선택하고 <strong>'윤곽선 만들기(Outline / Convert to Outlines)'</strong>를 적용해 글자를 도형 선으로 바꿔주면 완벽히 해결됩니다.</span>
+              <span data-lang="en">Cause: Custom fonts aren't installed on the rendering machine.<br />Fix: Convert text layers to outlines (<code class="text-indigo-300">Ctrl/Cmd + Shift + O</code>) in Figma or Illustrator before exporting to SVG.</span>
+            </p>
           </div>
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <strong class="text-indigo-400 block text-sm mb-1">2. viewBox 속성 누락으로 가장자리가 잘리는 현상</strong>
-            <p class="text-slate-400">원인: SVG 루트 태그에 `viewBox="0 0 W H"`가 없고 `width`, `height`만 선언된 경우 확대 스케일링 시 캔버스 밖으로 영역이 초과됨.<br />해결: 배처 툴의 자동 BoundingBox 보정 엔진이 뷰박스를 자동 생성하므로 안심하고 변환할 수 있습니다.</p>
+            <strong class="text-indigo-400 block text-sm mb-1">
+              <span data-lang="ko">2. 이미지 가장자리가 잘려서 나오는 현상</span>
+              <span data-lang="en">2. Cropped Edges</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">원인: 그림자나 외곽선 두께가 아트보드 영역 밖으로 삐져나갔을 때 생깁니다.<br />해결: 배처 툴은 여백을 자동으로 안전하게 계산하여 가장자리가 잘리지 않도록 도와줍니다.</span>
+              <span data-lang="en">Cause: Strokes or drop shadows exceed the artboard boundaries.<br />Fix: Batcher Tools automatically recalculates outer bounds to prevent clipping.</span>
+            </p>
           </div>
           <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <strong class="text-indigo-400 block text-sm mb-1">3. 투명 배경이 검정색 또는 회색으로 왜곡되는 현상</strong>
-            <p class="text-slate-400">원인: 24비트 비알파 비트맵으로 저장되거나 브라우저 그래픽 컨텍스트의 블렌딩 모드 오류.<br />해결: 배처 툴에서는 32비트 RGBA 전체 채널을 보존하는 PNG-32 무손실 파이프라인을 사용하여 알파 투명도를 100% 보존합니다.</p>
+            <strong class="text-indigo-400 block text-sm mb-1">
+              <span data-lang="ko">3. 투명 배경이 까맣게 나오는 현상</span>
+              <span data-lang="en">3. Transparent Background Becoming Black</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">원인: 투명도를 지원하지 않는 포맷(일반 JPG 등)으로 잘못 저장했을 때 생깁니다.<br />해결: 아이콘이나 로고처럼 뒷배경이 비쳐야 하는 이미지는 반드시 <strong>PNG 포맷</strong>을 선택하세요.</span>
+              <span data-lang="en">Cause: Exporting as JPG which does not support alpha transparency.<br />Fix: Always select <strong>PNG format</strong> when transparent backgrounds are needed.</span>
+            </p>
           </div>
         </div>
       </div>
 
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
-          <i class="fa-solid fa-lock text-indigo-400 text-lg"></i>
-          5. 100% 클라이언트 사이드(Client-Side) 렌더링의 강력한 보안 원리
+          <span class="material-symbols-outlined text-indigo-400 text-2xl">verified_user</span>
+          <span data-lang="ko">5. 내 컴퓨터 브라우저에서 바로 바뀌는 안전한 보안 원리</span>
+          <span data-lang="en">5. How In-Browser Local Conversion Keeps Your Work Safe</span>
         </h2>
         <p class="mb-3">
-          기존의 많은 무료 온라인 이미지 변환 서비스들은 사용자가 업로드한 그래픽 파일을 원격 클라우드 서버로 전송한 뒤 백엔드 툴(ImageMagick, Inkscape CLI 등)로 변환하여 다운로드 링크를 제공합니다. 이 과정에서 다음과 같은 치명적인 위험이 존재합니다:
+          <span data-lang="ko">많은 무료 파일 변환 사이트들은 내 디자인 파일을 인터넷 서버로 전송하여 변환합니다. 이 때문에 회사 미공개 신제품 디자인이나 브랜드 로고가 외부 서버에 유출될 위험이 있습니다.</span>
+          <span data-lang="en">Many online converters upload your files to remote servers, exposing private product designs, unreleased assets, or confidential brand logos to security risks.</span>
         </p>
-        <ol class="list-decimal pl-5 space-y-1.5 text-xs text-slate-400 mb-4">
-          <li><strong>기밀 유출 리스크:</strong> 미발표 신제품 UI 디자인, 기업 독점 로고, 저작권 보호 일러스트가 외부 서버 로그에 영구 또는 임시 보관될 수 있습니다.</li>
-          <li><strong>네트워크 대역폭 낭비 및 지연:</strong> 수백 메가바이트의 에셋을 서버로 업로드하고 다시 다운로드받아야 하므로 인터넷 속도에 따라 작업 시간이 크게 지연됩니다.</li>
-        </ol>
         <p>
-          반면 배처 툴은 최신 웹 표준 기술인 <strong>WICG File System Access API</strong>와 <strong>Blob URL / HTML5 Canvas 2D Context</strong>를 직접 활용합니다. 모든 파일 I/O와 그래픽 렌더링이 당신의 웹 브라우저 로컬 샌드박스 내부에서만 실행되므로 <strong>네트워크 연결이 끊긴 오프라인 상태에서도 완벽하게 동작</strong>하며, 어떠한 개인 정보나 디자인 데이터도 외부로 유출되지 않습니다.
+          <span data-lang="ko">배처 툴은 사용자의 컴퓨터 그래픽 엔진과 브라우저 기술만을 사용하여 화면 안에서 즉시 렌더링합니다. <strong>인터넷 연결을 꺼도 동작할 만큼 안전하며</strong>, 파일이 외부로 유출될 염려가 전혀 없습니다.</span>
+          <span data-lang="en">Batcher Tools runs entirely on your local device graphics engine. It even works completely offline without internet, ensuring complete privacy.</span>
         </p>
       </div>
 
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
-          <i class="fa-solid fa-list-check text-indigo-400 text-lg"></i>
-          6. 3단계 초간단 대량 변환 워크플로우
+          <span class="material-symbols-outlined text-indigo-400 text-2xl">checklist</span>
+          <span data-lang="ko">6. 3단계 초간단 대량 변환 방법</span>
+          <span data-lang="en">6. 3-Step Simple Conversion Workflow</span>
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
           <div class="p-4 rounded-xl bg-slate-950/40 border border-slate-800">
             <span class="text-indigo-400 font-extrabold text-sm block mb-1">STEP 01</span>
-            <strong class="text-slate-200 block mb-1 text-sm">에셋 불러오기</strong>
-            <p class="text-slate-400">파일 드롭존에 SVG 파일을 끌어다 놓거나 상단 '폴더 선택' 버튼을 눌러 디렉토리를 통째로 로드합니다.</p>
+            <strong class="text-slate-200 block mb-1 text-sm">
+              <span data-lang="ko">SVG 파일 끌어다 놓기</span>
+              <span data-lang="en">Drop SVG Files</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">변환할 SVG 파일들을 화면으로 끌어다 놓거나 '폴더 선택'으로 디렉토리를 통째로 불러옵니다.</span>
+              <span data-lang="en">Drag &amp; drop your SVG files into the browser or load an entire folder.</span>
+            </p>
           </div>
           <div class="p-4 rounded-xl bg-slate-950/40 border border-slate-800">
             <span class="text-indigo-400 font-extrabold text-sm block mb-1">STEP 02</span>
-            <strong class="text-slate-200 block mb-1 text-sm">포맷 & 배율 지정</strong>
-            <p class="text-slate-400">출력 포맷(PNG/JPG)과 목표 배율(1.0x ~ 3.0x), 파일명 접미사 규칙(@2x 등)을 원하는 대로 설정합니다.</p>
+            <strong class="text-slate-200 block mb-1 text-sm">
+              <span data-lang="ko">포맷 & 배율(@2x, @3x) 선택</span>
+              <span data-lang="en">Choose Format &amp; Scale</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">PNG 또는 JPG를 고르고, 필요한 배율(1.0x, 2.0x, 3.0x)을 체크합니다.</span>
+              <span data-lang="en">Select PNG or JPG, then check the densities you need (@2x, @3x).</span>
+            </p>
           </div>
           <div class="p-4 rounded-xl bg-slate-950/40 border border-slate-800">
             <span class="text-indigo-400 font-extrabold text-sm block mb-1">STEP 03</span>
-            <strong class="text-slate-200 block mb-1 text-sm">원클릭 변환 & 내보내기</strong>
-            <p class="text-slate-400">'변환 시작'을 누르면 실시간 프로그레스 바와 함께 즉시 결과물이 생성되어 ZIP 압축 또는 로컬 폴더에 저장됩니다.</p>
+            <strong class="text-slate-200 block mb-1 text-sm">
+              <span data-lang="ko">원클릭 변환 & 다운로드</span>
+              <span data-lang="en">Convert &amp; Save</span>
+            </strong>
+            <p class="text-slate-400">
+              <span data-lang="ko">'변환 시작'을 누르면 즉시 고화질 이미지가 생성되어 ZIP 압축 또는 폴더로 저장됩니다.</span>
+              <span data-lang="en">Hit 'Start Conversion' to get crisp images saved locally or as a neat ZIP archive.</span>
+            </p>
           </div>
         </div>
       </div>
@@ -384,41 +472,90 @@
       <!-- 추천 관련 기술 가이드 4선 -->
       <div class="border-t border-slate-800/80 pt-8">
         <h2 class="text-xl font-bold text-slate-100 mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-book-bookmark text-indigo-400 text-base"></i>
-          함께 읽으면 좋은 추천 디자인 &amp; 엔지니어링 가이드
+          <span class="material-symbols-outlined text-indigo-400 text-xl">auto_stories</span>
+          <span data-lang="ko">함께 읽으면 좋은 추천 디자인 가이드</span>
+          <span data-lang="en">Recommended Design Guides</span>
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           <a href="/guides/svg-to-png.html" class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-indigo-500/40 transition-all flex flex-col justify-between">
             <div>
-              <span class="text-indigo-400 font-bold block mb-1">핵심 가이드</span>
-              <strong class="text-slate-200 block mb-1">대량 SVG 파일 고화질 래스터화 및 레티나 배율 설정법</strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">디스플레이 해상도별 픽셀 밀도 계산과 고해상도 그래픽 추출 기법.</p>
+              <span class="text-indigo-400 font-bold block mb-1">
+                <span data-lang="ko">핵심 가이드</span>
+                <span data-lang="en">Key Guide</span>
+              </span>
+              <strong class="text-slate-200 block mb-1">
+                <span data-lang="ko">대량 SVG 파일 고화질 PNG 변환 및 레티나 배율 설정법</span>
+                <span data-lang="en">Bulk SVG to PNG Conversion &amp; Retina Scaling</span>
+              </strong>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                <span data-lang="ko">화면 해상도별 픽셀 밀도 계산과 고해상도 그래픽 추출 기법.</span>
+                <span data-lang="en">Calculating pixel densities and exporting crisp graphics for mobile &amp; web.</span>
+              </p>
             </div>
-            <span class="text-indigo-400 mt-2 font-semibold flex items-center gap-1">가이드 읽기 &rarr;</span>
+            <span class="text-indigo-400 mt-2 font-semibold flex items-center gap-1">
+              <span data-lang="ko">가이드 읽기 &rarr;</span>
+              <span data-lang="en">Read Guide &rarr;</span>
+            </span>
           </a>
           <a href="/guides/figma-illustrator-svg-export-troubleshooting.html" class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-indigo-500/40 transition-all flex flex-col justify-between">
             <div>
-              <span class="text-indigo-400 font-bold block mb-1">트러블슈팅</span>
-              <strong class="text-slate-200 block mb-1">피그마와 일러스트레이터 SVG 내보내기 오류 해결 가이드</strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">클리핑 마스크, 텍스트 패스화, 뷰박스 설정 요령 완벽 가이드.</p>
+              <span class="text-indigo-400 font-bold block mb-1">
+                <span data-lang="ko">문제 해결</span>
+                <span data-lang="en">Troubleshooting</span>
+              </span>
+              <strong class="text-slate-200 block mb-1">
+                <span data-lang="ko">피그마와 일러스트레이터 SVG 내보내기 오류 해결법</span>
+                <span data-lang="en">Figma &amp; Illustrator SVG Export Troubleshooting</span>
+              </strong>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                <span data-lang="ko">클리핑 마스크, 텍스트 아웃라인, 여백 잘림 방지 꿀팁.</span>
+                <span data-lang="en">Fixing clipping masks, text outlines, and missing viewBox issues.</span>
+              </p>
             </div>
-            <span class="text-indigo-400 mt-2 font-semibold flex items-center gap-1">가이드 읽기 &rarr;</span>
+            <span class="text-indigo-400 mt-2 font-semibold flex items-center gap-1">
+              <span data-lang="ko">가이드 읽기 &rarr;</span>
+              <span data-lang="en">Read Guide &rarr;</span>
+            </span>
           </a>
           <a href="/guides/retina-display-asset-management.html" class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-indigo-500/40 transition-all flex flex-col justify-between">
             <div>
-              <span class="text-indigo-400 font-bold block mb-1">디스플레이 기술</span>
-              <strong class="text-slate-200 block mb-1">레티나 디스플레이 대응 멀티 해상도 에셋 관리 전략</strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">모바일 앱과 반응형 웹을 위한 @1x, @2x, @3x 체계적인 에셋 빌드.</p>
+              <span class="text-indigo-400 font-bold block mb-1">
+                <span data-lang="ko">디스플레이 상식</span>
+                <span data-lang="en">Display Tech</span>
+              </span>
+              <strong class="text-slate-200 block mb-1">
+                <span data-lang="ko">레티나 디스플레이 대응 멀티 해상도 에셋 관리법</span>
+                <span data-lang="en">Managing Multi-Density Assets for Retina Displays</span>
+              </strong>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                <span data-lang="ko">모바일 앱과 반응형 웹을 위한 @1x, @2x, @3x 체계적인 에셋 정리.</span>
+                <span data-lang="en">Organizing @1x, @2x, and @3x graphics for responsive UI.</span>
+              </p>
             </div>
-            <span class="text-indigo-400 mt-2 font-semibold flex items-center gap-1">가이드 읽기 &rarr;</span>
+            <span class="text-indigo-400 mt-2 font-semibold flex items-center gap-1">
+              <span data-lang="ko">가이드 읽기 &rarr;</span>
+              <span data-lang="en">Read Guide &rarr;</span>
+            </span>
           </a>
           <a href="/guides/svg-path-optimization-and-cleaner.html" class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-indigo-500/40 transition-all flex flex-col justify-between">
             <div>
-              <span class="text-indigo-400 font-bold block mb-1">경량화 기술</span>
-              <strong class="text-slate-200 block mb-1">SVG 벡터 경로 최적화 및 메타데이터 클리너 가이드</strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">불필요한 에디터 태그 삭제와 무손실 경로 압축 기법.</p>
+              <span class="text-indigo-400 font-bold block mb-1">
+                <span data-lang="ko">용량 다이어트</span>
+                <span data-lang="en">Optimization</span>
+              </span>
+              <strong class="text-slate-200 block mb-1">
+                <span data-lang="ko">SVG 벡터 경로 최적화 및 메타데이터 클리너 가이드</span>
+                <span data-lang="en">SVG Vector Path Optimization &amp; Metadata Cleaning</span>
+              </strong>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                <span data-lang="ko">불필요한 태그를 지우고 깔끔하게 용량을 줄이는 비결.</span>
+                <span data-lang="en">Removing bloated editor metadata and compressing vector paths.</span>
+              </p>
             </div>
-            <span class="text-indigo-400 mt-2 font-semibold flex items-center gap-1">가이드 읽기 &rarr;</span>
+            <span class="text-indigo-400 mt-2 font-semibold flex items-center gap-1">
+              <span data-lang="ko">가이드 읽기 &rarr;</span>
+              <span data-lang="en">Read Guide &rarr;</span>
+            </span>
           </a>
         </div>
       </div>
@@ -427,47 +564,63 @@
     <!-- FAQ Accordion Section -->
     <section class="max-w-3xl mx-auto mb-20">
       <h2 class="text-2xl font-extrabold text-slate-100 mb-3 text-center tracking-tight">
-        자주 묻는 질문 (FAQ)
+        <span data-lang="ko">자주 묻는 질문 (FAQ)</span>
+        <span data-lang="en">Frequently Asked Questions (FAQ)</span>
       </h2>
       <p class="text-slate-400 text-xs text-center mb-8">
-        SVG 변환 및 고화질 에셋 추출 시 궁금한 사항들을 확인해 보세요.
+        <span data-lang="ko">SVG 변환 및 고화질 에셋 추출 시 궁금한 사항들을 확인해 보세요.</span>
+        <span data-lang="en">Common questions about SVG conversion and high-res asset exports.</span>
       </p>
 
       <div class="border-t border-b border-slate-800 divide-y divide-slate-800">
         <details class="group" open>
           <summary class="text-base font-semibold text-slate-100 py-5 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-question text-indigo-400 text-sm"></i> SVG를 PNG로 변환하면 투명 배경(Alpha Channel)이 유지되나요?
+              <span class="material-symbols-outlined text-indigo-400 text-lg">help</span>
+              <span data-lang="ko">SVG를 PNG로 바꾸면 투명 배경이 그대로 유지되나요?</span>
+              <span data-lang="en">Is transparent background preserved when converting to PNG?</span>
             </span>
-            <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+            <span class="material-symbols-outlined text-slate-500 text-base transition-transform duration-200 group-open:rotate-180">expand_more</span>
           </summary>
           <div class="px-1 pb-5 text-slate-300 text-xs leading-relaxed">
-            <p>네, PNG 포맷으로 변환할 경우 원본 SVG에 포함된 투명 배경 및 반투명 그라데이션 알파 채널이 100% 온전히 유지됩니다. 반대로 JPG 포맷으로 변환할 경우 투명 영역은 표준 규격에 따라 자동으로 흰색 배경으로 채워집니다.</p>
+            <p>
+              <span data-lang="ko">네, 물론입니다! PNG 포맷을 선택하시면 원본 SVG에 있던 투명 배경과 반투명 그림자가 100% 온전히 유지됩니다. 반면 JPG 포맷을 선택하시면 투명한 부분이 깔끔한 흰색 배경으로 자동 처리됩니다.</span>
+              <span data-lang="en">Yes, absolutely! When you choose PNG, transparent areas and soft shadows are 100% preserved. If you select JPG, transparent areas are automatically filled with a clean white background.</span>
+            </p>
           </div>
         </details>
 
         <details class="group">
           <summary class="text-base font-semibold text-slate-100 py-5 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-question text-indigo-400 text-sm"></i> 피그마(Figma)나 일러스트레이터에서 내보낸 SVG가 변환 시 잘리거나 깨지면 어떻게 하나요?
+              <span class="material-symbols-outlined text-indigo-400 text-lg">help</span>
+              <span data-lang="ko">피그마(Figma)에서 내보낸 SVG 아이콘 폰트가 깨지면 어떻게 하나요?</span>
+              <span data-lang="en">What if font text looks broken after exporting from Figma?</span>
             </span>
-            <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+            <span class="material-symbols-outlined text-slate-500 text-base transition-transform duration-200 group-open:rotate-180">expand_more</span>
           </summary>
           <div class="px-1 pb-5 text-slate-300 text-xs leading-relaxed space-y-2">
-            <p>디자인 툴에서 SVG를 내보낼 때 `viewBox` 속성이 누락되었거나 폰트 텍스트가 패스(Outline)로 변환되지 않은 경우 발생할 수 있습니다. 피그마에서 SVG를 익스포트할 때 'Include "id" Attribute' 옵션을 켜고, 텍스트 레이어는 `Ctrl + Shift + O`를 눌러 아웃라인으로 윤곽선 변환한 뒤 내보내시면 완벽하게 렌더링됩니다.</p>
-            <p>자세한 내용은 당사 <a href="/guides/figma-illustrator-svg-export-troubleshooting.html" class="text-indigo-400 hover:underline font-bold">피그마/일러스트레이터 SVG 에셋 오류 해결 가이드</a>를 참고하세요.</p>
+            <p>
+              <span data-lang="ko">피그마에서 텍스트 레이어를 그대로 둔 채 내보내면 다른 기기에서 폰트를 찾지 못해 발생합니다. 피그마에서 글자 레이어를 선택한 뒤 단축키 <code class="text-indigo-300">Ctrl + Shift + O</code> (Mac: <code class="text-indigo-300">Cmd + Shift + O</code>)를 눌러 텍스트를 윤곽선(Outline) 도형으로 변환한 다음 SVG로 내보내시면 어떤 환경에서도 똑같이 선명하게 변환됩니다.</span>
+              <span data-lang="en">This happens when text layers rely on custom fonts not available in the canvas environment. In Figma, select your text layers and press <code class="text-indigo-300">Ctrl/Cmd + Shift + O</code> to convert text into vector outlines before exporting to SVG.</span>
+            </p>
           </div>
         </details>
 
         <details class="group">
           <summary class="text-base font-semibold text-slate-100 py-5 px-1 flex items-center justify-between cursor-pointer list-none focus:outline-none select-none hover:text-indigo-400 transition-colors">
             <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-question text-indigo-400 text-sm"></i> 변환된 결과물 파일의 상업적 이용 및 라이선스 제약이 있나요?
+              <span class="material-symbols-outlined text-indigo-400 text-lg">help</span>
+              <span data-lang="ko">변환된 이미지들을 상업용 웹사이트나 유료 앱에 써도 되나요?</span>
+              <span data-lang="en">Can I use the converted images for commercial websites and paid apps?</span>
             </span>
-            <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform duration-200 group-open:rotate-180"></i>
+            <span class="material-symbols-outlined text-slate-500 text-base transition-transform duration-200 group-open:rotate-180">expand_more</span>
           </summary>
           <div class="px-1 pb-5 text-slate-300 text-xs leading-relaxed">
-            <p>어떠한 라이선스 제약이나 워터마크, 비용 청구가 없습니다. 배처 툴을 이용해 변환된 모든 파일의 저작권과 소유권은 100% 사용자에게 귀속되며, 상업적 웹사이트 구축, 유료 모바일 앱 배포, 게임 리소스 출시 등 모든 상업적 용도로 자유롭게 활용하실 수 있습니다.</p>
+            <p>
+              <span data-lang="ko">네, 전혀 제약이 없습니다! 워터마크나 이용 제한이 없으며, 변환된 모든 이미지의 권리는 100% 사용자에게 귀속됩니다. 회사 업무, 상업용 쇼핑몰, 유료 모바일 앱 출시 등 모든 목적에 완전 무료로 자유롭게 사용하실 수 있습니다.</span>
+              <span data-lang="en">Yes, 100% unrestricted! There are zero watermarks, fees, or usage limits. All converted images belong entirely to you, and you are free to use them in commercial apps, stores, and client projects.</span>
+            </p>
           </div>
         </details>
       </div>
@@ -476,14 +629,25 @@
     <!-- Internal Linking Navigation -->
     <nav class="pt-8 border-t border-slate-800 flex flex-wrap items-center justify-between gap-4 text-xs">
       <a href="/" class="text-indigo-400 hover:text-indigo-300 font-bold flex items-center gap-1.5">
-        <i class="fa-solid fa-house"></i> 메인 홈으로 이동
+        <span class="material-symbols-outlined text-base">home</span>
+        <span data-lang="ko">메인 홈으로 이동</span>
+        <span data-lang="en">Back to Home</span>
       </a>
       <div class="flex items-center gap-4 text-slate-400">
-        <a href="/wav-to-mp3.html" class="hover:text-slate-200 transition-colors">WAV to MP3 변환기</a>
+        <a href="/wav-to-mp3.html" class="hover:text-slate-200 transition-colors">
+          <span data-lang="ko">WAV to MP3 변환기</span>
+          <span data-lang="en">WAV to MP3 Converter</span>
+        </a>
         <span class="text-slate-800">|</span>
-        <a href="/batch-rename.html" class="hover:text-slate-200 transition-colors">대량 파일명 일괄 변경</a>
+        <a href="/batch-rename.html" class="hover:text-slate-200 transition-colors">
+          <span data-lang="ko">대량 파일명 일괄 변경</span>
+          <span data-lang="en">Batch Renamer</span>
+        </a>
         <span class="text-slate-800">|</span>
-        <a href="/guides/index.html" class="hover:text-slate-200 transition-colors">전체 가이드 허브</a>
+        <a href="/guides/index.html" class="hover:text-slate-200 transition-colors">
+          <span data-lang="ko">전체 가이드 허브</span>
+          <span data-lang="en">Guides Hub</span>
+        </a>
       </div>
     </nav>
 
@@ -499,10 +663,14 @@
             <div class="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/70 text-primary flex items-center justify-center shrink-0">
               <span class="material-symbols-outlined text-[18px]">verified_user</span>
             </div>
-            <span class="text-sm sm:text-base font-bold text-on-surface">100% 브라우저 로컬 데이터 보안</span>
+            <span class="text-sm sm:text-base font-bold text-on-surface">
+              <span data-lang="ko">100% 브라우저 로컬 데이터 보안</span>
+              <span data-lang="en">100% In-Browser Local Privacy</span>
+            </span>
           </div>
           <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-            업로드하신 모든 그래픽, 음원, 문서는 외부 서버로 전송되지 않고 사용자의 기기 브라우저(WebAssembly &amp; Web Workers) 안에서 100% 즉시 처리 후 폐기됩니다.
+            <span data-lang="ko">선택하신 모든 사진, 음원, 그래픽 파일은 외부 서버로 전송되지 않고 사용자의 기기 브라우저 안에서 100% 즉시 처리 후 안전하게 유지됩니다.</span>
+            <span data-lang="en">All your selected photos, audio, and graphic files are processed 100% locally within your device browser and are never sent to external servers.</span>
           </p>
         </div>
 
@@ -510,28 +678,66 @@
         <div class="flex flex-wrap sm:flex-nowrap gap-10 sm:gap-14 text-xs sm:text-sm">
           <!-- Col 1: Tools -->
           <div class="flex flex-col gap-2.5">
-            <span class="font-bold text-on-surface mb-1">도구 바로가기</span>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/svg-to-png.html">SVG 변환기</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/wav-to-mp3.html">오디오 변환기</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/batch-rename.html">대량 이름 바꾸기</a>
+            <span class="font-bold text-on-surface mb-1">
+              <span data-lang="ko">도구 바로가기</span>
+              <span data-lang="en">Tools</span>
+            </span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/svg-to-png.html">
+              <span data-lang="ko">SVG 변환기</span>
+              <span data-lang="en">SVG Converter</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/wav-to-mp3.html">
+              <span data-lang="ko">오디오 변환기</span>
+              <span data-lang="en">Audio Converter</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/batch-rename.html">
+              <span data-lang="ko">대량 이름 바꾸기</span>
+              <span data-lang="en">Batch Renamer</span>
+            </a>
           </div>
 
           <!-- Col 2: Security & About -->
           <div class="flex flex-col gap-2.5">
-            <span class="font-bold text-on-surface mb-1">보안 및 안내</span>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/serverless-local-conversion.html">데이터 무전송 증명</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/about.html">소개</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/index.html">사용 가이드</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/contact.html">문의하기</a>
+            <span class="font-bold text-on-surface mb-1">
+              <span data-lang="ko">보안 및 안내</span>
+              <span data-lang="en">Security &amp; Info</span>
+            </span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/serverless-local-conversion.html">
+              <span data-lang="ko">데이터 무전송 증명</span>
+              <span data-lang="en">Zero-Upload Proof</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/about.html">
+              <span data-lang="ko">소개</span>
+              <span data-lang="en">About</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/guides/index.html">
+              <span data-lang="ko">사용 가이드</span>
+              <span data-lang="en">User Guides</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/contact.html">
+              <span data-lang="ko">문의하기</span>
+              <span data-lang="en">Contact</span>
+            </a>
           </div>
 
           <!-- Col 3: Policy & Donate -->
           <div class="flex flex-col gap-2.5">
-            <span class="font-bold text-on-surface mb-1">정책</span>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/privacy.html">개인정보처리방침</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/terms.html">서비스 이용약관</a>
+            <span class="font-bold text-on-surface mb-1">
+              <span data-lang="ko">정책</span>
+              <span data-lang="en">Legal</span>
+            </span>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/privacy.html">
+              <span data-lang="ko">개인정보처리방침</span>
+              <span data-lang="en">Privacy Policy</span>
+            </a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="/terms.html">
+              <span data-lang="ko">서비스 이용약관</span>
+              <span data-lang="en">Terms of Service</span>
+            </a>
             <a class="text-amber-600 dark:text-amber-400 hover:underline inline-flex items-center gap-1 font-bold" href="https://buymeacoffee.com/playNolang" target="_blank" rel="noopener noreferrer">
-              <span>☕</span> 커피 후원
+              <span>☕</span>
+              <span data-lang="ko">커피 후원</span>
+              <span data-lang="en">Buy Me a Coffee</span>
             </a>
           </div>
         </div>
@@ -540,11 +746,14 @@
       <!-- Bottom Bar -->
       <div class="pt-8 mt-10 border-t border-surface-container flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-on-surface-variant">
         <div>
-          <span>© 2026 Batcher. 서버 전송 없는 100% 브라우저 로컬 파일 변환 도구. All rights reserved.</span>
+          <span>&copy; 2026 Batcher. </span>
+          <span data-lang="ko">서버 전송 없는 100% 브라우저 로컬 파일 변환 도구. All rights reserved.</span>
+          <span data-lang="en">Zero-Upload 100% In-Browser Local File Tools. All rights reserved.</span>
         </div>
         <div class="flex items-center gap-2 font-medium">
           <span class="w-2 h-2 rounded-full bg-primary inline-block animate-pulse"></span>
-          <span>온디바이스 가속 엔진 가동 중</span>
+          <span data-lang="ko">온디바이스 가속 엔진 가동 중</span>
+          <span data-lang="en">On-Device Fast Engine Active</span>
         </div>
       </div>
     </div>
